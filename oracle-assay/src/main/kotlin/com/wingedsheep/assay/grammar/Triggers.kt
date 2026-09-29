@@ -980,9 +980,8 @@ object Triggers {
      * ability carrying *both* a restriction and something else the sentence cannot spell still
      * declines rather than losing the difference.
      *
-     * Two rows, and the negative one is the SDK's own value rather than a `Not` over the positive:
-     * `Conditions.IsNotYourTurn` is what seven hand-written cards write, and a wrapped negation
-     * would be a second spelling of one condition that nothing could choose between.
+     * Two rows, with the opponent row using `Conditions.IsOpponentsTurn`. A negation of
+     * `IsYourTurn` would also include a teammate's turn, which the printed clause excludes.
      *
      * ### The negative row's surface was written from the model's name, not from printed text
      *
