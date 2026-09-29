@@ -1,19 +1,27 @@
 package com.wingedsheep.engine.handlers.continuations
 
+import com.wingedsheep.engine.core.CardsSelectedResponse
+import com.wingedsheep.engine.core.DecisionContext
+import com.wingedsheep.engine.core.DecisionPhase
 import com.wingedsheep.engine.core.DecisionResponse
 import com.wingedsheep.engine.core.EngineServices
 import com.wingedsheep.engine.core.ExecutionResult
 import com.wingedsheep.engine.core.GameEvent
+import com.wingedsheep.engine.core.GemstoneCavernsExileContinuation
 import com.wingedsheep.engine.core.LeylineDecisionContinuation
 import com.wingedsheep.engine.core.LeylinePhaseContinuation
+import com.wingedsheep.engine.core.SelectCardsDecision
+import com.wingedsheep.engine.core.suspendForDecision
 import com.wingedsheep.engine.core.YesNoResponse
 import com.wingedsheep.engine.core.ZoneChangeEvent
 import com.wingedsheep.engine.handlers.effects.PermanentEntryReplacements
 import com.wingedsheep.engine.handlers.effects.ZoneEntryOptions
 import com.wingedsheep.engine.handlers.effects.ZoneTransitionService
 import com.wingedsheep.engine.state.GameState
+import com.wingedsheep.engine.state.components.battlefield.CountersComponent
 import com.wingedsheep.engine.state.components.identity.CardComponent
 import com.wingedsheep.engine.state.components.player.MulliganStateComponent
+import com.wingedsheep.sdk.core.CounterType
 import com.wingedsheep.sdk.core.Zone
 import com.wingedsheep.sdk.model.EntityId
 import com.wingedsheep.sdk.scripting.CardNamePool
@@ -45,7 +53,8 @@ class LeylineContinuationResumer(
 ) : ContinuationResumerModule, AutoResumerModule {
 
     override fun resumers(): List<ContinuationResumer<*>> = listOf(
-        resumer(LeylineDecisionContinuation::class, ::resumeLeylineDecision)
+        resumer(LeylineDecisionContinuation::class, ::resumeLeylineDecision),
+        resumer(GemstoneCavernsExileContinuation::class, ::resumeGemstoneExile)
     )
 
     override fun autoResumers(): List<AutoResumer<*>> = listOf(
@@ -92,6 +101,44 @@ class LeylineContinuationResumer(
             newState = transition.state
             events.addAll(transition.events)
 
+            if (continuation.cardName == "Gemstone Caverns") {
+                val existingCounters = newState.getEntity(continuation.leylineCardId)
+                    ?.get<CountersComponent>() ?: CountersComponent()
+                newState = newState.updateEntity(continuation.leylineCardId) { container ->
+                    container.with(existingCounters.withAdded(CounterType.LUCK, 1))
+                }
+
+                val exileChoices = newState.getHand(continuation.playerId)
+                if (exileChoices.isEmpty()) {
+                    return ExecutionResult.error(
+                        newState,
+                        "Gemstone Caverns requires another card in hand to exile"
+                    )
+                }
+
+                val paused = newState.suspendForDecision(
+                    question = { decisionId -> SelectCardsDecision(
+                        id = decisionId,
+                        playerId = continuation.playerId,
+                        prompt = "Exile another card from your hand for Gemstone Caverns",
+                        context = DecisionContext(
+                            sourceId = continuation.leylineCardId,
+                            sourceName = continuation.cardName,
+                            phase = DecisionPhase.CASTING
+                        ),
+                        options = exileChoices,
+                        minSelections = 1,
+                        maxSelections = 1,
+                        selectedLabel = "Exile"
+                    ) },
+                    answer = GemstoneCavernsExileContinuation(
+                        playerId = continuation.playerId,
+                        gemstoneCardId = continuation.leylineCardId
+                    )
+                )
+                return ExecutionResult.propagatePause(paused.state, events + paused.events)
+            }
+
             val entersChoicePause = pauseForEntersWithChoice(
                 newState, continuation.playerId, continuation.leylineCardId, transition.events
             )
@@ -99,6 +146,34 @@ class LeylineContinuationResumer(
         }
 
         return continueLeylinePhase(newState, events, checkForMore)
+    }
+
+    private fun resumeGemstoneExile(
+        state: GameState,
+        continuation: GemstoneCavernsExileContinuation,
+        response: DecisionResponse,
+        checkForMore: CheckForMore
+    ): ExecutionResult {
+        if (response !is CardsSelectedResponse || response.selectedCards.size != 1) {
+            return ExecutionResult.error(state, "Expected exactly one card to exile for Gemstone Caverns")
+        }
+
+        val exileCardId = response.selectedCards.single()
+        if (exileCardId !in state.getHand(continuation.playerId)) {
+            return ExecutionResult.error(state, "Selected Gemstone Caverns exile card is not in hand")
+        }
+
+        val transition = services.zones.moveToZone(
+            state = state,
+            entityId = exileCardId,
+            destinationZone = Zone.EXILE
+        )
+
+        return continueLeylinePhase(
+            transition.state,
+            transition.events,
+            checkForMore
+        )
     }
 
     /**

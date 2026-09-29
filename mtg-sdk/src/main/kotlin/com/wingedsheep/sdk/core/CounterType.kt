@@ -82,6 +82,7 @@ value class CounterType(val name: String) {
          */
         val DEFENSE = CounterType("DEFENSE")
         val CHARGE = CounterType("CHARGE")
+        val LUCK = CounterType("LUCK")
         val GEM = CounterType("GEM")
         val POISON = CounterType("POISON")
         val SILVER = CounterType("SILVER")
@@ -647,6 +648,7 @@ value class CounterType(val name: String) {
             LOYALTY,
             DEFENSE,
             CHARGE,
+            LUCK,
             GEM,
             POISON,
             SILVER,

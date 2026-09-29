@@ -37,6 +37,16 @@ data class LeylineDecisionContinuation(
 ) : AnswerContinuation
 
 /**
+ * Resume Gemstone Caverns' opening-hand action after its controller chooses the
+ * other card that must be exiled from their hand.
+ */
+@Serializable
+data class GemstoneCavernsExileContinuation(
+    val playerId: EntityId,
+    val gemstoneCardId: EntityId
+) : AnswerContinuation
+
+/**
  * Resume the opening-hand leyline walk after something *else* paused in the middle of it.
  *
  * Only one thing does: a leyline that answers "yes" and then has its own "as this enters,

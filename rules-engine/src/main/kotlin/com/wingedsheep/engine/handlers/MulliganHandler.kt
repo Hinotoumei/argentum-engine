@@ -340,7 +340,17 @@ class MulliganHandler(
             val leylineCardIds = hand.filter { cardId ->
                 val cardComponent = newState.getEntity(cardId)?.get<CardComponent>() ?: return@filter false
                 val cardDef = registry.getCard(cardComponent.cardDefinitionId) ?: return@filter false
-                cardDef.script.mayStartOnBattlefield
+                if (!cardDef.script.mayStartOnBattlefield) return@filter false
+
+                // Gemstone Caverns has the same opening-hand timing as a Leyline but two
+                // additional requirements: its controller must not be the starting player,
+                // and Focused Magic requires another card to be available for the mandatory
+                // exile rider if the player takes the special action.
+                if (cardComponent.name == "Gemstone Caverns") {
+                    playerId != newState.activePlayerId && hand.any { it != cardId }
+                } else {
+                    true
+                }
             }
 
             val updatedMullState = mullState.copy(
@@ -426,6 +436,7 @@ class MulliganHandler(
      */
     fun createLeylineDecision(state: GameState, playerId: EntityId, leylineCardId: EntityId): ExecutionResult? {
         val cardName = state.getEntity(leylineCardId)?.get<CardComponent>()?.name ?: return null
+        val isGemstoneCaverns = cardName == "Gemstone Caverns"
         val question = { decisionId: String -> YesNoDecision(
             id = decisionId,
             playerId = playerId,
@@ -437,7 +448,11 @@ class MulliganHandler(
             ),
             yesText = "Yes",
             noText = "No",
-            hint = "Leyline — If this card is in your opening hand, you may begin the game with it on the battlefield."
+            hint = if (isGemstoneCaverns) {
+                "Gemstone Caverns — You are not playing first. If you begin with it on the battlefield, it gets a luck counter and you exile another card from your hand."
+            } else {
+                "Leyline — If this card is in your opening hand, you may begin the game with it on the battlefield."
+            }
         ) }
         val continuation = LeylineDecisionContinuation(
             playerId = playerId,

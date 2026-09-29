@@ -1,0 +1,232 @@
+diff --git a/mtg-sdk/src/main/kotlin/com/wingedsheep/sdk/core/CounterType.kt b/mtg-sdk/src/main/kotlin/com/wingedsheep/sdk/core/CounterType.kt
+--- a/mtg-sdk/src/main/kotlin/com/wingedsheep/sdk/core/CounterType.kt
++++ b/mtg-sdk/src/main/kotlin/com/wingedsheep/sdk/core/CounterType.kt
+@@ -83,5 +83,6 @@
+         val DEFENSE = CounterType("DEFENSE")
+         val CHARGE = CounterType("CHARGE")
++        val LUCK = CounterType("LUCK")
+         val GEM = CounterType("GEM")
+         val POISON = CounterType("POISON")
+         val SILVER = CounterType("SILVER")
+diff --git a/mtg-sdk/src/main/kotlin/com/wingedsheep/sdk/core/CounterType.kt b/mtg-sdk/src/main/kotlin/com/wingedsheep/sdk/core/CounterType.kt
+--- a/mtg-sdk/src/main/kotlin/com/wingedsheep/sdk/core/CounterType.kt
++++ b/mtg-sdk/src/main/kotlin/com/wingedsheep/sdk/core/CounterType.kt
+@@ -620,6 +621,7 @@
+             LOYALTY,
+             DEFENSE,
+             CHARGE,
++            LUCK,
+             GEM,
+             POISON,
+             SILVER,
+diff --git a/web-client/src/types/enums.ts b/web-client/src/types/enums.ts
+--- a/web-client/src/types/enums.ts
++++ b/web-client/src/types/enums.ts
+@@ -501,5 +501,6 @@
+   MINUS_TWO_MINUS_TWO = 'MINUS_TWO_MINUS_TWO',
+   LOYALTY = 'LOYALTY',
++  LUCK = 'LUCK',
+   CHARGE = 'CHARGE',
+   GEM = 'GEM',
+   POISON = 'POISON',
+diff --git a/web-client/src/types/enums.ts b/web-client/src/types/enums.ts
+--- a/web-client/src/types/enums.ts
++++ b/web-client/src/types/enums.ts
+@@ -613,5 +614,6 @@
+   [CounterType.MINUS_TWO_MINUS_TWO]: '-2/-2',
+   [CounterType.LOYALTY]: 'Loyalty',
++  [CounterType.LUCK]: 'Luck',
+   [CounterType.CHARGE]: 'Charge',
+   [CounterType.GEM]: 'Gem',
+   [CounterType.POISON]: 'Poison',
+diff --git a/rules-engine/src/main/kotlin/com/wingedsheep/engine/core/LeylineContinuations.kt b/rules-engine/src/main/kotlin/com/wingedsheep/engine/core/LeylineContinuations.kt
+--- a/rules-engine/src/main/kotlin/com/wingedsheep/engine/core/LeylineContinuations.kt
++++ b/rules-engine/src/main/kotlin/com/wingedsheep/engine/core/LeylineContinuations.kt
+@@ -37,4 +37,14 @@
+ ) : AnswerContinuation
+ 
+ /**
++ * Resume Gemstone Caverns' opening-hand action after its controller chooses the
++ * other card that must be exiled from their hand.
++ */
++@Serializable
++data class GemstoneCavernsExileContinuation(
++    val playerId: EntityId,
++    val gemstoneCardId: EntityId
++) : AnswerContinuation
++
++/**
+  * Resume the opening-hand leyline walk after something *else* paused in the middle of it.
+diff --git a/rules-engine/src/main/kotlin/com/wingedsheep/engine/core/Serialization.kt b/rules-engine/src/main/kotlin/com/wingedsheep/engine/core/Serialization.kt
+--- a/rules-engine/src/main/kotlin/com/wingedsheep/engine/core/Serialization.kt
++++ b/rules-engine/src/main/kotlin/com/wingedsheep/engine/core/Serialization.kt
+@@ -327,6 +327,7 @@
+         subclass(CastFromCollectionTargetsContinuation::class)
+         subclass(CastAnyNumberFromCollectionContinuation::class)
+         subclass(LeylineDecisionContinuation::class)
++        subclass(GemstoneCavernsExileContinuation::class)
+         subclass(ChooseGuessKindContinuation::class)
+         subclass(GuessTopCardKindContinuation::class)
+         subclass(GuessConditionContinuation::class)
+diff --git a/rules-engine/src/main/kotlin/com/wingedsheep/engine/handlers/MulliganHandler.kt b/rules-engine/src/main/kotlin/com/wingedsheep/engine/handlers/MulliganHandler.kt
+--- a/rules-engine/src/main/kotlin/com/wingedsheep/engine/handlers/MulliganHandler.kt
++++ b/rules-engine/src/main/kotlin/com/wingedsheep/engine/handlers/MulliganHandler.kt
+@@ -340,7 +340,17 @@
+             val leylineCardIds = hand.filter { cardId ->
+                 val cardComponent = newState.getEntity(cardId)?.get<CardComponent>() ?: return@filter false
+                 val cardDef = registry.getCard(cardComponent.cardDefinitionId) ?: return@filter false
+-                cardDef.script.mayStartOnBattlefield
++                if (!cardDef.script.mayStartOnBattlefield) return@filter false
++
++                // Gemstone Caverns has the same opening-hand timing as a Leyline but two
++                // additional requirements: its controller must not be the starting player,
++                // and Focused Magic requires another card to be available for the mandatory
++                // exile rider if the player takes the special action.
++                if (cardComponent.name == "Gemstone Caverns") {
++                    playerId != newState.activePlayerId && hand.any { it != cardId }
++                } else {
++                    true
++                }
+             }
+ 
+             val updatedMullState = mullState.copy(
+diff --git a/rules-engine/src/main/kotlin/com/wingedsheep/engine/handlers/MulliganHandler.kt b/rules-engine/src/main/kotlin/com/wingedsheep/engine/handlers/MulliganHandler.kt
+--- a/rules-engine/src/main/kotlin/com/wingedsheep/engine/handlers/MulliganHandler.kt
++++ b/rules-engine/src/main/kotlin/com/wingedsheep/engine/handlers/MulliganHandler.kt
+@@ -427,5 +437,6 @@
+     fun createLeylineDecision(state: GameState, playerId: EntityId, leylineCardId: EntityId): ExecutionResult? {
+         val cardName = state.getEntity(leylineCardId)?.get<CardComponent>()?.name ?: return null
++        val isGemstoneCaverns = cardName == "Gemstone Caverns"
+         val question = { decisionId: String -> YesNoDecision(
+             id = decisionId,
+             playerId = playerId,
+@@ -437,5 +448,9 @@
+             ),
+             yesText = "Yes",
+             noText = "No",
+-            hint = "Leyline — If this card is in your opening hand, you may begin the game with it on the battlefield."
++            hint = if (isGemstoneCaverns) {
++                "Gemstone Caverns — You are not playing first. If you begin with it on the battlefield, it gets a luck counter and you exile another card from your hand."
++            } else {
++                "Leyline — If this card is in your opening hand, you may begin the game with it on the battlefield."
++            }
+         ) }
+diff --git a/rules-engine/src/main/kotlin/com/wingedsheep/engine/handlers/continuations/LeylineContinuationResumer.kt b/rules-engine/src/main/kotlin/com/wingedsheep/engine/handlers/continuations/LeylineContinuationResumer.kt
+--- a/rules-engine/src/main/kotlin/com/wingedsheep/engine/handlers/continuations/LeylineContinuationResumer.kt
++++ b/rules-engine/src/main/kotlin/com/wingedsheep/engine/handlers/continuations/LeylineContinuationResumer.kt
+@@ -3,15 +3,23 @@
++import com.wingedsheep.engine.core.CardsSelectedResponse
++import com.wingedsheep.engine.core.DecisionContext
++import com.wingedsheep.engine.core.DecisionPhase
+ import com.wingedsheep.engine.core.DecisionResponse
+ import com.wingedsheep.engine.core.EngineServices
+ import com.wingedsheep.engine.core.ExecutionResult
+ import com.wingedsheep.engine.core.GameEvent
++import com.wingedsheep.engine.core.GemstoneCavernsExileContinuation
+ import com.wingedsheep.engine.core.LeylineDecisionContinuation
+ import com.wingedsheep.engine.core.LeylinePhaseContinuation
++import com.wingedsheep.engine.core.SelectCardsDecision
++import com.wingedsheep.engine.core.suspendForDecision
+ import com.wingedsheep.engine.core.YesNoResponse
+ import com.wingedsheep.engine.core.ZoneChangeEvent
+ import com.wingedsheep.engine.handlers.effects.PermanentEntryReplacements
+ import com.wingedsheep.engine.handlers.effects.ZoneEntryOptions
+ import com.wingedsheep.engine.handlers.effects.ZoneTransitionService
+ import com.wingedsheep.engine.state.GameState
++import com.wingedsheep.engine.state.components.battlefield.CountersComponent
+ import com.wingedsheep.engine.state.components.identity.CardComponent
+ import com.wingedsheep.engine.state.components.player.MulliganStateComponent
++import com.wingedsheep.sdk.core.CounterType
+ import com.wingedsheep.sdk.core.Zone
+diff --git a/rules-engine/src/main/kotlin/com/wingedsheep/engine/handlers/continuations/LeylineContinuationResumer.kt b/rules-engine/src/main/kotlin/com/wingedsheep/engine/handlers/continuations/LeylineContinuationResumer.kt
+--- a/rules-engine/src/main/kotlin/com/wingedsheep/engine/handlers/continuations/LeylineContinuationResumer.kt
++++ b/rules-engine/src/main/kotlin/com/wingedsheep/engine/handlers/continuations/LeylineContinuationResumer.kt
+@@ -47,3 +55,4 @@
+     override fun resumers(): List<ContinuationResumer<*>> = listOf(
+-        resumer(LeylineDecisionContinuation::class, ::resumeLeylineDecision)
++        resumer(LeylineDecisionContinuation::class, ::resumeLeylineDecision),
++        resumer(GemstoneCavernsExileContinuation::class, ::resumeGemstoneExile)
+     )
+diff --git a/rules-engine/src/main/kotlin/com/wingedsheep/engine/handlers/continuations/LeylineContinuationResumer.kt b/rules-engine/src/main/kotlin/com/wingedsheep/engine/handlers/continuations/LeylineContinuationResumer.kt
+--- a/rules-engine/src/main/kotlin/com/wingedsheep/engine/handlers/continuations/LeylineContinuationResumer.kt
++++ b/rules-engine/src/main/kotlin/com/wingedsheep/engine/handlers/continuations/LeylineContinuationResumer.kt
+@@ -92,5 +101,43 @@
+             newState = transition.state
+             events.addAll(transition.events)
++
++            if (continuation.cardName == "Gemstone Caverns") {
++                val existingCounters = newState.getEntity(continuation.leylineCardId)
++                    ?.get<CountersComponent>() ?: CountersComponent()
++                newState = newState.updateEntity(continuation.leylineCardId) { container ->
++                    container.with(existingCounters.withAdded(CounterType.LUCK, 1))
++                }
++
++                val exileChoices = newState.getHand(continuation.playerId)
++                if (exileChoices.isEmpty()) {
++                    return ExecutionResult.error(
++                        newState,
++                        "Gemstone Caverns requires another card in hand to exile"
++                    )
++                }
++
++                val paused = newState.suspendForDecision(
++                    question = { decisionId -> SelectCardsDecision(
++                        id = decisionId,
++                        playerId = continuation.playerId,
++                        prompt = "Exile another card from your hand for Gemstone Caverns",
++                        context = DecisionContext(
++                            sourceId = continuation.leylineCardId,
++                            sourceName = continuation.cardName,
++                            phase = DecisionPhase.CASTING
++                        ),
++                        options = exileChoices,
++                        minSelections = 1,
++                        maxSelections = 1,
++                        selectedLabel = "Exile"
++                    ) },
++                    answer = GemstoneCavernsExileContinuation(
++                        playerId = continuation.playerId,
++                        gemstoneCardId = continuation.leylineCardId
++                    )
++                )
++                return ExecutionResult.propagatePause(paused.state, events + paused.events)
++            }
+ 
+             val entersChoicePause = pauseForEntersWithChoice(
+                 newState, continuation.playerId, continuation.leylineCardId, transition.events
+diff --git a/rules-engine/src/main/kotlin/com/wingedsheep/engine/handlers/continuations/LeylineContinuationResumer.kt b/rules-engine/src/main/kotlin/com/wingedsheep/engine/handlers/continuations/LeylineContinuationResumer.kt
+--- a/rules-engine/src/main/kotlin/com/wingedsheep/engine/handlers/continuations/LeylineContinuationResumer.kt
++++ b/rules-engine/src/main/kotlin/com/wingedsheep/engine/handlers/continuations/LeylineContinuationResumer.kt
+@@ -101,4 +148,32 @@
+         return continueLeylinePhase(newState, events, checkForMore)
++    }
++
++    private fun resumeGemstoneExile(
++        state: GameState,
++        continuation: GemstoneCavernsExileContinuation,
++        response: DecisionResponse,
++        checkForMore: CheckForMore
++    ): ExecutionResult {
++        if (response !is CardsSelectedResponse || response.selectedCards.size != 1) {
++            return ExecutionResult.error(state, "Expected exactly one card to exile for Gemstone Caverns")
++        }
++
++        val exileCardId = response.selectedCards.single()
++        if (exileCardId !in state.getHand(continuation.playerId)) {
++            return ExecutionResult.error(state, "Selected Gemstone Caverns exile card is not in hand")
++        }
++
++        val transition = services.zones.moveToZone(
++            state = state,
++            entityId = exileCardId,
++            destinationZone = Zone.EXILE
++        )
++
++        return continueLeylinePhase(
++            transition.state,
++            transition.events,
++            checkForMore
++        )
+     }
+ 
+     /**
