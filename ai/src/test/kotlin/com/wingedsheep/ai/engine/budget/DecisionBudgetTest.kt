@@ -57,6 +57,22 @@ class DecisionBudgetTest : FunSpec({
         (budget.combatDeadlineNanos < Long.MAX_VALUE) shouldBe true
     }
 
+    test("offline work limits preserve search counts after the clock has expired") {
+        val timed = DecisionBudget(
+            BudgetTier.CRITICAL, SearchAllowances.forMillis(5_000), millis = 5_000,
+            startNanos = System.nanoTime() - 10_000_000_000L,
+        )
+        timed.expired() shouldBe true
+        (timed.combatDeadlineNanos < System.nanoTime()) shouldBe true
+        val offline = timed.workLimited()
+        offline.tier shouldBe timed.tier
+        offline.allowances shouldBe timed.allowances
+        offline.millis shouldBe timed.millis
+        offline.expired().shouldBeFalse()
+        offline.deadlineNanos shouldBe Long.MAX_VALUE
+        offline.combatDeadlineNanos shouldBe Long.MAX_VALUE
+    }
+
     test("an already-elapsed budget reports expired rather than negative time") {
         val budget = DecisionBudget(
             BudgetTier.ROUTINE, SearchAllowances.forMillis(1), millis = 1,

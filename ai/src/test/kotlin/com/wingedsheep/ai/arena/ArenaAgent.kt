@@ -5,6 +5,10 @@ import com.wingedsheep.ai.engine.AiProfile
 import com.wingedsheep.ai.engine.advisor.modules.BloomburrowAdvisorModule
 import com.wingedsheep.ai.engine.advisor.modules.OnslaughtAdvisorModule
 import com.wingedsheep.ai.engine.budget.RolloutBudgetPolicy
+import com.wingedsheep.ai.engine.budget.BudgetPolicy
+import com.wingedsheep.ai.engine.budget.DecisionBudget
+import com.wingedsheep.engine.state.GameState
+import com.wingedsheep.engine.legalactions.LegalAction
 import com.wingedsheep.ai.engine.budget.TieredBudgetPolicy
 import com.wingedsheep.ai.engine.evaluation.EvalWeights
 import com.wingedsheep.ai.engine.rollout.RolloutSettings
@@ -29,9 +33,18 @@ data class ArenaAgent(val name: String, val profile: AiProfile) {
         AIPlayer.create(
             registry,
             playerId,
-            profile,
+            profile.copy(budgetPolicy = ArenaBudgetPolicy(profile.budgetPolicy)),
             opponentDecks.mapValues { OpponentModel.KnownDecklist(it.value) },
         )
+}
+
+/** Arena comparisons spend identical work even when concurrent games contend for the CPU. */
+private class ArenaBudgetPolicy(private val delegate: BudgetPolicy) : BudgetPolicy {
+    override fun budgetFor(state: GameState, playerId: EntityId, meaningfulActions: List<LegalAction>): DecisionBudget =
+        delegate.budgetFor(state, playerId, meaningfulActions).workLimited()
+
+    override fun budgetForDecision(state: GameState, playerId: EntityId): DecisionBudget =
+        delegate.budgetForDecision(state, playerId).workLimited()
 }
 
 /**

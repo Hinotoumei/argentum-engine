@@ -162,14 +162,20 @@ class DecisionBudget(
     /** Nominal size of this budget in milliseconds. [UNBOUNDED_MILLIS] means "no wall-clock stop". */
     val millis: Long,
     private val startNanos: Long = System.nanoTime(),
+    private val useWallClockLimits: Boolean = true,
 ) {
     /** Hard wall-clock stop. A healthy decision finishes long before this; see [SearchAllowances]. */
     val deadlineNanos: Long =
-        if (millis >= UNBOUNDED_MILLIS) Long.MAX_VALUE else startNanos + millis * NANOS_PER_MILLI
+        if (!useWallClockLimits || millis >= UNBOUNDED_MILLIS) Long.MAX_VALUE else startNanos + millis * NANOS_PER_MILLI
 
     /** Deadline for the combat local searches, which have always had their own tighter cap. */
     val combatDeadlineNanos: Long =
-        min(deadlineNanos, startNanos + allowances.combatSearchMillis * NANOS_PER_MILLI)
+        if (!useWallClockLimits) Long.MAX_VALUE
+        else min(deadlineNanos, startNanos + allowances.combatSearchMillis * NANOS_PER_MILLI)
+
+    /** Reproducible offline search: retain tier and work counts, independent of machine load. */
+    fun workLimited(): DecisionBudget =
+        DecisionBudget(tier, allowances, millis, startNanos, useWallClockLimits = false)
 
     fun expired(): Boolean = deadlineNanos != Long.MAX_VALUE && System.nanoTime() >= deadlineNanos
 
