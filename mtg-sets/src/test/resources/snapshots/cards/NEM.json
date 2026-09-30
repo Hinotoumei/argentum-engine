@@ -290,6 +290,53 @@
     ]
 }
 
+// Daze
+{
+    "name": "Daze",
+    "manaCost": "{1}{U}",
+    "typeLine": "Instant",
+    "oracleText": "You may return an Island you control to its owner's hand rather than pay this spell's mana cost.\nCounter target spell unless its controller pays {1}.",
+    "script": {
+        "spellEffect": {
+            "type": "Counter",
+            "condition": {
+                "type": "CounterCondition.UnlessPaysMana",
+                "cost": "{1}"
+            }
+        },
+        "targetRequirements": [
+            {
+                "type": "TargetObject",
+                "filter": {
+                    "baseFilter": {},
+                    "zone": "Stack"
+                },
+                "id": "t0"
+            }
+        ],
+        "selfAlternativeCost": {
+            "manaCost": "{0}",
+            "additionalCosts": [
+                {
+                    "type": "AdditionalAtom",
+                    "atom": {
+                        "type": "AtomReturnToHand",
+                        "filter": "land Island"
+                    }
+                }
+            ]
+        }
+    },
+    "metadata": {
+        "collectorNumber": "30",
+        "artist": "Matthew D. Wilson",
+        "imageUri": "https://cards.scryfall.io/normal/front/d/0/d03bff25-0d5e-4dcf-8d75-6df846afea3b.jpg?1789015977"
+    },
+    "colorIdentityOverride": [
+        "BLUE"
+    ]
+}
+
 // Defiant Falcon
 {
     "name": "Defiant Falcon",
