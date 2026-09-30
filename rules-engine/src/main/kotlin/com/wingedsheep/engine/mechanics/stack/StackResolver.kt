@@ -207,11 +207,12 @@ class StackResolver(
         modeTargetRequirements: Map<Int, List<TargetRequirement>>? = null,
         copyIndex: Int? = null,
         copyTotal: Int? = null,
-        controllerId: EntityId? = null
+        controllerId: EntityId? = null,
+        sourceSnapshot: com.wingedsheep.engine.state.ComponentContainer? = null
     ): ExecutionResult =
         StackPlacement.putSpellCopy(
             state, sourceSpellId, targets, targetRequirements, chosenModes, modeTargetsOrdered,
-            modeTargetRequirements, copyIndex, copyTotal, controllerId
+            modeTargetRequirements, copyIndex, copyTotal, controllerId, sourceSnapshot
         )
 
     /** Put an activated ability on the stack. See [StackPlacement.putActivatedAbility]. */

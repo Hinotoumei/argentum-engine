@@ -109,9 +109,10 @@ internal object StackPlacement {
         modeTargetRequirements: Map<Int, List<TargetRequirement>>? = null,
         copyIndex: Int? = null,
         copyTotal: Int? = null,
-        controllerId: EntityId? = null
+        controllerId: EntityId? = null,
+        sourceSnapshot: ComponentContainer? = null
     ): ExecutionResult {
-        val sourceContainer = state.getEntity(sourceSpellId)
+        val sourceContainer = sourceSnapshot ?: state.getEntity(sourceSpellId)
             ?: return ExecutionResult.error(state, "Source spell not found: $sourceSpellId")
         // CR 707.10: a spell that can't be copied yields no copy. Succeed without change.
         if (sourceContainer.has<com.wingedsheep.engine.state.components.identity.CantBeCopiedComponent>()) {

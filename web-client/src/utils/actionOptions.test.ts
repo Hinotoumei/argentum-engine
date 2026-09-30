@@ -18,6 +18,25 @@ const action = (fields: Record<string, unknown>): LegalActionInfo =>
     ...fields,
   }) as unknown as LegalActionInfo
 
+describe('replicate action options', () => {
+  it('keeps every server-offered count, label, cost and action payload distinct', () => {
+    const variants = [1, 2, 11].map((times) => action({
+      actionType: 'CastWithKicker',
+      description: `Cast Consign to Memory (Replicate ×${times})`,
+      manaCostString: `{${times}}{U}`,
+      isAffordable: true,
+      action: { type: 'CastSpell', playerId: 'p1', cardId: 'consign', declaredCostSlot: 'REPLICATED', declaredCostTimes: times },
+    }))
+    const options = buildActionOptions(card('{U}', { name: 'Consign to Memory' }), variants)
+      .filter((option) => option.actionType === 'castWithKicker')
+    expect(options).toHaveLength(3)
+    expect(new Set(options.map((option) => option.key)).size).toBe(3)
+    expect(options.map((option) => option.label)).toEqual(variants.map((variant) => variant.description))
+    expect(options.map((option) => option.manaCost)).toEqual(['{1}{U}', '{2}{U}', '{11}{U}'])
+    options.forEach((option, index) => expect(option.action).toBe(variants[index]))
+  })
+})
+
 describe('costFieldsFor', () => {
   it('turns a convoke floor into a reduced-to cost and names what it costs to get there', () => {
     // Sun-Dappled Celebrant {4}{W}{W} with two white bodies: the server sends both ends.

@@ -38,6 +38,7 @@ class FrozenBaselineTest : FunSpec({
             register(PortalSet.basicLands)
         }
         val v0 = ArenaAgents.resolve("v0")
+        val previousStream = java.security.MessageDigest.getInstance("SHA-256")
 
         val outcome = ArenaGameRunner.play(
             registry = registry,
@@ -46,6 +47,9 @@ class FrozenBaselineTest : FunSpec({
             seed = FROZEN_SEED, pairId = 0, gameIndex = 0,
             maxTurns = 30,
             recordActionStream = true,
+            actionStreamObserver = { entry ->
+                previousStream.update(entry.replace(", declaredCostTimes=1", "").toByteArray(Charsets.UTF_8))
+            },
         )
 
         withClue(
@@ -54,6 +58,11 @@ class FrozenBaselineTest : FunSpec({
                 "life ${outcome.seat0Life}/${outcome.seat1Life}). See this test's KDoc before re-blessing."
         ) {
             outcome.actionStreamHash shouldBe GOLDEN_HASH
+            previousStream.digest().joinToString("") { "%02x".format(it) }.take(16) shouldBe "d8f35146e25ee2b1"
+            outcome.turns shouldBe 20
+            outcome.winnerSeat shouldBe 1
+            outcome.seat0Life shouldBe -8
+            outcome.seat1Life shouldBe 16
         }
     }
 }) {
@@ -123,7 +132,12 @@ class FrozenBaselineTest : FunSpec({
          * `", additionalCostChoices={}"` stripped from the recorded action text, this branch
          * reproduces the previous golden `6193d6504283455a` exactly. Seat 1 still wins on turn
          * 20 at life -8 / 16.
+         *
+         * Re-blessed 2026-09-30 for replicate adding `CastSpell.declaredCostTimes`. **`LEGACY_V0` did
+         * not move.** With `", declaredCostTimes=1"` stripped from the recorded action text, this
+         * branch reproduces the previous golden `d8f35146e25ee2b1` exactly. Seat 1 still wins on turn
+         * 20 at life -8 / 16.
          */
-        private const val GOLDEN_HASH = "d8f35146e25ee2b1"
+        private const val GOLDEN_HASH = "b1efc4d47dce9a1c"
     }
 }

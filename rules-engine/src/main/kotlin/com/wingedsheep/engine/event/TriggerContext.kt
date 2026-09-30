@@ -42,6 +42,8 @@ import com.wingedsheep.sdk.model.EntityId
  */
 @kotlinx.serialization.Serializable
 data class TriggerContext(
+    /** Cast-time source for self-copy triggers, retained after the original leaves the stack. */
+    val spellCopySource: com.wingedsheep.engine.state.ComponentContainer? = null,
     val triggeringEntityId: EntityId? = null,
     val triggeringOrigin: com.wingedsheep.engine.state.ObjectRef? = null,
     val triggeringObject: com.wingedsheep.engine.state.ObjectRef? = null,

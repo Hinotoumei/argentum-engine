@@ -559,6 +559,28 @@ internal class CastValidator(
             }
             return "This card does not have $mechanic"
         }
+        // Paying a declared optional cost more than once needs a repeatable one (replicate,
+        // CR 702.56a); a zero or negative count is not a declaration at all.
+        if (action.declaredCostTimes < 1) return "An optional cost must be paid at least once"
+        if (action.declaredCostSlot == ChoiceSlot.REPLICATED && declaredOptionalCosts(action, cardDef).size != 1)
+            return "Independent payments for multiple replicate abilities are not supported"
+        if (action.declaredCostTimes > 1 &&
+            (action.declaredCostSlot == null || declaredOptionalCosts(action, cardDef).none { it.multi })
+        ) {
+            return "This spell's optional cost can only be paid once"
+        }
+        for (cost in declaredOptionalCosts(action, cardDef)) {
+            val times = action.declaredCostTimes.toLong()
+            if ((cost.manaCost?.cmc ?: 0).toLong() * times + cardDef.manaCost.cmc > Int.MAX_VALUE)
+                return "Optional mana cost exceeds the supported amount"
+            val amount = when (val atom = (cost.additionalCost as? AdditionalCost.Atom)?.atom) {
+                is CostAtom.PayLife -> atom.amount
+                is CostAtom.PayPlayerCounters -> (atom.amount as? com.wingedsheep.sdk.scripting.values.DynamicAmount.Fixed)?.amount
+                else -> null
+            }
+            if (amount != null && amount.toLong() * times > Int.MAX_VALUE)
+                return "Optional additional cost exceeds the supported amount"
+        }
         // "…rather than pay this spell's mana cost **if** <condition>" (Blasphemous Edict). Mirrors
         // the availability gate in CastSpellEnumerator so an authorization can't outlive the
         // enumeration that offered it.

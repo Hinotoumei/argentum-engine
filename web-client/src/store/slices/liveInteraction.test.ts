@@ -72,6 +72,28 @@ beforeEach(() => {
 })
 
 describe('browser live action origins', () => {
+  it('preserves the offered replicate count through payment and targeting', () => {
+    const replicated: LegalActionInfo = {
+      ...offered,
+      actionType: 'CastWithKicker',
+      action: { type: 'CastSpell', playerId: ME, cardId: SPELL, declaredCostSlot: 'REPLICATED', declaredCostTimes: 2 },
+    }
+    receive('replicate', false, undefined, [replicated])
+    useGameStore.getState().startPipeline(useGameStore.getState().legalActions[0]!, { forceManualTap: true })
+    useGameStore.getState().advancePipeline({ type: 'manaSource', selectedSources: [MANA] })
+    useGameStore.getState().addTarget(TARGET)
+    useGameStore.getState().confirmTargeting('replicate')
+    expect(send).toHaveBeenCalledOnce()
+    expect(send).toHaveBeenCalledWith({
+      type: 'submitAction', interactionEpoch: 'replicate',
+      action: {
+        ...replicated.action,
+        paymentStrategy: { type: 'Explicit', manaAbilitiesToActivate: [MANA], phyrexianLifePayments: [] },
+        targets: [{ type: 'Permanent', entityId: TARGET }],
+      },
+    })
+  })
+
   it('retains an action origin through payment, targeting, and same-timeline delta delivery', () => {
     const actionInfo = useGameStore.getState().legalActions[0]!
     expect(actionInfo.interactionEpoch).toBe('original')

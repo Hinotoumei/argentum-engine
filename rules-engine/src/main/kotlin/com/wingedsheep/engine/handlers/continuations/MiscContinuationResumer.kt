@@ -599,7 +599,8 @@ class MiscContinuationResumer(
             targetRequirements = continuation.spellTargetRequirements,
             copyIndex = copyIndex,
             copyTotal = continuation.totalCopies,
-            controllerId = continuation.controllerId
+            controllerId = continuation.controllerId,
+            sourceSnapshot = continuation.sourceSnapshot
         )
         if (stackResult.outcome !is Outcome.Done) return stackResult
         currentState = com.wingedsheep.engine.handlers.effects.stack.StormCopyEffectExecutor
@@ -639,7 +640,8 @@ class MiscContinuationResumer(
                     sourceSpellId = continuation.sourceId,
                     copyIndex = nextCopyIndex,
                     copyTotal = continuation.totalCopies,
-                    controllerId = continuation.controllerId
+                    controllerId = continuation.controllerId,
+                    sourceSnapshot = continuation.sourceSnapshot
                 )
                 if (res.outcome !is Outcome.Done) return res
                 loopState = com.wingedsheep.engine.handlers.effects.stack.StormCopyEffectExecutor
@@ -664,7 +666,8 @@ class MiscContinuationResumer(
             totalCopies = continuation.totalCopies,
             keywordsForCopy = continuation.keywordsForCopy,
             removeLegendary = continuation.removeLegendary,
-            tokenRiders = continuation.tokenRiders
+            tokenRiders = continuation.tokenRiders,
+            sourceSnapshot = continuation.sourceSnapshot
         )
         val targetReqInfos = continuation.spellTargetRequirements.mapIndexed { index, req ->
             TargetRequirementInfo(
@@ -726,7 +729,8 @@ class MiscContinuationResumer(
             totalCopies = continuation.totalCopies,
             priorEvents = emptyList(),
             keywordsForCopy = continuation.keywordsForCopy,
-            removeLegendary = continuation.removeLegendary
+            removeLegendary = continuation.removeLegendary,
+            sourceSnapshot = continuation.sourceSnapshot
         )
 
         if (result.outcome is Outcome.Paused) {

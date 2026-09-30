@@ -27,6 +27,15 @@ class StormCopyEffectExecutor(
 
     override val effectType: KClass<StormCopyEffect> = StormCopyEffect::class
 
+    /** Read the same stack visit when it survives; otherwise use its last captured source. */
+    private fun sourceSnapshot(state: GameState, context: EffectContext): com.wingedsheep.engine.state.ComponentContainer? {
+        val captured = context.triggerContext?.spellCopySource ?: return null
+        val original = context.objectReferences.origin
+        return if (original != null && state.isCurrentObject(original))
+            state.getEntity(original.entityId) ?: captured
+        else captured
+    }
+
     override fun execute(
         state: GameState,
         effect: StormCopyEffect,
@@ -40,9 +49,11 @@ class StormCopyEffectExecutor(
         // [SpellOnStackComponent], not as a flat TargetsComponent. Modes are fixed
         // for every copy, but per 702.40a the copy controller may pick new targets
         // for each mode — iterate per-mode / per-copy via StormCopyModalTargetContinuation.
-        val sourceSpell = context.sourceId?.let { state.getEntity(it)?.get<SpellOnStackComponent>() }
+        val sourceSnapshot = sourceSnapshot(state, context)
+        val sourceSpell = (sourceSnapshot ?: context.sourceId?.let { state.getEntity(it) })?.get<SpellOnStackComponent>()
         if (sourceSpell != null && sourceSpell.chosenModes.isNotEmpty()) {
             val sourceId = context.sourceId
+                ?: return EffectResult.error(state, "Copy trigger has no source spell")
             val hasAnyTargetedMode = sourceSpell.chosenModes.any { modeIdx ->
                 sourceSpell.modeTargetRequirements[modeIdx]?.isNotEmpty() == true
             }
@@ -61,7 +72,8 @@ class StormCopyEffectExecutor(
                 currentOrdinal = 0,
                 remainingCopies = effect.copyCount,
                 totalCopies = effect.copyCount,
-                priorEvents = emptyList()
+                priorEvents = emptyList(),
+                sourceSnapshot = sourceSnapshot
             ))
         }
 
@@ -94,7 +106,8 @@ class StormCopyEffectExecutor(
                     sourceSpellId = sourceId,
                     copyIndex = i,
                     copyTotal = effect.copyCount,
-                    controllerId = context.controllerId
+                    controllerId = context.controllerId,
+                    sourceSnapshot = sourceSnapshot(state, context)
                 )
             )
             if (result.outcome !is Outcome.Done) return result
@@ -139,7 +152,8 @@ class StormCopyEffectExecutor(
                     sourceSpellId = sourceId,
                     copyIndex = copyIndex,
                     copyTotal = effect.copyCount,
-                    controllerId = context.controllerId
+                    controllerId = context.controllerId,
+                    sourceSnapshot = sourceSnapshot(state, context)
                 )
                 if (copyResult.outcome !is Outcome.Done) return EffectResult.from(copyResult)
                 currentState = copyResult.newState
@@ -155,7 +169,8 @@ class StormCopyEffectExecutor(
                 spellName = effect.spellName,
                 controllerId = context.controllerId,
                 sourceId = sourceId,
-                totalCopies = effect.copyCount
+                totalCopies = effect.copyCount,
+                sourceSnapshot = sourceSnapshot(state, context)
             )
             val targetReqInfos = effect.spellTargetRequirements.mapIndexed { index, req ->
                 TargetRequirementInfo(
@@ -216,7 +231,8 @@ class StormCopyEffectExecutor(
             totalCopies: Int,
             priorEvents: List<GameEvent>,
             keywordsForCopy: Set<String> = emptySet(),
-            removeLegendary: Boolean = false
+            removeLegendary: Boolean = false,
+            sourceSnapshot: com.wingedsheep.engine.state.ComponentContainer? = null
         ): ExecutionResult {
             var currentState = state
             val allEvents = priorEvents.toMutableList()
@@ -224,7 +240,7 @@ class StormCopyEffectExecutor(
             var ordinal = currentOrdinal
             var copiesLeft = remainingCopies
 
-            val sourceSpellComp = currentState.getEntity(sourceId)?.get<SpellOnStackComponent>()
+            val sourceSpellComp = (sourceSnapshot ?: currentState.getEntity(sourceId))?.get<SpellOnStackComponent>()
                 ?: return ExecutionResult.error(currentState, "Storm source spell not found: $sourceId")
             val sourceModeTargetsOrdered = sourceSpellComp.modeTargetsOrdered
 
@@ -291,7 +307,8 @@ class StormCopyEffectExecutor(
                         accumulatedOrdinalTargets = accumulated,
                         currentOrdinal = ordinal,
                         keywordsForCopy = keywordsForCopy,
-                        removeLegendary = removeLegendary
+                        removeLegendary = removeLegendary,
+                        sourceSnapshot = sourceSnapshot
                     )
 
                     return currentState.suspendForDecision(decision, continuation, allEvents)
@@ -306,7 +323,8 @@ class StormCopyEffectExecutor(
                     modeTargetRequirements = modeTargetRequirements,
                     copyIndex = copyIndex,
                     copyTotal = totalCopies,
-                    controllerId = controllerId
+                    controllerId = controllerId,
+                    sourceSnapshot = sourceSnapshot
                 )
                 if (copyResult.outcome !is Outcome.Done) return copyResult
                 currentState = applyCopyMutations(

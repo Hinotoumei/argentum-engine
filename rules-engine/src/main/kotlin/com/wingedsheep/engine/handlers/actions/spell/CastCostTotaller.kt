@@ -29,6 +29,7 @@ import com.wingedsheep.sdk.core.Zone
 import com.wingedsheep.sdk.model.CardDefinition
 import com.wingedsheep.sdk.model.EntityId
 import com.wingedsheep.sdk.scripting.AdditionalCost
+import com.wingedsheep.sdk.scripting.ChoiceSlot
 import com.wingedsheep.sdk.scripting.KeywordAbility
 import com.wingedsheep.sdk.scripting.effects.ModalEffect
 
@@ -75,10 +76,10 @@ internal class CastCostTotaller(
 
         // Add kicker/offspring mana cost if kicked (only for mana-based kicker/offspring; not
         // applicable with alternative costs).
-        if (!playForFree && !action.useAlternativeCost) {
+        if (!playForFree && !action.useAlternativeCost && action.declaredCostSlot != ChoiceSlot.REPLICATED) {
             val kickerManaCost = declaredOptionalCosts(action, cardDef)
                 .firstOrNull { it.manaCost != null }
-                ?.manaCost
+                ?.manaCostPaid(action.declaredCostTimes)
             if (kickerManaCost != null) {
                 effectiveCost = ManaCost(effectiveCost.symbols + kickerManaCost.symbols)
             }
@@ -143,7 +144,11 @@ internal class CastCostTotaller(
                 ?.get<PlayWithFixedAlternativeManaCostComponent>()
                 ?.takeIf { it.controllerId == action.playerId }
             if (fixedAltCost != null) {
-                effectiveCost = fixedAltCost.fixedCost
+                val replicateMana = replicateManaCost(action, cardDef)
+                effectiveCost = if (cardDef != null && replicateMana != null)
+                    costCalculator.calculateEffectiveCostWithAlternativeBase(
+                        state, cardDef, fixedAltCost.fixedCost + replicateMana, action.playerId)
+                    else fixedAltCost.fixedCost
             }
             // Apply runtime mana tax from exile permissions (e.g., Soul Partition) on top of
             // whichever base applies (printed cost, or the fixed alternative above).
@@ -275,10 +280,13 @@ internal class CastCostTotaller(
         // battlefield cost-modifier pipeline (CR 118.9a applies cost modifiers to the chosen half
         // just like to a normal cast).
         val faceManaCostOverride: ManaCost? = action.faceIndex?.let { idx -> cardDef?.cardFaces?.getOrNull(idx)?.manaCost }
+        val replicateMana = replicateManaCost(action, cardDef)
         return when {
-            playForFree -> ManaCost.ZERO
+            playForFree -> if (cardDef != null && replicateMana != null)
+                costCalculator.calculateEffectiveCostWithAlternativeBase(state, cardDef, replicateMana, action.playerId)
+                else ManaCost.ZERO
             faceManaCostOverride != null && cardDef != null ->
-                costCalculator.calculateEffectiveCostWithAlternativeBase(state, cardDef, faceManaCostOverride, action.playerId)
+                costCalculator.calculateEffectiveCostWithAlternativeBase(state, cardDef, faceManaCostOverride + (replicateMana ?: ManaCost.ZERO), action.playerId)
             action.useAlternativeCost && cardDef != null ->
                 alternativeBases.firstNotNullOfOrNull { (type, base) ->
                     if (action.altAllows(type)) base(AlternativeBaseQuery(state, action, cardDef)) else null
@@ -302,6 +310,7 @@ internal class CastCostTotaller(
                     // Price the branch the player actually announced — a "costs {2} less to cast if
                     // it's bargained" reduction is gated on the declaration (CR 702.166).
                     declaredCostSlot = action.declaredCostSlot,
+                    baseCost = cardDef.manaCost + (replicateMana ?: ManaCost.ZERO),
                 )
             }
             else -> cardComponent.manaCost
@@ -314,7 +323,13 @@ internal class CastCostTotaller(
     }
 
     private fun AlternativeBaseQuery.priced(base: ManaCost): ManaCost =
-        costCalculator.calculateEffectiveCostWithAlternativeBase(state, cardDef, base, playerId)
+        costCalculator.calculateEffectiveCostWithAlternativeBase(state, cardDef,
+            base + (replicateManaCost(action, cardDef) ?: ManaCost.ZERO), playerId)
+
+    private fun replicateManaCost(action: CastSpell, cardDef: CardDefinition?): ManaCost? =
+        if (action.declaredCostSlot == ChoiceSlot.REPLICATED && cardDef != null)
+            declaredOptionalCosts(action, cardDef).firstOrNull { it.manaCost != null }?.manaCostPaid(action.declaredCostTimes)
+        else null
 
     /**
      * The alternative costs that can replace a spell's mana cost (CR 118.9), in the order they are

@@ -188,6 +188,7 @@ object TableGameRunner {
         /** Hash every action and decision into [TableGameOutcome.actionStreamHash]. Off by
          *  default: it costs a string per action, and only `FrozenBaselineTest` needs it. */
         recordActionStream: Boolean = false,
+        actionStreamObserver: ((String) -> Unit)? = null,
         featureCollector: ArenaFeatureCollector? = null,
         trainingObserver: ArenaTrainingObserver? = null,
     ): TableGameOutcome {
@@ -242,7 +243,10 @@ object TableGameRunner {
         // `GameState.turnNumber` counts player turns, hence the multiply.
         val maxPlayerTurns = maxTurns * setup.seats
         val stream = if (recordActionStream) MessageDigest.getInstance("SHA-256") else null
-        fun record(entry: String) = stream?.update(entry.toByteArray(Charsets.UTF_8))
+        fun record(entry: String) {
+            stream?.update(entry.toByteArray(Charsets.UTF_8))
+            actionStreamObserver?.invoke(entry)
+        }
         val featureGame = featureCollector?.newGame(
             "$groupId-$rotation-$seed",
             seatIds.mapIndexed { seat, id -> id to agents[seat].name }.toMap(),

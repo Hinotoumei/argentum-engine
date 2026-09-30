@@ -282,7 +282,7 @@ export function buildActionOptions(
     (a) => a.action.type === 'CastSpell' && a.actionType !== 'CastFaceDown' && a.actionType !== 'CastWithKicker'
   )
   const castAction = castActions[0] ?? null
-  const kickerAction = legalActions.find((a) => a.actionType === 'CastWithKicker')
+  const kickerActions = legalActions.filter((a) => a.actionType === 'CastWithKicker')
   const morphAction = legalActions.find((a) => a.actionType === 'CastFaceDown')
   const cycleAction = legalActions.find((a) => a.action.type === 'CycleCard')
   const typecycleAction = legalActions.find((a) => a.action.type === 'TypecycleCard')
@@ -471,9 +471,9 @@ export function buildActionOptions(
   }
 
   // 3b. Cast with kicker
-  if (kickerAction) {
+  for (const [index, kickerAction] of kickerActions.entries()) {
     options.push({
-      key: 'castWithKicker',
+      key: index === 0 ? 'castWithKicker' : `castWithKicker-${index}`,
       // Server picks the suffix — "(Kicked)", "(Offspring)", "(Bargained)", or "(with Flash)" for
       // flash-timing kickers like Ghitu Fire / Molten Exhale. Fall back to an unlabelled cast if
       // absent rather than guessing a mechanic.

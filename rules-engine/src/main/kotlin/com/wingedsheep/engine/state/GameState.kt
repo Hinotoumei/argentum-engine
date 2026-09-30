@@ -1094,7 +1094,7 @@ data class GameState(
     fun popFromStack(): Pair<EntityId?, GameState> {
         if (stack.isEmpty()) return null to this
         val top = stack.last()
-        return top to copy(stack = stack.dropLast(1))
+        return top to captureCopySource(top).copy(stack = stack.dropLast(1))
     }
 
     /**
@@ -1115,7 +1115,30 @@ data class GameState(
      * Remove a specific entity from the stack (for countering).
      */
     fun removeFromStack(entityId: EntityId): GameState =
-        copy(stack = stack - entityId)
+        captureCopySource(entityId).copy(stack = stack - entityId)
+
+    /** CR 707.10: self-copy triggers keep the spell's last stack state, including retargeting. */
+    private fun captureCopySource(entityId: EntityId): GameState {
+        val source = getEntity(entityId)?.takeIf { it.has<SpellOnStackComponent>() } ?: return this
+        val sourceRef = objectRef(entityId) ?: return this
+        var updated = this
+        for (id in stack) {
+            val trigger = getEntity(id)?.get<com.wingedsheep.engine.state.components.stack.TriggeredAbilityOnStackComponent>() ?: continue
+            val facts = trigger.triggerContext ?: continue
+            if (facts.spellCopySource != null && trigger.objectReferences.origin == sourceRef) {
+                updated = updated.updateEntity(id) { it.with(trigger.copy(
+                    triggerContext = facts.copy(spellCopySource = source)
+                )) }
+            }
+        }
+        val pending = pendingTriggers.map { trigger ->
+            val facts = trigger.triggerContext
+            if (facts.spellCopySource != null && trigger.objectReferences.origin == sourceRef)
+                trigger.copy(triggerContext = facts.copy(spellCopySource = source))
+            else trigger
+        }
+        return if (pending == pendingTriggers) updated else updated.copy(pendingTriggers = pending)
+    }
 
     // =========================================================================
     // Convenience Zone Accessors

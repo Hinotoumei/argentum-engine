@@ -303,6 +303,69 @@
     }
 }
 
+// Consign to Memory
+{
+    "name": "Consign to Memory",
+    "manaCost": "{U}",
+    "typeLine": "Instant",
+    "oracleText": "Replicate {1} (When you cast this spell, copy it for each time you paid its replicate cost. You may choose new targets for the copies.)\nCounter target triggered ability or colorless spell.",
+    "keywords": [
+        "REPLICATE"
+    ],
+    "keywordAbilities": [
+        {
+            "type": "Kicker",
+            "manaCost": "{1}",
+            "multi": true,
+            "displayPrefix": "Replicate",
+            "keyword": "REPLICATE",
+            "branchesEffect": false,
+            "declaredSlot": "REPLICATED"
+        }
+    ],
+    "script": {
+        "spellEffect": {
+            "type": "Counter",
+            "target": "CounterTarget.SpellOrAbility"
+        },
+        "targetRequirements": [
+            {
+                "type": "TargetObject",
+                "filter": {
+                    "baseFilter": {
+                        "cardPredicates": [
+                            {
+                                "type": "Or",
+                                "predicates": [
+                                    "IsTriggeredAbility",
+                                    "IsColorless"
+                                ]
+                            }
+                        ]
+                    },
+                    "zone": "Stack"
+                },
+                "id": "t0"
+            }
+        ]
+    },
+    "metadata": {
+        "collectorNumber": "54",
+        "rarity": "UNCOMMON",
+        "artist": "Ben Hill",
+        "imageUri": "https://cards.scryfall.io/normal/front/b/c/bc95af55-d1dd-4fe6-adb0-3ad6db20d986.jpg?1783911293",
+        "rulings": [
+            {
+                "date": "2024-06-07",
+                "text": "A copy of a spell can be countered like any other spell, but it must be countered individually. Countering a spell with replicate won't affect the copies."
+            }
+        ]
+    },
+    "colorIdentityOverride": [
+        "BLUE"
+    ]
+}
+
 // Depth Defiler
 {
     "name": "Depth Defiler",

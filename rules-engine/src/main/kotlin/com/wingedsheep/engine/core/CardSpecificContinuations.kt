@@ -432,6 +432,8 @@ data class StormCopyTargetContinuation(
     val removeLegendary: Boolean = false,
     val tokenRiders: com.wingedsheep.engine.state.components.stack.SpellCopyTokenRidersComponent? = null,
     val objectReferences: com.wingedsheep.engine.handlers.ObjectReferenceEnvironment = com.wingedsheep.engine.handlers.ObjectReferenceEnvironment(),
+    /** Frozen source of a self-copy trigger; null for copies of a live target. */
+    val sourceSnapshot: com.wingedsheep.engine.state.ComponentContainer? = null,
 ) : AnswerContinuation
 
 /**
@@ -493,6 +495,8 @@ data class StormCopyModalTargetContinuation(
     /** If true, strip the Legendary supertype from each resulting copy. */
     val removeLegendary: Boolean = false,
     val objectReferences: com.wingedsheep.engine.handlers.ObjectReferenceEnvironment = com.wingedsheep.engine.handlers.ObjectReferenceEnvironment(),
+    /** Frozen source of a self-copy trigger; null for copies of a live target. */
+    val sourceSnapshot: com.wingedsheep.engine.state.ComponentContainer? = null,
 ) : AnswerContinuation
 
 /**
