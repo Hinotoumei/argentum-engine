@@ -1613,6 +1613,81 @@
     ]
 }
 
+// Gemstone Caverns
+{
+    "name": "Gemstone Caverns",
+    "manaCost": "",
+    "typeLine": "Legendary Land",
+    "oracleText": "If Gemstone Caverns is in your opening hand and you're not playing first, you may begin the game with it on the battlefield with a luck counter on it. If you do, exile a card from your hand.\n{T}: Add {C}. If Gemstone Caverns has a luck counter on it, instead add one mana of any color.",
+    "script": {
+        "activatedAbilities": [
+            {
+                "id": "Gemstone Caverns:1",
+                "cost": "CostTap",
+                "effect": {
+                    "type": "AddColorlessMana",
+                    "amount": {
+                        "type": "Fixed",
+                        "amount": 1
+                    }
+                },
+                "timing": "ManaAbility",
+                "restrictions": [
+                    {
+                        "type": "ActivationOnlyIfCondition",
+                        "condition": {
+                            "type": "Not",
+                            "condition": {
+                                "type": "EntityMatches",
+                                "entity": "Self",
+                                "filter": {
+                                    "statePredicates": [
+                                        {
+                                            "type": "HasCounter",
+                                            "counterType": "LUCK"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                ],
+                "isManaAbility": true
+            },
+            {
+                "id": "Gemstone Caverns:2",
+                "cost": "CostTap",
+                "effect": "AddManaOfChoice",
+                "timing": "ManaAbility",
+                "restrictions": [
+                    {
+                        "type": "ActivationOnlyIfCondition",
+                        "condition": {
+                            "type": "EntityMatches",
+                            "entity": "Self",
+                            "filter": {
+                                "statePredicates": [
+                                    {
+                                        "type": "HasCounter",
+                                        "counterType": "LUCK"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                ],
+                "isManaAbility": true
+            }
+        ],
+        "mayStartOnBattlefield": true
+    },
+    "metadata": {
+        "collectorNumber": "274",
+        "rarity": "RARE"
+    },
+    "colorIdentityOverride": []
+}
+
 // Grapeshot
 {
     "name": "Grapeshot",

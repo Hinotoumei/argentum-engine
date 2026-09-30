@@ -228,6 +228,152 @@
     ]
 }
 
+// Infernal Tutor
+{
+    "name": "Infernal Tutor",
+    "manaCost": "{1}{B}",
+    "typeLine": "Sorcery",
+    "oracleText": "Reveal a card from your hand. Search your library for a card with the same name as that card, reveal it, put it into your hand, then shuffle.\nHellbent — If you have no cards in hand, instead search your library for a card, put it into your hand, then shuffle.",
+    "script": {
+        "spellEffect": {
+            "type": "Gated",
+            "gate": {
+                "type": "Gate.WhenCondition",
+                "condition": {
+                    "type": "Exists",
+                    "player": "You",
+                    "zone": "Hand",
+                    "negate": true
+                }
+            },
+            "then": {
+                "type": "Composite",
+                "effects": [
+                    {
+                        "type": "GatherCards",
+                        "source": {
+                            "type": "FromZone",
+                            "zone": "Library"
+                        },
+                        "storeAs": "searchable",
+                        "search": true
+                    },
+                    {
+                        "type": "SelectFromCollection",
+                        "from": "searchable",
+                        "selection": {
+                            "type": "ChooseUpTo",
+                            "count": {
+                                "type": "Fixed",
+                                "amount": 1
+                            }
+                        },
+                        "storeSelected": "found"
+                    },
+                    {
+                        "type": "MoveCollection",
+                        "from": "found",
+                        "destination": {
+                            "type": "ToZone",
+                            "zone": "Hand"
+                        }
+                    },
+                    "ShuffleLibrary",
+                    "EmitLibrarySearchedEvent"
+                ]
+            },
+            "otherwise": {
+                "type": "Composite",
+                "effects": [
+                    {
+                        "type": "GatherCards",
+                        "source": {
+                            "type": "FromZone",
+                            "zone": "Hand"
+                        },
+                        "storeAs": "gathered0"
+                    },
+                    {
+                        "type": "SelectFromCollection",
+                        "from": "gathered0",
+                        "selection": {
+                            "type": "ChooseExactly",
+                            "count": {
+                                "type": "Fixed",
+                                "amount": 1
+                            }
+                        },
+                        "storeSelected": "selected1",
+                        "prompt": "Reveal a card from your hand"
+                    },
+                    {
+                        "type": "RevealCollection",
+                        "from": "selected1",
+                        "revealToSelf": false
+                    },
+                    {
+                        "type": "StoreCardName",
+                        "from": "selected1",
+                        "storeAs": "cardName3"
+                    },
+                    {
+                        "type": "Composite",
+                        "effects": [
+                            {
+                                "type": "GatherCards",
+                                "source": {
+                                    "type": "FromZone",
+                                    "zone": "Library",
+                                    "filter": {
+                                        "cardPredicates": [
+                                            {
+                                                "type": "NameEqualsChosen",
+                                                "variableName": "cardName3"
+                                            }
+                                        ]
+                                    }
+                                },
+                                "storeAs": "searchable",
+                                "search": true
+                            },
+                            {
+                                "type": "SelectFromCollection",
+                                "from": "searchable",
+                                "selection": {
+                                    "type": "ChooseUpTo",
+                                    "count": {
+                                        "type": "Fixed",
+                                        "amount": 1
+                                    }
+                                },
+                                "storeSelected": "found"
+                            },
+                            {
+                                "type": "MoveCollection",
+                                "from": "found",
+                                "destination": {
+                                    "type": "ToZone",
+                                    "zone": "Hand"
+                                },
+                                "revealed": true
+                            },
+                            "ShuffleLibrary",
+                            "EmitLibrarySearchedEvent"
+                        ]
+                    }
+                ]
+            }
+        }
+    },
+    "metadata": {
+        "collectorNumber": "46",
+        "rarity": "RARE"
+    },
+    "colorIdentityOverride": [
+        "BLACK"
+    ]
+}
+
 // Macabre Waltz
 {
     "name": "Macabre Waltz",

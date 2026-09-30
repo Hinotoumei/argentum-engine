@@ -3244,6 +3244,300 @@
     "colorIdentityOverride": []
 }
 
+// Kasmina, Enigma Sage
+{
+    "name": "Kasmina, Enigma Sage",
+    "manaCost": "{1}{G}{U}",
+    "typeLine": "Legendary Planeswalker — Kasmina",
+    "oracleText": "Each other planeswalker you control has the loyalty abilities of Kasmina, Enigma Sage.\n+2: Scry 1.\n−X: Create a 0/0 green and blue Fractal creature token. Put X +1/+1 counters on it.\n−8: Search your library for an instant or sorcery card that shares a color with this planeswalker, exile that card, then shuffle. You may cast that card without paying its mana cost.",
+    "script": {
+        "activatedAbilities": [
+            {
+                "id": "Kasmina, Enigma Sage:1",
+                "cost": {
+                    "type": "CostLoyalty",
+                    "change": 2
+                },
+                "effect": {
+                    "type": "Scry",
+                    "count": 1
+                },
+                "timing": "SorcerySpeed",
+                "isPlaneswalkerAbility": true
+            },
+            {
+                "id": "Kasmina, Enigma Sage:2",
+                "cost": "CostLoyaltyX",
+                "effect": {
+                    "type": "Composite",
+                    "effects": [
+                        {
+                            "type": "CreateToken",
+                            "power": 0,
+                            "toughness": 0,
+                            "colors": [
+                                "GREEN",
+                                "BLUE"
+                            ],
+                            "creatureTypes": [
+                                "Fractal"
+                            ]
+                        },
+                        {
+                            "type": "AddDynamicCounters",
+                            "counterType": "PLUS_ONE_PLUS_ONE",
+                            "amount": "XValue",
+                            "target": {
+                                "type": "PipelineTarget",
+                                "collectionName": "createdTokens"
+                            }
+                        }
+                    ]
+                },
+                "timing": "SorcerySpeed",
+                "isPlaneswalkerAbility": true
+            },
+            {
+                "id": "Kasmina, Enigma Sage:3",
+                "cost": {
+                    "type": "CostLoyalty",
+                    "change": -8
+                },
+                "effect": {
+                    "type": "Composite",
+                    "effects": [
+                        {
+                            "type": "GatherCards",
+                            "source": {
+                                "type": "FromZone",
+                                "zone": "Library",
+                                "filter": {
+                                    "cardPredicates": [
+                                        {
+                                            "type": "Or",
+                                            "predicates": [
+                                                "IsInstant",
+                                                "IsSorcery"
+                                            ]
+                                        },
+                                        {
+                                            "type": "SharesColorWith",
+                                            "entity": "Self"
+                                        }
+                                    ]
+                                }
+                            },
+                            "storeAs": "gathered0",
+                            "search": true
+                        },
+                        {
+                            "type": "SelectFromCollection",
+                            "from": "gathered0",
+                            "selection": {
+                                "type": "ChooseUpTo",
+                                "count": {
+                                    "type": "Fixed",
+                                    "amount": 1
+                                }
+                            },
+                            "storeSelected": "selected1",
+                            "prompt": "Search your library for an instant or sorcery card that shares a color with this planeswalker",
+                            "selectedLabel": "Exile and cast for free"
+                        },
+                        {
+                            "type": "RevealCollection",
+                            "from": "selected1",
+                            "revealToSelf": false
+                        },
+                        {
+                            "type": "MoveCollection",
+                            "from": "selected1",
+                            "destination": {
+                                "type": "ToZone",
+                                "zone": "Exile"
+                            }
+                        },
+                        "ShuffleLibrary",
+                        "EmitLibrarySearchedEvent",
+                        {
+                            "type": "ConditionalOnCollection",
+                            "collection": "selected1",
+                            "ifNotEmpty": {
+                                "type": "Gated",
+                                "gate": "Gate.MayDecide",
+                                "then": {
+                                    "type": "CastFromCollectionWithoutPayingCost",
+                                    "from": "selected1"
+                                },
+                                "descriptionOverride": "You may cast that card without paying its mana cost."
+                            }
+                        }
+                    ]
+                },
+                "timing": "SorcerySpeed",
+                "isPlaneswalkerAbility": true
+            }
+        ],
+        "staticAbilities": [
+            {
+                "type": "GrantActivatedAbility",
+                "ability": {
+                    "id": "Kasmina, Enigma Sage:4",
+                    "cost": {
+                        "type": "CostLoyalty",
+                        "change": 2
+                    },
+                    "effect": {
+                        "type": "Scry",
+                        "count": 1
+                    },
+                    "timing": "SorcerySpeed",
+                    "isPlaneswalkerAbility": true
+                },
+                "filter": {
+                    "baseFilter": "planeswalker ctrl:you",
+                    "excludeSelf": true
+                }
+            },
+            {
+                "type": "GrantActivatedAbility",
+                "ability": {
+                    "id": "Kasmina, Enigma Sage:5",
+                    "cost": "CostLoyaltyX",
+                    "effect": {
+                        "type": "Composite",
+                        "effects": [
+                            {
+                                "type": "CreateToken",
+                                "power": 0,
+                                "toughness": 0,
+                                "colors": [
+                                    "GREEN",
+                                    "BLUE"
+                                ],
+                                "creatureTypes": [
+                                    "Fractal"
+                                ]
+                            },
+                            {
+                                "type": "AddDynamicCounters",
+                                "counterType": "PLUS_ONE_PLUS_ONE",
+                                "amount": "XValue",
+                                "target": {
+                                    "type": "PipelineTarget",
+                                    "collectionName": "createdTokens"
+                                }
+                            }
+                        ]
+                    },
+                    "timing": "SorcerySpeed",
+                    "isPlaneswalkerAbility": true
+                },
+                "filter": {
+                    "baseFilter": "planeswalker ctrl:you",
+                    "excludeSelf": true
+                }
+            },
+            {
+                "type": "GrantActivatedAbility",
+                "ability": {
+                    "id": "Kasmina, Enigma Sage:6",
+                    "cost": {
+                        "type": "CostLoyalty",
+                        "change": -8
+                    },
+                    "effect": {
+                        "type": "Composite",
+                        "effects": [
+                            {
+                                "type": "GatherCards",
+                                "source": {
+                                    "type": "FromZone",
+                                    "zone": "Library",
+                                    "filter": {
+                                        "cardPredicates": [
+                                            {
+                                                "type": "Or",
+                                                "predicates": [
+                                                    "IsInstant",
+                                                    "IsSorcery"
+                                                ]
+                                            },
+                                            {
+                                                "type": "SharesColorWith",
+                                                "entity": "Self"
+                                            }
+                                        ]
+                                    }
+                                },
+                                "storeAs": "gathered0",
+                                "search": true
+                            },
+                            {
+                                "type": "SelectFromCollection",
+                                "from": "gathered0",
+                                "selection": {
+                                    "type": "ChooseUpTo",
+                                    "count": {
+                                        "type": "Fixed",
+                                        "amount": 1
+                                    }
+                                },
+                                "storeSelected": "selected1",
+                                "prompt": "Search your library for an instant or sorcery card that shares a color with this planeswalker",
+                                "selectedLabel": "Exile and cast for free"
+                            },
+                            {
+                                "type": "RevealCollection",
+                                "from": "selected1",
+                                "revealToSelf": false
+                            },
+                            {
+                                "type": "MoveCollection",
+                                "from": "selected1",
+                                "destination": {
+                                    "type": "ToZone",
+                                    "zone": "Exile"
+                                }
+                            },
+                            "ShuffleLibrary",
+                            "EmitLibrarySearchedEvent",
+                            {
+                                "type": "ConditionalOnCollection",
+                                "collection": "selected1",
+                                "ifNotEmpty": {
+                                    "type": "Gated",
+                                    "gate": "Gate.MayDecide",
+                                    "then": {
+                                        "type": "CastFromCollectionWithoutPayingCost",
+                                        "from": "selected1"
+                                    },
+                                    "descriptionOverride": "You may cast that card without paying its mana cost."
+                                }
+                            }
+                        ]
+                    },
+                    "timing": "SorcerySpeed",
+                    "isPlaneswalkerAbility": true
+                },
+                "filter": {
+                    "baseFilter": "planeswalker ctrl:you",
+                    "excludeSelf": true
+                }
+            }
+        ]
+    },
+    "metadata": {
+        "collectorNumber": "196",
+        "rarity": "MYTHIC"
+    },
+    "startingLoyalty": 2,
+    "colorIdentityOverride": [
+        "GREEN",
+        "BLUE"
+    ]
+}
+
 // Lash of Malice
 {
     "name": "Lash of Malice",
@@ -4315,6 +4609,157 @@
     "colorIdentityOverride": [
         "RED",
         "BLUE"
+    ]
+}
+
+// Prismari Command
+{
+    "name": "Prismari Command",
+    "manaCost": "{1}{U}{R}",
+    "typeLine": "Instant",
+    "oracleText": "Choose two —\n• Prismari Command deals 2 damage to any target.\n• Target player draws two cards, then discards two cards.\n• Target player creates a Treasure token.\n• Destroy target artifact.",
+    "script": {
+        "spellEffect": {
+            "type": "Modal",
+            "modes": [
+                {
+                    "effect": {
+                        "type": "DealDamage",
+                        "amount": {
+                            "type": "Fixed",
+                            "amount": 2
+                        },
+                        "target": {
+                            "type": "BoundVariable",
+                            "name": "t0"
+                        }
+                    },
+                    "targetRequirements": [
+                        {
+                            "type": "AnyTarget",
+                            "id": "t0"
+                        }
+                    ],
+                    "description": "Prismari Command deals 2 damage to any target"
+                },
+                {
+                    "effect": {
+                        "type": "Composite",
+                        "effects": [
+                            {
+                                "type": "DrawCards",
+                                "count": {
+                                    "type": "Fixed",
+                                    "amount": 2
+                                },
+                                "target": {
+                                    "type": "BoundVariable",
+                                    "name": "t1"
+                                }
+                            },
+                            {
+                                "type": "Composite",
+                                "effects": [
+                                    {
+                                        "type": "GatherCards",
+                                        "source": {
+                                            "type": "FromZone",
+                                            "zone": "Hand",
+                                            "player": {
+                                                "type": "BoundVariable",
+                                                "name": "t1"
+                                            }
+                                        },
+                                        "storeAs": "hand"
+                                    },
+                                    {
+                                        "type": "SelectFromCollection",
+                                        "from": "hand",
+                                        "selection": {
+                                            "type": "ChooseExactly",
+                                            "count": {
+                                                "type": "Fixed",
+                                                "amount": 2
+                                            }
+                                        },
+                                        "chooser": "TargetPlayer",
+                                        "storeSelected": "discarded",
+                                        "prompt": "Choose 2 cards to discard"
+                                    },
+                                    {
+                                        "type": "MoveCollection",
+                                        "from": "discarded",
+                                        "destination": {
+                                            "type": "ToZone",
+                                            "zone": "Graveyard",
+                                            "player": {
+                                                "type": "BoundVariable",
+                                                "name": "t1"
+                                            }
+                                        },
+                                        "moveType": "Discard"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "targetRequirements": [
+                        {
+                            "type": "TargetPlayer",
+                            "id": "t1"
+                        }
+                    ],
+                    "description": "Target player draws two cards, then discards two cards"
+                },
+                {
+                    "effect": {
+                        "type": "CreatePredefinedToken",
+                        "tokenType": "Treasure",
+                        "controller": {
+                            "type": "BoundVariable",
+                            "name": "t2"
+                        }
+                    },
+                    "targetRequirements": [
+                        {
+                            "type": "TargetPlayer",
+                            "id": "t2"
+                        }
+                    ],
+                    "description": "Target player creates a Treasure token"
+                },
+                {
+                    "effect": {
+                        "type": "MoveToZone",
+                        "target": {
+                            "type": "BoundVariable",
+                            "name": "t3"
+                        },
+                        "destination": "Graveyard",
+                        "byDestruction": true
+                    },
+                    "targetRequirements": [
+                        {
+                            "type": "TargetObject",
+                            "filter": {
+                                "baseFilter": "artifact"
+                            },
+                            "id": "t3"
+                        }
+                    ],
+                    "description": "Destroy target artifact"
+                }
+            ],
+            "chooseCount": 2
+        }
+    },
+    "metadata": {
+        "collectorNumber": "214",
+        "rarity": "UNCOMMON"
+    },
+    "colorIdentityOverride": [
+        "BLUE",
+        "RED"
     ]
 }
 

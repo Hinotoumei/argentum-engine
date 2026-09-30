@@ -55,3 +55,42 @@
         "RED"
     ]
 }
+
+// One with Nothing
+{
+    "name": "One with Nothing",
+    "manaCost": "{B}",
+    "typeLine": "Instant",
+    "oracleText": "Discard your hand.",
+    "script": {
+        "spellEffect": {
+            "type": "Composite",
+            "effects": [
+                {
+                    "type": "GatherCards",
+                    "source": {
+                        "type": "FromZone",
+                        "zone": "Hand"
+                    },
+                    "storeAs": "discardedHand"
+                },
+                {
+                    "type": "MoveCollection",
+                    "from": "discardedHand",
+                    "destination": {
+                        "type": "ToZone",
+                        "zone": "Graveyard"
+                    },
+                    "moveType": "Discard"
+                }
+            ]
+        }
+    },
+    "metadata": {
+        "collectorNumber": "84",
+        "rarity": "RARE"
+    },
+    "colorIdentityOverride": [
+        "BLACK"
+    ]
+}

@@ -82,7 +82,7 @@ class FacadeBoundaryTest : FunSpec({
 
         SetSourceRoots.definitionFiles().forEach { path ->
             val rel = SetSourceRoots.relativize(path)
-            if (pipelineAllowlist.keys.any { rel.toString().endsWith(it) }) return@forEach
+            if (pipelineAllowlist.keys.any { rel.toString().replace('\\', '/').endsWith(it) }) return@forEach
             stripCommentsAndImports(path.readText()).forEachIndexed { idx, line ->
                 for ((regex, hint) in pipelineSteps) {
                     if (regex.containsMatchIn(line)) {

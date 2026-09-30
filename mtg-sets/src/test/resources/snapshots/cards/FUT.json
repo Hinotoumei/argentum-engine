@@ -144,6 +144,82 @@
     ]
 }
 
+// Keldon Megaliths
+{
+    "name": "Keldon Megaliths",
+    "manaCost": "",
+    "typeLine": "Land",
+    "oracleText": "Keldon Megaliths enters tapped.\n{T}: Add {R}.\nHellbent — {1}{R}, {T}: Keldon Megaliths deals 1 damage to any target. Activate only if you have no cards in hand.",
+    "script": {
+        "activatedAbilities": [
+            {
+                "id": "Keldon Megaliths:1",
+                "cost": "CostTap",
+                "effect": {
+                    "type": "AddMana",
+                    "color": "RED"
+                },
+                "timing": "ManaAbility",
+                "isManaAbility": true
+            },
+            {
+                "id": "Keldon Megaliths:2",
+                "cost": {
+                    "type": "CostComposite",
+                    "costs": [
+                        {
+                            "type": "CostAtomWrapper",
+                            "atom": {
+                                "type": "AtomMana",
+                                "cost": "{1}{R}"
+                            }
+                        },
+                        "CostTap"
+                    ]
+                },
+                "effect": {
+                    "type": "DealDamage",
+                    "amount": {
+                        "type": "Fixed",
+                        "amount": 1
+                    },
+                    "target": {
+                        "type": "BoundVariable",
+                        "name": "t0"
+                    }
+                },
+                "targetRequirements": [
+                    {
+                        "type": "AnyTarget",
+                        "id": "t0"
+                    }
+                ],
+                "restrictions": [
+                    {
+                        "type": "ActivationOnlyIfCondition",
+                        "condition": {
+                            "type": "Exists",
+                            "player": "You",
+                            "zone": "Hand",
+                            "negate": true
+                        }
+                    }
+                ]
+            }
+        ],
+        "replacementEffects": [
+            "EntersTapped"
+        ]
+    },
+    "metadata": {
+        "collectorNumber": "170",
+        "rarity": "RARE"
+    },
+    "colorIdentityOverride": [
+        "RED"
+    ]
+}
+
 // Mass of Ghouls
 {
     "name": "Mass of Ghouls",

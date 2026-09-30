@@ -1855,6 +1855,49 @@
     }
 }
 
+// Manamorphose
+{
+    "name": "Manamorphose",
+    "manaCost": "{1}{R/G}",
+    "typeLine": "Instant",
+    "oracleText": "Add two mana in any combination of colors.\nDraw a card.",
+    "script": {
+        "spellEffect": {
+            "type": "Composite",
+            "effects": [
+                {
+                    "type": "AddDynamicMana",
+                    "amountSource": {
+                        "type": "Fixed",
+                        "amount": 2
+                    },
+                    "allowedColors": [
+                        "WHITE",
+                        "BLUE",
+                        "BLACK",
+                        "RED",
+                        "GREEN"
+                    ]
+                },
+                {
+                    "type": "DrawCards",
+                    "count": {
+                        "type": "Fixed",
+                        "amount": 1
+                    }
+                }
+            ]
+        }
+    },
+    "metadata": {
+        "collectorNumber": "211"
+    },
+    "colorIdentityOverride": [
+        "RED",
+        "GREEN"
+    ]
+}
+
 // Mass Calcify
 {
     "name": "Mass Calcify",

@@ -274,6 +274,68 @@
     ]
 }
 
+// Sire of Insanity
+{
+    "name": "Sire of Insanity",
+    "manaCost": "{4}{B}{R}",
+    "typeLine": "Creature — Demon",
+    "oracleText": "At the beginning of each end step, each player discards their hand.",
+    "creatureStats": {
+        "power": 6,
+        "toughness": 4
+    },
+    "script": {
+        "triggeredAbilities": [
+            {
+                "id": "Sire of Insanity:1",
+                "trigger": {
+                    "type": "StepEvent",
+                    "step": "END",
+                    "player": "Each"
+                },
+                "binding": "ANY",
+                "effect": {
+                    "type": "ForEach",
+                    "space": {
+                        "type": "IterationSpace.Players",
+                        "players": "ActivePlayerFirst"
+                    },
+                    "body": {
+                        "type": "Composite",
+                        "effects": [
+                            {
+                                "type": "GatherCards",
+                                "source": {
+                                    "type": "FromZone",
+                                    "zone": "Hand"
+                                },
+                                "storeAs": "discardedHand"
+                            },
+                            {
+                                "type": "MoveCollection",
+                                "from": "discardedHand",
+                                "destination": {
+                                    "type": "ToZone",
+                                    "zone": "Graveyard"
+                                },
+                                "moveType": "Discard"
+                            }
+                        ]
+                    }
+                }
+            }
+        ]
+    },
+    "metadata": {
+        "collectorNumber": "104",
+        "rarity": "RARE"
+    },
+    "colorIdentityOverride": [
+        "BLACK",
+        "RED"
+    ]
+}
+
 // Unflinching Courage
 {
     "name": "Unflinching Courage",

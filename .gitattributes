@@ -1,0 +1,2 @@
+# Golden snapshots are compared as canonical JSON text on every platform.
+mtg-sets/src/test/resources/snapshots/cards/*.json text eol=lf
