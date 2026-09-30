@@ -4,8 +4,7 @@ import com.wingedsheep.engine.core.CardsSelectedResponse
 import com.wingedsheep.engine.core.SelectCardsDecision
 import com.wingedsheep.engine.state.components.battlefield.CountersComponent
 import com.wingedsheep.engine.support.GameTestDriver
-import com.wingedsheep.sdk.model.CardDefinition
-import com.wingedsheep.sdk.core.Subtype
+import com.wingedsheep.engine.support.TestCards
 import com.wingedsheep.mtg.sets.definitions.lrw.cards.AdderStaffBoggart
 import com.wingedsheep.sdk.core.Color
 import com.wingedsheep.sdk.core.CounterType
@@ -36,12 +35,13 @@ class AdderStaffBoggartScenarioTest : FunSpec({
         manaCost = "{0}"; typeLine = "Artifact"; oracleText = ""
     }
 
+    // Catalog discovery is shared suite setup, not part of a timed gameplay assertion.
+    // Loading here also prevents the next spec from paying the cold-start cost in its first test.
+    val cards = TestCards.all + listOf(AdderStaffBoggart, Boulder, Pebble)
+
     fun driver(): GameTestDriver {
         val d = GameTestDriver()
-        d.registerCards(listOf(
-            AdderStaffBoggart, Boulder, Pebble,
-            CardDefinition.basicLand("Mountain", Subtype("Mountain"))
-        ))
+        d.registerCards(cards)
         d.initMirrorMatch(deck = Deck.of("Mountain" to 40), startingPlayer = 0)
         d.passPriorityUntil(Step.PRECOMBAT_MAIN)
         return d
