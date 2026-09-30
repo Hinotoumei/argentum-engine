@@ -64,6 +64,7 @@ class RandomDeckResolver(
         format: DeckFormat?,
         fallbackSetCode: String,
         commanderRules: Boolean,
+        maxCopiesPerCard: Int? = null,
     ): GeneratedDeck {
         // A fixed list is the host's explicit answer and was validated against the format when it
         // was submitted; nothing left to decide. Its commander rides along — under a non-commander
@@ -76,7 +77,7 @@ class RandomDeckResolver(
         // empty pool — treat it as Auto instead of failing the game start.
         val setCodes = (spec as? AiDeckSpec.Sets)?.setCodes?.filter { it.isNotBlank() }.orEmpty()
 
-        return randomDeck(format, setCodes, fallbackSetCode, commanderRules)
+        return randomDeck(format, setCodes, fallbackSetCode, commanderRules, maxCopiesPerCard)
     }
 
     /**
@@ -90,7 +91,8 @@ class RandomDeckResolver(
         format: DeckFormat?,
         setCodes: List<String>,
         commanderRules: Boolean,
-    ): GeneratedDeck = resolve(spec, format, fallbackSetFrom(setCodes), commanderRules)
+        maxCopiesPerCard: Int? = null,
+    ): GeneratedDeck = resolve(spec, format, fallbackSetFrom(setCodes), commanderRules, maxCopiesPerCard)
 
     /**
      * A generated deck for a seat that pinned no set of its own — [resolve] without a spec, for the
@@ -127,6 +129,7 @@ class RandomDeckResolver(
         setCodes: List<String>,
         fallbackSetCode: String,
         commanderRules: Boolean,
+        maxCopiesPerCard: Int? = null,
     ): GeneratedDeck {
         // Which commander-shaped format to build to: the lobby's own when it set one, else paper
         // Commander — the broadest commander-legal pool, and the right default for a lobby that
@@ -175,9 +178,9 @@ class RandomDeckResolver(
         }
 
         val sealed = if (setCodes.isEmpty()) {
-            sealedDeckGenerator.generate(fallbackSetCode)
+            sealedDeckGenerator.generate(fallbackSetCode, maxCopiesPerCard)
         } else {
-            sealedDeckGenerator.generate(setCodes)
+            sealedDeckGenerator.generate(setCodes, maxCopiesPerCard)
         }
         return GeneratedDeck(sealed)
     }

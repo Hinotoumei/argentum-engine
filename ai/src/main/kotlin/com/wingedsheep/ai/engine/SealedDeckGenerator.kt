@@ -55,13 +55,14 @@ class SealedDeckGenerator(
      * Generates a sealed deck from 8 boosters of the specified set.
      *
      * @param setCode The set to generate boosters from
+     * @param maxCopiesPerCard Optional nonbasic copy limit for brought-deck lobbies
      * @return A map of card name (or "Name#SetCode-CollectorNumber" for lands) to count
      */
-    fun generate(setCode: String): Map<String, Int> {
+    fun generate(setCode: String, maxCopiesPerCard: Int? = null): Map<String, Int> {
         requireNotNull(boosterGenerator.availableSets[setCode]) { "Unknown set code: $setCode" }
 
         val pool = boosterGenerator.generateSealedPool(setCode, boosterCount = 8)
-        val deck = buildSealedDeck(pool, setCode)
+        val deck = buildSealedDeck(pool, setCode, maxCopiesPerCard)
 
         // Pin the basics to the set's standard art, exactly as a human's submitted deck is.
         return BoosterGenerator.withBasicLandArt(deck, boosterGenerator.getBasicLands(setCode))
@@ -77,15 +78,16 @@ class SealedDeckGenerator(
      *
      * @param setCodes the sets to open boosters from; a single-element list behaves exactly like
      *        [generate].
+     * @param maxCopiesPerCard Optional nonbasic copy limit for brought-deck lobbies
      * @return A map of card name (or "Name#SetCode-CollectorNumber" for lands) to count
      */
-    fun generate(setCodes: List<String>): Map<String, Int> {
+    fun generate(setCodes: List<String>, maxCopiesPerCard: Int? = null): Map<String, Int> {
         require(setCodes.isNotEmpty()) { "At least one set code is required" }
-        if (setCodes.size == 1) return generate(setCodes.first())
+        if (setCodes.size == 1) return generate(setCodes.first(), maxCopiesPerCard)
         setCodes.forEach { requireNotNull(boosterGenerator.availableSets[it]) { "Unknown set code: $it" } }
 
         val pool = boosterGenerator.generateSealedPool(setCodes, boosterCount = 8)
-        val deck = buildSealedDeck(pool, setCodes.first())
+        val deck = buildSealedDeck(pool, setCodes.first(), maxCopiesPerCard)
 
         return BoosterGenerator.withBasicLandArt(deck, boosterGenerator.getBasicLands(setCodes))
     }
@@ -94,22 +96,40 @@ class SealedDeckGenerator(
      * Builds a sealed deck from [pool] with the Draftsim autobuilder, scoped to [setCode] so it loads
      * that set's ratings/removal/archetype tables. Sets without a Draftsim ratings file still build
      * (the scorer falls back to a rarity ladder). Falls back to [buildHeuristicSealedDeck] only if
-     * Draftsim throws or yields an empty list — the heuristic always produces a legal 40-card deck.
+     * Draftsim throws or yields an incomplete deck.
      */
-    private fun buildSealedDeck(pool: List<CardDefinition>, setCode: String): Map<String, Int> {
+    internal fun buildSealedDeck(
+        pool: List<CardDefinition>,
+        setCode: String,
+        maxCopiesPerCard: Int? = null,
+    ): Map<String, Int> {
+        // A brought-deck lobby may use sealed cards as its source while enforcing a copy limit.
+        // Limit the builder's physical pool, so both builders fill missing slots with basic lands.
+        // Ordinary Limited keeps every opened copy; basic lands are always unrestricted.
+        val eligiblePool = if (maxCopiesPerCard == null) pool else {
+            require(maxCopiesPerCard > 0) { "Copy limit must be positive" }
+            val counts = mutableMapOf<String, Int>()
+            pool.filter { card ->
+                if (card.typeLine.isBasicLand) true else {
+                    val count = counts.getOrDefault(card.name, 0)
+                    counts[card.name] = count + 1
+                    count < maxCopiesPerCard
+                }
+            }
+        }
         val result = runCatching {
-            DraftsimDeckBuildAdvisor.buildDeck(DeckBuildRequest(pool = pool, setCodes = listOf(setCode)))
+            DraftsimDeckBuildAdvisor.buildDeck(DeckBuildRequest(pool = eligiblePool, setCodes = listOf(setCode)))
         }.getOrElse { error ->
             logger.warn("Draftsim build failed for set '{}'; falling back to heuristic", setCode, error)
             null
         }
         val build = result?.builds?.getOrNull(result.recommended)
-        if (build != null && build.deckList.isNotEmpty()) return build.deckList
+        if (build != null && build.deckList.values.sum() == 40) return build.deckList
 
         if (result != null) {
-            logger.warn("Draftsim produced no build for set '{}'; falling back to heuristic", setCode)
+            logger.warn("Draftsim produced no complete 40-card build for set '{}'; falling back to heuristic", setCode)
         }
-        return buildHeuristicSealedDeck(pool)
+        return buildHeuristicSealedDeck(eligiblePool)
     }
 
     private companion object {

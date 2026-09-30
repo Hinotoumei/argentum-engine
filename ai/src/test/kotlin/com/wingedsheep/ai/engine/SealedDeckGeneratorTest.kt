@@ -9,6 +9,7 @@ import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.ints.shouldBeGreaterThan
 
 /**
  * Guards the random-set selection used by quick/AI games against picking a set whose pool is too
@@ -62,6 +63,24 @@ class SealedDeckGeneratorTest : FunSpec({
             incomplete = incomplete,
             extensionSet = extensionSet,
         )
+
+    test("a premade copy limit preserves deck size and leaves basic lands unrestricted") {
+        val generator = SealedDeckGenerator(BoosterGenerator(emptyMap()))
+        val pool = List(40) { card("Repeated Creature", Rarity.COMMON) }
+
+        val limited = generator.buildSealedDeck(pool, "TEST")
+        limited.getValue("Repeated Creature") shouldBe 4
+        limited.values.sum() shouldBe 40
+
+        val premade = generator.buildSealedDeck(pool, "TEST", maxCopiesPerCard = 4)
+        premade.getValue("Repeated Creature") shouldBe 4
+        premade.values.sum() shouldBe 40
+        premade.getValue("Forest") shouldBeGreaterThan 4
+
+        val stricter = generator.buildSealedDeck(pool, "TEST", maxCopiesPerCard = 2)
+        stricter.getValue("Repeated Creature") shouldBe 2
+        stricter.values.sum() shouldBe 40
+    }
 
     test("randomSetCode only returns fully-implemented sets") {
         // One viable, curated set; several partial ones whose pools cannot open a booster

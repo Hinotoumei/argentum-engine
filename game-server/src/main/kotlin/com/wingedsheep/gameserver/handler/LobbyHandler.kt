@@ -1621,6 +1621,7 @@ class LobbyHandler(
                 lobby.deckFormat,
                 lobby.setCodes,
                 lobby.usesCommanderRules,
+                maxCopiesPerCard = 4,
             )
         }
             .onFailure { logger.error("Could not generate a deck for AI seat ${aiPlayerId.value}", it) }
