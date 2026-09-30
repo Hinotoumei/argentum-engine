@@ -4,7 +4,8 @@ import com.wingedsheep.engine.core.CardsSelectedResponse
 import com.wingedsheep.engine.core.SelectCardsDecision
 import com.wingedsheep.engine.state.components.battlefield.CountersComponent
 import com.wingedsheep.engine.support.GameTestDriver
-import com.wingedsheep.engine.support.TestCards
+import com.wingedsheep.sdk.model.CardDefinition
+import com.wingedsheep.sdk.core.Subtype
 import com.wingedsheep.mtg.sets.definitions.lrw.cards.AdderStaffBoggart
 import com.wingedsheep.sdk.core.Color
 import com.wingedsheep.sdk.core.CounterType
@@ -37,7 +38,10 @@ class AdderStaffBoggartScenarioTest : FunSpec({
 
     fun driver(): GameTestDriver {
         val d = GameTestDriver()
-        d.registerCards(TestCards.all + listOf(AdderStaffBoggart, Boulder, Pebble))
+        d.registerCards(listOf(
+            AdderStaffBoggart, Boulder, Pebble,
+            CardDefinition.basicLand("Mountain", Subtype("Mountain"))
+        ))
         d.initMirrorMatch(deck = Deck.of("Mountain" to 40), startingPlayer = 0)
         d.passPriorityUntil(Step.PRECOMBAT_MAIN)
         return d
