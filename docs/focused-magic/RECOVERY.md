@@ -14,4 +14,21 @@ The original archive preserves the frontend, exact deck fixtures, historical dep
 
 Recovery is not gameplay acceptance. The recovered Gemstone implementation contains card-specific engine logic and an unreported counter mutation that require repair. Scalding Tarn and Faithless Looting already have native definitions; their gameplay and Focused Magic adapter decisions still require behavioral tests. Scope remains the exact Modern 60 versus Dimir Tempo 60 main decks, with 42 unique identities, as recorded in the latest checkpoint.
 
-No upstream writes or Render changes have been made. The recovered source has not yet passed compilation or gameplay verification.
+No upstream writes or Render changes have been made. The September 29 recovered baseline passed the project build excluding the accepted legacy `:mtgish-tooling:test` limitation. That baseline result does not verify subsequent September 30 changes or establish live gameplay acceptance.
+
+## September 30 continuation
+
+The newer repair packet is preserved in `recovery/2026-09-30/`; its complete ZIP has SHA-256 `19b611fdc55d6b23680711f3024d1d88c28af3d7ec7391ebc9206dde04455eb9`. The prepared frontend is direct source under `focused-magic-app/`. Archive preservation and frontend adoption were pushed to the existing branch in commit `ac5eb85c7f`.
+
+The September 30 Magic regression build passed (`build -x :mtgish-tooling:test`), retaining the accepted legacy mtgish-only exclusion. The final test-only strengthening for normal Caverns land play also passed all twelve Caverns scenarios:
+
+- Force of Will: three alternate-cost scenarios passed, including rejection of exiling the spell itself and a nonblue card. The self-exile rejection repairs cost validation. Assay reads the counter line but declines the alternate-cost line; this is not a whole-card Assay pass.
+- Daze: Island return and both payment outcomes passed; a Forest cannot pay the alternate cost. Assay declined its reading, so scenario evidence remains necessary.
+- Gray Ogre: the existing printed card casts and deals two unblocked combat damage in its dedicated scenario. The packet's historical `Grey Ogre` spelling remains in the preserved archive.
+- Gemstone Caverns: all twelve scenarios passed on retry, including the one-card-hand and exiled-second-Caverns edge cases. The initial full-catalog fixture timed out in its first scenario; the retry uses only the relevant cards. Opening-hand options are now generic source data, and both SDK and suspended-game serialization checks passed. The 4,043-test engine suite and complete 2,030-test 2003–2007 card scenario suite passed, including the existing Leyline of the Void scenarios. The complete later-era regression suites also passed.
+- Scalding Tarn: all four scenarios passed, covering Island, Mountain and dual-land eligibility, fail-to-find, activation life/sacrifice costs, invalid selection rejection, untapped entry and shuffling.
+- Faithless Looting: both normal-cast and flashback scenarios passed, proving newly drawn cards are available to discard and that the flashback spell is exiled.
+
+The remaining September 30 card matrix, Consign to Memory's missing replicate capability, provider decisions in real games, and live acceptance remain unfinished. A card's presence in the corpus or registry is not gameplay verification. InuYasha color validation is a separate unfinished frontend repair; official rules govern its matching-color and direct-attack cases.
+
+The first September 30 full build failed when Adder-Staff Boggart's first gameplay test spent its timeout loading the full card catalog. An unchanged retry passed but spent 97.6 seconds in that test; a thread dump confirmed catalog discovery. With user authorization, the fixture now loads the shared catalog during spec setup instead of inside a timed gameplay test (commit `87ee1dfb5d`). The corrected full-suite run spent roughly 128 seconds preparing that spec, then its first gameplay test passed in 2.0 seconds; the following Ageless Sentinels tests also passed. The complete build subsequently passed in 36 minutes 27 seconds; a final Caverns-only run passed after strengthening its normal-play case to submit the actual PlayLand action. Assay's ALL and TSP set differential checks reported no divergences among covered cards; NEM reported a pre-existing Stronghold Machinist target-filter divergence, whose repair still awaits separate approval. Assay coverage declines are not passes.
