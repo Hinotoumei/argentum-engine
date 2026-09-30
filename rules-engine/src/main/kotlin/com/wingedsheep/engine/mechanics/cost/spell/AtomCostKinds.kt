@@ -305,6 +305,11 @@ internal object ExileFromCostKind : SpellCostKind<CostAtom.ExileFrom> {
         val zoneCards = state.getZone(ZoneKey(check.playerId, cost.zone))
         val context = PredicateContext(controllerId = check.playerId)
         for (cardId in exiled) {
+            // Validation reads the pre-cast state, where the spell is still in hand.
+            // It moves to the stack before costs are paid and cannot pay its own exile cost.
+            if (cardId == check.action.cardId) {
+                return "Cannot exile the spell being cast to pay its own cost"
+            }
             if (cardId !in zoneCards) {
                 return "Card to exile is not in your $zoneDesc"
             }
