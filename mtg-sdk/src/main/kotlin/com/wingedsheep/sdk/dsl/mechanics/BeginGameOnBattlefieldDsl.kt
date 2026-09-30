@@ -13,6 +13,13 @@ package com.wingedsheep.sdk.dsl
  * A set-mechanic [CardBuilder] extension (SDK plan §2.2): it composes onto the builder via
  * the public `mayStartOnBattlefield` flag and lives here rather than on the core builder.
  */
-fun CardBuilder.mayBeginGameOnBattlefield() {
+fun CardBuilder.mayBeginGameOnBattlefield(
+    requireNotStartingPlayer: Boolean = false,
+    entryCounters: Map<com.wingedsheep.sdk.core.CounterType, Int> = emptyMap(),
+    exileFromHandCount: Int = 0
+) {
     mayStartOnBattlefield = true
+    openingHandBattlefieldOptions = com.wingedsheep.sdk.model.OpeningHandBattlefieldOptions(
+        requireNotStartingPlayer, entryCounters, exileFromHandCount
+    )
 }

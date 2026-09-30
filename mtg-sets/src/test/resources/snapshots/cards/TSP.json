@@ -1679,7 +1679,14 @@
                 "isManaAbility": true
             }
         ],
-        "mayStartOnBattlefield": true
+        "mayStartOnBattlefield": true,
+        "openingHandBattlefieldOptions": {
+            "requireNotStartingPlayer": true,
+            "entryCounters": {
+                "LUCK": 1
+            },
+            "exileFromHandCount": 1
+        }
     },
     "metadata": {
         "collectorNumber": "274",

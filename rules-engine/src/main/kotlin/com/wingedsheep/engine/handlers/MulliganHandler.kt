@@ -342,15 +342,9 @@ class MulliganHandler(
                 val cardDef = registry.getCard(cardComponent.cardDefinitionId) ?: return@filter false
                 if (!cardDef.script.mayStartOnBattlefield) return@filter false
 
-                // Gemstone Caverns has the same opening-hand timing as a Leyline but two
-                // additional requirements: its controller must not be the starting player,
-                // and Focused Magic requires another card to be available for the mandatory
-                // exile rider if the player takes the special action.
-                if (cardComponent.name == "Gemstone Caverns") {
-                    playerId != newState.activePlayerId && hand.any { it != cardId }
-                } else {
-                    true
-                }
+                val options = cardDef.script.openingHandBattlefieldOptions
+                (!options.requireNotStartingPlayer || playerId != newState.activePlayerId) &&
+                    hand.count { it != cardId } >= options.exileFromHandCount
             }
 
             val updatedMullState = mullState.copy(
@@ -383,7 +377,15 @@ class MulliganHandler(
         }
         for (playerId in ordered) {
             val mullState = getMulliganState(state, playerId)
-            val firstLeyline = mullState.pendingLeylineCardIds.firstOrNull() ?: continue
+            val hand = state.getHand(playerId)
+            val firstLeyline = mullState.pendingLeylineCardIds.firstOrNull { cardId ->
+                if (cardId !in hand) return@firstOrNull false
+                val card = state.getEntity(cardId)?.get<CardComponent>() ?: return@firstOrNull false
+                val definition = cardRegistry?.getCard(card.cardDefinitionId) ?: return@firstOrNull false
+                val options = definition.script.openingHandBattlefieldOptions
+                (!options.requireNotStartingPlayer || playerId != state.activePlayerId) &&
+                    hand.count { it != cardId } >= options.exileFromHandCount
+            } ?: continue
             return playerId to firstLeyline
         }
         return null
@@ -436,7 +438,8 @@ class MulliganHandler(
      */
     fun createLeylineDecision(state: GameState, playerId: EntityId, leylineCardId: EntityId): ExecutionResult? {
         val cardName = state.getEntity(leylineCardId)?.get<CardComponent>()?.name ?: return null
-        val isGemstoneCaverns = cardName == "Gemstone Caverns"
+        val cardDef = cardRegistry?.getCard(cardName)
+        val options = cardDef?.script?.openingHandBattlefieldOptions
         val question = { decisionId: String -> YesNoDecision(
             id = decisionId,
             playerId = playerId,
@@ -448,10 +451,11 @@ class MulliganHandler(
             ),
             yesText = "Yes",
             noText = "No",
-            hint = if (isGemstoneCaverns) {
-                "Gemstone Caverns — You are not playing first. If you begin with it on the battlefield, it gets a luck counter and you exile another card from your hand."
-            } else {
-                "Leyline — If this card is in your opening hand, you may begin the game with it on the battlefield."
+            hint = buildString {
+                append("If this card is in your opening hand, you may begin with it on the battlefield.")
+                if (options?.requireNotStartingPlayer == true) append(" Only if you are not playing first.")
+                if ((options?.exileFromHandCount ?: 0) > 0) append(" Exile ${options!!.exileFromHandCount} other card(s) from your hand.")
+                options?.entryCounters?.forEach { (type, count) -> append(" It begins with $count ${type.name.lowercase()} counter(s).") }
             }
         ) }
         val continuation = LeylineDecisionContinuation(

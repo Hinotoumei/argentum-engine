@@ -384,6 +384,7 @@ data class CardScript(
      * Wired via the `mayBeginGameOnBattlefield()` DSL helper on [com.wingedsheep.sdk.dsl.CardBuilder].
      */
     val mayStartOnBattlefield: Boolean = false,
+    val openingHandBattlefieldOptions: OpeningHandBattlefieldOptions = OpeningHandBattlefieldOptions(),
 
     /**
      * "As you cast this spell" condition captures (CR 601.2i). Each is a named condition the engine

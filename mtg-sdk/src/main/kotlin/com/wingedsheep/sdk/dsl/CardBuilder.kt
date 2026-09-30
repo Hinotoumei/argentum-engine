@@ -385,6 +385,7 @@ class CardBuilder(private val name: String) {
      * [leyline] DSL helper rather than by hand.
      */
     var mayStartOnBattlefield: Boolean = false
+    var openingHandBattlefieldOptions = com.wingedsheep.sdk.model.OpeningHandBattlefieldOptions()
 
     /**
      * Meld-result marker (CR 701.42). Set on the permanent two meld cards combine into —
@@ -965,6 +966,7 @@ class CardBuilder(private val name: String) {
             selfAlternativeCost = selfAlternativeCost,
             xManaRestriction = spellBuilder?.xManaRestriction ?: emptySet(),
             mayStartOnBattlefield = mayStartOnBattlefield,
+            openingHandBattlefieldOptions = openingHandBattlefieldOptions,
             castTimeCaptures = spellBuilder?.castTimeCaptures ?: emptyList()
         )
 

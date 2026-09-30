@@ -70,6 +70,7 @@ import com.wingedsheep.engine.event.ConditionalSelfGrants
  */
 data class ZoneEntryOptions(
     val controllerId: EntityId? = null,
+    val entryCounters: Map<CounterType, Int> = emptyMap(),
     val libraryPlacement: LibraryPlacement = LibraryPlacement.Top,
     val tapped: Boolean = false,
     val tappedAndAttacking: Boolean = false,
@@ -717,6 +718,14 @@ class ZoneTransitionService(
                 newState = applyBattlefieldEntry(
                     newState, entityId, cardComponent, destControllerId, options, fromZone
                 )
+                for ((counterType, count) in options.entryCounters) {
+                    val (counterState, counterEvents) = EntersWithReplacements.placeEntryCounters(
+                        newState, entityId, counterType, count, destControllerId,
+                        cardComponent.name, predicateEvaluator
+                    )
+                    newState = counterState
+                    events.addAll(counterEvents)
+                }
                 // Record entry for per-player ETB-by-type tracking (Mechan Shieldmate and similar).
                 // This pipeline records via PermanentEntryTracker.record directly rather than
                 // BattlefieldEntry.place because the read must happen *after* applyBattlefieldEntry

@@ -327,7 +327,7 @@ val engineSerializersModule = SerializersModule {
         subclass(CastFromCollectionTargetsContinuation::class)
         subclass(CastAnyNumberFromCollectionContinuation::class)
         subclass(LeylineDecisionContinuation::class)
-        subclass(GemstoneCavernsExileContinuation::class)
+        subclass(OpeningHandExileContinuation::class)
         subclass(ChooseGuessKindContinuation::class)
         subclass(GuessTopCardKindContinuation::class)
         subclass(GuessConditionContinuation::class)

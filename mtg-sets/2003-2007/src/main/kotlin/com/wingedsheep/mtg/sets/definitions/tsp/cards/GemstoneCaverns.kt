@@ -14,9 +14,8 @@ import com.wingedsheep.sdk.scripting.TimingRule
  * Gemstone Caverns
  * Legendary Land
  *
- * Focused Magic 0.6.7 uses Argentum's opening-hand battlefield phase for the
- * pregame action. The engine patch supplies Gemstone's extra requirements:
- * not playing first, exile another card, and enter with a luck counter.
+ * Uses the generic opening-hand battlefield action with a nonstarting-player
+ * restriction, an entry luck counter, and a mandatory hand exile.
  */
 val GemstoneCaverns = card("Gemstone Caverns") {
     typeLine = "Legendary Land"
@@ -26,7 +25,11 @@ val GemstoneCaverns = card("Gemstone Caverns") {
         "If you do, exile a card from your hand.\n" +
         "{T}: Add {C}. If Gemstone Caverns has a luck counter on it, instead add one mana of any color."
 
-    mayBeginGameOnBattlefield()
+    mayBeginGameOnBattlefield(
+        requireNotStartingPlayer = true,
+        entryCounters = mapOf(CounterType.LUCK to 1),
+        exileFromHandCount = 1
+    )
 
     activatedAbility {
         cost = Costs.Tap

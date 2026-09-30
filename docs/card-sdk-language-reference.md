@@ -15004,3 +15004,14 @@ and `Not`. They delegate that relational comparison to the shared predicate eval
 intermediate projection, preserving colorless results instead of falling back to printed colors.
 Public library-reveal statics follow projected control, so stealing a reveal source switches which
 player's top card is visible.
+
+### Opening-hand battlefield conditions and riders
+
+`mayBeginGameOnBattlefield(requireNotStartingPlayer = true,
+entryCounters = mapOf(CounterType.LUCK to 1), exileFromHandCount = 1)`
+models an optional opening-hand action restricted to players who are not playing first.
+The permanent enters with the specified counters through counter replacement and event
+processing. Accepting the action requires enough other cards in hand and then a mandatory
+selection to exile exactly that many distinct cards. The defaults retain the ordinary
+Leyline behavior. These options are stored in `CardScript.openingHandBattlefieldOptions`;
+the engine does not identify cards by name.
