@@ -1,0 +1,66 @@
+FOCUSED MAGIC v0.6.6 PLAYABLE TABLETOP + INUYASHA TEST MATCH VALIDATION
+
+USER CORRECTION APPLIED
+PASS — the launcher does not hide or replace the playable Magic game surface.
+PASS — the Constructed local/manual fallback still renders a visual card table with hand, battlefield, stack/zones, and card images.
+PASS — InuYasha is a separate visual test-match table, not a text/numeric-only replacement UI.
+
+MAGIC FOUNDATION PRESERVATION
+Byte-identical to accepted v0.6.5 for the core tabletop implementation files:
+  css/base.css
+  css/reality-tabletop.css
+  css/reality-fracture.css
+  css/core-match.css
+  js/reality-fracture/rules-engine.js
+  js/reality-fracture/ui.js
+  js/core/core-magic.js
+Intentional differences from v0.6.5:
+  css/launcher.css — parent shell remains mounted; unused legacy chrome stays hidden.
+  js/choices/choices.mjs — stale Constructed startup auto-open removed.
+  index.html — v0.6.6 provider/InuYasha integration and playable-tabletop messaging.
+
+BROWSER SMOKE
+PASS — Chromium injected-asset harness (direct localhost/file navigation is prohibited by this execution environment).
+PASS — home visible; Constructed setup opens; no Constructed startup auto-open.
+PASS — Constructed local fallback opens the real visual tabletop with 7 cards and 7 card images in the opening hand.
+PASS — InuYasha test match opens with 7 visible cards in hand.
+PASS — player card moves Hand -> Play; AI card moves Hand -> Play.
+PASS — default opposing decks are Three's Company Current V4 (deck 6) vs Band of Seven Revival Pure Baseline (deck 5).
+Browser harness details: assessment/browser-smoke.txt
+
+STATIC INTEGRITY
+PASS — 405 HTML IDs / 405 unique / 0 duplicates.
+PASS — 18 local index script/style references / 0 missing.
+PASS — all packaged JS/MJS files parse with node --check.
+PASS — .legacy-compat-shell is mounted; no display:none rule on the whole shell.
+PASS — stale queueMicrotask Constructed auto-open is absent.
+PASS — Argentum JS/CSS and InuYasha JS/CSS/deck payloads are referenced by index.html.
+
+INUYASHA ENGINE
+PASS — Python reference attack-core tests 11/11 when run from inuyasha-reference package directory.
+PASS — browser JavaScript parity tests 11/11.
+
+INUYASHA DATA
+Canonical database SHA256=6262da5c8398efe8c32108fb6af1437a3f622cd1624e610ba5fc893439355c81
+Canonical database size=2625536 bytes
+PASS — SQLite integrity_check=ok; foreign_key_check=0.
+PASS — deck 5 Band of Seven Revival: 60/60 copies image-backed.
+PASS — deck 6 Three's Company Current V4: 61/61 copies image-backed.
+PASS — deck payload is generated from the packaged canonical SQLite database by tools/build_inuyasha_test_decks.py.
+PASS — catalog image resolver preserves app/personal image first, then linked catalog image, then exact normalized-name catalog fallback without converting catalog metadata into rules authority.
+PASS — CCGTrader images use restricted same-origin /inuyasha/catalog-image first, then direct transformed/raw fallbacks.
+
+INUYASHA SCOPE BOUNDARY
+The visual test match implements a real deck/library/opening-hand/play/discard/shard/table interaction layer around the verified ARD v4.0 attack timing engine.
+Full ARD turn/setup/recovery/win-condition/card-text automation is NOT claimed. Printed combat values are not fabricated; current attack resolution still requests the compared values from the real card image because the canonical database does not yet authoritatively encode all five combat values/card text.
+
+ARGENTUM / MTG PROVIDER
+Provider pin=f1fd5fd1719a1eaabec00e0a5ef3fab204c997d9
+PASS — provider JS/CSS referenced by index.html.
+PASS — Dockerfile copies the Focused Magic overlay hook before Gradle.
+PRESERVED — all actual v0.6.6 provider/frontend changes available in the prior candidate are carried forward.
+UNRESOLVED — the earlier transient Kotlin card-definition working tree was never durably present in the previous v0.6.6 ZIP and could not be recovered from Drive search; this build does not fabricate those source files.
+PENDING — real provider Gradle build and deployed provider gameplay acceptance.
+
+ENVIRONMENT LIMITATION
+Direct Chromium navigation to http://127.0.0.1 and file:// is blocked by the execution environment administrator. Browser interaction was therefore validated by loading the exact packaged HTML/CSS/JS bytes into Chromium directly. Deployed Cloudflare Worker image transport and live Argentum server connectivity remain deployment acceptance gates.

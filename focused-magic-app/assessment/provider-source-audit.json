@@ -1,0 +1,9 @@
+{
+  "build": "Focused Magic v0.6.6",
+  "provider_repository": "wingedsheep/argentum-engine",
+  "provider_commit": "f1fd5fd1719a1eaabec00e0a5ef3fab204c997d9",
+  "card_specific_overlay": "deferred_by_user",
+  "overlay_packaging": "fixed_copy_before_gradle",
+  "runtime_compile": "not_verified_in_local_candidate_environment",
+  "release_interpretation": "Provider adapter is now actually loaded by index.html. Exact MTG card-specific completion is intentionally not a v0.6.6 release gate; provider runtime remains a live deployment gate and visible local/manual fallback is preserved."
+}

@@ -1,0 +1,16 @@
+test_attached_cards_turn_facedown_and_expended_with_defeated_character (test_attack_sequence.AttackSequenceTests.test_attached_cards_turn_facedown_and_expended_with_defeated_character) ... ok
+test_attack_windows_are_in_ard_order_on_success (test_attack_sequence.AttackSequenceTests.test_attack_windows_are_in_ard_order_on_success) ... ok
+test_attack_windows_skip_defeat_and_shard_windows_on_failure (test_attack_sequence.AttackSequenceTests.test_attack_windows_skip_defeat_and_shard_windows_on_failure) ... ok
+test_attacking_player_is_attack_active_even_when_not_turn_active (test_attack_sequence.AttackSequenceTests.test_attacking_player_is_attack_active_even_when_not_turn_active) ... ok
+test_expended_character_cannot_attack (test_attack_sequence.AttackSequenceTests.test_expended_character_cannot_attack) ... ok
+test_final_color_value_includes_temporary_and_constant_modifiers (test_attack_sequence.AttackSequenceTests.test_final_color_value_includes_temporary_and_constant_modifiers) ... ok
+test_lower_attack_value_does_not_defeat_or_steal (test_attack_sequence.AttackSequenceTests.test_lower_attack_value_does_not_defeat_or_steal) ... ok
+test_no_shard_window_if_victim_has_no_shards (test_attack_sequence.AttackSequenceTests.test_no_shard_window_if_victim_has_no_shards) ... ok
+test_successful_attack_defeats_and_steals_one_shard (test_attack_sequence.AttackSequenceTests.test_successful_attack_defeats_and_steals_one_shard) ... ok
+test_tie_defeats_defender (test_attack_sequence.AttackSequenceTests.test_tie_defeats_defender) ... ok
+test_window_hook_can_change_value_before_comparison (test_attack_sequence.AttackSequenceTests.test_window_hook_can_change_value_before_comparison) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.001s
+
+OK

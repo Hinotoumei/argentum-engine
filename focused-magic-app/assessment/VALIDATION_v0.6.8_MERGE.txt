@@ -1,0 +1,40 @@
+Focused Magic v0.6.8 merge validation — 2026-09-29
+STATUS=LOCAL MERGE VALIDATION PASS / LIVE RENDER ACCEPTANCE PENDING.
+
+BASELINE CORRECTION
+- v0.6.7 provider WIP omitted the InuYasha module and launcher wiring from the playable v0.6.6 frontend; its index.html also carried an older v0.6.4 frontend comment and omitted the provider script tag.
+- v0.6.8 therefore starts from the complete v0.6.6 playable package and ports forward the verified v0.6.7 provider/backend/rules changes.
+
+PRESERVATION CHECKS
+- 405/405 DOM ids unique: PASS.
+- All 19 local index script/style/image references resolve: PASS.
+- js/provider/argentum.js loaded by index.html: PASS.
+- InuYasha CSS + score engine + decks + tabletop loaded by index.html: PASS.
+- Cloudflare _worker.js InuYasha catalog-image bridge preserved: PASS.
+- CHOICES launcher-owned startup behavior preserved; Constructed no longer auto-opens at page load: PASS.
+
+INUYASHA GUARD
+- readRequiredCombatValue() trims raw text and rejects raw empty string before Number(raw): PASS.
+- Resolve button requires both final combat values to parse as non-null, finite, nonnegative numbers: PASS.
+- InuYasha JS browser parity suite: 11/11 PASS.
+- InuYasha Python attack sequence suite: 11/11 PASS.
+- User live retest remains required.
+
+0.6.7 REPAIR PRESERVATION
+- New mandatory-local-db.js present and loaded before Reality Fracture UI: PASS.
+- v0.6.7 Reality Fracture rules/UI files ported: PASS.
+- Dedicated Render provider origin retained: PASS.
+- Provider alias Exclusive Nightclub -> Oscorp Industries retained: PASS.
+- Argentum backend overrides include Gemstone Caverns and scoped repair cards: PASS.
+- FocusedMagicCatalogCorsConfig.kt present: PASS.
+- verify-render-provider.sh checks Gemstone Caverns, Oscorp Industries, and Access-Control-Allow-Origin: PASS.
+- FM_PATCH_B64 decodes as gzip/tar and includes Gemstone patch + CORS override: PASS.
+
+JS / STATIC INTEGRITY
+- All JavaScript and MJS under js/: Node syntax PASS.
+- Local asset references: PASS.
+
+LIVE BOUNDARY
+- This package has not been deployed from this merge session.
+- Current Render live predecessor must remain distinct from this v0.6.8 package until deployment/readback succeeds.
+- Live /api/cards membership, browser CORS, exact deck admission, Gemstone pregame, Scalding Tarn and the remaining scoped runtime matrix are still acceptance gates.

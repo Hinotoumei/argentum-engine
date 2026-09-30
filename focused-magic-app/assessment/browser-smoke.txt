@@ -1,0 +1,31 @@
+{
+  "browserHarness": "Chromium + injected local package assets (navigation prohibited by environment)",
+  "homeVisible": true,
+  "constructedSetupVisible": true,
+  "magicVisualTableVisible": true,
+  "magicHandChildren": 7,
+  "magicHandImages": 7,
+  "inuyashaVisible": true,
+  "inuyashaDefaultDecks": [
+    "6",
+    "5"
+  ],
+  "inuyashaOpeningHand": 7,
+  "playerCardMovedToPlay": true,
+  "aiCardMovedToPlay": true,
+  "deckStats": [
+    [
+      5,
+      60,
+      60,
+      true
+    ],
+    [
+      6,
+      61,
+      61,
+      true
+    ]
+  ],
+  "pageErrors": []
+}

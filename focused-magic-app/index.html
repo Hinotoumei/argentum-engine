@@ -1,0 +1,422 @@
+<!doctype html>
+<!-- Focused Magic v0.6.9: v0.6.6 playable/InuYasha foundation + v0.6.7 provider-registry/CORS/Gemstone repairs. -->
+<!-- Focused Magic v0.6.9 multi-file Cloudflare build. Preserves Magic + InuYasha playable surfaces and adds the registry-gated patched Argentum provider. No API key embedded. --><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0d1118"><title>Focused Magic — v0.6.9</title><link rel="stylesheet" href="css/base.css?v=0.6.9">
+<link rel="stylesheet" href="css/fates.css?v=0.6.9">
+<link rel="stylesheet" href="css/core-match.css?v=0.6.9">
+<link rel="stylesheet" href="css/reality-fracture.css?v=0.6.9">
+<link rel="stylesheet" href="css/reality-tabletop.css?v=0.6.9">
+<link rel="stylesheet" href="css/argentum.css?v=0.6.9">
+<link rel="stylesheet" href="css/inuyasha-tabletop.css?v=0.6.9">
+<link rel="stylesheet" href="css/launcher.css?v=0.6.9">
+</head><body>
+
+<section class="fm-home" id="fmHome">
+  <div class="fm-home-head"><div class="fm-home-mark">FM</div><h1>Focused Magic</h1><p class="fm-home-intro">Choose what you want to play. The tabletop only opens after you choose a mode.</p></div>
+  <div class="fm-mode-grid">
+    <button class="fm-mode" id="launchCore" type="button"><span><h2>Play Core Match</h2><p>Fast rules-engine match with a controlled card pool.</p></span><span class="fm-go">Play →</span></button>
+    <button class="fm-mode" id="launchConstructed" type="button"><span><h2>Constructed vs AI</h2><p>Paste or upload your decklist, choose an AI deck, and play on the visual tabletop.</p></span><span class="fm-go">Load a deck →</span></button>
+    <button class="fm-mode fm-mode-wide" id="launchLimited" type="button"><span><h2>Reality Fracture Limited</h2><p>Choose Sealed or an 8-seat bot Draft, build a 40-card deck, then play it against the AI.</p></span><span class="fm-go">Choose Sealed / Draft →</span></button>
+    <button class="fm-mode" id="launchChoices" type="button"><span><h2>CHOICES</h2><p>Open the CHOICES mechanical game lab.</p></span><span class="fm-go">Open →</span></button>
+    <button class="fm-mode" id="launchFates" type="button"><span><h2>Fates Lab</h2><p>Open the current Fates rules and match lab.</p></span><span class="fm-go">Open →</span></button>
+    <button class="fm-mode iy-mode-accent" id="launchInuyasha" type="button"><span><h2>InuYasha Score TCG</h2><p>Test a real database deck on a visual card table using the verified attack timing engine.</p></span><span class="fm-go">Test match →</span></button>
+  </div>
+  <div class="fm-home-foot">v0.6.9 • playable Magic + InuYasha preserved • Argentum registry/CORS/Gemstone repair</div>
+</section>
+
+<div class="app legacy-compat-shell">
+<header class="mast"><div class="sigil">FM</div><div><h1>Focused Magic</h1><div class="sub">Web Beta v0.6.9 • playable Magic + InuYasha test match + registry-gated Argentum + Limited + CHOICES + Fates</div></div></header>
+<div class="toolbar"><button id="newBtn" class="primary">New Page vs AI Match</button><button id="coreBtn" class="good">Play Core Match</button><button id="constructedBtn" class="good">Constructed vs AI</button><button id="sealedBtn" class="sealed-accent">Reality Fracture Sealed</button><button id="challengeBtn" class="good" disabled title="Paused by current project scope">Challenge Series — Paused</button><button id="choicesBtn" class="choices-accent">Play CHOICES Beta</button><button id="fatesBtn" class="fates-accent">Play Fates Lab</button><button id="inuyashaBtn" class="iy-mode-accent">Play InuYasha Test Match</button><button id="rollBtn">Roll for First</button><button id="saveBtn">Save</button><button id="loadBtn">Load</button><button id="checkpointBtn">Checkpoint</button><button id="rollbackBtn">Rollback</button><button id="aiBtn" class="good">Remalia: Take Action</button><button id="apiBtn">Check Remalia</button><span id="status" class="status">Ready.</span><span>Integrity: <span id="integrity" class="integrity">—</span></span></div>
+<div class="turnbar"><div><label>Active</label><select id="active"><option>User</option><option>Assistant</option><option>Undetermined</option></select></div><div><label>Phase</label><select id="phase"><option>Pregame — Roll for First</option><option>Pregame — Mulligans</option><option>Challenge Setup</option><option>Beginning</option><option>Precombat Main</option><option>Combat</option><option>Postcombat Main</option><option>Ending</option></select></div><div><label>Priority</label><select id="priority"><option>User</option><option>Assistant</option><option>Undetermined</option></select></div><button id="applyTurn">Apply Turn State</button><button id="userTurn">Begin User Turn</button><button id="aiTurn">Begin Assistant Turn</button><div class="meta"><span>Turn <b id="turn">0</b></span><span id="rollResult"></span></div></div>
+<div id="challengeBanner" class="challenge-banner hidden"><div><b id="challengeBannerTitle">Challenge</b><div id="challengeBannerObjective" class="sub"></div></div><div class="actions"><button id="challengeSetupBtn" class="small">Setup</button><button id="challengeSolutionBtn" class="small">Solution</button><button id="challengeResetBtn" class="small">Reset</button></div></div><div id="challengeSetupTools" class="challenge-setup-tools hidden"><span class="sub">Guided setup</span><select id="challengeAddOwner"><option value="User">Player</option><option value="Assistant">Opponent</option></select><select id="challengeAddZone"><option value="hand">Hand</option><option value="battlefield">Battlefield</option><option value="graveyard">Graveyard</option><option value="exile">Exile</option><option value="library">Top of library</option><option value="stack">Stack</option></select><input id="challengeAddCard" placeholder="Exact card name"><button id="challengeAddCardBtn" class="small">Add Card</button></div><div class="table">
+<aside class="side"><h2 id="userDeckTitle">Legacy sandbox — inactive</h2><div class="life"><button data-life="user" data-delta="-1">−</button><strong id="userLife">20</strong><button data-life="user" data-delta="1">+</button></div><div class="meta"><span>Library <b id="userLib">0</b></span><span>Hand <b id="userHandCount">0</b></span></div><div class="actions"><button id="userDraw">Draw 1</button><button id="userMulligan">London Mulligan</button></div><div class="zone hand" data-owner="User" data-zone="hand"><h3>Your Hand</h3><div id="userHand" class="cards"></div></div><div class="zone" data-owner="User" data-zone="graveyard"><h3>Your Graveyard</h3><div id="userGraveyard" class="cards"></div></div><div class="zone" data-owner="User" data-zone="exile"><h3>Your Exile</h3><div id="userExile" class="cards"></div></div></aside>
+<main class="center"><div class="zone battlefield" data-owner="Assistant" data-zone="battlefield"><h3 id="aiBattlefieldTitle">Dimir Tempo — Battlefield</h3><div id="aiBattlefield" class="cards"></div></div><div class="zone" data-owner="Assistant" data-zone="graveyard"><h3>AI Graveyard</h3><div id="aiGraveyard" class="cards"></div></div><div class="zone" data-owner="Assistant" data-zone="exile"><h3>AI Exile</h3><div id="aiExile" class="cards"></div></div><div class="zone" data-owner="Assistant" data-zone="hand"><h3>Assistant Hidden Hand</h3><div id="aiHand" class="cards"></div></div><div class="zone battlefield" data-owner="User" data-zone="battlefield"><h3>Legacy sandbox — inactive battlefield</h3><div id="userBattlefield" class="cards"></div></div><div class="stackbox"><div><div class="zone" data-owner="Public" data-zone="stack"><h3>Stack — top first</h3><div id="stack" class="cards"></div></div><div class="actions"><button id="stackBf">Resolve Top → Battlefield</button><button id="stackGy">Resolve Top → Graveyard</button><button id="stackCounter" class="bad">Counter Top</button></div><div class="manual"><h3>Manual Public Action / Unusual Effect</h3><textarea id="manualAction" placeholder="Record an unusual effect or exact public action..."></textarea><button id="recordAction">Record Action</button></div></div><div class="preview"><img id="previewImg" alt="Card preview"><div id="previewRules" class="rules">Hover or tap a visible card to inspect it.</div></div></div><h3>Action Log</h3><div id="log" class="log"></div></main>
+<aside class="side"><h2 id="aiDeckTitle">Remalia — Dimir Tempo</h2><div class="life"><button data-life="assistant" data-delta="-1">−</button><strong id="aiLife">20</strong><button data-life="assistant" data-delta="1">+</button></div><div class="meta"><span>Library <b id="aiLib">0</b></span><span>Hand <b id="aiHandCount">0</b></span></div><div class="actions"><button id="aiDraw">Assistant Draw 1</button><button id="aiMulligan">Assistant Mulligan (automatic)</button></div><p class="sub">The assistant's exact hand remains hidden here but is sent privately to Remalia when she takes an action.</p></aside>
+</div></div>
+
+
+<div id="challengeModal" class="modal"><div class="modal-panel challenge-panel"><div class="challenge-head"><div><h2>Magic Challenge Series</h2><p class="sub">KOSEIRA-authored Season 1 starter draft • 50 challenges • validation pending</p></div><button id="challengeClose">Close</button></div><div class="challenge-layout"><div class="challenge-list-pane"><label>Level</label><select id="challengeLevelFilter"><option value="all">All levels</option><option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option><option value="4">Level 4</option><option value="5">Level 5</option></select><div id="challengeList" class="challenge-list"></div></div><div class="challenge-detail"><div class="challenge-badges"><span id="challengeLevelBadge" class="badge"></span><span id="challengeLoaderBadge" class="badge"></span></div><h2 id="challengeTitle">Select a challenge</h2><h3>Lesson</h3><p id="challengeLesson"></p><h3>Setup</h3><p id="challengeSetup"></p><h3>Objective</h3><p id="challengeObjective"></p><div class="actions"><button id="challengeLoad" class="primary">Load Challenge Workspace</button><button id="challengeShowSolution">Show Solution</button></div><div id="challengeSolution" class="challenge-solution hidden"></div><p id="challengeAuthorityNote" class="sub"></p></div></div></div></div>
+<div id="choicesModal" class="modal choices-modal"><div class="modal-panel choices-panel"><div class="challenge-head"><div><h2>CHOICES — Focused Magic Mechanical Beta</h2><p class="sub">deterministic rules shell • StoryPackage vertical slice + NONCANON fixture • 18 rules tests + 5 engine-integrity tests • no AI/NLP interpretation</p></div><button id="choicesClose">Close</button></div>
+<div class="choices-setup"><label>Seed <input id="choicesSeed" value="CHOICES-TEST-SEED"></label><label>Animal regression module <select id="choicesAnimal"><option value="DOG">Dog</option><option value="CAT">Cat</option><option value="NONE">None</option></select></label><button id="choicesNew" class="primary">Start Week</button><button id="choicesSave">Save</button><button id="choicesLoad">Load</button><button id="choicesCheckpoint">Checkpoint</button><button id="choicesRollback">Rollback</button><span id="choicesStatus" class="status">Ready.</span><span>Integrity: <span id="choicesIntegrity" class="integrity">—</span></span></div>
+<div class="choices-setup"><label style="flex:1 1 300px">StoryPackage JSON <input id="choicesStoryFile" type="file" accept=".json,application/json"></label><button id="choicesStoryClear" disabled>Use Mechanical Fixture</button><span id="choicesStoryStatus" class="status" style="flex:2 1 360px">Mechanical fixture mode.</span></div><p class="sub">Content pipeline: load a user-authored seven-Day StoryPackage. It is validated fail-closed before play. This vertical slice currently executes one choice Scene per Day; chained Scenes are rejected rather than silently skipped.</p>
+<div class="choices-days" id="choicesDays"></div>
+<div class="choices-grid">
+<section class="choices-card"><div class="choice-kicker"><span id="choicesDay">Day 1 of 7</span><span id="choicesModuleBadge" class="badge">DOG module</span><span>Phase: <b id="choicesPhase">—</b></span></div><h3 id="choicesSceneTitle">Scene</h3><p id="choicesSceneText"></p><dl class="choice-facts"><div><dt>Location</dt><dd id="choicesLocation">—</dd></div><div><dt>Objective</dt><dd id="choicesObjective">—</dd></div></dl><h3>Present / reachable</h3><div id="choicesEntities" class="choices-entities"></div></section>
+<section class="choices-card"><h3>Action Hand</h3><p class="sub">Any Action in hand may be attempted against a valid current target. There is no Action-family permission gate.</p><div id="choicesActionHand" class="choice-action-hand"></div><button id="choicesImprovise" class="choices-accent">IMPROVISE</button><textarea id="choicesImproviseText" placeholder="Optional free-text description — stored/displayed only; never parsed or judged mechanically."></textarea><label>Target <select id="choicesTarget"></select></label><button id="choicesResolve" class="primary">Resolve Choice</button><button id="choicesNextDay" class="good" disabled>Advance to Next Day</button></section>
+<section class="choices-card"><h3>Outcome</h3><div id="choicesOutcome" class="choice-outcome">Awaiting resolution</div><h3>Memory Recall</h3><p id="choicesRecall" class="sub">No Memory recalled this Day.</p><h3>Active Emotions</h3><div id="choicesEmotions" class="emotion-row"></div><h3>Memory Pool</h3><div id="choicesMemories" class="choices-memories"></div><div id="choicesWeekSummary" class="week-summary hidden"></div></section>
+</div>
+<details class="choices-dev"><summary>Developer / deterministic replay evidence</summary><div class="dev-row"><label><input type="checkbox" id="choicesDevMode"> Enable fixture-only forced Outcome</label><select id="choicesForceOutcome" disabled><option value="">Seeded random Outcome</option><option>CLEAN_SUCCESS</option><option>MESSY_SUCCESS</option><option>SETBACK</option><option>CHAOS</option></select></div><p class="sub">Forced Outcome is a test harness control only. Normal CHOICES resolution uses the seeded configurable Outcome engine.</p>
+<div class="dev-row"><button id="choicesRunAcceptance" class="good">Run 18-Test Acceptance Suite</button><span id="choicesAcceptanceStatus" class="status">Not run in this session.</span></div>
+<p class="sub">Runs the CURRENT CHOICES_VIDEO_GAME_RULESET_V0.1 mechanical acceptance contract against the embedded deterministic engine. Fixture-only forced outcomes are used only where a specific branch must be exercised.</p>
+<pre id="choicesAcceptanceResults" class="log">Acceptance evidence has not been run in this session.</pre>
+<h4>State / replay log</h4><pre id="choicesLog" class="log"></pre></details>
+</div></div>
+
+
+<div id="constructedModal" class="modal constructed-modal" aria-hidden="true"><div class="modal-panel constructed-panel">
+  <div class="constructed-head"><div><h2>Constructed Deck vs AI</h2><p class="sub">Focused Magic v0.6.9 • patched Argentum required • exact decklists • registry-gated</p></div><button id="constructedClose">Close</button></div>
+  <div class="constructed-note"><b>Saved-database source:</b> The current Page vs Dimir fixture is resolved from the project’s saved Scryfall <code>default-cards.jsonl.gz</code> snapshot (2026-09-11); all 57/57 distinct requested card identities are embedded in this build. These two decklists require no live Scryfall card API calls. Live lookup is available only as an explicit fallback for a user-edited name that is absent from the embedded snapshot subset.<br><br><b>Rules-choice support:</b> shock-land entry choices and modal casting/resolution are implemented for Izzet Charm, Prismari Command, Sheoldred's Edict, and Hydroblast. Choices and targets are stored on the stack; draw/discard, sacrifice, and “unless its controller pays” decisions pause resolution when the user must decide.<br><br><b>Provider gate:</b> Constructed requires the patched Argentum provider. Focused Magic checks the provider catalog before match creation and blocks on missing identities instead of silently treating the local/manual engine as proof of provider behavior. The preserved local/manual tabletop remains available for explicit diagnostics, while InuYasha remains a separate playable test-match mode.</div>
+  <div class="constructed-toolbar"><label>Match seed<input id="constructedSeed" value="PAGE-VS-DIMIR-001"></label><label>AI difficulty<select id="constructedDifficulty"><option>Apprentice</option><option selected>Regular</option><option>Expert</option></select></label><label>Upload your deck<input id="constructedUserDeckFile" type="file" accept=".txt,.dec,.dek,.mtga,text/plain"></label><button id="constructedValidate">Validate Decklists</button><button id="constructedStart" class="primary">Play Exact Deck vs AI</button><label style="display:flex;align-items:center;gap:5px;min-width:240px"><input id="constructedLiveFallback" type="checkbox"> Allow live Scryfall only if saved DB lacks a card</label><span id="constructedProgress" class="constructed-progress">v0.6.9 exact fixtures ready</span></div>
+  <div class="constructed-grid">
+    <section class="constructed-deckbox"><h3>You — Page, Loose Leaf</h3><div class="sub">Main deck may be 60+ cards. The supplied list is intentionally preserved at 61. Sideboard is retained separately.</div><textarea id="constructedUserDeck" spellcheck="false">2 Blood Crypt
+4 Blood Scrivener
+1 Chandra, Spark Hunter
+2 Currency Converter
+2 Cutthroat il-Dal
+1 Demonfire
+2 Gamble
+2 Gathan Raiders
+1 Geier Reach Sanitarium
+2 Infernal Tutor
+1 Island
+3 Izzet Charm
+3 Jagged Poppet
+1 Keldon Megaliths
+3 Library of Leng
+3 Lotus Petal
+1 Mountain
+1 One with Nothing
+2 Oscorp Industries
+3 Page, Loose Leaf
+2 Persist
+2 Prismari Command
+4 Scalding Tarn
+1 Sire of Insanity
+4 Steam Vents
+1 Swamp
+4 Taste for Mayhem
+1 The Biblioplex
+2 Visionary's Dance
+
+SIDEBOARD:
+2 Surgical Extraction</textarea><div id="constructedUserSummary" class="constructed-summary">Not validated yet.</div></section>
+    <section class="constructed-deckbox"><h3>AI — Dimir</h3><div class="sub">Opponent hand remains hidden during play. Sideboard is retained separately for later match/sideboarding support.</div><textarea id="constructedAiDeck" spellcheck="false">2 Barrowgoyf
+4 Brainstorm
+3 Daze
+3 Fatal Push
+3 Flow State
+1 Force of Negation
+4 Force of Will
+1 Island
+2 Kaito, Bane of Nightmares
+2 Misty Rainforest
+2 Murktide Regent
+4 Orcish Bowmasters
+4 Polluted Delta
+4 Ponder
+1 Scalding Tarn
+1 Sheoldred's Edict
+1 Swamp
+4 Tamiyo, Inquisitive Student
+4 Thoughtseize
+1 Undercity Sewers
+4 Underground Sea
+1 Verdant Catacombs
+4 Wasteland
+
+SIDEBOARD:
+1 Barrowgoyf
+3 Consign to Memory
+2 Dauthi Voidwalker
+1 Engineered Explosives
+2 Force of Negation
+2 Hydroblast
+1 Long Goodbye
+1 Null Rod
+1 Sheoldred's Edict
+1 Toxic Deluge</textarea><div id="constructedAiSummary" class="constructed-summary">Not validated yet.</div></section>
+  </div>
+</div></div>
+
+<div id="coreModal" class="modal core-modal"><div class="modal-panel core-panel">
+  <div class="core-head"><div><h2>Focused Magic — Core Match Alpha</h2><p class="sub">Rules-enforced playable Magic slice • 60-card mono-red mirror • stack + priority + combat + state-based lethal checks</p></div><button id="coreClose">Close</button></div>
+  <div class="core-toolbar"><label>Seed<input id="coreSeed" value="FOCUSED-MAGIC-CORE"></label><label>AI difficulty<select id="coreDifficulty"><option>Apprentice</option><option selected>Regular</option><option>Expert</option></select></label><button id="coreNew" class="primary">New Core Match</button><button id="coreConcede" class="bad">Concede</button><span id="coreStatus" class="status">Ready.</span></div>
+  <div class="core-status-grid"><div class="core-stat"><b id="coreTurn">1</b><span>Turn</span></div><div class="core-stat"><b id="coreActive">User</b><span>Active</span></div><div class="core-stat"><b id="corePhase">MAIN1</b><span>Phase</span></div><div class="core-stat"><b id="corePriority">User</b><span>Priority</span></div><div class="core-stat"><b id="coreUserLife">20</b><span>Your life</span></div><div class="core-stat"><b id="coreAiLife">20</b><span>Opponent life</span></div></div>
+  <div id="coreGameOver" class="core-gameover hidden"></div>
+  <div class="core-help">Core Match Alpha intentionally supports a small, fully understood card pool first. It enforces one land per turn, automatic red mana payment, sorcery timing, instants, stack/priority passing, summoning sickness, attackers, one blocker per attacker, simultaneous combat damage, lethal creature cleanup, empty-library loss, and 20-life wins. Unsupported card text is not silently guessed.</div>
+  <div class="core-actions"><button id="corePass" class="good core-pass">Pass Priority / Continue</button><button id="coreDeclareAttackers" class="primary hidden">Declare Attackers</button><button id="coreDeclareBlocks" class="primary hidden">Declare Blocks</button></div>
+  <div id="coreCombatControls" class="core-combat hidden"></div>
+  <div class="core-board">
+    <section class="core-player"><h3>You</h3><div class="meta"><span>Library <b id="coreUserLib">0</b></span><span>Hand <b id="coreUserHandCount">0</b></span><span>Graveyard <b id="coreUserGyCount">0</b></span></div><div class="core-zone"><h4>Your battlefield</h4><div id="coreUserBattlefield" class="core-cards"></div></div><div class="core-zone"><h4>Your hand</h4><div id="coreUserHand" class="core-cards"></div></div></section>
+    <section class="core-middle"><h3>Stack — top last</h3><div id="coreStack"></div><h3>Match log</h3><div id="coreLog" class="core-log"></div></section>
+    <section class="core-player"><h3>Opponent — <span id="coreAiDifficultyLabel">Regular</span></h3><div class="meta"><span>Library <b id="coreAiLib">0</b></span><span>Hand <b id="coreAiHandCount">0</b></span><span>Graveyard <b id="coreAiGyCount">0</b></span></div><div class="core-zone"><h4>Opponent battlefield</h4><div id="coreAiBattlefield" class="core-cards"></div></div><div class="core-zone"><h4>Opponent hidden hand</h4><div id="coreAiHand" class="core-cards"></div></div></section>
+  </div>
+</div></div>
+<div id="sealedModal" class="modal sealed-modal"><div class="modal-panel sealed-panel">
+  <div class="sealed-head"><div><h2>Reality Fracture — Prerelease Sealed Lab</h2><p class="sub">Open 6 Play Boosters + prerelease promo • build 40 cards • AI opens and builds its own pool • sealed sparring</p></div><button id="sealedClose">Close</button></div>
+  <div class="sealed-toolbar">
+    <label>Seed<input id="sealedSeed" value="REALITY-FRACTURE-PRERELEASE"></label>
+    <label>AI builder<select id="sealedDifficulty"><option>Apprentice</option><option selected>Regular</option><option>Expert</option></select></label>
+    <button id="sealedOpen" class="primary">Open 6 Packs Each</button>
+    <button id="sealedAutoBuild" class="good" disabled>Suggest My 40</button>
+    <button id="sealedClearDeck" disabled>Clear My Deck</button>
+    <button id="sealedStartMatch" class="sealed-accent" disabled>Face AI Deck</button>
+    <span id="sealedStatus" class="status">Load the Reality Fracture card data, then open prerelease pools.</span>
+  </div>
+  <div class="sealed-note">Prerelease practice uses the published Reality Fracture Play Booster slot structure. Card metadata and full Oracle/rules text are loaded live from Scryfall; if current FRA data cannot be loaded, this mode fails closed rather than inventing cards. Pool and deck views show card text in-app, including both faces of double-faced cards. The sparring engine automates mana, casting, creature combat and a conservative set of simple spell effects; complex card text is visibly marked as manual/not automated.</div>
+  <div id="sealedSourceStatus" class="sub">Card data not loaded yet.</div>
+  <div class="sealed-grid">
+    <section class="sealed-box"><h3>Your prerelease pool</h3><div id="sealedPackList" class="sealed-pack-grid"><div class="sub">Open your six packs to begin.</div></div><div class="sealed-pool-tools"><label>Show <select id="sealedPoolFilter"><option value="all">All cards</option><option value="W">White</option><option value="U">Blue</option><option value="B">Black</option><option value="R">Red</option><option value="G">Green</option><option value="C">Colorless / lands</option></select></label><label>Search<input id="sealedPoolSearch" placeholder="card name or text"></label></div><div id="sealedPool" class="sealed-scroll"></div></section>
+    <section class="sealed-box"><h3>Your 40-card build</h3><div class="sealed-summary"><div><b id="sealedDeckCount">0</b><span class="sub">Cards</span></div><div><b id="sealedCreatureCount">0</b><span class="sub">Creatures</span></div><div><b id="sealedLandCount">0</b><span class="sub">Lands</span></div><div><b id="sealedColors">—</b><span class="sub">Colors</span></div><div><b id="sealedCurve">—</b><span class="sub">Avg MV</span></div></div><div class="sealed-land-grid"><label>Plains<input id="sealedLandW" type="number" min="0" value="0"></label><label>Island<input id="sealedLandU" type="number" min="0" value="0"></label><label>Swamp<input id="sealedLandB" type="number" min="0" value="0"></label><label>Mountain<input id="sealedLandR" type="number" min="0" value="0"></label><label>Forest<input id="sealedLandG" type="number" min="0" value="0"></label></div><div id="sealedDeck" class="sealed-scroll"></div><h3>AI prerelease build</h3><div id="sealedAiSummary" class="sealed-ai-hidden">The opponent has not opened a pool yet.</div><div class="core-actions"><button id="sealedRevealAi" disabled>Reveal / Hide AI Deck</button></div><div id="sealedAiDeck" class="sealed-scroll hidden"></div></section>
+  </div>
+  <section id="sealedMatchArea" class="sealed-match hidden">
+    <div class="sealed-match-topbar">
+      <div class="match-actions"><button id="sealedMatchBack">← Deck Builder</button><button id="sealedMatchMulligan" type="button">Mulligan</button><button id="sealedManual" type="button">Manual Control</button><button id="sealedMatchConcede" class="bad">Concede</button></div>
+      <div class="match-state"><span class="match-pill">Turn <b id="sealedMatchTurn">1</b></span><span class="match-pill"><b id="sealedMatchPhase">MAIN1</b></span><span class="match-pill">Priority <b id="sealedMatchPriority">You</b></span><span class="match-pill">Mana <b id="sealedMatchUserMana">empty</b></span><span id="sealedMatchStatus" class="status">—</span></div>
+      <div class="match-actions"><button id="sealedMatchPass" class="good">Pass / Continue</button><button id="sealedMatchAttack" class="primary hidden">Attack</button><button id="sealedMatchBlock" class="primary hidden">Block</button></div>
+    </div>
+    <div id="sealedMatchGameOver" class="core-gameover hidden"></div>
+    <div id="sealedMatchCombat" class="sealed-match-combat-overlay hidden"></div>
+    <div class="sealed-tabletop">
+      <div class="sealed-player-strip sealed-ai"><div class="sealed-player-id"><div class="sealed-life-orb" id="sealedMatchAiLife">20</div><div><b id="sealedMatchAiName">AI opponent</b><div class="sealed-mini-stats"><span>Library <b id="sealedMatchAiLib">0</b></span><span>Hand <b id="sealedMatchAiHandCount">0</b></span><span>GY <b id="sealedMatchAiGyCount">0</b></span></div></div></div><div class="sealed-mini-stats">Opponent</div></div>
+      <div class="sealed-board-zone"><span id="sealedMatchAiZoneTitle" class="sealed-board-zone-title">Opponent battlefield</span><div id="sealedMatchAiBattlefield" class="sealed-match-cards"></div></div>
+      <div class="sealed-center-lane"><div></div><div class="sealed-center-stack"><div class="sealed-center-label">Stack</div><div id="sealedMatchStack"></div></div><div></div></div>
+      <div class="sealed-board-zone"><span id="sealedMatchUserZoneTitle" class="sealed-board-zone-title">Your battlefield</span><div id="sealedMatchUserBattlefield" class="sealed-match-cards"></div></div>
+      <div class="sealed-player-strip"><div class="sealed-player-id"><div class="sealed-life-orb" id="sealedMatchUserLife">20</div><div><b id="sealedMatchUserName">You</b><div class="sealed-mini-stats"><span>Library <b id="sealedMatchUserLib">0</b></span><span>Hand <b id="sealedMatchUserHandCount">0</b></span><button id="sealedMatchUserGrave" class="small" type="button">GY <b id="sealedMatchUserGyCount">0</b></button></div></div></div><div class="sealed-mini-stats">Tap a card for legal actions</div></div>
+      <div class="sealed-board-zone sealed-hand-zone"><span id="sealedMatchHandTitle" class="sealed-board-zone-title">Your hand</span><div id="sealedMatchUserHand" class="sealed-match-cards"></div></div>
+    </div>
+    <div class="sealed-log-drawer"><details><summary>Game log</summary><div id="sealedMatchLog" class="sealed-match-log"></div></details></div>
+    <div id="sealedMatchAiHand" class="hidden"></div>
+  </section>
+</div></div>
+
+
+
+<div id="limitedModeModal" class="modal" aria-hidden="true"><div class="modal-panel fm-choice-panel"><div class="draft-head"><div><h2>Reality Fracture Limited</h2><p class="sub">Choose the Limited format you want to play.</p></div><button id="limitedModeClose">Close</button></div><div class="fm-choice-grid"><div class="fm-choice-card"><h3>Sealed</h3><p>Open six Play Boosters plus a prerelease promo for you and an independent AI pool. Build 40 and play.</p><button id="limitedSealed" class="sealed-accent">Play Sealed</button></div><div class="fm-choice-card"><h3>Draft</h3><p>Draft three Play Boosters at an eight-seat bot table, build 40, and face one of the drafted AI decks.</p><button id="limitedDraft" class="sealed-accent">Start Draft</button></div></div></div></div>
+<div id="draftModal" class="modal" aria-hidden="true"><div class="modal-panel draft-panel"><div class="draft-head"><div><h2>Reality Fracture — Bot Draft</h2><p class="sub">8 seats • 3 packs • left / right / left • pick one card at a time</p></div><button id="draftClose">Close</button></div><div class="draft-status"><span class="badge">Round <b id="draftRound">1</b>/3</span><span class="badge">Pick <b id="draftPick">1</b>/14</span><span class="badge">Drafted <b id="draftCount">0</b></span><span id="draftStatus" class="status">Ready.</span></div><div id="draftPack" class="draft-pack"></div></div></div>
+<div id="manualTableModal" class="modal" aria-hidden="true"><div class="modal-panel manual-panel"><div class="draft-head"><div><h2>Manual Control</h2><p class="sub">Tabletop-simulator fallback for interactions the automation does not yet understand.</p></div><button id="manualTableClose">Close</button></div><div class="manual-note">Use this only to carry out the real game action. Every override is written to the match log; it never silently changes state.</div><div class="manual-grid"><label>Player<select id="manualOwner"><option value="User">You</option><option value="Assistant">AI</option></select></label><label>Source zone<select id="manualSource"><option value="hand">Hand</option><option value="battlefield">Battlefield</option><option value="graveyard">Graveyard</option><option value="exile">Exile</option><option value="library">Library</option></select></label><label>Card<select id="manualCard"></select></label><label>Move to<select id="manualDest"><option value="battlefield">Battlefield</option><option value="hand">Hand</option><option value="graveyard">Graveyard</option><option value="exile">Exile</option><option value="library_top">Top of library</option><option value="library_bottom">Bottom of library</option></select></label></div><div class="manual-actions"><button id="manualMove" class="primary">Move Card</button><button id="manualTap">Tap / Untap</button><button id="manualPlusCounter">+1/+1 Counter +1</button><button id="manualMinusCounter">+1/+1 Counter −1</button><button id="manualLoyaltyPlus">Loyalty +1</button><button id="manualLoyaltyMinus">Loyalty −1</button></div><div class="manual-divider"></div><div class="manual-actions"><button data-manual-life="User" data-manual-delta="-1">You −1 life</button><button data-manual-life="User" data-manual-delta="1">You +1 life</button><button data-manual-life="Assistant" data-manual-delta="-1">AI −1 life</button><button data-manual-life="Assistant" data-manual-delta="1">AI +1 life</button></div></div></div>
+
+<div id="sealedCardInspectModal" class="modal sealed-inspect-modal"><div class="modal-panel"><div class="modal-head"><h2>Card</h2><button id="sealedInspectClose">Close</button></div><div class="sealed-inspect-panel"><div id="sealedInspectVisual"></div><div><div id="sealedInspectTitle" class="sealed-inspect-title"></div><div id="sealedInspectRules" class="sealed-inspect-text"></div></div></div></div></div>
+<div id="sealedGameChoiceModal" class="modal sealed-game-choice-modal" aria-hidden="true"><div class="modal-panel sealed-game-choice-panel"><h2 id="sealedGameChoiceTitle">Make a choice</h2><div id="sealedGameChoiceHelp" class="sealed-game-choice-help"></div><div id="sealedGameChoiceBody"></div><div id="sealedGameChoiceActions" class="sealed-game-choice-actions"></div></div></div>
+<div id="mulliganModal" class="modal"><div class="modal-panel"><h2>Choose cards for bottom</h2><p id="mulliganHelp"></p><div id="mulliganChoices" class="choose-grid"></div><div class="actions"><button id="mulliganFinish" class="good">Put selected cards on bottom</button></div></div></div>
+
+<div id="iyGameModal" class="modal iy-game-modal" aria-hidden="true"><div class="iy-game-panel">
+  <div class="iy-topbar">
+    <div class="iy-title"><div class="iy-mark">犬</div><div><h2>InuYasha Score TCG — Test Match</h2><div class="sub">Actual database cards • actual card images • verified ARD v4.0 attack timing core</div></div></div>
+    <div class="iy-config"><label>Your deck<select id="iyUserDeck"></select></label><label>Opponent deck<select id="iyAiDeck"></select></label></div>
+    <div class="iy-actions"><button id="iyReset" class="good">New Match</button><button id="iyGameClose">Close</button></div>
+  </div>
+  <div class="iy-table">
+    <div class="iy-player-strip"><div class="iy-player-id"><div><b id="iyAiName">Opponent</b><div class="iy-counts"><span>Library <b id="iyAiLib">0</b></span><span>Hand <b id="iyAiHandCount">0</b></span><span>Discard <b id="iyAiDiscard">0</b></span></div></div></div><div class="iy-shards" id="iyAiShards"></div><b id="iyAiShardsCount" hidden>0</b></div>
+    <div class="iy-zone"><span class="iy-zone-title">Opponent play area — click a card to choose defender</span><div id="iyAiPlayZone" class="iy-cards"></div></div>
+    <div class="iy-center"><div class="iy-centerbox"><div><div id="iyAttackSummary" class="iy-attack-summary">Select an attacker and defender.</div><div id="iyWindows" class="iy-window-track"></div></div><div class="iy-attack-actions"><button id="iyResolveAttack" class="primary" disabled>Resolve Attack</button><button id="iyClearAttack">Clear</button></div></div></div>
+    <div class="iy-zone"><span class="iy-zone-title">Your play area — click a card to choose attacker</span><div id="iyUserPlay" class="iy-cards"></div></div>
+    <div class="iy-player-strip"><div class="iy-player-id"><div><b id="iyUserName">You</b><div class="iy-counts"><span>Library <b id="iyUserLib">0</b></span><span>Hand <b id="iyUserHandCount">0</b></span><span>Discard <b id="iyUserDiscard">0</b></span></div></div></div><div class="iy-shards" id="iyUserShards"></div><b id="iyUserShardsCount" hidden>0</b><div class="iy-toolbar"><button id="iyDraw">Draw</button><button id="iyPlaySelected" class="good">Play Selected</button><button id="iyDiscardSelected">Discard Selected</button><button id="iyReady">Ready My Cards</button><button id="iyAiDraw">AI Draw</button><button id="iyAiPlayButton">AI Play Card</button><span id="iyStatus" class="iy-status">Ready.</span></div></div>
+    <div class="iy-zone iy-hand-zone"><span class="iy-zone-title">Your hand — real card images from the InuYasha database</span><div id="iyUserHand" class="iy-cards"></div><div id="iyAiHand" class="hidden"></div></div>
+  </div>
+  <div id="iyInspector" class="iy-inspector"><img id="iyInspectImage" alt="Selected InuYasha card"><h3 id="iyInspectName"></h3><div id="iyInspectMeta" class="sub"></div><div id="iyInspectZone" class="sub"></div><button id="iyInspectClose">Close card view</button></div>
+  <div class="iy-log-drawer"><details><summary>Test-match log</summary><div id="iyLog" class="iy-log"></div></details></div>
+</div></div>
+
+<div id="iyAttackModal" class="modal iy-attack-modal" aria-hidden="true"><div class="modal-panel iy-attack-panel">
+  <h2>Resolve InuYasha Attack</h2><div class="iy-attack-note">The current database does not yet contain authoritative printed color values for every card. Read the values from the real card images and enter them here; the attack sequence itself is resolved by the verified engine rather than guessed.</div>
+  <div class="iy-attack-grid"><label>Attacker<b id="iyAttackAttacker"></b><input id="iyAttackValue" type="number" min="0" step="1" inputmode="numeric" required placeholder="Final value"></label><label>Defender<b id="iyAttackDefender"></b><input id="iyDefendValue" type="number" min="0" step="1" inputmode="numeric" required placeholder="Final value"></label></div>
+  <input id="iyAttackColor" type="hidden" value="red"><div class="iy-color-row"><button type="button" data-iy-color="red">Red</button><button type="button" data-iy-color="blue">Blue</button><button type="button" data-iy-color="green">Green</button><button type="button" data-iy-color="purple">Purple</button><button type="button" data-iy-color="black">Black</button></div>
+  <div id="iyAttackError" class="sub"></div><div class="sub">Runtime <b id="iyAttackRuntimeBuild">0.6.9</b></div><div class="actions"><button id="iyAttackConfirm" class="primary" type="button" disabled aria-disabled="true">Resolve with ARD Engine</button><button id="iyAttackCancel">Cancel</button></div>
+</div></div>
+
+<div id="fatesModal" class="fates-modal" aria-hidden="true">
+  <div class="fates-panel">
+    <div class="fates-head">
+      <div><h2>Fates Test Environment</h2><div class="sub">Focused Magic module • KOSEIRA rules authority • deterministic test state • unresolved mechanics fail closed</div></div>
+      <button id="fatesClose" class="fates-close" aria-label="Close Fates Lab">×</button>
+    </div>
+    <div class="fates-toolbar">
+      <button id="fatesNew" class="primary">New Fates Test</button>
+      <button id="fatesSave">Save Fates</button><button id="fatesLoad">Load Fates</button>
+      <button id="fatesExport">Export State JSON</button>
+      <label>Actor<select id="fatesActor"><option>User</option><option>Opponent</option></select></label>
+      <label>Plane<input id="fatesPlane" value="Test Plane"></label>
+      <label>Seed<input id="fatesSeed" type="number" value="260918"></label>
+      <span id="fatesStatus" class="status">Ready.</span>
+    </div>
+    <div class="fates-tabs">
+      <button data-fates-view="state" class="active">Game State</button>
+      <button data-fates-view="systems">Outside Systems</button>
+      <button data-fates-view="tempt">Tempt / Randomizer</button>
+      <button data-fates-view="evidence">Evidence / Regressions</button>
+      <button data-fates-view="rules">Rules / Unresolved</button>
+    </div>
+
+
+    <section id="fatesViewState" class="fates-view active">
+      <div class="fates-grid">
+        <div class="fates-card">
+          <h3>Active Fate</h3>
+          <div class="fates-row"><label>Name<input id="fatesName" value="Active Fate"></label><label>Current loyalty<input id="fatesLoyalty" type="number" value="3"></label><label>Descend mode<select id="fatesMode"><option value="printed">Printed Planeswalker</option><option value="signature">Signature-Spell creature form</option></select></label></div>
+          <div class="fates-stats">
+            <div class="fates-stat"><b id="fatesDistance">10</b><span>Fate distance</span></div>
+            <div class="fates-stat"><b id="fatesZone">Observer</b><span>Fate zone/state</span></div>
+            <div class="fates-stat"><b id="fatesRevealCount">0</b><span>true reveals</span></div>
+            <div class="fates-stat"><b id="fatesRescueCost">2</b><span>next rescue {mana}</span></div>
+          </div>
+          <div class="fates-actions">
+            <button id="fatesDraw">Normal Draw</button><button id="fatesShuffle">Library Shuffle</button>
+            <button id="fatesOpportunity">Resolve Fate Opportunity</button><button id="fatesInvoke">Invoke Fate</button>
+            <button id="fatesCommit" class="good">Commit to Descend</button><button id="fatesCast">Cast / Manifest Fate</button>
+          </div>
+          <div class="fates-row"><label>Removal / defeat<select id="fatesRemovalType"><option value="defeat">Combat / physical defeat</option><option value="exile">Exile effect</option><option value="bounce">Bounce / return to hand</option><option value="blink">Blink</option><option value="tuck">Tuck / library movement</option></select></label><button id="fatesApplyRemoval">Apply</button><button id="fatesPayRescue">Pay Rescue</button><button id="fatesDeclineRescue" class="bad">Decline → Despark</button></div>
+          <div id="fatesFateNote" class="fates-note"></div>
+        </div>
+
+        <div class="fates-card">
+          <h3>Three-Fate Match Roster</h3>
+          <div class="fates-note">Each player registers three Fates. Rescue tax and Despark status persist for each Fate across the match; a desparked Fate cannot be selected again later in that match.</div>
+          <div id="fatesRoster" class="fates-roster"></div>
+          <div class="fates-row"><label>Active Fate for a new game<select id="fatesRosterSelect"><option value="0">Fate 1</option><option value="1">Fate 2</option><option value="2">Fate 3</option></select></label><button id="fatesActivateRoster" class="good">Activate for New Game</button></div>
+          <div class="fates-note fates-unresolved">Game-boundary helper: this resets only the current actor's life and active-Fate per-game state, while preserving that Fate's match Rescue tax / Despark record. It does not guess resets for unrelated outside systems.</div>
+        </div>
+
+
+        <div class="fates-card">
+          <h3>Life / Last Chance / Arlinn</h3>
+          <div class="fates-row"><label>Life<input id="fatesLife" type="number" value="20"></label><button id="fatesSetLife">Set Life</button><button id="fatesTriggerLoss" class="warn">Trigger Loss Check</button></div>
+          <div class="fates-stats">
+            <div class="fates-stat"><b id="fatesLastChance">No</b><span>Last Chance</span></div>
+            <div class="fates-stat"><b id="fatesHexproof">No</b><span>Fate hexproof</span></div>
+            <div class="fates-stat"><b id="fatesDescents">0</b><span>Descents</span></div>
+            <div class="fates-stat"><b id="fatesLost">No</b><span>Game lost</span></div>
+          </div>
+          <div class="fates-row"><label>Magic day/night<select id="fatesDayNight"><option value="neither">Neither</option><option value="day">Day</option><option value="night">Night</option></select></label><button id="fatesSetDayNight">Apply Day/Night</button></div>
+          <div class="fates-note">Arlinn uses Magic's normal day/night state. True Arlinn reveals accumulate Wolf +1/+1. The exact night creature-conversion base/bonus formula remains <b>UNRESOLVED</b> and is not automated.</div>
+          <div class="fates-stats"><div class="fates-stat"><b id="fatesWolfBonus">+0/+0</b><span>Arlinn cumulative Wolf bonus</span></div></div>
+        </div>
+
+
+        <div class="fates-card wide">
+          <h3>Replay / Event Log</h3>
+          <div class="fates-actions"><button id="fatesClearLog">Clear Log</button><button id="fatesCheckpoint">Checkpoint</button><button id="fatesRollback">Rollback</button></div>
+          <div id="fatesLog" class="fates-log"></div>
+        </div>
+      </div>
+    </section>
+
+
+    <section id="fatesViewSystems" class="fates-view">
+      <div class="fates-grid">
+        <div class="fates-card">
+          <h3>Signature Spells</h3>
+          <div class="fates-note">Up to three. Prepare for {3} into the Active Spell Zone, then pay printed mana cost to use. One-use; removed from match after use; no copy/storm bookkeeping through this procedure.</div>
+          <div id="fatesSignatures" class="fates-signatures"></div>
+        </div>
+        <div class="fates-card">
+          <h3>Background / Roll Support</h3>
+          <div class="fates-row"><label>Active Background<input id="fatesBackground" placeholder="Background name"></label><button id="fatesSetBackground">Set</button></div>
+          <hr>
+          <div class="fates-row"><label>Roll Support card<input id="fatesSupportName" value="Free-Range Chicken"></label><label>Adapted trigger / cost<input id="fatesSupportCondition" value="{1}{G} activation (reference wording)"></label></div>
+          <div class="fates-stats"><div class="fates-stat"><b id="fatesSupportZone">Fate zone</b><span>Roll Support state</span></div></div>
+          <div class="fates-actions"><button id="fatesSupportActivate">Activate / Trigger Support</button><button id="fatesSupportRemove">Remove from Match</button></div>
+          <div class="fates-note">No generic free Roll Support roll. The designated card's own Fates-adapted trigger/cost controls activation. Card-specific translations must come from KOSEIRA authority.</div>
+        </div>
+        <div class="fates-card wide">
+          <h3>Community Ante</h3>
+          <div class="fates-note fates-unresolved">Initial lands revealed while searching for the first nonland Community Ante contribution remain UNRESOLVED. This tester records the contribution but does not invent land disposition/order.</div>
+          <div class="fates-row"><label>User contribution<input id="fatesAnteUser" placeholder="Nonland card"></label><label>Opponent contribution<input id="fatesAnteOpponent" placeholder="Nonland card"></label><button id="fatesAnteSet">Set Pool</button></div>
+          <div id="fatesAntePool" class="fates-log"></div>
+          <div class="fates-actions"><button data-ante-use="User">Use User contribution</button><button data-ante-use="Opponent">Use Opponent contribution</button></div>
+          <h4>Dedicated Ante card</h4>
+          <div class="fates-row"><label>Name<input id="fatesDedicatedAnte" value="Contract from Below"></label><button id="fatesDedicatedUse">Use Dedicated Ante</button><button id="fatesJeweledBird">Jeweled Bird Exchange</button></div>
+          <div class="fates-note">Ordinary contribution used → owner's graveyard → exile exactly the top card as replacement → no shuffle. Dedicated Ante card is reusable and returns to the shared pool unless another legal effect relocates it.</div>
+        </div>
+      </div>
+    </section>
+
+
+    <section id="fatesViewTempt" class="fates-view">
+      <div class="fates-grid">
+        <div class="fates-card wide">
+          <h3>Tempt Fate / Resist Temptation</h3>
+          <div class="fates-note">Start a concealed Fate-die roll, select eligible creatures to pay the convoke-only Tempt requirement, then allow individual Resist Temptation decisions before revealing/resolving. Colored cost satisfaction remains a manual legality check unless the selected test fixture explicitly supplies color data.</div>
+          <div class="fates-row"><label>Creature name<input id="fatesCreatureName" placeholder="Creature"></label><label>Controller<select id="fatesCreatureController"><option>User</option><option>Opponent</option></select></label><label>Power<input id="fatesCreaturePower" type="number" min="0" value="1"></label><label>Hexproof<select id="fatesCreatureHexproof"><option value="no">No</option><option value="yes">Yes</option></select></label><button id="fatesAddCreature">Add Creature</button></div>
+          <div id="fatesCreatures" class="fates-creatures"></div>
+          <div class="fates-actions"><button id="fatesStartConcealed" class="primary">Start Concealed Fate Roll</button><button id="fatesPayTempt">Pay Tempt with Selected Creatures</button><button id="fatesResolveTempt" class="good">Reveal & Resolve Roll</button></div>
+          <div id="fatesTemptStatus" class="fates-note">No active concealed roll.</div>
+        </div>
+        <div class="fates-card">
+          <h3>Fate Die / Randomizer Replacement</h3>
+          <div class="fates-actions"><button id="fatesRollD20">Roll Fate d20</button><button id="fatesMapD6">Resolve printed d6</button><button id="fatesCoin">Resolve coin flip</button></div>
+          <div class="fates-row"><label>Random choices (N)<input id="fatesRandomN" type="number" min="2" max="20" value="3"></label><button id="fatesRandomPick">Choose evenly</button></div>
+          <div id="fatesRandomResult" class="fates-note">—</div>
+          <div class="fates-note">The Fate d20 replaces the original die/coin/randomizer. Smaller die scales use an even mapping and reroll unused d20 faces.</div>
+        </div>
+        <div class="fates-card">
+          <h3>Tempt Status Summary</h3>
+          <div class="fates-stats"><div class="fates-stat"><b id="fatesTemptRaw">—</b><span>concealed/raw</span></div><div class="fates-stat"><b id="fatesTemptPower">0</b><span>remaining Tempted power</span></div><div class="fates-stat"><b id="fatesTemptFinal">—</b><span>final Fate result</span></div></div>
+          <div class="fates-note">Final Fate result has a floor of 0. Reaching 0 creates the normal Fate opportunity; excess subtraction does nothing extra.</div>
+        </div>
+      </div>
+    </section>
+
+
+    <section id="fatesViewEvidence" class="fates-view">
+      <div class="fates-grid">
+        <div class="fates-card">
+          <h3>Regression Suite</h3>
+          <div class="fates-actions"><button id="fatesRunTests" class="good">Run All Fates Regressions</button></div>
+          <div id="fatesTests" class="fates-tests"></div>
+        </div>
+        <div class="fates-card">
+          <h3>Gameplay Evidence Fixtures</h3>
+          <div class="fates-evidence">
+            <article><span class="tag">CORRECTED SIMULATION</span><b>Tempt 6 − 6 = 0</b><div class="sub">Confirms zero floor and normal Fate opportunity.</div><button data-fixture="tempt6">Load fixture</button></article>
+            <article><span class="tag">PLAYTEST EVIDENCE</span><b>Despark persistence</b><div class="sub">A declined rescue removes that Fate for the remainder of the match.</div><button data-fixture="despark">Load fixture</button></article>
+            <article><span class="tag">PLAYTEST EVIDENCE</span><b>Community Ante / Jeweled Bird</b><div class="sub">Reusable dedicated Ante access can be interrupted by a legal Ante relocation effect.</div><button data-fixture="ante">Load fixture</button></article>
+            <article><span class="tag">CURRENT USER RULE</span><b>Arlinn reveal/day-night</b><div class="sub">Reveal count and cumulative Wolf bonus are testable; night conversion formula remains blocked.</div><button data-fixture="arlinn">Load fixture</button></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <section id="fatesViewRules" class="fates-view">
+      <div class="fates-grid">
+        <div class="fates-card">
+          <h3>Implemented Rule Contracts</h3>
+          <ul>
+            <li>Observer-zone Fate is outside normal library processing.</li>
+            <li>Fate distance starts at 10; normal draws decrement; legitimate shuffles reroll/reset.</li>
+            <li>True Fate opportunity restores +1 loyalty.</li>
+            <li>Descended Fate has hexproof except in Last Chance.</li>
+            <li>Exile/bounce/blink/tuck returns Fate to observer cycle; physical defeat uses Rescue/Despark.</li>
+            <li>Rescue costs progress {2}, {4}, {6}… for that Fate in the match; three-Fate roster tracks match-persistent Rescue/Despark state.</li>
+            <li>Signature Spell preparation/use lifecycle.</li>
+            <li>Community Ante replacement and dedicated reusable Ante distinction.</li>
+            <li>Fate-die replacement for printed dice, coin flips, and random selection.</li>
+            <li>Tempt Fate + Tempted status + per-creature Resist Temptation targeting.</li>
+            <li>Last Chance and Arlinn reveal/day-night tracking.</li>
+          </ul>
+        </div>
+        <div class="fates-card">
+          <h3>Fail-Closed / UNRESOLVED</h3>
+          <ul class="fates-bad">
+            <li>Initial Community Ante revealed-land disposition/order.</li>
+            <li>Exact Arlinn night battlefield-conversion base-P/T vs reveal bonus formula.</li>
+            <li>Signature-Spell creature-form details beyond P/T = loyalty.</li>
+            <li>Iron Mastiff equal-nearest-divisible exact tie-break.</li>
+            <li>Any Roll Support card-specific zone translation not already locked by KOSEIRA.</li>
+            <li>Any remaining Last Chance hand/library permissions previously marked unresolved.</li>
+          </ul>
+          <div class="fates-note">The tester records these as blocked/manual. It does not promote assumptions into format rules.</div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+
+
+
+
+
+
+<script src="js/fates/fates-lab.js?v=0.6.9"></script>
+<script src="js/reality-fracture/rules-engine.js?v=0.6.9"></script>
+<script src="js/reality-fracture/mandatory-local-db.js?v=0.6.9"></script>
+<script src="js/reality-fracture/ui.js?v=0.6.9"></script>
+<script src="js/core/core-magic.js?v=0.6.9"></script>
+<script type="module" src="js/choices/choices.mjs?v=0.6.9"></script>
+<script src="js/provider/argentum.js?v=0.6.9"></script>
+<script src="js/inuyasha/score-engine.js?v=0.6.9"></script>
+<script src="js/inuyasha/decks.js?v=0.6.9"></script>
+<script src="js/inuyasha/tabletop.js?v=0.6.9"></script>
+<script src="js/shell/launcher.js?v=0.6.9"></script>
+</body></html>

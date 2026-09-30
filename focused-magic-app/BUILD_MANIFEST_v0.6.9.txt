@@ -1,0 +1,40 @@
+FOCUSED MAGIC v0.6.9 — LIVE FAILURE REPAIR
+DATE=2026-09-29
+STATUS=LOCAL INUYASHA BROWSER CLICK-PATH PASS / ARGENTUM RUNTIME-GATED BACKEND LIVE ON RENDER / BROWSER CORS+DECK ADMISSION+USER LIVE ACCEPTANCE PENDING
+
+LINEAGE
+BASE=v0.6.8 rejected user-live successor, itself rebuilt from v0.6.6 full playable authority plus verified v0.6.7 provider work.
+USER_CORRECTION=v0.6.8 failed in live use: InuYasha Resolve Attack did not work and Argentum failed load.
+
+INUYASHA v0.6.9
+- full InuYasha playable surface preserved
+- blank combat values rejected before Number conversion
+- native required/min validation
+- resolve confirmation disabled by default and gated on valid values
+- input/change/keyup/blur refresh
+- runtime VERSION=0.6.9 + diagnostics()
+- visible runtime marker and cache-busted/no-store frontend assets
+- actual Chromium DOM click-path PASS: select attacker/defender -> open Resolve Attack -> blank blocked -> 1 vs 6 accepted -> resolve -> attacker expended -> defender survives -> shards 2-2 -> log reaches Attack ends
+- USER LIVE RETEST=PENDING
+
+ARGENTUM / RENDER
+- hosting remains the existing Render Pro service focused-magic-argentum-067-pro in Ohio
+- service id=srv-datrs2rncjis739q2t00
+- provider=https://focused-magic-argentum-067-pro.onrender.com
+- websocket=wss://focused-magic-argentum-067-pro.onrender.com/game
+- pinned Argentum source=e4fcc1621812670c58c001a80df9c71eced69a1c
+- oversized FM_PATCH_B64 transport repeatedly corrupted before Gradle
+- compact/gated payload bytes=7764
+- compact/gated base64 chars=10352
+- compact/gated archive SHA256=5dffa810521a6ac588f552eae186521e787328c326b440c6d4921d8c59de777d
+- exact-byte gated deploy=dep-datv22hsrm7s73a6tl50
+- Render bootJar build=PASS
+- Spring Boot startup=PASS
+- runtime card registry gate=PASS
+- registry size=13752
+- required runtime identities proven present=Gemstone Caverns; Oscorp Industries
+- narrow CORS config compiled/live for GET/OPTIONS /api/cards/**
+- direct public /api/cards response-header readback from this agent remains unavailable; browser CORS acceptance is therefore still pending
+
+RELEASE BOUNDARY
+v0.6.9 is the current successor WIP, not a fully user-accepted release. Remaining gate: browser/provider /api/cards+CORS -> exact Constructed deck admission -> Gemstone Caverns pregame -> Scalding Tarn -> Jace/Kasmina, Way, Reweave and remaining scoped runtime matrix -> user live InuYasha confirmation.

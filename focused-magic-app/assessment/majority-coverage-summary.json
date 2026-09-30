@@ -1,0 +1,19 @@
+{
+  "build": "Focused Magic v0.6.6",
+  "status": "CARD_SPECIFIC_RECERTIFICATION_DEFERRED_BY_USER",
+  "historical_baseline_note": "v0.6.5 carried lower-bound static coverage measurements. They are not reused as current proof after the provider pin changed.",
+  "current_release_focus": [
+    "launcher/modal platform repair",
+    "Argentum adapter load repair",
+    "provider pin correction",
+    "overlay-before-Gradle packaging repair",
+    "Challenge Series pause enforcement",
+    "InuYasha Score TCG attack-core integration"
+  ],
+  "mtg_runtime_proof": "PENDING_DEPLOYED_PROVIDER",
+  "inuyasha_attack_core": {
+    "python_reference_tests": "11/11 PASS",
+    "browser_parity_tests": "11/11 PASS",
+    "full_game_support": false
+  }
+}

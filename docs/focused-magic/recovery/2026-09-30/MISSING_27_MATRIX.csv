@@ -1,0 +1,28 @@
+card,set_or_origin,prepared_source,status_for_codex
+Barrowgoyf,MH3,,IMPLEMENT_FULL_TEXT
+Daze,NEM,backend-seeds/.../Daze.kt,RECOVERED_OLD_OVERLAY_COMPILE_AND_TEST
+Fatal Push,AER,,IMPLEMENT_FULL_TEXT
+Force of Will,ALL,backend-seeds/.../ForceOfWill.kt,RECOVERED_OLD_OVERLAY_COMPILE_AND_TEST
+Murktide Regent,MH2,,IMPLEMENT_FULL_TEXT
+Sheoldred's Edict,ONE,,IMPLEMENT_FULL_TEXT
+Tamiyo, Inquisitive Student,MH3,,IMPLEMENT_FULL_TEXT_DFC
+Consign to Memory,MH3,backend-seeds/.../ConsignToMemory.kt,TRANSPLANT_FROM_NEWER_UPSTREAM_THEN_TEST
+Dauthi Voidwalker,MH2,,IMPLEMENT_FULL_TEXT
+Engineered Explosives,5DN,,IMPLEMENT_FULL_TEXT
+Hydroblast,ICE,,IMPLEMENT_FULL_TEXT
+Null Rod,WTH,,IMPLEMENT_FULL_TEXT
+Toxic Deluge,C13,,IMPLEMENT_FULL_TEXT
+Blood Scrivener,DGM,,IMPLEMENT_FULL_TEXT
+Currency Converter,NCC,,IMPLEMENT_FULL_TEXT
+Cutthroat il-Dal,FUT,,IMPLEMENT_FULL_TEXT
+Demonfire,DIS,,IMPLEMENT_FULL_TEXT
+Gathan Raiders,FUT,,IMPLEMENT_FULL_TEXT
+Geier Reach Sanitarium,EMN,,IMPLEMENT_FULL_TEXT
+Izzet Charm,RTR,,IMPLEMENT_FULL_TEXT
+Jagged Poppet,DIS,,IMPLEMENT_FULL_TEXT
+Library of Leng,LEA,,IMPLEMENT_FULL_TEXT
+Persist,MH2,,IMPLEMENT_FULL_TEXT
+Taste for Mayhem,DIS,,IMPLEMENT_FULL_TEXT
+The Biblioplex,STX,,IMPLEMENT_FULL_TEXT
+Surgical Extraction,NPH,,IMPLEMENT_FULL_TEXT
+Grey Ogre,LEA,backend-seeds/.../GreyOgre.kt,PREPARED_SIMPLE_SOURCE_COMPILE_AND_TEST

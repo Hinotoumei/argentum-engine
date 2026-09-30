@@ -1,0 +1,18 @@
+FOCUSED MAGIC v0.6.9 — INUYASHA BROWSER CLICK-PATH VALIDATION
+STATUS=PASS in Chromium DOM execution harness.
+
+Executed the shipped score-engine.js + tabletop.js through the real UI event path:
+1. Opened InuYasha tabletop.
+2. Selected a user Character from hand and used Play Selected.
+3. AI Play Card placed an opposing Character.
+4. Clicked user in-play Character as attacker and AI in-play Character as defender.
+5. Clicked Resolve Attack.
+6. Confirmed Resolve with ARD Engine is DISABLED with both combat inputs blank.
+7. Confirmed visible validation text: Enter both printed/current final color values before resolving.
+8. Entered attacker=1, defender=6; dispatched actual input events.
+9. Confirmed Resolve with ARD Engine becomes enabled.
+10. Clicked Resolve with ARD Engine.
+11. Confirmed attack modal closes and state mutates: attacker ready=false (expended), attacker not defeated, defender survives, shards remain 2-2.
+12. Confirmed ARD log includes When attacking, When attacked, Compare (1 vs 6), Attack ends.
+
+Runtime diagnostic: InuYashaTabletop.VERSION=0.6.9; diagnostics() => ok=true, blankRejected=true, numericAccepted=true.

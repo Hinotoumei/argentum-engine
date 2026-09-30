@@ -1,0 +1,21 @@
+Focused Magic v0.6.8 — playable-shell preservation + provider/CORS merge
+
+BASELINE CORRECTION
+- v0.6.7 provider repair was packaged from a regressed frontend baseline and omitted the v0.6.6 InuYasha module/launcher wiring.
+- v0.6.8 therefore uses the complete v0.6.6 playable build as the frontend authority and ports forward only the verified newer v0.6.7 provider/backend/rules repairs.
+
+PRESERVED FROM v0.6.6
+- InuYasha Score TCG visual test match, deck/database/image bridge, verified attack-core integration, and blank-input attack guard.
+- Playable Magic shell, launcher, worker, CHOICES startup behavior, Limited/Fates surfaces, and mounted modal/tabletop shell.
+
+PORTED FROM v0.6.7
+- Dedicated Render Argentum provider selection and fail-closed /api/cards registry gate.
+- Exclusive Nightclub -> Oscorp Industries provider-name bridge.
+- Gemstone Caverns provider/runtime repair package and scoped card overrides.
+- Dedicated Argentum tabletop improvements.
+- Narrow GET/OPTIONS /api/cards/** CORS bridge and CORS-aware provider verifier.
+- Regenerated Render patch payload package.
+- Scoped Reality Fracture rules/UI changes and mandatory local card DB.
+
+BOUNDARY
+- This package is a local/Drive WIP successor. It is not claimed deployed or live-accepted until Render catalog/CORS and gameplay gates pass.

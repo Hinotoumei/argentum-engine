@@ -1,0 +1,116 @@
+{
+  "method": "Lower-bound static evidence only: name has either an obvious dedicated card-definition filename in pinned Argentum source or EXACTLY_SUPPORTED/PARTIAL coverage in the preserved v0.6.4 local engine. This is not a live runtime proof.",
+  "provider_commit": "e4fcc1621812670c58c001a80df9c71eced69a1c",
+  "required_distinct_union": 69,
+  "combined_static_evidence_union": 44,
+  "combined_static_evidence_percent": 63.8,
+  "fixtures": {
+    "mandatory": {
+      "distinct_required": 20,
+      "static_evidence_names": 12,
+      "percent": 60.0,
+      "covered_names": [
+        "Blood Crypt",
+        "Bloodstained Mire",
+        "Desperate Ritual",
+        "Faithless Looting",
+        "Jace's Machinations",
+        "Keldon Megaliths",
+        "Monument to Endurance",
+        "Prismari Command",
+        "Scalding Tarn",
+        "Starting Town",
+        "Steam Vents",
+        "Way of the Pyromancer"
+      ],
+      "repair_on_encounter_names": [
+        "Exclusive Nightclub",
+        "Gemstone Caverns",
+        "Infernal Tutor",
+        "Kasmina, Enigma Sage",
+        "Manamorphose",
+        "One with Nothing",
+        "Reweave",
+        "Sire of Insanity"
+      ]
+    },
+    "page_legacy": {
+      "distinct_required": 30,
+      "static_evidence_names": 17,
+      "percent": 56.7,
+      "covered_names": [
+        "Blood Crypt",
+        "Chandra, Spark Hunter",
+        "Currency Converter",
+        "Gamble",
+        "Gathan Raiders",
+        "Island",
+        "Izzet Charm",
+        "Keldon Megaliths",
+        "Lotus Petal",
+        "Mountain",
+        "Oscorp Industries",
+        "Page, Loose Leaf",
+        "Prismari Command",
+        "Scalding Tarn",
+        "Steam Vents",
+        "Swamp",
+        "Visionary's Dance"
+      ],
+      "repair_on_encounter_names": [
+        "Blood Scrivener",
+        "Cutthroat il-Dal",
+        "Demonfire",
+        "Geier Reach Sanitarium",
+        "Infernal Tutor",
+        "Jagged Poppet",
+        "Library of Leng",
+        "One with Nothing",
+        "Persist",
+        "Sire of Insanity",
+        "Surgical Extraction",
+        "Taste for Mayhem",
+        "The Biblioplex"
+      ]
+    },
+    "dimir_tempo": {
+      "distinct_required": 30,
+      "static_evidence_names": 23,
+      "percent": 76.7,
+      "covered_names": [
+        "Brainstorm",
+        "Daze",
+        "Fatal Push",
+        "Flow State",
+        "Force of Negation",
+        "Force of Will",
+        "Hydroblast",
+        "Island",
+        "Kaito, Bane of Nightmares",
+        "Long Goodbye",
+        "Misty Rainforest",
+        "Orcish Bowmasters",
+        "Polluted Delta",
+        "Ponder",
+        "Scalding Tarn",
+        "Sheoldred's Edict",
+        "Swamp",
+        "Tamiyo, Inquisitive Student",
+        "Thoughtseize",
+        "Undercity Sewers",
+        "Underground Sea",
+        "Verdant Catacombs",
+        "Wasteland"
+      ],
+      "repair_on_encounter_names": [
+        "Barrowgoyf",
+        "Consign to Memory",
+        "Dauthi Voidwalker",
+        "Engineered Explosives",
+        "Murktide Regent",
+        "Null Rod",
+        "Toxic Deluge"
+      ]
+    }
+  }
+}

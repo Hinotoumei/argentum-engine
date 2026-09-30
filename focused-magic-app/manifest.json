@@ -1,0 +1,438 @@
+{
+  "version": "0.6.9",
+  "build": "TIKUNARI_CODEX_PREP_PROVIDER_LOCK_INUYASHA_RUNTIME_GUARD",
+  "date": "2026-09-30",
+  "base": {
+    "frontend_authority": "Focused_Magic_v0.6.9_INUYASHA_RESOLVE_ARGENTUM_LIVE_REPAIR_2026-09-29.zip",
+    "frontend_drive_id": "1iRWxWsS-Rbmi8tVK6jIfVAamqTXK5WYj",
+    "failed_non_authority": "Focused_Magic_v0.6.6_PLAYABLE_TABLETOP_INUYASHA_EXACT_CANDIDATE_BLANK_INPUT_GUARD_FIXED_2026-09-29.zip / Drive 1yCq8ejYxVf4Z9WtHXPzpLaFsABMt_dY5",
+    "backend_authority": "Hinotoumei/argentum-engine focused-magic direct-fork deployment"
+  },
+  "architecture": "Cloudflare/static playable frontend + existing Render Pro Argentum server-authoritative Constructed provider.",
+  "render": {
+    "service": "focused-magic-argentum-067-pro",
+    "service_id": "srv-datrs2rncjis739q2t00",
+    "plan": "Pro",
+    "region": "Ohio",
+    "provider": "https://focused-magic-argentum-067-pro.onrender.com",
+    "websocket": "wss://focused-magic-argentum-067-pro.onrender.com/game",
+    "verified_live_deploy": "dep-daue0vmk1f9s73bfmrng",
+    "verified_commit": "1e021883b1961f73ae39366518e131b43bd55993",
+    "catalog_status": "LIVE BUT USER ASSESSMENT REPORTS 27 REQUIRED NAMES MISSING; NOT ACCEPTED"
+  },
+  "validation": {
+    "packet_status": "SUPPORTING_LOCAL_VALIDATION_ONLY_NOT_USER_ACCEPTANCE",
+    "provider_hardcode_static": "PASS",
+    "provider_js_syntax": "PASS",
+    "inuyasha_js_syntax": "PASS",
+    "inuyasha_required_live_acceptance": "PENDING",
+    "backend_27_card_repair": "PENDING_CODEX"
+  },
+  "files": [
+    {
+      "path": "BUILD_MANIFEST_v0.6.9.txt",
+      "bytes": 2409,
+      "sha256": "f97fd915aadf85c7309953aefede17f8c11609131a8ab23f5d8069293138ad82"
+    },
+    {
+      "path": "CHANGELOG_v0.6.6.txt",
+      "bytes": 656,
+      "sha256": "b4d17f142887ceda23aaf3e94b8555f785348a3284c287b2ea414af383f0904a"
+    },
+    {
+      "path": "CHANGELOG_v0.6.8.txt",
+      "bytes": 1317,
+      "sha256": "b97fd25d00b4e2b3032aba77a7ca71adb3e29da4c50c1efd8df6721b4358623f"
+    },
+    {
+      "path": "CHANGELOG_v0.6.9.txt",
+      "bytes": 1441,
+      "sha256": "f0b932ba99ebbec0ba76ed9b703b89748e6527627bbb4e7cfb079cf91b140acb"
+    },
+    {
+      "path": "README_DEPLOY.txt",
+      "bytes": 2345,
+      "sha256": "9302838eeca05a2e4d851940b0ba41f7150eec8e964366a5e1483ea6c7961f08"
+    },
+    {
+      "path": "TIKUNARI_PREP_NOTES_2026-09-30.txt",
+      "bytes": 912,
+      "sha256": "0d0c1bebfe72e6c42a8f534b05e094b70ddc6889f847054815b80ed2b7849dbd"
+    },
+    {
+      "path": "_headers",
+      "bytes": 311,
+      "sha256": "ad03f07f9b02cc7168c0e933846283918849cceee4524d6f51f20b0cb8360425"
+    },
+    {
+      "path": "_worker.js",
+      "bytes": 2203,
+      "sha256": "811c0a00adb61279557d603e4d379d6d2b1d9332a5bfcad9daa37e466673310d"
+    },
+    {
+      "path": "argentum-backend/Dockerfile",
+      "bytes": 1229,
+      "sha256": "e5627005d5ae7958be5801f544c4c5668de157a76572e3454e60a8bcb1e18500"
+    },
+    {
+      "path": "argentum-backend/FOCUSED_MAGIC_PROVIDER_DEPLOYMENT_GATE.txt",
+      "bytes": 1208,
+      "sha256": "50f091f54039e1000c7245ea5e3ff05a511da4da8700f7fe8113c352a87f2e20"
+    },
+    {
+      "path": "argentum-backend/README_PINNED_PROVIDER.txt",
+      "bytes": 2419,
+      "sha256": "4e2930b79108cae6a2f7cd966b405c7744770960c8e9c0945ccd65c5da792e52"
+    },
+    {
+      "path": "argentum-backend/VALIDATION_ARGENTUM_REPAIR_2026-09-29.txt",
+      "bytes": 10692,
+      "sha256": "52bbdfb7972ce966b3c7bc99e8311c56228e70e14fdc84b47e4a485ce242fe49"
+    },
+    {
+      "path": "argentum-backend/deploy/FM_PATCH_B64.txt",
+      "bytes": 10352,
+      "sha256": "0af6e476c013f8bbb82763a0e9f869128ba927c3256b21ad1ea54e249d058e3c"
+    },
+    {
+      "path": "argentum-backend/deploy/RENDER_DEPLOYMENT_PAYLOAD.txt",
+      "bytes": 2389,
+      "sha256": "efef4c0fff0d67bdfffe8501f0bd9283e9e0c8766c656094e5044144ff44d3be"
+    },
+    {
+      "path": "argentum-backend/deploy/verify-render-provider.sh",
+      "bytes": 1346,
+      "sha256": "f147b4f2b2609222c7915100b50f54383fa3595fa421f3df1b55bb91f6269461"
+    },
+    {
+      "path": "argentum-backend/docker-compose.focused-magic.yml",
+      "bytes": 357,
+      "sha256": "7b7817cb7757716622a5b0178f154915725a1f4381fc50331aa75e2f33a1ff81"
+    },
+    {
+      "path": "argentum-backend/overrides/game-server/src/main/kotlin/com/wingedsheep/gameserver/config/FocusedMagicCatalogCorsConfig.kt",
+      "bytes": 838,
+      "sha256": "37dbb03d5b67874859cdff2ae289a153cde87d27b91a9c8410cee2fa90503725"
+    },
+    {
+      "path": "argentum-backend/overrides/mtg-sets/2003-2007/src/main/kotlin/com/wingedsheep/mtg/sets/definitions/dis/cards/InfernalTutor.kt",
+      "bytes": 1990,
+      "sha256": "e7d2b3e5bda1aee263815cc0ae9b1f1a71101aed2d82d725f3ce396f93ee3b2b"
+    },
+    {
+      "path": "argentum-backend/overrides/mtg-sets/2003-2007/src/main/kotlin/com/wingedsheep/mtg/sets/definitions/fut/cards/KeldonMegaliths.kt",
+      "bytes": 1294,
+      "sha256": "7b538cf088b6d33303ab6386ff7fc4c33a593dfcd71d2ecbb7c42d183e40c82d"
+    },
+    {
+      "path": "argentum-backend/overrides/mtg-sets/2003-2007/src/main/kotlin/com/wingedsheep/mtg/sets/definitions/sok/cards/OneWithNothing.kt",
+      "bytes": 444,
+      "sha256": "b49ae49c35b847046cc9acaad486998ba7dd24d43749cb2981df336a62f1def8"
+    },
+    {
+      "path": "argentum-backend/overrides/mtg-sets/2003-2007/src/main/kotlin/com/wingedsheep/mtg/sets/definitions/tsp/cards/GemstoneCaverns.kt",
+      "bytes": 1987,
+      "sha256": "e99a3efe9f9c914f9ac29eee64e84b5c412599f893446f4d82a04a4f2a84b58b"
+    },
+    {
+      "path": "argentum-backend/overrides/mtg-sets/2008-2016/src/main/kotlin/com/wingedsheep/mtg/sets/definitions/dgm/cards/SireOfInsanity.kt",
+      "bytes": 961,
+      "sha256": "3179f4681813649fead9eb88be753938542a51eb0bf96bdb1dac44ed1d9e3810"
+    },
+    {
+      "path": "argentum-backend/overrides/mtg-sets/2008-2016/src/main/kotlin/com/wingedsheep/mtg/sets/definitions/shm/cards/Manamorphose.kt",
+      "bytes": 538,
+      "sha256": "09d54973c433b4a1e16d349dbfd9330dc0b122f75e270678ceae8d3043f2a256"
+    },
+    {
+      "path": "argentum-backend/overrides/mtg-sets/2017-2022/src/main/kotlin/com/wingedsheep/mtg/sets/definitions/stx/cards/KasminaEnigmaSage.kt",
+      "bytes": 4001,
+      "sha256": "8ae7743a834886668171ec34e6c5f615c150fc65a1b56045251c234349796ddc"
+    },
+    {
+      "path": "argentum-backend/overrides/mtg-sets/2017-2022/src/main/kotlin/com/wingedsheep/mtg/sets/definitions/stx/cards/PrismariCommand.kt",
+      "bytes": 1635,
+      "sha256": "0c111a57e5524bfd4fe63b16cd4e6d22a20d8deba522c968ebf3a51c0722fb91"
+    },
+    {
+      "path": "argentum-backend/overrides/mtg-sets/2025/src/main/kotlin/com/wingedsheep/mtg/sets/definitions/spm/cards/ExclusiveNightclub.kt",
+      "bytes": 1796,
+      "sha256": "a506f8a5f51c657b7421299c981389397cd7ac6a89329d0017cf3d820664c16b"
+    },
+    {
+      "path": "argentum-backend/patches/focused-magic-gemstone.patch",
+      "bytes": 12778,
+      "sha256": "cb4142230ed52d123f5b733580f9e05ee67fe1e50c4efc601a63884878c8e3ff"
+    },
+    {
+      "path": "argentum-backend/validate_argentum_repair.sh",
+      "bytes": 2723,
+      "sha256": "48536244539e88ee67adfbb15f665d5a06ae936a2009c93d7c6109a41ed933c5"
+    },
+    {
+      "path": "assessment/INUYASHA_BROWSER_CLICKPATH_v0.6.9.txt",
+      "bytes": 1145,
+      "sha256": "8437c0ca90b8506cdf3c2b082f88662b5b7e6d30ebe3737a0148543a68768b6f"
+    },
+    {
+      "path": "assessment/VALIDATION.txt",
+      "bytes": 4482,
+      "sha256": "687fbf97d4cc4c3e5168b44c511d81cc6e0230b1beacfb2f61ddaf3493807b4f"
+    },
+    {
+      "path": "assessment/VALIDATION_v0.6.5_BASELINE.txt",
+      "bytes": 1605,
+      "sha256": "9eaffe234039256cfd724a95dfaef7f405d35a816b0fe91c04b208f3f7548d64"
+    },
+    {
+      "path": "assessment/VALIDATION_v0.6.6_PLAYABLE.txt",
+      "bytes": 4482,
+      "sha256": "687fbf97d4cc4c3e5168b44c511d81cc6e0230b1beacfb2f61ddaf3493807b4f"
+    },
+    {
+      "path": "assessment/VALIDATION_v0.6.8_MERGE.txt",
+      "bytes": 2359,
+      "sha256": "21c5abe60f6abf72eab207f6d5716474a0de3fc4543ee16c5d589ed7071df6ad"
+    },
+    {
+      "path": "assessment/VALIDATION_v0.6.9_REPAIR.txt",
+      "bytes": 2598,
+      "sha256": "e8a26470276215ce9da5a04c2491f498d92241d6f9d8dd31e50bb24f4f5e1749"
+    },
+    {
+      "path": "assessment/browser-smoke.txt",
+      "bytes": 563,
+      "sha256": "49c2a1c6bc0df59de52cc53080cc86198a204e6122197dbc747b927e0b649d0b"
+    },
+    {
+      "path": "assessment/inuyasha-blank-input-guard-2026-09-29.txt",
+      "bytes": 1561,
+      "sha256": "557561a08fd994a66d53fb7018da7009038a78d496eb2d01c12a5d14ab93e80d"
+    },
+    {
+      "path": "assessment/inuyasha-js-parity.txt",
+      "bytes": 518,
+      "sha256": "e353452306cf13294a061f63b2b17e519aa75c462ddee4098ebdcc3673405969"
+    },
+    {
+      "path": "assessment/inuyasha-parity.test.js",
+      "bytes": 3623,
+      "sha256": "6665030ef77ba7b68e60d1cc1acc947a45ee39cbd45599b1a40d5a1396b9998f"
+    },
+    {
+      "path": "assessment/inuyasha-python-tests.txt",
+      "bytes": 1793,
+      "sha256": "01baf4ea4b9c779b749c1918a15db691b3affb23bbe2b5658788d96a8c4d59d1"
+    },
+    {
+      "path": "assessment/majority-coverage-summary.json",
+      "bytes": 737,
+      "sha256": "63b4e658f25f17dd4837ecb39244879b62ec4884f50711136322b6fe322c30a2"
+    },
+    {
+      "path": "assessment/mandatory-fixtures.json",
+      "bytes": 4229,
+      "sha256": "cabd0d270ca11292dcaa9b89c6e038f2c7752ef65856d355ee841a047db7e711"
+    },
+    {
+      "path": "assessment/provider-source-audit.json",
+      "bytes": 586,
+      "sha256": "befd6ef4f2f3bed58c2684a7745d0c49d1bf1d704d0ab71a64c7376fa09659d2"
+    },
+    {
+      "path": "assessment/static-integrity.txt",
+      "bytes": 398,
+      "sha256": "481d832f958ad2fa1986e9a9d5135f4eeb237149316f4a18ff591ec47f7c3b31"
+    },
+    {
+      "path": "assessment/v0.6.7-provider-repair/VALIDATION.txt",
+      "bytes": 2259,
+      "sha256": "ff1589b9958a920d57ff14ffe7de43bf3a37cfee64119077bb56974b43c65c18"
+    },
+    {
+      "path": "assessment/v0.6.7-provider-repair/majority-coverage-summary.json",
+      "bytes": 3113,
+      "sha256": "34ef35a353fa48a16ddb5e82e37d946f1cfb3adf853092c18b09b1c96a4bda90"
+    },
+    {
+      "path": "assessment/v0.6.7-provider-repair/mandatory-fixtures.json",
+      "bytes": 4226,
+      "sha256": "44742c82efabc649cfa1b205195f1efc5137dd437e36073d5db956eb7f7ee5e7"
+    },
+    {
+      "path": "assessment/v0.6.7-provider-repair/provider-source-audit.json",
+      "bytes": 1604,
+      "sha256": "27936c7d98ad4b0e12575037c5f3f7fee9c18fa07c2ee2b7a5667531ca072cbe"
+    },
+    {
+      "path": "css/argentum.css",
+      "bytes": 4705,
+      "sha256": "3a185ac7c6ff8c2d72332a666cf71562f3b677fbdfdcf37d18eba5793bd5a586"
+    },
+    {
+      "path": "css/base.css",
+      "bytes": 10364,
+      "sha256": "dba6a907a348d8357a05dfdb5b56a3da06f0ed42d78e2598b473524b036252b1"
+    },
+    {
+      "path": "css/core-match.css",
+      "bytes": 3168,
+      "sha256": "79ffc0e5da0fa92f3bdc0e5e52111d4d819eed253f9b4ffe9e4e273ecc8c206b"
+    },
+    {
+      "path": "css/fates.css",
+      "bytes": 4323,
+      "sha256": "a33906b0c88a332991a1b473d517e0122dd15075b0786cf68cfdfa07c3587685"
+    },
+    {
+      "path": "css/inuyasha-tabletop.css",
+      "bytes": 8012,
+      "sha256": "ffc60c0f42480bb04b332f9347a2e333e0b1cc938d8d7d2c407ceb733aff5e3c"
+    },
+    {
+      "path": "css/launcher.css",
+      "bytes": 3602,
+      "sha256": "c114004c10d618b4931c8e346a7ea33582df154e59c8da0361e160a8a2964c93"
+    },
+    {
+      "path": "css/reality-fracture.css",
+      "bytes": 5210,
+      "sha256": "4034798494548472804e571805acbde17504a20e1aadaa03b7915a87acb1c3bc"
+    },
+    {
+      "path": "css/reality-tabletop.css",
+      "bytes": 11985,
+      "sha256": "9b285f3eb1ec265c9626e246e9d01b401663c1757b50a82d6a746ee7e9f8a1d3"
+    },
+    {
+      "path": "data/inuyasha-test-decks.json",
+      "bytes": 28369,
+      "sha256": "6155550efb3ac373b36afa70d84622427842797d3a04c4701472db5cadeea42b"
+    },
+    {
+      "path": "index.html",
+      "bytes": 53960,
+      "sha256": "44a008ecc5f79ddd1b504fd9e12c10f5669107e8932ff114d82075597c7f24df"
+    },
+    {
+      "path": "inuyasha-reference/DATABASE_README.txt",
+      "bytes": 506,
+      "sha256": "04ad5eb4b0a4565d5e56d7bf992548122e434b7de1e4b9cfd09e84a9d7d84434"
+    },
+    {
+      "path": "inuyasha-reference/INUYASHA_SCORE_RULES_ENGINE_v0.1.0.zip",
+      "bytes": 20912,
+      "sha256": "70fa37d1c533050f8674b5217671ab50ee7d4cb3469f3e5b423a5b4d83cd8e8e"
+    },
+    {
+      "path": "inuyasha-reference/README.md",
+      "bytes": 3476,
+      "sha256": "0d10c89cfa1442dacab254203254d13a19beeddebf4efe83a09b2ddd70c2a5f3"
+    },
+    {
+      "path": "inuyasha-reference/SECOND_DRAW_INUYASHA_DATABASE_CURRENT.sqlite",
+      "bytes": 2625536,
+      "sha256": "6262da5c8398efe8c32108fb6af1437a3f622cd1624e610ba5fc893439355c81"
+    },
+    {
+      "path": "inuyasha-reference/VERSION.txt",
+      "bytes": 176,
+      "sha256": "f6e826c4b8946c32a1e3b30c9523b78da7bcd40933cefe9117cf6b65aa36390c"
+    },
+    {
+      "path": "inuyasha-reference/demo.py",
+      "bytes": 1053,
+      "sha256": "37e79f098f7f1d672496a3fb0bc0f252502ea8ff103c323b6257516dbf6eaf0f"
+    },
+    {
+      "path": "inuyasha-reference/inuyasha_engine/__init__.py",
+      "bytes": 395,
+      "sha256": "4180b98b0fa09e31227b374aae42db40f235272777d5e3857a5a442e7eb1543e"
+    },
+    {
+      "path": "inuyasha-reference/inuyasha_engine/__pycache__/__init__.cpython-313.pyc",
+      "bytes": 459,
+      "sha256": "41d4fee4163d09e28e9d806f39e2bf13d44a4c761026583c5267efa9596c58ce"
+    },
+    {
+      "path": "inuyasha-reference/inuyasha_engine/__pycache__/core.cpython-313.pyc",
+      "bytes": 13080,
+      "sha256": "937ae21ee101d83e8c0bf70f69b48398210ba1acb52e7ad7111a0a433aff6544"
+    },
+    {
+      "path": "inuyasha-reference/inuyasha_engine/core.py",
+      "bytes": 9704,
+      "sha256": "e17da0643714ca7f76c694b39aefc69c3b7a28cce09c78a944f0815aa2278a48"
+    },
+    {
+      "path": "inuyasha-reference/tests/__pycache__/test_attack_sequence.cpython-313.pyc",
+      "bytes": 12384,
+      "sha256": "ba0610372ac0d94d2803a046bed4ba3ee9cd71f2ec3f23e63ada868a9bc12c9c"
+    },
+    {
+      "path": "inuyasha-reference/tests/test_attack_sequence.py",
+      "bytes": 6344,
+      "sha256": "28ea4c5266339f85a46feaf8790d1b0a9193fa0b7f532dc96f030af2ebe4bf96"
+    },
+    {
+      "path": "js/choices/choices.mjs",
+      "bytes": 178163,
+      "sha256": "55d94db7b3caf5459d4c03d024ceba1b3e3d2ef38729cdc38b8fee98576121a7"
+    },
+    {
+      "path": "js/core/core-magic.js",
+      "bytes": 25167,
+      "sha256": "d53289252dd25511d97c98e74cdbca0ed367b6536608625cb0fb01533dda0bfe"
+    },
+    {
+      "path": "js/fates/fates-lab.js",
+      "bytes": 33787,
+      "sha256": "d23a4eef108848def976478ac1063f9869c2a07e5f609a1cefaa9237568d3104"
+    },
+    {
+      "path": "js/inuyasha/decks.js",
+      "bytes": 19082,
+      "sha256": "6cdf5235f800ca9516cefce1921dd4586530cc7450335639f0708aadbea179ca"
+    },
+    {
+      "path": "js/inuyasha/score-engine.js",
+      "bytes": 5733,
+      "sha256": "022510cdcc8fb975c9392089824c437066cb35c0685799f80a7323c8cd2f5429"
+    },
+    {
+      "path": "js/inuyasha/tabletop.js",
+      "bytes": 17096,
+      "sha256": "db938d36b99ea5167f3e5320d1482fe4450cc7eed1018fa073573a800d053726"
+    },
+    {
+      "path": "js/provider/argentum.js",
+      "bytes": 58116,
+      "sha256": "7ce82d32be10c7ca57f6c7ed5131f1ce84a7e6d104bbe190ebcc37c28066a991"
+    },
+    {
+      "path": "js/reality-fracture/mandatory-local-db.js",
+      "bytes": 3934,
+      "sha256": "7c064803ba4cab7586ff061e9789bccf66fe1b480889fd7d110748c636e95de0"
+    },
+    {
+      "path": "js/reality-fracture/rules-engine.js",
+      "bytes": 77738,
+      "sha256": "5f19b5090e304ac83dbb1cf8b732d27d3c7f41b98f268a53c2c197167138fe0b"
+    },
+    {
+      "path": "js/reality-fracture/ui.js",
+      "bytes": 111679,
+      "sha256": "726ae68ae8b3428a38c7727eb28c818e2b24d581589278a09e9da971d82e2154"
+    },
+    {
+      "path": "js/shell/launcher.js",
+      "bytes": 574,
+      "sha256": "5fa3c9eb181eb9cced08b0f65225297fc2a9c0d27c5d42cd16ae83b05697e808"
+    },
+    {
+      "path": "tools/build_inuyasha_test_decks.py",
+      "bytes": 5569,
+      "sha256": "bdd7a982e4b10335b64144351bf1d1dca50f541ac402a7642549fda7a51d99e7"
+    }
+  ]
+}

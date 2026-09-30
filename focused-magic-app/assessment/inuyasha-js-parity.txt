@@ -1,0 +1,12 @@
+PASS successful attack defeats and steals one shard
+PASS tie defeats defender
+PASS lower attack does not defeat or steal
+PASS attachments defeat with host
+PASS success windows in ARD order
+PASS failure skips defeat and shard windows
+PASS attack active player does not overwrite turn active
+PASS final value includes temporary and constant modifiers
+PASS window hook can change value before comparison
+PASS expended attacker is illegal
+PASS no shard window when victim has no shards
+InuYasha browser parity: 11/11 PASS

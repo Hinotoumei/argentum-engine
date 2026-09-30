@@ -1,0 +1,6 @@
+STATUS=CODEX PREPARATION / NOT A RELEASE / NOT USER-LIVE ACCEPTED.
+BASE=Focused_Magic_v0.6.9_INUYASHA_RESOLVE_ARGENTUM_LIVE_REPAIR_2026-09-29.zip (Drive 1iRWxWsS-Rbmi8tVK6jIfVAamqTXK5WYj).
+PROVIDER=Hard locked to https://focused-magic-argentum-067-pro.onrender.com and wss://focused-magic-argentum-067-pro.onrender.com/game. Stale provider localStorage cannot override.
+INUYASHA=Actual click/resolver path hardened to fail closed for blank/invalid numeric combat input; ARD math unchanged. USER-LIVE A-H acceptance still required.
+BACKEND=Current Render deployment authority is direct fork Hinotoumei/argentum-engine focused-magic; the old patch-injection backend files inside this historical frontend archive are reference only and MUST NOT replace the direct-fork deployment architecture.
+DO_NOT_PROMOTE=this package until Codex integrates the backend 27-card repair and all required build/runtime gates pass.

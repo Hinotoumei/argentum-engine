@@ -1,0 +1,18 @@
+AUTHORITATIVE HANDOFF: TIKUNARI_INUYASHA_ATTACK_INPUT_VALIDATION_HANDOFF_2026-09-30
+Drive document ID: 1Ni7rCtW7FRdJjrtw7zuDksntVFWd-2AJeMtO0XATepw
+
+NON-NEGOTIABLE:
+- Drive artifact 1yCq8ejYxVf4Z9WtHXPzpLaFsABMt_dY5 is FAILED LIVE EVIDENCE, not an accepted fix.
+- Do not patch/revive that archive as the authoritative baseline.
+- Current prepared frontend is derived from Focused_Magic_v0.6.9_INUYASHA_RESOLVE_ARGENTUM_LIVE_REPAIR_2026-09-29.zip (Drive 1iRWxWsS-Rbmi8tVK6jIfVAamqTXK5WYj).
+- Trace the actual Resolve Attack button, listener, resolver, duplicate IDs/renderers, stale scripts and cache ownership.
+- Blank/whitespace/NaN/negative/invalid values must fail closed in BOTH UI and resolver.
+- Preserve ARD v4.0 combat math; do not rewrite combat outcome logic.
+- Local/headless tests are supporting evidence only. User-live A-H retest is the acceptance gate.
+
+Prepared frontend hardening:
+- combat values are digit-only before Number conversion and must be safe non-negative integers;
+- capture-phase click guard stops invalid resolution before later listeners can run;
+- resolver itself re-checks gate before any game-state mutation;
+- pageshow refreshes gate state;
+- existing no-store/cache-busting files are preserved.

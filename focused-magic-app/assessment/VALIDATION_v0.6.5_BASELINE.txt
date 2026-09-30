@@ -1,0 +1,16 @@
+Focused Magic v0.6.5 final local validation
+
+PASS: JavaScript syntax checks pass for all release JS/MJS files.
+PASS: 354/354 HTML DOM IDs are unique.
+PASS: all local src/href asset references resolve.
+PASS: provider adapter uses createGame(user exact main+sideboard) + joinGame(opponent exact main+sideboard); no quick-game fake AI deck shortcut.
+PASS: Constructed, Core, and Reality Fracture Limited route to Argentum first when enabled.
+PASS: provider failure/rejection falls visibly to the preserved local/manual engine for normal play; mandatory assessment itself still fails closed so it remains diagnostic.
+PASS: provider generic action adapter handles provider-advertised modal mode selection in addition to targets/X/colors/basic decisions.
+PASS: exact fixture counts: mandatory 60+0; Page legacy 61+2; Dimir 60+15; Core 60+0.
+PASS: embedded mandatory deck text matches user-uploaded no-20260927-150036.txt after outer whitespace normalization.
+PASS: lower-bound combined static implementation evidence covers 44/69 distinct required names (63.8%). By fixture: new deck 12/20 (60.0%); Page legacy 17/30 (56.7%); Dimir 23/30 (76.7%). See majority-coverage-summary.json.
+
+NOT VERIFIED HERE: live Argentum WebSocket/card admission/gameplay because outbound DNS is blocked in this build environment. Static source evidence is not a substitute for live runtime acceptance.
+
+RELEASE POLICY: majority-first / repair-on-encounter. Remaining unsupported provider/local card interactions must surface visibly (provider rejection, local manual marker, or explicit error), never silently resolve incorrectly.

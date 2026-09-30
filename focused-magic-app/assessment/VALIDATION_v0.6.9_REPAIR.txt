@@ -1,0 +1,51 @@
+FOCUSED MAGIC v0.6.9 — LIVE FAILURE REPAIR VALIDATION
+STATUS=LOCAL INUYASHA BROWSER CLICK-PATH PASS / RENDER BACKEND LIVE + RUNTIME CARD REGISTRY GATE PASS / BROWSER CORS+DECK ADMISSION+USER LIVE ACCEPTANCE PENDING
+
+USER-LIVE FAILURE SUPERSEDED TARGET
+- v0.6.8 rejected by user: InuYasha Resolve Attack did not work in live use; Argentum still failed load.
+
+INUYASHA REPAIR
+- Runtime build marker: 0.6.9.
+- Blank combat inputs rejected before numeric conversion.
+- Confirm defaults disabled and stays disabled until both required numeric fields are valid nonnegative values.
+- Native required/min validity checked.
+- Gate refreshes on input/change/keyup/blur.
+- HTML/JS/CSS cache-busted with ?v=0.6.9 and no-cache/no-store response rules.
+- Runtime self-diagnostic exported through window.InuYashaTabletop.diagnostics().
+
+BROWSER CLICK-PATH ACCEPTANCE
+PASS in Chromium DOM execution harness using shipped score-engine.js + tabletop.js:
+- select user Character -> Play Selected
+- AI Play Card -> opposing Character
+- select attacker + defender -> Resolve Attack
+- blank inputs => confirm disabled + visible validation
+- attacker=1 / defender=6 => confirm enabled
+- click confirm => modal closes, attacker expended, defender survives, shards stay 2-2
+- ARD log completes through Attack ends
+User live retest remains pending.
+
+ARGENTUM / RENDER ACCEPTANCE
+- service remains focused-magic-argentum-067-pro, Pro, Ohio; no migration/new service.
+- compact/gated payload: 7,764 bytes gzip; 10,352 Base64 chars; SHA256 5dffa810521a6ac588f552eae186521e787328c326b440c6d4921d8c59de777d.
+- exact deploy dep-datv22hsrm7s73a6tl50: LIVE.
+- Gradle :game-server:bootJar: PASS.
+- Spring Boot: PASS.
+- runtime catalog assertion: PASS registrySize=13752.
+- runtime required cards: Gemstone Caverns present; Oscorp Industries present.
+- /api/cards/** GET/OPTIONS CORS config compiled/live in same build.
+- agent cannot directly fetch the public Render endpoint, therefore actual browser Access-Control-Allow-Origin response and exact Constructed admission remain pending.
+
+PACKAGE CHECKS TO RUN ON FINAL ARCHIVE
+- unique DOM IDs
+- local assets
+- JS/MJS syntax
+- exact payload roundtrip/hash
+- ZIP read test/hash
+
+FINAL PACKAGE CHECK — 2026-09-29
+- DOM IDs: 406/406 unique PASS.
+- local index assets: 19 refs / 0 missing PASS.
+- all js/*.js, js/*.mjs and _worker.js syntax: PASS.
+- packaged FM_PATCH_B64 strict decode: PASS.
+- decoded payload exact-match vs deployed gated archive: PASS.
+- payload archive: 7,764 bytes; Base64: 10,352 chars; SHA256 5dffa810521a6ac588f552eae186521e787328c326b440c6d4921d8c59de777d.

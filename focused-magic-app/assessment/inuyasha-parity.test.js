@@ -1,0 +1,18 @@
+'use strict';
+const assert=require('assert');
+const E=require('../js/inuyasha/score-engine.js');
+function char(title,controller,red,blue=0,green=0,purple=0,black=0){return new E.CharacterState({title,controllerId:controller,colorValues:{red,blue,green,purple,black}});}
+function makeGame(ar=5,dr=4){const p1=new E.PlayerState('P1',[new E.JewelShard('P1-S1'),new E.JewelShard('P1-S2')]);const p2=new E.PlayerState('P2',[new E.JewelShard('P2-S1'),new E.JewelShard('P2-S2')]);const a=char('TEST Attacker','P1',ar),d=char('TEST Defender','P2',dr);return [new E.GameState({players:{P1:p1,P2:p2},turnActivePlayerId:'P2',characters:[a,d]}),a,d];}
+let passed=0;function test(name,fn){fn();passed++;console.log('PASS',name);}
+test('successful attack defeats and steals one shard',()=>{const[g,a,d]=makeGame(5,4),b1=g.player('P1').jewelShards.length,b2=g.player('P2').jewelShards.length,c=g.attack(a,d,E.Color.RED);assert(a.expended&&d.defeated&&!d.faceUp&&d.expended&&c.defenderDefeatedByAttack&&c.shardStolen);assert.equal(g.player('P1').jewelShards.length,b1+1);assert.equal(g.player('P2').jewelShards.length,b2-1);});
+test('tie defeats defender',()=>{const[g,a,d]=makeGame(4,4);assert(g.attack(a,d,E.Color.RED).defenderDefeatedByAttack);});
+test('lower attack does not defeat or steal',()=>{const[g,a,d]=makeGame(3,4),c=g.attack(a,d,E.Color.RED);assert(!c.defenderDefeatedByAttack&&!c.shardStolen&&!d.defeated);});
+test('attachments defeat with host',()=>{const[g,a,d]=makeGame(8,1),x=new E.AttachmentState('TEST Attached Item');d.attachments.push(x);g.attack(a,d,E.Color.RED);assert(!x.faceUp&&x.expended);});
+test('success windows in ARD order',()=>{const[g,a,d]=makeGame();g.attack(a,d,E.Color.RED);assert.deepStrictEqual(g.eventLog.map(x=>x.window),[E.TimingWindow.CHARACTER_EXPENDED,E.TimingWindow.WHEN_ATTACKING,E.TimingWindow.WHEN_ATTACKED,E.TimingWindow.COMPARING_COLOR_VALUES,E.TimingWindow.CHARACTER_DEFEATED,E.TimingWindow.JEWEL_SHARD_STOLEN,E.TimingWindow.ATTACK_END]);});
+test('failure skips defeat and shard windows',()=>{const[g,a,d]=makeGame(1,9);g.attack(a,d,E.Color.RED);assert.deepStrictEqual(g.eventLog.map(x=>x.window),[E.TimingWindow.CHARACTER_EXPENDED,E.TimingWindow.WHEN_ATTACKING,E.TimingWindow.WHEN_ATTACKED,E.TimingWindow.COMPARING_COLOR_VALUES,E.TimingWindow.ATTACK_END]);});
+test('attack active player does not overwrite turn active',()=>{const[g,a,d]=makeGame();const c=g.attack(a,d,E.Color.RED);assert.equal(c.attackingPlayerId,'P1');assert.equal(c.turnActivePlayerId,'P2');assert(g.eventLog.every(x=>x.activePlayerId==='P1'));assert.equal(g.turnActivePlayerId,'P2');});
+test('final value includes temporary and constant modifiers',()=>{const[g,a,d]=makeGame(2,5);a.temporaryColorModifiers.red=2;a.constantColorModifiers.red=2;const c=g.attack(a,d,E.Color.RED);assert.equal(c.attackerFinalValue,6);assert(c.defenderDefeatedByAttack);});
+test('window hook can change value before comparison',()=>{const[g,a,d]=makeGame(2,4);g.registerWindowHandler(E.TimingWindow.WHEN_ATTACKING,(state,ctx)=>{ctx.attacker.temporaryColorModifiers[ctx.color]=3;});const c=g.attack(a,d,E.Color.RED);assert.equal(c.attackerFinalValue,5);assert(d.defeated);});
+test('expended attacker is illegal',()=>{const[g,a,d]=makeGame();a.ready=false;assert.throws(()=>g.attack(a,d,E.Color.RED),E.RuleError);});
+test('no shard window when victim has no shards',()=>{const[g,a,d]=makeGame();g.player('P2').jewelShards.length=0;const c=g.attack(a,d,E.Color.RED);assert(d.defeated&&!c.shardStolen);assert(!g.eventLog.some(x=>x.window===E.TimingWindow.JEWEL_SHARD_STOLEN));});
+console.log(`InuYasha browser parity: ${passed}/11 PASS`);

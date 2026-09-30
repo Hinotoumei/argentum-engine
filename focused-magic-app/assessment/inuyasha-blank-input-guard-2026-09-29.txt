@@ -1,0 +1,26 @@
+INUYASHA ATTACK INPUT GUARD — 2026-09-29
+STATUS=IMPLEMENTED / STATIC VALIDATION PASS / USER LIVE RETEST PENDING.
+
+USER-REPRODUCED BUG
+- Manual combat values work correctly when entered.
+- Leaving both combat value inputs blank and pressing Resolve previously allowed resolution.
+- JavaScript Number('') evaluates to 0, so the prior finite/nonnegative validation incorrectly accepted blank fields as 0.
+
+FIX
+- Added readRequiredCombatValue() which checks the trimmed raw input before numeric conversion.
+- Empty strings now return null and cannot reach the ARD attack resolver.
+- Resolve button is disabled until BOTH attacker and defender final-color values are present and valid nonnegative numbers.
+- If resolution is invoked without both valid values, the UI displays: "Enter both printed/current final color values before resolving."
+- Existing manually-entered combat-value behavior is otherwise unchanged.
+
+VALIDATION
+- js/inuyasha/tabletop.js: Node syntax check PASS.
+- Source guard verified: raw blank check occurs before Number(raw).
+- Resolve button gate verified to depend on both parsed values being non-null.
+- Existing InuYasha score-engine and parity tests remain unchanged; this patch is UI input validation only.
+
+LIVE ACCEPTANCE STILL REQUIRED
+- Open an InuYasha test match.
+- Select attacker + defender and open Resolve Attack.
+- Confirm Resolve with ARD Engine is disabled while either value is blank.
+- Enter 1 purple attacker and 6 purple defender; button enables; result must be attacker expended / defender survives / no shard stolen.

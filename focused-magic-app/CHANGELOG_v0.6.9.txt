@@ -1,0 +1,11 @@
+FOCUSED MAGIC v0.6.9 — LIVE FAILURE REPAIR
+
+- v0.6.8 rejected by user live QA: InuYasha Resolve Attack did not work and Argentum failed load.
+- InuYasha: hardens the real Resolve Attack UI path. Blank final-color inputs are rejected before numeric conversion; confirmation starts disabled; native required/min validity plus input/change/keyup/blur refresh are enforced; a 0.6.9 runtime marker/diagnostic is exposed; frontend assets are cache-busted/no-store for reliable live retesting.
+- InuYasha browser acceptance: actual shipped score-engine.js + tabletop.js click flow passes in Chromium DOM execution, including blank-input blocking and successful 1-vs-6 resolution through Attack ends.
+- Argentum: stays on the existing Render Pro service. No hosting migration and no second service.
+- Render transport: replaced the oversized/corrupting deployment archive with a compact exact-byte payload.
+- Argentum runtime gate: startup now refuses to accept the candidate unless CardRegistry contains both Gemstone Caverns and Oscorp Industries.
+- Live backend: Render deploy dep-datv22hsrm7s73a6tl50 built and started successfully and logged FOCUSED_MAGIC_CATALOG_GATE PASS registrySize=13752.
+- CORS remains narrowly scoped to GET/OPTIONS /api/cards/**; account/session APIs are not broadly opened.
+- Remaining acceptance: browser-side catalog/CORS readback, exact deck admission, scoped Magic runtime matrix, and user live InuYasha retest.

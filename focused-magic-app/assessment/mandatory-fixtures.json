@@ -1,0 +1,148 @@
+{
+  "schema": "focused-magic-mandatory-assessment-v0.6.6",
+  "provider": {
+    "repository": "wingedsheep/argentum-engine",
+    "commit": "f1fd5fd1719a1eaabec00e0a5ef3fab204c997d9"
+  },
+  "fixtures": {
+    "mandatory": {
+      "label": "constructed fixture",
+      "main_count": 60,
+      "sideboard_count": 0,
+      "main": {
+        "Blood Crypt": 2,
+        "Bloodstained Mire": 2,
+        "Desperate Ritual": 4,
+        "Exclusive Nightclub": 3,
+        "Faithless Looting": 3,
+        "Gemstone Caverns": 4,
+        "Infernal Tutor": 2,
+        "Jace's Machinations": 4,
+        "Kasmina, Enigma Sage": 4,
+        "Keldon Megaliths": 2,
+        "Manamorphose": 4,
+        "Monument to Endurance": 4,
+        "One with Nothing": 3,
+        "Prismari Command": 4,
+        "Reweave": 4,
+        "Scalding Tarn": 2,
+        "Sire of Insanity": 1,
+        "Starting Town": 2,
+        "Steam Vents": 2,
+        "Way of the Pyromancer": 4
+      },
+      "sideboard": {},
+      "sha256_deck_text": "aa2610537c14c5ccb4d446bd5bd5832e1b098036f34a110ce69008121c1580af"
+    },
+    "page_legacy": {
+      "label": "Page, Loose Leaf legacy",
+      "main_count": 61,
+      "sideboard_count": 2,
+      "main": {
+        "Blood Crypt": 2,
+        "Blood Scrivener": 4,
+        "Chandra, Spark Hunter": 1,
+        "Currency Converter": 2,
+        "Cutthroat il-Dal": 2,
+        "Demonfire": 1,
+        "Gamble": 2,
+        "Gathan Raiders": 2,
+        "Geier Reach Sanitarium": 1,
+        "Infernal Tutor": 2,
+        "Island": 1,
+        "Izzet Charm": 3,
+        "Jagged Poppet": 3,
+        "Keldon Megaliths": 1,
+        "Library of Leng": 3,
+        "Lotus Petal": 3,
+        "Mountain": 1,
+        "One with Nothing": 1,
+        "Oscorp Industries": 2,
+        "Page, Loose Leaf": 3,
+        "Persist": 2,
+        "Prismari Command": 2,
+        "Scalding Tarn": 4,
+        "Sire of Insanity": 1,
+        "Steam Vents": 4,
+        "Swamp": 1,
+        "Taste for Mayhem": 4,
+        "The Biblioplex": 1,
+        "Visionary's Dance": 2
+      },
+      "sideboard": {
+        "Surgical Extraction": 2
+      },
+      "sha256_deck_text": "0f0c8a3978a7442065b1710e6c2d835a165d8765d741cf73aa2afe921e0e8fc2"
+    },
+    "dimir_tempo": {
+      "label": "Dimir Tempo",
+      "main_count": 60,
+      "sideboard_count": 15,
+      "main": {
+        "Barrowgoyf": 2,
+        "Brainstorm": 4,
+        "Daze": 3,
+        "Fatal Push": 3,
+        "Flow State": 3,
+        "Force of Negation": 1,
+        "Force of Will": 4,
+        "Island": 1,
+        "Kaito, Bane of Nightmares": 2,
+        "Misty Rainforest": 2,
+        "Murktide Regent": 2,
+        "Orcish Bowmasters": 4,
+        "Polluted Delta": 4,
+        "Ponder": 4,
+        "Scalding Tarn": 1,
+        "Sheoldred's Edict": 1,
+        "Swamp": 1,
+        "Tamiyo, Inquisitive Student": 4,
+        "Thoughtseize": 4,
+        "Undercity Sewers": 1,
+        "Underground Sea": 4,
+        "Verdant Catacombs": 1,
+        "Wasteland": 4
+      },
+      "sideboard": {
+        "Barrowgoyf": 1,
+        "Consign to Memory": 3,
+        "Dauthi Voidwalker": 2,
+        "Engineered Explosives": 1,
+        "Force of Negation": 2,
+        "Hydroblast": 2,
+        "Long Goodbye": 1,
+        "Null Rod": 1,
+        "Sheoldred's Edict": 1,
+        "Toxic Deluge": 1
+      },
+      "sha256_deck_text": "eea590aae145f1b1ba514ebaf134df464d6ab0da65bfaca0b8e2bc422557b365"
+    },
+    "core": {
+      "label": "Core Match",
+      "main_count": 60,
+      "sideboard_count": 0,
+      "main": {
+        "Mountain": 24,
+        "Mons's Goblin Raiders": 4,
+        "Goblin Piker": 4,
+        "Gray Ogre": 4,
+        "Hurloon Minotaur": 4,
+        "Hill Giant": 4,
+        "Shock": 4,
+        "Lightning Strike": 4,
+        "Volcanic Hammer": 4,
+        "Lava Axe": 4
+      },
+      "sideboard": {},
+      "sha256_deck_text": "74124a9b7d8f9065d976869fb2a180263891a6fe9f0b448cafe807edd11d53d2"
+    }
+  },
+  "gates": [
+    "exact main-deck count",
+    "exact sideboard count",
+    "server accepts exact deck through createGame/joinGame",
+    "gameStarted received by both seats",
+    "Dimir seat submits a non-pass provider legal action",
+    "authoritative stateUpdate follows the Dimir action without provider error"
+  ]
+}

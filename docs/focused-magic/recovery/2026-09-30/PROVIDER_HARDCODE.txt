@@ -1,0 +1,10 @@
+Provider origin (authoritative): https://focused-magic-argentum-067-pro.onrender.com
+WebSocket (authoritative): wss://focused-magic-argentum-067-pro.onrender.com/game
+
+Prepared frontend behavior:
+- providerConfig() always returns the two constants above and enabled=true;
+- legacy provider localStorage keys are removed;
+- current provider storage is rewritten to the pinned values;
+- injected globals and stale saved WingedSheep values cannot override the endpoint;
+- provider fields in Diagnostics are read-only and the Save button is disabled/locked;
+- duplicate Provider origin input in prior v0.6.9 markup is removed.

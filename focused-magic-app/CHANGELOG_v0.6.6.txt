@@ -1,0 +1,10 @@
+Focused Magic v0.6.6 — playable restoration
+
+- Restored the real playable app shell instead of hiding it behind the launcher.
+- Preserved the accepted v0.6.5 visual tabletop foundation and manual mulligan behavior.
+- Preserved v0.6.6 Argentum load/pin/pre-Gradle-overlay packaging repairs.
+- Removed stale Constructed auto-open at startup.
+- Challenge Series remains paused.
+- Added InuYasha as a separate visual test-match table using real database decklists and card images.
+- Added restricted Cloudflare Pages image proxy for CCGTrader catalog assets.
+- Kept the verified InuYasha attack-core state machine; no unsupported full-game/card-text claims.

@@ -1,0 +1,12 @@
+DOM IDs: 405/405 unique PASS
+Local index assets: 18 refs, 0 missing PASS
+DOM IDs unique: PASS
+Local index assets present: PASS
+Whole legacy shell not hidden: PASS
+Constructed startup auto-open absent: PASS
+Argentum assets loaded: PASS
+InuYasha assets loaded: PASS
+InuYasha deck 5 exact/image complete: PASS
+InuYasha deck 6 exact/image complete: PASS
+Missing assets: []
+JS/MJS syntax: 12 files PASS
