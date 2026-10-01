@@ -282,7 +282,7 @@ SIDEBOARD:
         <div class="argentum-tabletop-board">
           <section class="argentum-tabletop-player opponent"><div class="argentum-tabletop-playerhead"><b id="argentumTabletopOppName">Opponent</b><span>Life <b id="argentumTabletopOppLife">?</b></span><span>Hand <b id="argentumTabletopOppHandCount">?</b></span><span>Library <b id="argentumTabletopOppLibCount">?</b></span></div><div class="argentum-tabletop-zone-title">Opponent battlefield</div><div id="argentumTabletopOppBattlefield" class="argentum-tabletop-cards"></div></section>
           <section class="argentum-tabletop-stack"><div class="argentum-tabletop-zone-title">Stack</div><div id="argentumTabletopStack" class="argentum-tabletop-cards compact"></div></section>
-          <section class="argentum-tabletop-player self"><div class="argentum-tabletop-zone-title">Your battlefield</div><div id="argentumTabletopMyBattlefield" class="argentum-tabletop-cards"></div><div class="argentum-tabletop-playerhead"><b id="argentumTabletopMyName">You</b><span>Life <b id="argentumTabletopMyLife">?</b></span><span>GY <b id="argentumTabletopMyGyCount">0</b></span><span>Library <b id="argentumTabletopMyLibCount">?</b></span></div></section>
+          <section class="argentum-tabletop-player self"><div class="argentum-tabletop-playerhead"><b id="argentumTabletopMyName">You</b><span>Life <b id="argentumTabletopMyLife">?</b></span><span>GY <b id="argentumTabletopMyGyCount">0</b></span><span>Library <b id="argentumTabletopMyLibCount">?</b></span></div><div class="argentum-tabletop-zone-title">Your battlefield</div><div id="argentumTabletopMyBattlefield" class="argentum-tabletop-cards"></div></section>
           <section class="argentum-tabletop-hand"><div class="argentum-tabletop-zone-title">Your hand — tap a card to play/cast</div><div id="argentumTabletopMyHand" class="argentum-tabletop-cards hand"></div></section>
         </div>
         <section id="argentumTabletopCardActions" class="argentum-tabletop-actions"><span class="sub">Select a card or use Pass/Continue.</span></section>
@@ -323,6 +323,10 @@ SIDEBOARD:
     if(!c){b.classList.add('hidden-card');b.textContent='Hidden';b.disabled=true;return b;}
     const art=c.imageUri||c.imageURL||c.imageUrl||'';
     b.innerHTML=art?`<img src="${esc(art)}" alt="${esc(c.name)}"><span><b>${esc(c.name)}</b></span>`:`<span class="argentum-tabletop-cardname"><b>${esc(c.name)}</b><small>${esc(c.manaCost||'')} ${esc(c.typeLine||'')}</small></span>`;
+    // Display the provider's projected values, including X=0; never derive card rules here.
+    if(c.power!=null&&c.toughness!=null)b.innerHTML+=`<small class="argentum-tabletop-stat">${esc(c.power)}/${esc(c.toughness)}</small>`;
+    if(c.chosenX!=null)b.innerHTML+=`<small class="argentum-tabletop-x">X=${esc(c.chosenX)}</small>`;
+    b.title=c.stackText||c.oracleText||c.name||'';
     if(c.isTapped)b.classList.add('tapped');
     b.onclick=()=>showCardActions(id,zone);
     return b;
@@ -349,6 +353,7 @@ SIDEBOARD:
     $('argentumTabletopMyLibCount').textContent=myLib?.size??myLib?.cardIds?.length??'?';$('argentumTabletopMyGyCount').textContent=myGy?.size??myGy?.cardIds?.length??0;$('argentumTabletopOppHandCount').textContent=oppHand?.size??oppHand?.cardIds?.length??'?';$('argentumTabletopOppLibCount').textContent=oppLib?.size??oppLib?.cardIds?.length??'?';
     $('argentumTabletopScore').textContent=`Turn ${s.turnNumber??'?'} • ${s.currentPhase||''}${s.currentStep?'/'+s.currentStep:''} • Priority: ${s.players?.find(p=>p.playerId===s.priorityPlayerId)?.name||s.priorityPlayerId||'—'}`;
     fillTableZone('argentumTabletopMyHand',s,myHand);fillTableZone('argentumTabletopMyBattlefield',s,stateZone(s,me,'BATTLEFIELD'));if(opp)fillTableZone('argentumTabletopOppBattlefield',s,stateZone(s,opp.playerId,'BATTLEFIELD'));fillTableZone('argentumTabletopStack',s,s.zones?.find(z=>String(zoneType(z)).toUpperCase()==='STACK'));
+    $('argentumTabletopCardActions').innerHTML='<span class="sub">Select a card or use Pass/Continue.</span>';
     renderTabletopDecision();setTabletopStatus('Argentum game active.');
   }
 
@@ -454,6 +459,30 @@ SIDEBOARD:
     return picked;
   }
 
+  function collectModalTargets(action, enumeration, chooseIds, toTarget) {
+    const picks=action.chosenModes||[];
+    const min=enumeration.minChooseCount??1, max=enumeration.chooseCount??min;
+    if(picks.length<min||picks.length>max)throw new Error('Choose the required number of modes.');
+    if(!enumeration.allowRepeat && new Set(picks).size!==picks.length)throw new Error('A mode cannot be chosen twice.');
+    const allIds=[], groups=[];
+    for(const modeIndex of picks){
+      const mode=(enumeration.modes||[]).find(m=>m.index===modeIndex);
+      if(!mode||mode.available===false||(enumeration.unavailableIndices||[]).includes(modeIndex))throw new Error('That mode is unavailable.');
+      const targets=[];
+      for(const req of mode.targetRequirements||[]){
+        const valid=[...new Set(req.validTargets||[])].filter(id=>!req.mustDifferFromEarlier||!allIds.includes(id));
+        const minTargets=req.minTargets??1,maxTargets=req.maxTargets??minTargets;
+        if(valid.length<minTargets)throw new Error('A selected mode has no legal target selection.');
+        const ids=chooseIds({...req,validTargets:valid},mode);
+        if(!Array.isArray(ids)||ids.length<minTargets||ids.length>maxTargets||new Set(ids).size!==ids.length||ids.some(id=>!valid.includes(id)))throw new Error('Choose legal targets for each selected mode.');
+        allIds.push(...ids);targets.push(...ids.map(toTarget));
+      }
+      groups.push(targets);
+    }
+    action.modeTargetsOrdered=groups;
+    action.targets=groups.flat();
+  }
+
   async function submitLegalAction(info) {
     try {
       if(!active?.interactionEpoch)throw new Error('No live interaction epoch; request a resync first.');
@@ -462,9 +491,9 @@ SIDEBOARD:
         const e=info.modalEnumeration;
         const available=(e.modes||[]).filter(m=>m.available!==false && !(e.unavailableIndices||[]).includes(m.index));
         const min=Math.max(1,e.minChooseCount??1), max=Math.max(min,e.chooseCount??min);
-        if(available.length<min)throw new Error('Provider offered a modal spell without enough available modes.');
+        if(!available.length||(!e.allowRepeat&&available.length<min))throw new Error('Provider offered a modal spell without enough available modes.');
         const listing=available.map((m,i)=>`${i+1}. ${m.description||`Mode ${m.index+1}`}`).join('\n');
-        const def=available.slice(0,min).map((_,i)=>String(i+1)).join(',');
+        const def=Array.from({length:min},(_,i)=>String((e.allowRepeat?i%available.length:i)+1)).join(',');
         const raw=prompt(`Choose ${min===max?min:`${min}-${max}`} mode(s):\n${listing}`,def);
         if(raw==null)return;
         let picks=raw.split(/[ ,]+/).filter(Boolean).map(x=>available[Number(x)-1]).filter(Boolean).map(m=>m.index);
@@ -473,6 +502,18 @@ SIDEBOARD:
         action.chosenModes=picks;
       }
       if(info.hasXCost){const max=info.maxAffordableX??20;const raw=prompt(`Choose X (${info.minX??0}–${max})`,String(info.minX??0));if(raw==null)return;action.xValue=Math.max(info.minX??0,Math.min(max,Number(raw)||0));}
+      if(info.modalEnumeration && action.type==='CastSpell') {
+        collectModalTargets(action,info.modalEnumeration,
+          (req,mode)=>pickIds(`${mode.description||'Selected mode'}: ${req.description||'Choose target'}`,req.validTargets,req.minTargets??1,req.maxTargets??1),chosenTarget);
+      }
+      if(info.additionalCostInfo?.costType==='PayXLife') {
+        const max=info.additionalCostInfo.payXLifeMaxX??0;
+        const raw=prompt(`Choose X: pay that much life (0–${max})`,'0');
+        if(raw==null)return;
+        const amount=Number(raw);
+        if(!String(raw).trim()||!Number.isSafeInteger(amount)||amount<0||amount>max)throw new Error(`Choose a whole number of life from 0 to ${max}.`);
+        action.additionalCostPayment={...(action.additionalCostPayment||{}),payXLifeAmount:amount};
+      }
       if(info.requiresTargets && !info.modalEnumeration){
         const chosen=[];
         const reqs=info.targetRequirements?.length?info.targetRequirements:[{description:info.targetDescription||'Choose target',minTargets:info.minTargets??info.targetCount??1,maxTargets:info.targetCount??1,validTargets:info.validTargets||[]}];
@@ -573,10 +614,9 @@ SIDEBOARD:
   }
 
   function actionNeedsUnsupportedAutomation(info) {
-    // Modal choice itself is generic: choose provider-advertised available modes and let the
-    // authoritative engine raise any per-mode target decisions afterward. Other resource-heavy
-    // payments stay fail-closed until we have a safe generic chooser for them.
-    return !!(info?.additionalCostInfo || info?.hasConvoke || info?.hasDelve || info?.hasHarmonize || info?.hasTapForGeneric || info?.requiresDamageDistribution);
+    // Cast-time modes and targets come from the provider's enumeration. Resource-heavy
+    // payments stay fail-closed until a generic chooser can complete their payloads.
+    return !!((info?.additionalCostInfo && info.additionalCostInfo.costType!=='PayXLife') || info?.hasConvoke || info?.hasDelve || info?.hasHarmonize || info?.hasTapForGeneric || info?.requiresDamageDistribution);
   }
 
   function completeActionForBot(info, state) {
@@ -590,12 +630,23 @@ SIDEBOARD:
       const e=info.modalEnumeration;
       const available=(e.modes||[]).filter(m=>m.available!==false && !(e.unavailableIndices||[]).includes(m.index));
       const min=Math.max(1,e.minChooseCount??1), max=Math.max(min,e.chooseCount??min);
-      if(available.length<min)return null;
-      action.chosenModes=available.slice(0,Math.min(max,min)).map(m=>m.index);
+      if(!available.length||(!e.allowRepeat&&available.length<min))return null;
+      action.chosenModes=Array.from({length:min},(_,i)=>available[e.allowRepeat?i%available.length:i].index);
+      if(e.additionalCostPerExtraMode&&action.chosenModes.length>1)return null;
+      if(action.chosenModes.some(index=>available.find(m=>m.index===index)?.additionalCostInfo))return null;
     }
     if (info.hasXCost) action.xValue=Math.max(info.minX??0, Math.min(info.maxAffordableX??0, info.minX??0));
     if (info.requiresManaColorChoice) action.manaColorChoice=(info.availableManaColors?.[0]||'BLUE');
 
+    if (info.additionalCostInfo?.costType==='PayXLife') {
+      action.additionalCostPayment={...(action.additionalCostPayment||{}),payXLifeAmount:0};
+    }
+    if (info.modalEnumeration && action.type==='CastSpell') {
+      try {
+        collectModalTargets(action,info.modalEnumeration,
+          req=>(req.validTargets||[]).slice(0,req.minTargets??1),id=>chosenTargetForState(state,id));
+      } catch(_e) {return null;}
+    }
     if (info.requiresTargets && !info.modalEnumeration) {
       const reqs=info.targetRequirements?.length ? info.targetRequirements : [{
         minTargets:info.minTargets??info.targetCount??1,

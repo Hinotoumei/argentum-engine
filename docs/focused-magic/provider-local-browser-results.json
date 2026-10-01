@@ -1,0 +1,10 @@
+{
+  "scenario": "Toxic Deluge via real local server and normal adapter controls",
+  "paidLife": 2,
+  "chosenX": 2,
+  "casterLife": 18,
+  "opponentLife": 20,
+  "bothHillGiants": "1/1",
+  "grizzlyBearsDied": true,
+  "pageErrors": []
+}

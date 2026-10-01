@@ -1,0 +1,13 @@
+{
+  "scenario": "Prismari Command through normal adapter controls and real local server",
+  "chosenModes": [
+    0,
+    2
+  ],
+  "damageTarget": "Opponent",
+  "treasureTarget": "Modal Tester",
+  "opponentLife": 18,
+  "casterLife": 20,
+  "treasureCount": 1,
+  "pageErrors": []
+}
