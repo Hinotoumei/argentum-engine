@@ -1433,6 +1433,110 @@
     ]
 }
 
+// Hydroblast
+{
+    "name": "Hydroblast",
+    "manaCost": "{U}",
+    "typeLine": "Instant",
+    "oracleText": "Choose one —\n• Counter target spell if it's red.\n• Destroy target permanent if it's red.",
+    "script": {
+        "spellEffect": {
+            "type": "Modal",
+            "modes": [
+                {
+                    "effect": {
+                        "type": "Gated",
+                        "gate": {
+                            "type": "Gate.WhenCondition",
+                            "condition": {
+                                "type": "EntityMatches",
+                                "entity": {
+                                    "type": "BoundVariable",
+                                    "name": "t0"
+                                },
+                                "filter": "red"
+                            }
+                        },
+                        "then": "Counter"
+                    },
+                    "targetRequirements": [
+                        {
+                            "type": "TargetObject",
+                            "filter": {
+                                "baseFilter": {
+                                    "cardPredicates": [
+                                        {
+                                            "type": "Not",
+                                            "predicate": "IsActivatedOrTriggeredAbility"
+                                        }
+                                    ]
+                                },
+                                "zone": "Stack"
+                            },
+                            "id": "t0"
+                        }
+                    ],
+                    "description": "Counter target spell if it's red"
+                },
+                {
+                    "effect": {
+                        "type": "Gated",
+                        "gate": {
+                            "type": "Gate.WhenCondition",
+                            "condition": {
+                                "type": "EntityMatches",
+                                "entity": {
+                                    "type": "BoundVariable",
+                                    "name": "t1"
+                                },
+                                "filter": "red"
+                            }
+                        },
+                        "then": {
+                            "type": "MoveToZone",
+                            "target": {
+                                "type": "BoundVariable",
+                                "name": "t1"
+                            },
+                            "destination": "Graveyard",
+                            "byDestruction": true
+                        }
+                    },
+                    "targetRequirements": [
+                        {
+                            "type": "TargetObject",
+                            "filter": {
+                                "baseFilter": "permanent"
+                            },
+                            "id": "t1"
+                        }
+                    ],
+                    "description": "Destroy target permanent if it's red"
+                }
+            ]
+        }
+    },
+    "metadata": {
+        "collectorNumber": "72",
+        "artist": "Kaja Foglio",
+        "flavorText": "\"Heed the lessons of our time: the forms of water may move the land itself and hold captive the fires within.\"\n—Gustha Ebbasdotter, Kjeldoran Royal Mage",
+        "imageUri": "https://cards.scryfall.io/normal/front/f/6/f62716f0-fde2-49ef-b8a4-c1b03f451194.jpg?1783947514",
+        "rulings": [
+            {
+                "date": "2016-06-08",
+                "text": "Hydroblast can target any spell or permanent, not just a red one. It checks the color of the target only on resolution."
+            },
+            {
+                "date": "2004-10-04",
+                "text": "The decision to counter a spell or destroy a permanent is a decision made on announcement before the target is selected. If the spell is redirected, this mode can't be changed, so only targets of the selected type are valid."
+            }
+        ]
+    },
+    "colorIdentityOverride": [
+        "BLUE"
+    ]
+}
+
 // Iceberg
 {
     "name": "Iceberg",
