@@ -1,0 +1,118 @@
+{
+  "scope": "Native Hydroblast, Toxic Deluge, Taste for Mayhem gameplay scenarios",
+  "results": [
+    {
+      "name": "com.wingedsheep.engine.scenarios.HydroblastScenarioTest",
+      "tests": "8",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "timestamp": "2026-10-01T10:52:11.701Z",
+      "time": "157.793",
+      "cases": [
+        {
+          "name": "counter mode legally targets a spell whose red status is false",
+          "status": "passed"
+        },
+        {
+          "name": "destroy mode legally targets a permanent whose red status is false",
+          "status": "passed"
+        },
+        {
+          "name": "destroy mode uses the target's color after a real color-change spell resolves: false",
+          "status": "passed"
+        },
+        {
+          "name": "counter mode legally targets a spell whose red status is true",
+          "status": "passed"
+        },
+        {
+          "name": "destroy mode legally targets a permanent whose red status is true",
+          "status": "passed"
+        },
+        {
+          "name": "destroy mode uses the target's color after a real color-change spell resolves: true",
+          "status": "passed"
+        },
+        {
+          "name": "counter mode rejects an activated ability without paying its costs",
+          "status": "passed"
+        },
+        {
+          "name": "destroy mode rejects a player atomically",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "name": "com.wingedsheep.engine.scenarios.ToxicDelugeScenarioTest",
+      "tests": "9",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "timestamp": "2026-10-01T11:31:01.015Z",
+      "time": "73.586",
+      "cases": [
+        {
+          "name": "X comes from paid life, affects both players, and leaves noncreatures alone",
+          "status": "passed"
+        },
+        {
+          "name": "X zero pays no life and leaves ordinary creatures unchanged",
+          "status": "passed"
+        },
+        {
+          "name": "the affected creatures are captured at resolution and recover next turn",
+          "status": "passed"
+        },
+        {
+          "name": "zero toughness sends an indestructible creature to the graveyard",
+          "status": "passed"
+        },
+        {
+          "name": "Omniscience waives mana but still requires and preserves the chosen life payment",
+          "status": "passed"
+        },
+        {
+          "name": "an unrelated submitted mana X cannot override the amount of life paid",
+          "status": "passed"
+        },
+        {
+          "name": "Naru Meha copies the paid-life reduction as a real spell without paying life again",
+          "status": "passed"
+        },
+        {
+          "name": "invalid life payment -1 rejects before any cost is paid",
+          "status": "passed"
+        },
+        {
+          "name": "invalid life payment 21 rejects before any cost is paid",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "name": "com.wingedsheep.engine.scenarios.TasteForMayhemScenarioTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "timestamp": "2026-10-01T10:56:04.700Z",
+      "time": "77.945",
+      "cases": [
+        {
+          "name": "base bonus and live hellbent track the Aura controller's hand with own host false",
+          "status": "passed"
+        },
+        {
+          "name": "base bonus and live hellbent track the Aura controller's hand with own host true",
+          "status": "passed"
+        },
+        {
+          "name": "a player is not a legal enchanted target and rejection spends nothing",
+          "status": "passed"
+        }
+      ]
+    }
+  ]
+}

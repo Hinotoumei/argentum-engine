@@ -1,0 +1,64 @@
+{
+  "scope": "Both-player paid-life X badge reproduction",
+  "suite": {
+    "name": "com.wingedsheep.engine.scenarios.PayXLifeResolutionTest",
+    "tests": "6",
+    "skipped": "0",
+    "failures": "5",
+    "errors": "0",
+    "timestamp": "2026-10-01T14:22:19.821Z",
+    "hostname": "DESKTOP-6K9JG6J",
+    "time": "10.85"
+  },
+  "cases": [
+    {
+      "name": "paid life 2 determines resolution X despite submitted mana X null",
+      "failure": [
+        {
+          "message": "org.opentest4j.AssertionFailedError: Expected 2 but actual was null\n\tat com.wingedsheep.engine.scenarios.PayXLifeResolutionTest._init_$lambda$0$assertVisibleX(PayXLifeResolutionTest.kt:28)\n\tat com.wingedsheep.engine.scenarios.PayXLifeResolutionTest.access$_init_$lambda$0$assertVisibleX(PayXLifeResolutionTest.kt:23)\n\tat com.wingedsheep.engine.scenarios.PayXLifeResolutionTest$1$1.invokeSuspend(PayXLifeResolutionTest.kt:50)\n\tat com.wingedsheep.engine.scenarios.PayXLifeResolutionTest$1$1.invoke(PayXLifeResolutionTest.kt)\n\tat com.wingedsheep.engine.scenarios.PayXLifeResolutionTest$1$1.invoke(PayXLi",
+          "type": "org.opentest4j.AssertionFailedError"
+        }
+      ]
+    },
+    {
+      "name": "paid life 2 determines resolution X despite submitted mana X 20",
+      "failure": [
+        {
+          "message": "org.opentest4j.AssertionFailedError: expected:<2> but was:<20>\n\tat com.wingedsheep.engine.scenarios.PayXLifeResolutionTest._init_$lambda$0$assertVisibleX(PayXLifeResolutionTest.kt:28)\n\tat com.wingedsheep.engine.scenarios.PayXLifeResolutionTest.access$_init_$lambda$0$assertVisibleX(PayXLifeResolutionTest.kt:23)\n\tat com.wingedsheep.engine.scenarios.PayXLifeResolutionTest$1$1.invokeSuspend(PayXLifeResolutionTest.kt:50)\n\tat com.wingedsheep.engine.scenarios.PayXLifeResolutionTest$1$1.invoke(PayXLifeResolutionTest.kt)\n\tat com.wingedsheep.engine.scenarios.PayXLifeResolutionTest$1$1.invoke(PayXLifeRes",
+          "type": "org.opentest4j.AssertionFailedError"
+        }
+      ]
+    },
+    {
+      "name": "paid life 2 determines resolution X despite submitted mana X 0",
+      "failure": [
+        {
+          "message": "org.opentest4j.AssertionFailedError: expected:<2> but was:<0>\n\tat com.wingedsheep.engine.scenarios.PayXLifeResolutionTest._init_$lambda$0$assertVisibleX(PayXLifeResolutionTest.kt:28)\n\tat com.wingedsheep.engine.scenarios.PayXLifeResolutionTest.access$_init_$lambda$0$assertVisibleX(PayXLifeResolutionTest.kt:23)\n\tat com.wingedsheep.engine.scenarios.PayXLifeResolutionTest$1$1.invokeSuspend(PayXLifeResolutionTest.kt:50)\n\tat com.wingedsheep.engine.scenarios.PayXLifeResolutionTest$1$1.invoke(PayXLifeResolutionTest.kt)\n\tat com.wingedsheep.engine.scenarios.PayXLifeResolutionTest$1$1.invoke(PayXLifeReso",
+          "type": "org.opentest4j.AssertionFailedError"
+        }
+      ]
+    },
+    {
+      "name": "paid life 0 determines resolution X despite submitted mana X 20",
+      "failure": [
+        {
+          "message": "org.opentest4j.AssertionFailedError: expected:<0> but was:<20>\n\tat com.wingedsheep.engine.scenarios.PayXLifeResolutionTest._init_$lambda$0$assertVisibleX(PayXLifeResolutionTest.kt:28)\n\tat com.wingedsheep.engine.scenarios.PayXLifeResolutionTest.access$_init_$lambda$0$assertVisibleX(PayXLifeResolutionTest.kt:23)\n\tat com.wingedsheep.engine.scenarios.PayXLifeResolutionTest$1$1.invokeSuspend(PayXLifeResolutionTest.kt:50)\n\tat com.wingedsheep.engine.scenarios.PayXLifeResolutionTest$1$1.invoke(PayXLifeResolutionTest.kt)\n\tat com.wingedsheep.engine.scenarios.PayXLifeResolutionTest$1$1.invoke(PayXLifeRes",
+          "type": "org.opentest4j.AssertionFailedError"
+        }
+      ]
+    },
+    {
+      "name": "an ordinary mana-X spell still resolves with its declared X",
+      "failure": []
+    },
+    {
+      "name": "a spell copy inherits the paid-life X without charging life again",
+      "failure": [
+        {
+          "message": "org.opentest4j.AssertionFailedError: expected:<2> but was:<20>\n\tat com.wingedsheep.engine.scenarios.PayXLifeResolutionTest._init_$lambda$0$assertVisibleX(PayXLifeResolutionTest.kt:28)\n\tat com.wingedsheep.engine.scenarios.PayXLifeResolutionTest.access$_init_$lambda$0$assertVisibleX(PayXLifeResolutionTest.kt:23)\n\tat com.wingedsheep.engine.scenarios.PayXLifeResolutionTest$1$3.invokeSuspend(PayXLifeResolutionTest.kt:98)\n\tat com.wingedsheep.engine.scenarios.PayXLifeResolutionTest$1$3.invoke(PayXLifeResolutionTest.kt)\n\tat com.wingedsheep.engine.scenarios.PayXLifeResolutionTest$1$3.invoke(PayXLifeRes",
+          "type": "org.opentest4j.AssertionFailedError"
+        }
+      ]
+    }
+  ]
+}

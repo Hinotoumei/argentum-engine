@@ -1,0 +1,20 @@
+{
+  "gate": "pay-life-card-regression before resolution repair",
+  "status": "failed",
+  "suite": {
+    "name": "com.wingedsheep.engine.scenarios.ToxicDelugeScenarioTest",
+    "tests": "8",
+    "skipped": "0",
+    "failures": "1",
+    "errors": "0",
+    "timestamp": "2026-10-01T11:07:47.640Z",
+    "hostname": "DESKTOP-6K9JG6J",
+    "time": "157.679"
+  },
+  "failedCases": [
+    {
+      "name": "an unrelated submitted mana X cannot override the amount of life paid",
+      "message": "org.opentest4j.AssertionFailedError: expected:<true> but was:<false>"
+    }
+  ]
+}

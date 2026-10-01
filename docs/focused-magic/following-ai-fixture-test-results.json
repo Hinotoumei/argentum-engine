@@ -1,0 +1,30 @@
+{
+  "scope": "Approved AI factory catalog setup repair; focused retry passed",
+  "suite": {
+    "name": "com.wingedsheep.ai.engine.AIPlayerFactoryTest",
+    "tests": "3",
+    "skipped": "0",
+    "failures": "0",
+    "errors": "0",
+    "timestamp": "2026-10-01T11:52:36.808Z",
+    "hostname": "DESKTOP-6K9JG6J",
+    "time": "149.261"
+  },
+  "cases": [
+    {
+      "name": "fresh players match standalone choices across profiles and repeated calls",
+      "classname": "com.wingedsheep.ai.engine.AIPlayerFactoryTest",
+      "time": "4.666"
+    },
+    {
+      "name": "factory shares services while keeping strategy memory and resolver state per player",
+      "classname": "com.wingedsheep.ai.engine.AIPlayerFactoryTest",
+      "time": "0.379"
+    },
+    {
+      "name": "factory simulators retain their own responder callbacks through pending choices",
+      "classname": "com.wingedsheep.ai.engine.AIPlayerFactoryTest",
+      "time": "0.399"
+    }
+  ]
+}

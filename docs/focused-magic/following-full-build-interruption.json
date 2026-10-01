@@ -1,0 +1,13 @@
+{
+  "status": "incomplete; stopped after unrelated timeout",
+  "session": 12656,
+  "observedFailure": {
+    "suite": "AIPlayerFactoryTest",
+    "case": "fresh players match standalone choices across profiles and repeated calls",
+    "exception": "kotlinx.coroutines.TimeoutCancellationException"
+  },
+  "otherFactoryCases": "Both passed in the same run",
+  "xmlCaution": "The interrupted Gradle run had not finalized fresh XML; older passing XML was not treated as evidence for this run.",
+  "authorization": "User replied Go ahead after disclosure of untouched-test blocker.",
+  "repair": "Move TestCards.all full-catalog loading to shared FunSpec fixture setup; assertions and timeout unchanged."
+}

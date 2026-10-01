@@ -1,0 +1,60 @@
+{
+  "phase": "post-view",
+  "build": "failed",
+  "session": 43276,
+  "duration": "44m 50s",
+  "failedTask": ":mtg-sets:2024:tests:test",
+  "suite": {
+    "name": "com.wingedsheep.engine.scenarios.AKillerAmongUsScenarioTest",
+    "tests": "6",
+    "skipped": "0",
+    "failures": "1",
+    "errors": "0",
+    "timestamp": "2026-10-01T15:06:26.713Z",
+    "hostname": "DESKTOP-6K9JG6J",
+    "time": "147.597"
+  },
+  "cases": [
+    {
+      "name": "the enters trigger makes the three 1/1 suspects, then offers only their three types",
+      "time": "142.914",
+      "status": "failed",
+      "failure": {
+        "message": "kotlinx.coroutines.TimeoutCancellationException: Coroutine \"spec-scope-873769155\" timed out waiting for 120000 ms",
+        "type": "kotlinx.coroutines.TimeoutCancellationException"
+      }
+    },
+    {
+      "name": "the choice is noted on the enchantment, secret to the player who made it",
+      "time": "0.236",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "name": "an attacking token of the chosen type gets three +1/+1 counters and deathtouch",
+      "time": "1.115",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "name": "an attacking token of the wrong type is a legal target that gets nothing",
+      "time": "0.384",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "name": "paying the reveal cost makes the note public",
+      "time": "0.239",
+      "status": "passed",
+      "failure": null
+    },
+    {
+      "name": "a player who gained control can't activate it \u2014 they never saw the choice",
+      "time": "0.317",
+      "status": "passed",
+      "failure": null
+    }
+  ],
+  "interpretation": "Untouched first scenario timed out; full catalog discovery remains inside the timed fixture. Five other scenarios passed. Proposed fixture-only preload is not applied; user approval required by AGENTS.md and verify skill.",
+  "publication": "Not committed or pushed; prior pre-view success is not final validation."
+}

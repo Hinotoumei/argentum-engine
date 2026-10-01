@@ -1,0 +1,55 @@
+{
+  "scope": "Paid-life X resolution, real spell copies, both-player badges and ordinary/modal numeric damage text",
+  "suite": {
+    "name": "com.wingedsheep.engine.scenarios.PayXLifeResolutionTest",
+    "tests": "8",
+    "skipped": "0",
+    "failures": "0",
+    "errors": "0",
+    "timestamp": "2026-10-01T14:29:29.324Z",
+    "hostname": "DESKTOP-6K9JG6J",
+    "time": "9.661"
+  },
+  "cases": [
+    {
+      "name": "paid life 2 determines resolution X despite submitted mana X null",
+      "classname": "com.wingedsheep.engine.scenarios.PayXLifeResolutionTest",
+      "time": "8.488"
+    },
+    {
+      "name": "paid life 2 determines resolution X despite submitted mana X 20",
+      "classname": "com.wingedsheep.engine.scenarios.PayXLifeResolutionTest",
+      "time": "0.034"
+    },
+    {
+      "name": "paid life 2 determines resolution X despite submitted mana X 0",
+      "classname": "com.wingedsheep.engine.scenarios.PayXLifeResolutionTest",
+      "time": "0.04"
+    },
+    {
+      "name": "paid life 0 determines resolution X despite submitted mana X 20",
+      "classname": "com.wingedsheep.engine.scenarios.PayXLifeResolutionTest",
+      "time": "0.033"
+    },
+    {
+      "name": "an ordinary mana-X spell still resolves with its declared X",
+      "classname": "com.wingedsheep.engine.scenarios.PayXLifeResolutionTest",
+      "time": "0.044"
+    },
+    {
+      "name": "a spell copy inherits the paid-life X without charging life again",
+      "classname": "com.wingedsheep.engine.scenarios.PayXLifeResolutionTest",
+      "time": "0.289"
+    },
+    {
+      "name": "paid-life damage text displays validated X for modal=false",
+      "classname": "com.wingedsheep.engine.scenarios.PayXLifeResolutionTest",
+      "time": "0.063"
+    },
+    {
+      "name": "paid-life damage text displays validated X for modal=true",
+      "classname": "com.wingedsheep.engine.scenarios.PayXLifeResolutionTest",
+      "time": "0.079"
+    }
+  ]
+}

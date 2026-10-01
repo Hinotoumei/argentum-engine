@@ -1,0 +1,19 @@
+{
+  "gate": "pay-life engine copy regression before copy repair",
+  "suite": {
+    "name": "com.wingedsheep.engine.scenarios.PayXLifeResolutionTest",
+    "tests": "6",
+    "skipped": "0",
+    "failures": "1",
+    "errors": "0",
+    "timestamp": "2026-10-01T11:24:20.001Z",
+    "hostname": "DESKTOP-6K9JG6J",
+    "time": "7.281"
+  },
+  "failedCases": [
+    {
+      "name": "a spell copy inherits the paid-life X without charging life again",
+      "message": "org.opentest4j.AssertionFailedError: expected:<20> but was:<18>"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "scope": "Approved A Killer Among Us shared-catalog fixture repair",
+  "tests": "6",
+  "failures": "0",
+  "errors": "0",
+  "timestamp": "2026-10-01T15:22:01.750Z",
+  "cases": [
+    {
+      "name": "the enters trigger makes the three 1/1 suspects, then offers only their three types",
+      "seconds": "1.293"
+    },
+    {
+      "name": "the choice is noted on the enchantment, secret to the player who made it",
+      "seconds": "0.064"
+    },
+    {
+      "name": "an attacking token of the chosen type gets three +1/+1 counters and deathtouch",
+      "seconds": "0.276"
+    },
+    {
+      "name": "an attacking token of the wrong type is a legal target that gets nothing",
+      "seconds": "0.07"
+    },
+    {
+      "name": "paying the reveal cost makes the note public",
+      "seconds": "0.055"
+    },
+    {
+      "name": "a player who gained control can't activate it — they never saw the choice",
+      "seconds": "0.099"
+    }
+  ]
+}

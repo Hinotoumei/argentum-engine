@@ -1,0 +1,20 @@
+{
+  "gate": "initial following-cards-targeted",
+  "status": "failed",
+  "tests": {
+    "name": "com.wingedsheep.engine.scenarios.HydroblastScenarioTest",
+    "tests": "8",
+    "skipped": "0",
+    "failures": "1",
+    "errors": "0",
+    "timestamp": "2026-10-01T10:44:11.077Z",
+    "hostname": "DESKTOP-6K9JG6J",
+    "time": "124.459"
+  },
+  "failedCases": [
+    {
+      "name": "counter mode rejects an activated ability without paying its costs",
+      "message": "org.opentest4j.AssertionFailedError: Done is of type com.wingedsheep.engine.core.Outcome.Done but expected com.wingedsheep.engine.core.Outcome.Rejected\nexpected:<com.wingedsheep.engine.core.Outcome.Rejected> but was:<Done>"
+    }
+  ]
+}
