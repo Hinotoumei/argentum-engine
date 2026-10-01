@@ -1,0 +1,12 @@
+{
+  "run": "Full-build retry after Abattoir Ghoul fixture repair",
+  "fixture": "com.wingedsheep.engine.scenarios.ARealmRebornTest",
+  "timestamp": "2026-10-01T09:28:06.074Z",
+  "suiteDurationSeconds": "133.934",
+  "testDurationSeconds": "133.345",
+  "test": "another permanent you control gains tap-for-any-color; the enchantment itself does not",
+  "failureType": "kotlinx.coroutines.TimeoutCancellationException",
+  "failureMessage": "kotlinx.coroutines.TimeoutCancellationException: Coroutine \"spec-scope-727119352\" timed out waiting for 120000 ms",
+  "repair": "Move TestCards.all into spec setup, preserving mana-ability assertions",
+  "authorization": "User instruction: Yes, fix Windows test harness blockers"
+}

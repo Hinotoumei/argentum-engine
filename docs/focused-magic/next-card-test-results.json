@@ -1,0 +1,146 @@
+{
+  "scope": "Native Fatal Push, Null Rod, Izzet Charm gameplay scenarios",
+  "results": [
+    {
+      "name": "com.wingedsheep.engine.scenarios.FatalPushScenarioTest",
+      "tests": "10",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "timestamp": "2026-10-01T09:13:12.878Z",
+      "time": "0.447",
+      "cases": [
+        {
+          "name": "without revolt Grizzly Bears is a legal target and destruction is true",
+          "status": "passed"
+        },
+        {
+          "name": "without revolt Centaur Courser is a legal target and destruction is false",
+          "status": "passed"
+        },
+        {
+          "name": "without revolt Hill Giant is a legal target and destruction is false",
+          "status": "passed"
+        },
+        {
+          "name": "without revolt Hystrodon is a legal target and destruction is false",
+          "status": "passed"
+        },
+        {
+          "name": "Hill Giant revolt evaluates after casting with friendly sacrifice false",
+          "status": "passed"
+        },
+        {
+          "name": "Hystrodon revolt evaluates after casting with friendly sacrifice false",
+          "status": "passed"
+        },
+        {
+          "name": "Hill Giant revolt evaluates after casting with friendly sacrifice true",
+          "status": "passed"
+        },
+        {
+          "name": "Hystrodon revolt evaluates after casting with friendly sacrifice true",
+          "status": "passed"
+        },
+        {
+          "name": "a genuinely cast face-down Hystrodon has mana value zero",
+          "status": "passed"
+        },
+        {
+          "name": "a player is not a legal target and rejection spends nothing",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "name": "com.wingedsheep.engine.scenarios.NullRodScenarioTest",
+      "tests": "6",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "timestamp": "2026-10-01T04:27:40.291Z",
+      "time": "0.583",
+      "cases": [
+        {
+          "name": "Mind Stone mana and draw activations reject atomically",
+          "status": "passed"
+        },
+        {
+          "name": "artifact static and triggered abilities continue to operate",
+          "status": "passed"
+        },
+        {
+          "name": "automatic payment cannot tap Mind Stone while land mana remains available",
+          "status": "passed"
+        },
+        {
+          "name": "destroying Null Rod through Naturalize restores artifact mana",
+          "status": "passed"
+        },
+        {
+          "name": "artifact card activation outside battlefield is usable: graveyard false",
+          "status": "passed"
+        },
+        {
+          "name": "artifact card activation outside battlefield is usable: graveyard true",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "name": "com.wingedsheep.engine.scenarios.IzzetCharmScenarioTest",
+      "tests": "11",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "timestamp": "2026-10-01T09:10:44.671Z",
+      "time": "0.311",
+      "cases": [
+        {
+          "name": "counter mode resolves with opponent payment false",
+          "status": "passed"
+        },
+        {
+          "name": "counter mode resolves with opponent payment true",
+          "status": "passed"
+        },
+        {
+          "name": "damage mode destroys a two-toughness creature",
+          "status": "passed"
+        },
+        {
+          "name": "draw mode has no targets and allows discarding the newly drawn cards",
+          "status": "passed"
+        },
+        {
+          "name": "invalid modes [0, 2] reject without spending mana",
+          "status": "passed"
+        },
+        {
+          "name": "invalid modes [3] reject without spending mana",
+          "status": "passed"
+        },
+        {
+          "name": "invalid modes [2, 2] reject without spending mana",
+          "status": "passed"
+        },
+        {
+          "name": "damage mode cannot target a player",
+          "status": "passed"
+        },
+        {
+          "name": "counter mode cannot target a creature spell",
+          "status": "passed"
+        },
+        {
+          "name": "counter mode cannot target an activated ability on the stack",
+          "status": "passed"
+        },
+        {
+          "name": "damage mode cannot target a spell on the stack",
+          "status": "passed"
+        }
+      ]
+    }
+  ]
+}

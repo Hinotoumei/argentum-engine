@@ -1,0 +1,27 @@
+# Native Fatal Push, Null Rod, and Izzet Charm verification
+
+October 1, 2026. This batch uses existing SDK primitives and adds one dedicated gameplay scenario file per card. All 27 dedicated scenarios and the full regression build passed after the approved fixture repair below. These checks establish source-level regression evidence, not deployed gameplay acceptance.
+
+| Card | Gameplay scenarios | Verified behavior |
+|---|---:|---|
+| Fatal Push | 10 passed | Any creature is a legal target; mana-value and revolt gates resolve at resolution; friendly versus opposing sacrifice; a genuinely cast face-down creature has mana value zero; player targets reject without spending resources. |
+| Null Rod | 6 passed | Both artifact mana and nonmana activations reject; action enumeration and automatic payment honor the restriction; removing the Rod restores activation; hand/graveyard abilities and static/triggered effects remain available. |
+| Izzet Charm | 11 passed | Both counter-payment outcomes; creature damage; draw-before-discard and newly drawn cards selectable; no action between draw and discard; invalid modes and player, creature-spell, activated-ability and stack-spell targets reject atomically. |
+
+Exact scenario results and timestamps are in `next-card-test-results.json`. All 27 cases passed their complete era suites in the successful full gate, including the two strengthened Izzet Charm target-rejection cases and the draw/discard interruption check.
+
+The initial targeted gate passed the then-current 25 scenarios, all card snapshots/JSON round trips, and card lint. Fresh Scryfall verification checked Oracle text, mana cost, type, rarity, collector number, artist, exact image identity (HTTP 200), rulings and earliest-printing placement. Fatal Push is AER; Null Rod is WTH. Izzet Charm first appeared in DDJ on September 7, 2012, with an RTR reprint on October 5. DDJ is explicitly incomplete and unavailable for sealed. Its mechanical backlog was bootstrapped from Scryfall and records 1/78 Extras; this is no claim of set completion.
+
+Snapshot review confirmed only Fatal Push was added to AER and Null Rod to WTH; all existing entries are unchanged. The new DDJ golden contains only Izzet Charm. No engine/SDK implementation changed in this batch.
+
+Assay set differentials exited zero with no divergences or undecodable goldens: AER compared 9/11, WTH compared 6/11, and DDJ compared 0/1. Assay declines the new card texts; these are coverage gaps, not whole-card passes. The WTH report also has one existing fold exclusion. The full-corpus output from an earlier CLI invocation reported 52 unreviewed model divergences; it is not a clean gate and does not establish broad agreement.
+
+All 17 card-count headers are consistent. The implementation-checkbox check reports 99 pre-existing unchecked entries across the BLC set and three BLC deck backlogs. Those unrelated files remain untouched.
+
+## Full build and approved fixture repair
+
+`build :oracle-assay:installDist -x :mtgish-tooling:test -DupdateSnapshots=true --max-workers=2 -PkotlinCompileParallelism=1`, through the locked just recipe, failed after 49 minutes 49 seconds. The sole reported failure is the untouched `AbattoirGhoulScenarioTest`: its first test exceeded the 120-second invocation timeout (reported duration 129.155 seconds). The rest of the 555-case 2008–2016 suite passed, including Izzet Charm. The engine suite and earlier card suites passed; that initial run stopped before completing the later tasks.
+
+The fixture loads `TestCards.all` inside its timed gameplay case. That list discovers the full catalog, matching the cold-start structure previously repaired with authorization in Adder-Staff Boggart. Catalog loading is the suspected cause; this run's timeout trace does not prove that stack location. A minimal proposed patch moves the same card list to spec setup, preserving the combat and life-gain assertions. The user approved this repair on October 1, and the patch has been applied. The first retry passed Abattoir Ghoul and the complete 2008–2016, 2017–2022, 2023, and 2024 suites, but stopped on the untouched first `ARealmRebornTest` case in 2025 after a 120-second invocation timeout (133.345-second test duration). The other 1,610 tests in that suite passed. The same spec-setup correction is applied there under the user’s prior authorization to fix Windows test-harness blockers, preserving all mana-ability assertions. The second full-build retry passed, retaining the accepted legacy mtgish-only test exclusion. Abattoir Ghoul's unchanged timed gameplay case passed in 1.782 seconds (85.407 seconds including suite setup); A Realm Reborn's unchanged timed gameplay case passed in 2.491 seconds (146.065 seconds including suite setup). The 120-second gameplay timeout is unchanged. Across 20 modules, the final XML records 19,496 passed and 24 skipped, with zero failures or errors. Unchanged tasks reused valid Gradle results. See `next-card-full-build-results.json`; the original timeout is preserved separately in `next-card-initial-build-failure.json`. The second timeout is recorded in `next-card-retry-build-failure.json`.
+
+No deployment or live Focused Magic acceptance is established by this batch. The remaining packet cards, actual provider decision flows, Constructed admission/start, and live acceptance remain unfinished. Registry presence alone is not gameplay proof.

@@ -1,0 +1,12 @@
+{
+  "run": "First full gate, before approved fixture repair",
+  "elapsed": "49m 49s",
+  "fixture": "com.wingedsheep.engine.scenarios.AbattoirGhoulScenarioTest",
+  "timestamp": "2026-10-01T04:36:56.915Z",
+  "durationSeconds": "129.155",
+  "test": "gains life equal to toughness when a creature it damaged dies in combat",
+  "failureType": "kotlinx.coroutines.TimeoutCancellationException",
+  "failureMessage": "kotlinx.coroutines.TimeoutCancellationException: Coroutine \"spec-scope-394424498\" timed out waiting for 120000 ms",
+  "repair": "Evaluate TestCards.all at spec setup, preserving gameplay assertions",
+  "approved": "2026-10-01"
+}
