@@ -1,0 +1,259 @@
+{
+  "status": "Printed combat profiles for 28 fixture character printings; card-text effects and most-recent-printing errata are not automated",
+  "source": "Printed card scans at https://api.ccgtrader.co.uk/_/assets/<assetId>",
+  "profiles": {
+    "ikvxaex9zrsc8sk8": {
+      "name": "Jaken, Follower of Sesshomaru",
+      "colors": {
+        "white": 2,
+        "red": 4,
+        "purple": 5
+      },
+      "deckCost": 2
+    },
+    "3d7qm60jzwo4koc4": {
+      "name": "Rin, Follower of Sesshomaru",
+      "colors": {
+        "white": 2,
+        "purple": 2,
+        "green": 4
+      },
+      "deckCost": 2
+    },
+    "t8bt43beq5ckgw4k": {
+      "name": "Jaken",
+      "colors": {
+        "black": 4,
+        "blue": 2,
+        "purple": 5
+      },
+      "deckCost": 2
+    },
+    "gu8zgtc5go0g4k0g": {
+      "name": "Rin, Obedient Child",
+      "colors": {
+        "black": 2,
+        "white": 2,
+        "red": 4
+      },
+      "deckCost": 2
+    },
+    "sxy5m2ea6yo4gk4w": {
+      "name": "Rin, Child Follower",
+      "colors": {
+        "white": 2,
+        "blue": 4,
+        "green": 2
+      },
+      "deckCost": 2
+    },
+    "q5m6si4azmsw4w4c": {
+      "name": "Sesshomaru, Menacing Demon",
+      "colors": {
+        "black": 3,
+        "white": 5,
+        "blue": 6
+      },
+      "deckCost": 3
+    },
+    "hdyw7ra3wtw8c88c": {
+      "name": "Sesshomaru, Silent Warrior",
+      "colors": {
+        "white": 6,
+        "red": 3,
+        "blue": 5
+      },
+      "deckCost": 3
+    },
+    "1e2jj1q43ew0go80": {
+      "name": "Sesshomaru, Legendary Foe",
+      "colors": {
+        "white": 4,
+        "blue": 6,
+        "green": 7
+      },
+      "deckCost": 3
+    },
+    "pevuv4ixvi8wcwsk": {
+      "name": "Bankotsu, Leader of the Band of Seven",
+      "colors": {
+        "black": 6,
+        "blue": 7,
+        "purple": 4
+      },
+      "deckCost": 5
+    },
+    "rm8hgzyf4i88s0o8": {
+      "name": "Bankotsu, Warrior of the Band of Seven",
+      "colors": {
+        "black": 3,
+        "red": 5,
+        "green": 6
+      },
+      "deckCost": 3
+    },
+    "jg0nragefo8cc8kg": {
+      "name": "Sesshomaru, Wanderer",
+      "colors": {
+        "black": 3,
+        "purple": 6,
+        "green": 6
+      },
+      "deckCost": 3
+    },
+    "t5jrev5pf3kos0og": {
+      "name": "Renkotsu, Tactician of the Band of Seven",
+      "colors": {
+        "white": 3,
+        "red": 6,
+        "green": 5
+      },
+      "deckCost": 3
+    },
+    "b1cxg58mancoogc0": {
+      "name": "Jakotsu, Warrior of the Band of Seven",
+      "colors": {
+        "black": 6,
+        "white": 3,
+        "blue": 5
+      },
+      "deckCost": 4
+    },
+    "qy9w2yxdd4gog0s0": {
+      "name": "Jakotsu, Member of the Band of Seven",
+      "colors": {
+        "blue": 5,
+        "purple": 6,
+        "green": 3
+      },
+      "deckCost": 3
+    },
+    "lp08t3adi5cg0g40": {
+      "name": "Renkotsu, Member of the Band of Seven",
+      "colors": {
+        "black": 7,
+        "red": 3,
+        "purple": 5
+      },
+      "deckCost": 4
+    },
+    "2ent2vvyjow0o880": {
+      "name": "Suikotsu, Member of the Band of Seven",
+      "colors": {
+        "red": 6,
+        "blue": 4,
+        "green": 3
+      },
+      "deckCost": 3
+    },
+    "9yxp0nvi78gkcg8k": {
+      "name": "Suikotsu, Band of Seven",
+      "colors": {
+        "red": 6,
+        "blue": 5,
+        "green": 7
+      },
+      "deckCost": 4
+    },
+    "qh76b7y3v80cc888": {
+      "name": "Bankotsu, Member of the Band of Seven",
+      "colors": {
+        "black": 5,
+        "blue": 6,
+        "purple": 3
+      },
+      "deckCost": 4
+    },
+    "l7x0g0b4434ok80o": {
+      "name": "Ginkotsu, Member of the Band of Seven",
+      "colors": {
+        "black": 7,
+        "red": 3,
+        "blue": 5
+      },
+      "deckCost": 4
+    },
+    "roveyeyzsb484w4o": {
+      "name": "Bankotsu, Band of Seven",
+      "colors": {
+        "white": 7,
+        "blue": 6,
+        "green": 4
+      },
+      "deckCost": 5
+    },
+    "qigc6391ge8w0s04": {
+      "name": "Ginkotsu, Band of Seven",
+      "colors": {
+        "red": 7,
+        "blue": 3,
+        "purple": 6
+      },
+      "deckCost": 4
+    },
+    "o76kmj9dsa8s8w40": {
+      "name": "Jakotsu, Band of Seven",
+      "colors": {
+        "black": 3,
+        "white": 6,
+        "blue": 5
+      },
+      "deckCost": 3
+    },
+    "93r70z7lzgo4040o": {
+      "name": "Kyokotsu, Band of Seven",
+      "colors": {
+        "black": 7,
+        "red": 7,
+        "purple": 2
+      },
+      "deckCost": 4
+    },
+    "ab0egoj8wi880ccs": {
+      "name": "Mukotsu, Band of Seven",
+      "colors": {
+        "red": 2,
+        "blue": 3,
+        "green": 4
+      },
+      "deckCost": 2
+    },
+    "a8llookww4gkgsks": {
+      "name": "Renkotsu, Band of Seven",
+      "colors": {
+        "white": 5,
+        "red": 3,
+        "purple": 6
+      },
+      "deckCost": 3
+    },
+    "fdfngumlds00sw0s": {
+      "name": "Rin, Young Follower",
+      "colors": {
+        "blue": 5,
+        "purple": 3,
+        "green": 4
+      },
+      "deckCost": 2
+    },
+    "1egmwh942alcgog8": {
+      "name": "A-Un, Follower of Sesshomaru",
+      "colors": {
+        "white": 2,
+        "blue": 2,
+        "green": 2
+      },
+      "deckCost": 2
+    },
+    "6nffy23w8pkw8444": {
+      "name": "Suikotsu, Mercenary of the Band of Seven",
+      "colors": {
+        "black": 6,
+        "red": 6,
+        "purple": 3
+      },
+      "deckCost": 4
+    }
+  },
+  "rulesSource": "https://sites.google.com/view/inuyashatcgdatabase/inuyasha-gameplay-rules"
+}

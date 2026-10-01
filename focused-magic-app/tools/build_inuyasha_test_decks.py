@@ -7,6 +7,7 @@ DB=ROOT/'inuyasha-reference'/'SECOND_DRAW_INUYASHA_DATABASE_CURRENT.sqlite'
 OUT_JSON=ROOT/'data'/'inuyasha-test-decks.json'
 OUT_JS=ROOT/'js'/'inuyasha'/'decks.js'
 DECK_IDS=(5,6)
+PROFILES=json.loads((ROOT/'data'/'inuyasha-printed-character-profiles.json').read_text(encoding='utf-8'))['profiles']
 
 def norm(s):
     s=unicodedata.normalize('NFKD', s or '').encode('ascii','ignore').decode('ascii').lower()
@@ -81,10 +82,14 @@ for did in DECK_IDS:
         card,method=resolve_card(row)
         url,img_method,catalog_id=resolve_image(row,card)
         if url: imaged+=qty
+        profile=PROFILES.get(asset_id(url))
         out.append({
             'name':row['raw_card_name'],'quantity':qty,
             'cardId':card['card_id'] if card else row['card_id'],
-            'cardType':card['card_type'] if card else None,
+            'cardType':'Character' if profile else (card['card_type'] if card else None),
+            'colorValues':dict(profile['colors']) if profile else None,
+            'printedDeckCost':profile['deckCost'] if profile else None,
+            'combatProfileSource':url.split('?')[0] if profile else None,
             'rarity':card['rarity'] if card else None,
             'setName':row['set_name'],'collectorNo':row['collector_no'],
             'evidenceStatus':row['evidence_status'],'reconstructed':bool(row['reconstructed']),

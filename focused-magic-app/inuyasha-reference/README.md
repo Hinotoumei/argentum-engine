@@ -1,7 +1,7 @@
 # InuYasha Score TCG Rules Engine — v0.1.0 Attack Core
 
 This is the first executable rules slice for the **original Score Entertainment InuYasha TCG**.
-It is intentionally narrow: only the **Attack Timing Sequence** from the *InuYasha TCG Advanced Rules Document (ARD) v4.0, updated 2007-07-11* is implemented.
+It remains a limited attack resolver. It implements character comparison timing from the *InuYasha TCG Advanced Rules Document (ARD) v4.0, updated 2007-07-11*, plus the rulebook’s basic direct attack when the opponent controls no characters. Full turn and printed-card effect automation remain unfinished.
 
 ## Implemented ARD behavior
 
@@ -57,3 +57,13 @@ python demo.py
 `Turn Start -> Draw -> Set Up -> Battle -> Recovery -> End of Turn`
 
 That will wrap this already-tested attack state machine inside the actual turn engine.
+
+## Printed-color and direct-attack repair
+
+The browser fixtures now carry sparse printed combat profiles for 28 character printings, keyed by their linked image asset rather than their name. The six represented colors include white. An absent color is absent, rather than a zero-valued invented color. The browser offers only shared printed colors and locks the printed values. Unknown profiles cannot declare character attacks.
+
+Rin, Young Follower versus Ginkotsu, Band of Seven compares blue 5 to 3 and purple 3 to 6. These are different outcomes. The browser and engine tests exercise both.
+
+The [rulebook](https://sites.google.com/view/inuyashatcgdatabase/inuyasha-gameplay-rules) permits a direct attack when the opponent controls no characters. Lack of matching colors alone does not satisfy this condition. Its definition of control requires a faceup card; defeated facedown cards are out of play. The resolver therefore excludes facedown defeated cards when checking controlled characters. The browser also blocks direct attacks while a faceup card’s type remains unknown, rather than assuming it is a noncharacter.
+
+These fixtures do not execute card-text exceptions, numeric modifiers from actual card effects, or most-recent-printing errata. They do not establish a complete official game: the imported tabletop still has prototype setup/turn controls, and its preserved Three’s Company fixture has 61 cards. See `docs/focused-magic/INUYASHA-COLOR-VERIFICATION.md` for the tested scope.

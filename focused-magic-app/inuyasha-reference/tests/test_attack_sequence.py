@@ -155,5 +155,42 @@ class AttackSequenceTests(unittest.TestCase):
         self.assertNotIn(TimingWindow.JEWEL_SHARD_STOLEN, [e.window for e in game.event_log])
 
 
+class PrintedColorTests(unittest.TestCase):
+    def make_game(self, defender=True):
+        attacker = CharacterState("TEST Blue", "P1", {Color.BLUE: 5})
+        other = CharacterState("TEST Red", "P2", {Color.RED: 7})
+        game = GameState(players={"P1": PlayerState("P1"), "P2": PlayerState("P2", [JewelShard("S1")])},
+                         turn_active_player_id="P1", characters=[attacker, other] if defender else [attacker])
+        return game, attacker, other
+
+    def test_mismatch_does_not_enable_direct_attack(self):
+        game, attacker, _ = self.make_game()
+        with self.assertRaises(RuleError):
+            game.attack_player(attacker, "P2", Color.BLUE)
+        self.assertTrue(attacker.ready)
+        self.assertEqual(game.event_log, [])
+
+    def test_direct_attack_with_no_controlled_characters(self):
+        game, attacker, _ = self.make_game(False)
+        ctx = game.attack_player(attacker, "P2", Color.BLUE)
+        self.assertTrue(ctx.shard_stolen)
+        self.assertFalse(attacker.ready)
+        self.assertEqual(len(game.player("P1").jewel_shards), 1)
+        self.assertEqual(len(game.player("P2").jewel_shards), 0)
+
+    def test_defeated_facedown_cards_are_out_of_play(self):
+        game, attacker, defender = self.make_game()
+        defender.defeat()
+        self.assertTrue(game.attack_player(attacker, "P2", Color.BLUE).shard_stolen)
+
+    def test_white_and_negative_modifiers(self):
+        character = CharacterState("TEST White", "P1", {Color.WHITE: 2})
+        self.assertEqual(character.final_color_value(Color.WHITE), 2)
+        character.temporary_color_modifiers[Color.WHITE] = -5
+        self.assertEqual(character.final_color_value(Color.WHITE), 0)
+        with self.assertRaises(RuleError):
+            character.final_color_value(Color.RED)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -7,7 +7,11 @@
   if(!E||!DB){console.error('InuYasha tabletop dependencies missing');return;}
 
   let state=null, selected=null, attackSource=null, attackTarget=null, inspectCard=null;
-  const COLORS=['red','blue','green','purple','black'];
+  const COLORS=Object.values(E.Color);
+  function verifiedCharacter(card){return card?.cardType==='Character'&&card.colorValues&&Object.keys(card.colorValues).length>0;}
+  function matchingColors(a,d){return verifiedCharacter(a)&&verifiedCharacter(d)?COLORS.filter(c=>Object.hasOwn(a.colorValues,c)&&Object.hasOwn(d.colorValues,c)):[];}
+  function canAttackPlayer(){return !!state&&state.ai.play.every(c=>!c.faceUp||c.defeated||['Item','Location','Event'].includes(c.cardType));}
+  function attackSelection(){const a=attackSource&&findCard(attackSource),direct=attackTarget==='P2',d=direct?null:attackTarget&&findCard(attackTarget);return {a,d,direct,colors:direct&&verifiedCharacter(a)&&canAttackPlayer()?COLORS.filter(c=>Object.hasOwn(a.colorValues,c)):matchingColors(a,d)};}
   const WINDOW_LABELS={
     when_character_expended:'Expend',when_attacking:'When attacking',when_attacked:'When attacked',when_comparing_color_values:'Compare',when_character_defeated:'Defeated',when_jewel_shard_stolen:'Shard stolen',when_attack_ends:'Attack ends'
   };
@@ -52,8 +56,8 @@
     wrap.addEventListener('click',()=>{
       selected=card.instanceId;inspectCard=card.instanceId;
       if(zone==='play'){
-        if(card.owner==='P1' && !card.defeated && (card.cardType==='Character'||!card.cardType)){attackSource=card.instanceId;}
-        if(card.owner==='P2' && !card.defeated && (card.cardType==='Character'||!card.cardType)){attackTarget=card.instanceId;}
+        if(card.owner==='P1' && card.ready && card.faceUp && !card.defeated && verifiedCharacter(card)){attackSource=card.instanceId;}
+        if(card.owner==='P2' && card.faceUp && !card.defeated && verifiedCharacter(card)){attackTarget=card.instanceId;}
       }
       render();
     });
@@ -66,7 +70,7 @@
   function renderLog(){if(!q('iyLog')||!state)return;q('iyLog').textContent=state.log.slice().reverse().join('\n');}
   function renderWindows(){const el=q('iyWindows');el.innerHTML='';for(const w of ['when_character_expended','when_attacking','when_attacked','when_comparing_color_values','when_character_defeated','when_jewel_shard_stolen','when_attack_ends']){const s=document.createElement('span');s.className='iy-window'+(state.lastWindows.includes(w)?' active':'');s.textContent=WINDOW_LABELS[w];el.appendChild(s);}}
   function renderInspector(){const box=q('iyInspector');const c=inspectCard?findCard(inspectCard):null;if(!c){box.classList.remove('open');return;}box.classList.add('open');q('iyInspectImage').src=c.imageUrl?imageAttempt(c.imageUrl,0):'';q('iyInspectImage').style.display=c.imageUrl?'block':'none';q('iyInspectImage').dataset.raw=c.imageUrl||'';q('iyInspectImage').dataset.step='0';q('iyInspectName').textContent=c.name;q('iyInspectMeta').textContent=[c.cardType||'Type not normalized in database',c.rarity||'rarity not normalized',c.evidenceStatus||''].filter(Boolean).join(' • ');q('iyInspectZone').textContent=`${c.owner==='P1'?'Your':'Opponent'} ${c.zone}`;}
-  function renderAttackSummary(){const a=attackSource&&findCard(attackSource),d=attackTarget&&findCard(attackTarget);q('iyAttackSummary').innerHTML=a&&d?`<b>${esc(a.name)}</b> → <b>${esc(d.name)}</b><div class="sub">Choose Resolve Attack to enter the printed color values from the cards.</div>`:'Select one of your in-play cards and one opposing in-play card to prepare an attack.';q('iyResolveAttack').disabled=!(a&&d);}
+  function renderAttackSummary(){const {a,d,direct,colors}=attackSelection();q('iyAttackSummary').innerHTML=a&&(d||direct)?`<b>${esc(a.name)}</b> → <b>${direct?'Opponent':esc(d.name)}</b><div class="sub">${colors.length?(direct?'The opponent controls no characters.':`Matching printed colors: ${colors.join(', ')}.`):'No matching printed color. This character attack is illegal; a mismatch does not permit a direct attack.'}</div>`:'Select your ready character and an opposing character, or attack the opponent when they control no characters.';q('iyResolveAttack').disabled=!(a&&colors.length&&a.ready&&!a.defeated&&(direct||d&&!d.defeated));q('iyDirectAttack').disabled=!(verifiedCharacter(a)&&a.ready&&a.faceUp&&!a.defeated&&canAttackPlayer());}
   function render(){if(!state)return;
     q('iyUserName').textContent=state.user.deck.name;q('iyAiName').textContent=state.ai.deck.name;
     q('iyUserLib').textContent=state.user.library.length;q('iyUserHandCount').textContent=state.user.hand.length;q('iyUserDiscard').textContent=state.user.discard.length;
@@ -89,29 +93,31 @@
   }
   function syncAttackInputGate(){
     const av=readRequiredCombatValue('iyAttackValue'),dv=readRequiredCombatValue('iyDefendValue');
-    const valid=av!==null&&dv!==null;
+    const {a,d,direct,colors}=attackSelection(),color=q('iyAttackColor')?.value;
+    const valid=!!(a&&a.zone==='play'&&a.owner==='P1'&&a.ready&&a.faceUp&&!a.defeated&&colors.includes(color)&&av===a.colorValues[color]&&(direct?canAttackPlayer():d&&d.zone==='play'&&d.owner==='P2'&&d.faceUp&&!d.defeated&&dv===d.colorValues[color]));
     const confirm=q('iyAttackConfirm');
     if(confirm){confirm.disabled=!valid;confirm.setAttribute('aria-disabled',String(!valid));}
     const err=q('iyAttackError');
-    if(err)err.textContent=valid?'':'Enter both printed/current final color values before resolving.';
+    if(err)err.textContent=valid?'Printed values only. Card-text effects and modifiers are not automated.':'Choose a matching printed color on two eligible characters.';
     return valid;
   }
-  function openAttackDialog(){const a=findCard(attackSource),d=findCard(attackTarget);if(!a||!d)return; q('iyAttackAttacker').textContent=a.name;q('iyAttackDefender').textContent=d.name;q('iyAttackValue').value='';q('iyDefendValue').value='';q('iyAttackConfirm').disabled=true;q('iyAttackConfirm').setAttribute('aria-disabled','true');q('iyAttackModal').classList.add('open');q('iyAttackModal').setAttribute('aria-hidden','false');setAttackColor('red');syncAttackInputGate();}
-  function setAttackColor(c){q('iyAttackColor').value=c;document.querySelectorAll('[data-iy-color]').forEach(b=>b.classList.toggle('active',b.dataset.iyColor===c));}
+  function openAttackDialog(){const {a,d,direct,colors}=attackSelection();if(!a||!colors.length)return; q('iyAttackAttacker').textContent=a.name;q('iyAttackDefender').textContent=direct?'Opponent':d.name;q('iyDefendValue').closest('label').style.display=direct?'none':'';q('iyAttackNote').textContent=direct?'The opponent controls no characters. Choose any printed color on your ready character to attack directly. Card effects still require manual rules handling.':'Choose a color printed on both characters. Values come from the linked card printing and cannot be edited. This tabletop compares printed values; card effects and modifiers still require manual rules handling.';q('iyAttackModal').classList.add('open');q('iyAttackModal').setAttribute('aria-hidden','false');setAttackColor(colors[0]);}
+  function setAttackColor(c){const {a,d,direct,colors}=attackSelection(),chosen=colors.includes(c)?c:'';q('iyAttackColor').value=chosen;q('iyAttackValue').value=chosen?a.colorValues[chosen]:'';q('iyDefendValue').value=chosen&&!direct?d.colorValues[chosen]:'';document.querySelectorAll('[data-iy-color]').forEach(b=>{b.disabled=!colors.includes(b.dataset.iyColor);b.classList.toggle('active',b.dataset.iyColor===chosen);});syncAttackInputGate();}
   function resolveAttack(event){
     event?.preventDefault?.();
     if(!syncAttackInputGate()){event?.stopImmediatePropagation?.();return false;}
-    const a=findCard(attackSource),d=findCard(attackTarget);if(!a||!d)return false;
+    const {a,d,direct}=attackSelection();if(!a||!d&&!direct)return false;
     const av=readRequiredCombatValue('iyAttackValue'),dv=readRequiredCombatValue('iyDefendValue'),color=q('iyAttackColor').value;
-    if(av===null||dv===null){q('iyAttackError').textContent='Enter both printed/current final color values before resolving.';syncAttackInputGate();return false;}
+    if(av===null||!direct&&dv===null){syncAttackInputGate();return false;}
     try{
-      const cvA={red:0,blue:0,green:0,purple:0,black:0},cvD={red:0,blue:0,green:0,purple:0,black:0};cvA[color]=av;cvD[color]=dv;
+      const cvA={...a.colorValues};
       const ac=new E.CharacterState({title:a.name,controllerId:'P1',colorValues:cvA,ready:a.ready,faceUp:a.faceUp,inPlay:true,defeated:a.defeated});
-      const dc=new E.CharacterState({title:d.name,controllerId:'P2',colorValues:cvD,ready:d.ready,faceUp:d.faceUp,inPlay:true,defeated:d.defeated});
+      const dc=direct?null:new E.CharacterState({title:d.name,controllerId:'P2',colorValues:d.colorValues,ready:d.ready,faceUp:d.faceUp,inPlay:true,defeated:d.defeated});
       const p1=new E.PlayerState('P1',Array.from({length:state.user.shards},(_,i)=>new E.JewelShard(`P1-${i}`)));const p2=new E.PlayerState('P2',Array.from({length:state.ai.shards},(_,i)=>new E.JewelShard(`P2-${i}`)));
-      const game=new E.GameState({players:{P1:p1,P2:p2},turnActivePlayerId:state.turn,characters:[ac,dc]});const ctx=game.attack(ac,dc,color);
-      a.ready=ac.ready;a.defeated=ac.defeated;a.faceUp=ac.faceUp;d.ready=dc.ready;d.defeated=dc.defeated;d.faceUp=dc.faceUp;state.user.shards=game.player('P1').jewelShards.length;state.ai.shards=game.player('P2').jewelShards.length;
-      state.lastWindows=game.eventLog.map(x=>x.window);log(`${a.name} attacked ${d.name} using ${color.toUpperCase()}: ${ctx.attackerFinalValue} vs ${ctx.defenderFinalValue}. ${ctx.defenderDefeatedByAttack?'Defender defeated.':'Defender survives.'}${ctx.shardStolen?' One opaque Jewel Shard stolen.':''}`);
+      const opponents=direct?state.ai.play.filter(c=>c.cardType==='Character').map(c=>new E.CharacterState({title:c.name,controllerId:'P2',colorValues:c.colorValues||{},ready:c.ready,faceUp:c.faceUp,inPlay:true,defeated:c.defeated})):[dc];
+      const game=new E.GameState({players:{P1:p1,P2:p2},turnActivePlayerId:state.turn,characters:[ac,...opponents]});const ctx=direct?game.attackPlayer(ac,'P2',color):game.attack(ac,dc,color);
+      a.ready=ac.ready;a.defeated=ac.defeated;a.faceUp=ac.faceUp;if(d){d.ready=dc.ready;d.defeated=dc.defeated;d.faceUp=dc.faceUp;}state.user.shards=game.player('P1').jewelShards.length;state.ai.shards=game.player('P2').jewelShards.length;
+      state.lastWindows=game.eventLog.map(x=>x.window);log(direct?`${a.name} attacked the opponent directly using ${color.toUpperCase()}.${ctx.shardStolen?' One opaque Jewel Shard stolen.':''}`:`${a.name} attacked ${d.name} using ${color.toUpperCase()}: ${ctx.attackerFinalValue} vs ${ctx.defenderFinalValue}. ${ctx.defenderDefeatedByAttack?'Defender defeated.':'Defender survives.'}${ctx.shardStolen?' One opaque Jewel Shard stolen.':''}`);
       for(const ev of game.eventLog)log(`ARD window — ${WINDOW_LABELS[ev.window]}${ev.detail?` (${ev.detail})`:''}`);
       q('iyAttackModal').classList.remove('open');q('iyAttackModal').setAttribute('aria-hidden','true');attackSource=null;attackTarget=null;selected=null;render();return true;
     }catch(e){q('iyAttackError').textContent=e.message||String(e);return false;}
@@ -132,7 +138,7 @@
   function open(){q('iyGameModal').classList.add('open');q('iyGameModal').setAttribute('aria-hidden','false');if(!state)resetGame();else render();}
   function close(){q('iyGameModal').classList.remove('open');q('iyGameModal').setAttribute('aria-hidden','true');}
   function install(){
-    populateDeckSelectors();q('iyGameClose').onclick=close;q('iyReset').onclick=resetGame;q('iyUserDeck').onchange=resetGame;q('iyAiDeck').onchange=resetGame;q('iyDraw').onclick=()=>draw('P1');q('iyPlaySelected').onclick=playSelected;q('iyDiscardSelected').onclick=discardSelected;q('iyAiDraw').onclick=()=>draw('P2');q('iyAiPlayButton').onclick=aiPlay;q('iyReady').onclick=readyUser;q('iyResolveAttack').onclick=openAttackDialog;q('iyClearAttack').onclick=()=>{attackSource=null;attackTarget=null;render();};q('iyInspectClose').onclick=()=>{inspectCard=null;renderInspector();};q('iyAttackCancel').onclick=()=>{q('iyAttackModal').classList.remove('open');q('iyAttackModal').setAttribute('aria-hidden','true');};q('iyAttackConfirm').onclick=null;q('iyAttackConfirm').addEventListener('click',e=>{if(!syncAttackInputGate()){e.preventDefault();e.stopImmediatePropagation();return false;}return resolveAttack(e);},{capture:true});for(const id of ['iyAttackValue','iyDefendValue'])for(const evt of ['input','change','keyup','blur'])q(id).addEventListener(evt,syncAttackInputGate);document.querySelectorAll('[data-iy-color]').forEach(b=>b.onclick=()=>setAttackColor(b.dataset.iyColor));q('iyInspectImage').onerror=function(){onImageError(this)};q('iyAttackConfirm').disabled=true;q('iyAttackConfirm').setAttribute('aria-disabled','true');window.addEventListener('pageshow',syncAttackInputGate);const diag=attackGuardSelfTest();if(!diag.ok)console.error('InuYasha attack guard self-test failed',diag);
+    populateDeckSelectors();q('iyGameClose').onclick=close;q('iyReset').onclick=resetGame;q('iyUserDeck').onchange=resetGame;q('iyAiDeck').onchange=resetGame;q('iyDraw').onclick=()=>draw('P1');q('iyPlaySelected').onclick=playSelected;q('iyDiscardSelected').onclick=discardSelected;q('iyAiDraw').onclick=()=>draw('P2');q('iyAiPlayButton').onclick=aiPlay;q('iyReady').onclick=readyUser;q('iyResolveAttack').onclick=openAttackDialog;q('iyDirectAttack').onclick=()=>{if(canAttackPlayer()){attackTarget='P2';openAttackDialog();}};q('iyClearAttack').onclick=()=>{attackSource=null;attackTarget=null;render();};q('iyInspectClose').onclick=()=>{inspectCard=null;renderInspector();};q('iyAttackCancel').onclick=()=>{q('iyAttackModal').classList.remove('open');q('iyAttackModal').setAttribute('aria-hidden','true');};q('iyAttackConfirm').onclick=null;q('iyAttackConfirm').addEventListener('click',e=>{if(!syncAttackInputGate()){e.preventDefault();e.stopImmediatePropagation();return false;}return resolveAttack(e);},{capture:true});for(const id of ['iyAttackValue','iyDefendValue'])for(const evt of ['input','change','keyup','blur'])q(id).addEventListener(evt,syncAttackInputGate);document.querySelectorAll('[data-iy-color]').forEach(b=>b.onclick=()=>setAttackColor(b.dataset.iyColor));q('iyInspectImage').onerror=function(){onImageError(this)};q('iyAttackConfirm').disabled=true;q('iyAttackConfirm').setAttribute('aria-disabled','true');window.addEventListener('pageshow',syncAttackInputGate);const diag=attackGuardSelfTest();if(!diag.ok)console.error('InuYasha attack guard self-test failed',diag);
     q('launchInuyasha')?.addEventListener('click',open);q('inuyashaBtn')?.addEventListener('click',open);
   }
   window.InuYashaTabletop={VERSION:BUILD,open,close,reset:resetGame,diagnostics:attackGuardSelfTest,get state(){return state;}};

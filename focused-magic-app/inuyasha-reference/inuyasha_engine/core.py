@@ -15,6 +15,7 @@ class Color(str, Enum):
     GREEN = "green"
     PURPLE = "purple"
     BLACK = "black"
+    WHITE = "white"
 
 
 class TimingWindow(str, Enum):
@@ -65,7 +66,7 @@ class CharacterState:
         """
         if color not in self.color_values:
             raise RuleError(f"{self.title} has no implemented {color.value} value")
-        return (
+        return max(0,
             self.color_values[color]
             + self.temporary_color_modifiers.get(color, 0)
             + self.constant_color_modifiers.get(color, 0)
@@ -119,8 +120,9 @@ class AttackContext:
     turn_active_player_id: str
     attacking_player_id: str
     attacker: CharacterState
-    defender: CharacterState
+    defender: Optional[CharacterState]
     color: Color
+    defending_player_id: Optional[str] = None
     attacker_final_value: Optional[int] = None
     defender_final_value: Optional[int] = None
     defender_defeated_by_attack: bool = False
@@ -156,7 +158,7 @@ class GameState:
             attack_id=ctx.attack_id,
             active_player_id=ctx.attacking_player_id,
             attacker_title=ctx.attacker.title,
-            defender_title=ctx.defender.title,
+            defender_title=ctx.defender.title if ctx.defender else ctx.defending_player_id,
             color=ctx.color,
             detail=detail,
         )
@@ -252,6 +254,30 @@ class GameState:
                 ctx.shard_stolen = True
                 self._open_window(ctx, TimingWindow.JEWEL_SHARD_STOLEN)
 
+        self._open_window(ctx, TimingWindow.ATTACK_END)
+        ctx.ended = True
+        return ctx
+
+    def attack_player(self, attacker: CharacterState, defending_player_id: str, color: Color) -> AttackContext:
+        self.player(defending_player_id)
+        self.player(attacker.controller_id)
+        if attacker not in self.characters or not attacker.in_play or not attacker.face_up or attacker.defeated or not attacker.ready:
+            raise RuleError("Choose a ready character you control in play")
+        if attacker.controller_id == defending_player_id:
+            raise RuleError("You cannot attack yourself")
+        if any(c.controller_id == defending_player_id and c.in_play and c.face_up and not c.defeated for c in self.characters):
+            raise RuleError("A direct attack requires the opponent to control no characters; a color mismatch does not permit it")
+        if color not in attacker.color_values:
+            raise RuleError("Choose a color printed on the attacking character")
+        ctx = AttackContext(self._next_attack_id, self.turn_active_player_id, attacker.controller_id,
+                            attacker, None, color, defending_player_id=defending_player_id)
+        self._next_attack_id += 1
+        attacker.expend()
+        self._open_window(ctx, TimingWindow.CHARACTER_EXPENDED)
+        self._open_window(ctx, TimingWindow.WHEN_ATTACKING)
+        if self._steal_one_opaque_shard(attacker.controller_id, defending_player_id):
+            ctx.shard_stolen = True
+            self._open_window(ctx, TimingWindow.JEWEL_SHARD_STOLEN)
         self._open_window(ctx, TimingWindow.ATTACK_END)
         ctx.ended = True
         return ctx

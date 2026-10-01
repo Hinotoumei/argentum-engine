@@ -8,7 +8,7 @@
     constructor(message){super(message);this.name='RuleError';}
   }
 
-  const Color=Object.freeze({RED:'red',BLUE:'blue',GREEN:'green',PURPLE:'purple',BLACK:'black'});
+  const Color=Object.freeze({RED:'red',BLUE:'blue',GREEN:'green',PURPLE:'purple',BLACK:'black',WHITE:'white'});
   const TimingWindow=Object.freeze({
     CHARACTER_EXPENDED:'when_character_expended',
     WHEN_ATTACKING:'when_attacking',
@@ -32,7 +32,9 @@
     get expended(){return !this.ready;}
     finalColorValue(color){
       if(!(color in this.colorValues))throw new RuleError(`${this.title} has no implemented ${color} value`);
-      return Number(this.colorValues[color]||0)+Number(this.temporaryColorModifiers[color]||0)+Number(this.constantColorModifiers[color]||0);
+      const value=Number(this.colorValues[color])+Number(this.temporaryColorModifiers[color]||0)+Number(this.constantColorModifiers[color]||0);
+      if(!Number.isFinite(value))throw new RuleError('Color values must be finite numbers');
+      return Math.max(0,value);
     }
     expend(){if(!this.ready)throw new RuleError(`${this.title} is already expended`);this.ready=false;}
     defeat(){this.defeated=true;this.faceUp=false;this.ready=false;for(const attachment of this.attachments)attachment.defeatWithHost();}
@@ -48,7 +50,7 @@
     player(playerId){const p=this.players[playerId];if(!p)throw new RuleError(`Unknown player: ${playerId}`);return p;}
     registerWindowHandler(window,handler){(this._windowHandlers[window]||(this._windowHandlers[window]=[])).push(handler);}
     _openWindow(ctx,window,detail=null){
-      const event={window,attackId:ctx.attackId,activePlayerId:ctx.attackingPlayerId,attackerTitle:ctx.attacker.title,defenderTitle:ctx.defender.title,color:ctx.color,detail};
+      const event={window,attackId:ctx.attackId,activePlayerId:ctx.attackingPlayerId,attackerTitle:ctx.attacker.title,defenderTitle:ctx.defender?.title||ctx.defendingPlayerId,color:ctx.color,detail};
       this.eventLog.push(event);for(const handler of [...(this._windowHandlers[window]||[])])handler(this,ctx,event);
     }
     _validateBasicAttack(attacker,defender,color){
@@ -58,7 +60,7 @@
       if(attacker.defeated||!attacker.faceUp)throw new RuleError('A defeated/facedown character cannot declare this v0.1 attack');
       if(defender.defeated||!defender.faceUp)throw new RuleError('A defeated/facedown character cannot be the v0.1 defender');
       if(!attacker.ready)throw new RuleError('The attacking character must be ready before it is expended to attack');
-      if(!(color in attacker.colorValues)||!(color in defender.colorValues))throw new RuleError('Both test characters need an implemented value for the chosen attack color');
+      if(!Object.values(Color).includes(color)||!(color in attacker.colorValues)||!(color in defender.colorValues))throw new RuleError('Choose a color printed on both characters');
     }
     _stealOneOpaqueShard(thiefId,victimId){
       const thief=this.player(thiefId),victim=this.player(victimId);if(!victim.jewelShards.length)return false;
@@ -75,6 +77,17 @@
         defender.defeat();ctx.defenderDefeatedByAttack=true;this._openWindow(ctx,TimingWindow.CHARACTER_DEFEATED);
         if(this._stealOneOpaqueShard(attacker.controllerId,defender.controllerId)){ctx.shardStolen=true;this._openWindow(ctx,TimingWindow.JEWEL_SHARD_STOLEN);}
       }
+      this._openWindow(ctx,TimingWindow.ATTACK_END);ctx.ended=true;return ctx;
+    }
+    attackPlayer(attacker,defendingPlayerId,color){
+      this.player(defendingPlayerId);this.player(attacker.controllerId);
+      if(!this.characters.includes(attacker)||!attacker.inPlay||!attacker.faceUp||attacker.defeated||!attacker.ready)throw new RuleError('Choose a ready character you control in play');
+      if(attacker.controllerId===defendingPlayerId)throw new RuleError('You cannot attack yourself');
+      if(this.characters.some(c=>c.controllerId===defendingPlayerId&&c.inPlay&&c.faceUp&&!c.defeated))throw new RuleError('A direct attack requires the opponent to control no characters; a color mismatch does not permit it');
+      if(!Object.values(Color).includes(color)||!Object.hasOwn(attacker.colorValues,color))throw new RuleError('Choose a color printed on the attacking character');
+      const ctx={attackId:this._nextAttackId++,turnActivePlayerId:this.turnActivePlayerId,attackingPlayerId:attacker.controllerId,defendingPlayerId,attacker,defender:null,color,attackerFinalValue:null,defenderFinalValue:null,defenderDefeatedByAttack:false,shardStolen:false,ended:false};
+      attacker.expend();this._openWindow(ctx,TimingWindow.CHARACTER_EXPENDED);this._openWindow(ctx,TimingWindow.WHEN_ATTACKING);
+      if(this._stealOneOpaqueShard(attacker.controllerId,defendingPlayerId)){ctx.shardStolen=true;this._openWindow(ctx,TimingWindow.JEWEL_SHARD_STOLEN);}
       this._openWindow(ctx,TimingWindow.ATTACK_END);ctx.ended=true;return ctx;
     }
   }
