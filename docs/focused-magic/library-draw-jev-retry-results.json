@@ -1,0 +1,15 @@
+{
+  "verification": "User-authorized unchanged retry through existing ai-focused just recipe",
+  "result": "BUILD SUCCESSFUL",
+  "duration": "3m3s",
+  "exitCode": 0,
+  "sourceOrTimeoutChanged": false,
+  "jevCases": [
+    {"name": "uses Decisions API choice schema and bearer auth, accepts typed answer", "status": "passed"},
+    {"name": "rejects HTTP errors, malformed answers and choices not in the request", "status": "passed"},
+    {"name": "choice sessions reject invented IDs and skip forced choices", "status": "passed"},
+    {"name": "large choices and integer ranges preserve the last option beyond cardinality 255", "status": "passed"}
+  ],
+  "otherSelectedSuites": ["ArenaHarnessTest", "FrozenBaselineTest", "AIPlayerFactoryTest", "DecisionBudgetTest"],
+  "limits": "The isolated selection passing does not erase the recorded full-build failure or establish the subsequent full gate; that gate is being rerun separately."
+}

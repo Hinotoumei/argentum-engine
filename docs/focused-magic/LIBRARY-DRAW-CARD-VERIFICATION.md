@@ -1,0 +1,19 @@
+# Native library and draw card verification
+
+The preceding hellbent batch is published at `9ae762f7195fd7ae52bedd9400ac4d9c6194e4e3`. Its evidence remains preserved separately. This record covers the subsequent native Biblioplex and Blood Scrivener batch.
+
+The Biblioplex has a new STX canonical definition and fifteen authored scenarios. Its activated ability uses an activation-only zero-or-seven hand-size gate and two independent private-look choices: reveal an instant/sorcery into hand; otherwise optionally put the card into the graveyard. Scenarios cover legal zero/seven and illegal one/six/eight hand sizes, instant/sorcery selection and reveal privacy, independently declining each option, nonmatching cards, a real draw in response, source removal, empty library, mana/tap rejection, and actual normal land play supplying colorless mana.
+
+Blood Scrivener has a new DGM canonical definition and ten authored scenarios. Its existing ReplaceDrawWith vocabulary replaces a single empty-hand draw with drawing two followed by losing one life. Tests cover printed casting/payment rejection, empty/nonempty hands, a real two-card spell's sequential draws, two/three competing replacement sources and actual decisions, opponent/controller distinction, a real draw-step draw, and source removal in response.
+
+Both definitions compose existing SDK data; no engine or SDK change has been made. Canonical STX/DGM source data, current rulings, all printings, and image HTTP 200 responses have been fetched. Assay reads The Biblioplex's mana ability but declines its lookup; it declines Blood Scrivener. These are not whole-card model passes. Current draft data and preparatory scripts are under the external tooling directory.
+
+The focused gameplay, snapshot, round-trip, and lint gate passed in 15 minutes 42 seconds. All fifteen Biblioplex and ten Blood Scrivener scenarios passed with zero failures, errors, or skips. Review confirmed the DGM/STX snapshots add only the intended card; existing card trees are unchanged. See `library-draw-card-test-results.json`.
+
+Fresh repository printing checks passed for both cards. Installed Assay differential agrees on all 59 compared STX cards and all six compared DGM cards, with zero divergences. The new cards remain grammar declines, not whole-card Assay passes. See `library-draw-printing-check-results.json` and `library-draw-assay-results.json`.
+
+The required full regression build failed after 20 minutes 39 seconds in `:ai:test`. The sole AI failure is the unchanged `JevClientTest` success-path test: its real loopback HTTP request exceeded its 1000ms timeout. The cause is not established; no test timeout or production behavior has been changed. See `library-draw-full-build-failure.json`. Repository instructions require confirmation before continuing an unrelated failure, so a focused unchanged retry and subsequent full gate await that confirmation.
+
+The user authorized an unchanged retry followed by the full build if it passes. The existing `ai-focused` recipe passed in 3 minutes 3 seconds: all four JevClientTest cases and the selected AI regression classes passed, including the previously timed-out success path. No timeout or test assertions changed. See `library-draw-jev-retry-results.json`. The subsequent full regression gate passed in 55 minutes 16 seconds, with 136 actionable tasks (36 executed, 100 up-to-date), retaining only the accepted mtgish test exclusion. See `library-draw-card-full-build-results.json` for module totals. Build session `62323` exited successfully.
+
+These results establish native gameplay and full regression verification for this batch. They do not establish exact Constructed deck admission, broader provider behavior, browser acceptance for these two cards, deployment, or complete packet acceptance. Twelve packet identities remain after this verified batch. The initial failed build is retained as historical evidence rather than erased.

@@ -1,0 +1,19 @@
+{
+  "phase": "library-draw-batch",
+  "command": "just next-cards-full-gate: build :oracle-assay:installDist -x :mtgish-tooling:test -DupdateSnapshots=true --max-workers=2 -PkotlinCompileParallelism=1",
+  "result": "failed",
+  "exitCode": 1,
+  "duration": "20m39s",
+  "failedTask": ":ai:test",
+  "failures": [
+    {
+      "suite": "com.wingedsheep.ai.jev.JevClientTest",
+      "case": "uses Decisions API choice schema and bearer auth, accepts typed answer",
+      "error": "java.net.http.HttpTimeoutException: request timed out",
+      "fixture": "Local loopback HttpServer, 1000ms request timeout",
+      "sourceUnchangedByThisBatch": true
+    }
+  ],
+  "interpretation": "Cause not established. The failing success-path test uses a real loopback HTTP exchange and a one-second deadline. It is outside the two-card change. No production or fixture change made; repository instructions require confirmation before continuing an unrelated failure.",
+  "targetedEvidence": "Both cards' 25 scenarios and snapshot/lint checks passed separately. The full gate is incomplete; no publication or deployment claimed."
+}

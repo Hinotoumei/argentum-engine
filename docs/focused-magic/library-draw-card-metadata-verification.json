@@ -1,0 +1,48 @@
+{
+  "verification": "Fresh canonical Scryfall metadata and rulings match authored definitions; gameplay verification is separate",
+  "cards": [
+    {
+      "name": "The Biblioplex",
+      "canonicalSet": "STX",
+      "source": "mtg-sets/2017-2022/src/main/kotlin/com/wingedsheep/mtg/sets/definitions/stx/cards/TheBiblioplex.kt",
+      "exactFields": [
+        "mana_cost",
+        "type_line",
+        "oracle_text",
+        "collector_number",
+        "artist",
+        "name",
+        "color_identity",
+        "rarity",
+        "image_uri",
+        "power/toughness when present",
+        "official rulings"
+      ],
+      "earliestRelease": "2021-04-23",
+      "imageHttpStatus": 200,
+      "imageCheckedDuringCanonicalFetch": true
+    },
+    {
+      "name": "Blood Scrivener",
+      "canonicalSet": "DGM",
+      "source": "mtg-sets/2008-2016/src/main/kotlin/com/wingedsheep/mtg/sets/definitions/dgm/cards/BloodScrivener.kt",
+      "exactFields": [
+        "mana_cost",
+        "type_line",
+        "oracle_text",
+        "collector_number",
+        "artist",
+        "flavor_text",
+        "name",
+        "color_identity",
+        "rarity",
+        "image_uri",
+        "power/toughness when present",
+        "official rulings"
+      ],
+      "earliestRelease": "2013-05-03",
+      "imageHttpStatus": 200,
+      "imageCheckedDuringCanonicalFetch": true
+    }
+  ]
+}

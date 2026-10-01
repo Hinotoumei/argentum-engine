@@ -1,0 +1,12 @@
+{
+  "verification": "Installed Assay differential against reviewed STX and DGM snapshots",
+  "sets": [
+    {"set": "STX", "handWritten": 85, "compared": 59, "agree": 59, "divergent": 0, "grammarDeclines": 25, "multiFaceOutOfScope": 1, "exitCode": 0},
+    {"set": "DGM", "handWritten": 10, "compared": 6, "agree": 6, "divergent": 0, "grammarDeclines": 4, "multiFaceOutOfScope": 0, "exitCode": 0}
+  ],
+  "newCards": [
+    {"name": "The Biblioplex", "wholeCardAssayPass": false, "reason": "Mana ability round-trips; lookup grammar declines"},
+    {"name": "Blood Scrivener", "wholeCardAssayPass": false, "reason": "Conditional draw replacement grammar declines"}
+  ],
+  "limits": "Zero divergences applies only to compared cards. Declines are not passes. Dedicated behavioral scenarios supply separate evidence."
+}

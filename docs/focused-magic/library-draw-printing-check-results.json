@@ -1,0 +1,8 @@
+{
+  "verification": "Repository check-card-printing.py --refresh completed successfully for each card",
+  "cards": [
+    {"name": "The Biblioplex", "canonicalActual": "STX", "canonicalExpected": "STX", "earliestRelease": "2021-04-23", "scryfallPrintings": 5, "allScaffoldedReprintsCovered": true, "exitCode": 0},
+    {"name": "Blood Scrivener", "canonicalActual": "DGM", "canonicalExpected": "DGM", "earliestRelease": "2013-05-03", "scryfallPrintings": 2, "allScaffoldedReprintsCovered": true, "unscaffoldedLaterSet": "PIO", "exitCode": 0}
+  ],
+  "limits": "Printing placement and registry discovery are separate from gameplay verification."
+}

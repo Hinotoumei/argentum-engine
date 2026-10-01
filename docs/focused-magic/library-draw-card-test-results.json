@@ -1,0 +1,163 @@
+{
+  "scope": "Dedicated native library/draw scenarios; targeted gate completed successfully in 15m42s; full regression separate",
+  "results": [
+    {
+      "suite": {
+        "name": "com.wingedsheep.engine.scenarios.BloodScrivenerScenarioTest",
+        "tests": "10",
+        "skipped": "0",
+        "failures": "0",
+        "errors": "0",
+        "timestamp": "2026-10-01T17:49:22.495Z",
+        "hostname": "DESKTOP-6K9JG6J",
+        "time": "135.975"
+      },
+      "cases": [
+        {
+          "name": "normal casting pays one and black and resolves as a 2-1 creature",
+          "seconds": "2.646",
+          "status": "passed"
+        },
+        {
+          "name": "printed cost rejects with only one mana without changing state",
+          "seconds": "0.106",
+          "status": "passed"
+        },
+        {
+          "name": "an actual empty-hand draw becomes two cards and one life lost",
+          "seconds": "0.312",
+          "status": "passed"
+        },
+        {
+          "name": "a nonempty hand leaves the draw and life total unchanged",
+          "seconds": "0.045",
+          "status": "passed"
+        },
+        {
+          "name": "a real two-card spell draws three total because draws happen one at a time",
+          "seconds": "0.04",
+          "status": "passed"
+        },
+        {
+          "name": "2 replacement sources add one card and one lost life each without recursion",
+          "seconds": "0.095",
+          "status": "passed"
+        },
+        {
+          "name": "3 replacement sources add one card and one lost life each without recursion",
+          "seconds": "0.058",
+          "status": "passed"
+        },
+        {
+          "name": "an opponent's Scrivener does not replace the controller's draw",
+          "seconds": "0.037",
+          "status": "passed"
+        },
+        {
+          "name": "a real draw-step draw uses the same empty-hand replacement",
+          "seconds": "0.187",
+          "status": "passed"
+        },
+        {
+          "name": "destroying the source in response restores the ordinary draw",
+          "seconds": "0.131",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "suite": {
+        "name": "com.wingedsheep.engine.scenarios.TheBiblioplexScenarioTest",
+        "tests": "15",
+        "skipped": "0",
+        "failures": "0",
+        "errors": "0",
+        "timestamp": "2026-10-01T17:54:07.105Z",
+        "hostname": "DESKTOP-6K9JG6J",
+        "time": "167.767"
+      },
+      "cases": [
+        {
+          "name": "lookup activates with exactly 0 cards and may leave a nonmatching card on top",
+          "seconds": "4.577",
+          "status": "passed"
+        },
+        {
+          "name": "lookup activates with exactly 7 cards and may leave a nonmatching card on top",
+          "seconds": "0.13",
+          "status": "passed"
+        },
+        {
+          "name": "lookup at 1 cards rejects without paying or tapping",
+          "seconds": "0.203",
+          "status": "passed"
+        },
+        {
+          "name": "lookup at 6 cards rejects without paying or tapping",
+          "seconds": "0.076",
+          "status": "passed"
+        },
+        {
+          "name": "lookup at 8 cards rejects without paying or tapping",
+          "seconds": "0.036",
+          "status": "passed"
+        },
+        {
+          "name": "matching Shock is privately looked at then revealed into hand",
+          "seconds": "2.969",
+          "status": "passed"
+        },
+        {
+          "name": "matching Divination is privately looked at then revealed into hand",
+          "seconds": "0.067",
+          "status": "passed"
+        },
+        {
+          "name": "declining a matching card independently permits graveyard choice false",
+          "seconds": "0.056",
+          "status": "passed"
+        },
+        {
+          "name": "declining a matching card independently permits graveyard choice true",
+          "seconds": "0.093",
+          "status": "passed"
+        },
+        {
+          "name": "a nonmatching creature may go to the graveyard",
+          "seconds": "0.076",
+          "status": "passed"
+        },
+        {
+          "name": "a real response draw changes hand size without disabling resolution",
+          "seconds": "0.07",
+          "status": "passed"
+        },
+        {
+          "name": "exiling the source in response does not cancel its lookup",
+          "seconds": "0.063",
+          "status": "passed"
+        },
+        {
+          "name": "empty library makes lookup finish without a choice or draw loss",
+          "seconds": "0.052",
+          "status": "passed"
+        },
+        {
+          "name": "unaffordable lookup rejects atomically",
+          "seconds": "0.063",
+          "status": "passed"
+        },
+        {
+          "name": "normal land play supplies colorless mana immediately and tapped lookup rejects",
+          "seconds": "0.113",
+          "status": "passed"
+        }
+      ]
+    }
+  ],
+  "reviewedSnapshots": {
+    "DGM": "Only Blood Scrivener added",
+    "STX": "Only The Biblioplex added"
+  },
+  "scenarioPasses": 25
+}
