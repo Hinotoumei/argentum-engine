@@ -374,6 +374,129 @@
     ]
 }
 
+// Jagged Poppet
+{
+    "name": "Jagged Poppet",
+    "manaCost": "{1}{B}{R}",
+    "typeLine": "Creature — Ogre Warrior",
+    "oracleText": "Whenever this creature is dealt damage, discard that many cards.\nHellbent — Whenever this creature deals combat damage to a player, if you have no cards in hand, that player discards cards equal to the damage.",
+    "creatureStats": {
+        "power": 3,
+        "toughness": 4
+    },
+    "script": {
+        "triggeredAbilities": [
+            {
+                "id": "Jagged Poppet:1",
+                "trigger": "DamageReceivedEvent",
+                "effect": {
+                    "type": "Composite",
+                    "effects": [
+                        {
+                            "type": "GatherCards",
+                            "source": {
+                                "type": "FromZone",
+                                "zone": "Hand"
+                            },
+                            "storeAs": "hand"
+                        },
+                        {
+                            "type": "SelectFromCollection",
+                            "from": "hand",
+                            "selection": {
+                                "type": "ChooseExactly",
+                                "count": {
+                                    "type": "ContextProperty",
+                                    "key": "TRIGGER_DAMAGE_AMOUNT"
+                                }
+                            },
+                            "storeSelected": "discarded",
+                            "prompt": "Choose cards to discard"
+                        },
+                        {
+                            "type": "MoveCollection",
+                            "from": "discarded",
+                            "destination": {
+                                "type": "ToZone",
+                                "zone": "Graveyard"
+                            },
+                            "moveType": "Discard"
+                        }
+                    ]
+                },
+                "descriptionOverride": "Whenever this creature is dealt damage, discard that many cards."
+            },
+            {
+                "id": "Jagged Poppet:2",
+                "trigger": {
+                    "type": "DealsDamageEvent",
+                    "damageType": "DamageCombat",
+                    "recipient": {
+                        "type": "RecipientPlayer",
+                        "player": "Any"
+                    }
+                },
+                "effect": {
+                    "type": "Composite",
+                    "effects": [
+                        {
+                            "type": "GatherCards",
+                            "source": {
+                                "type": "FromZone",
+                                "zone": "Hand",
+                                "player": "TriggeringPlayer"
+                            },
+                            "storeAs": "hand"
+                        },
+                        {
+                            "type": "SelectFromCollection",
+                            "from": "hand",
+                            "selection": {
+                                "type": "ChooseExactly",
+                                "count": {
+                                    "type": "ContextProperty",
+                                    "key": "TRIGGER_DAMAGE_AMOUNT"
+                                }
+                            },
+                            "chooser": "TriggeringPlayer",
+                            "storeSelected": "discarded",
+                            "prompt": "Choose cards to discard"
+                        },
+                        {
+                            "type": "MoveCollection",
+                            "from": "discarded",
+                            "destination": {
+                                "type": "ToZone",
+                                "zone": "Graveyard",
+                                "player": "TriggeringPlayer"
+                            },
+                            "moveType": "Discard"
+                        }
+                    ]
+                },
+                "interveningIf": {
+                    "type": "Exists",
+                    "player": "You",
+                    "zone": "Hand",
+                    "negate": true
+                },
+                "descriptionOverride": "Whenever this creature deals combat damage to a player, if you have no cards in hand, that player discards cards equal to the damage."
+            }
+        ]
+    },
+    "metadata": {
+        "collectorNumber": "115",
+        "rarity": "UNCOMMON",
+        "artist": "Jeff Miracola",
+        "flavorText": "Few puppets are so willing.",
+        "imageUri": "https://cards.scryfall.io/normal/front/e/7/e796a838-3599-4769-b90b-9bbbaad76fcb.jpg?1783943400"
+    },
+    "colorIdentityOverride": [
+        "BLACK",
+        "RED"
+    ]
+}
+
 // Macabre Waltz
 {
     "name": "Macabre Waltz",
