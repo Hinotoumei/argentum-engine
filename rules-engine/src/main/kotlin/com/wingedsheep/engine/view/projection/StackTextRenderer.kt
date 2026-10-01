@@ -69,7 +69,7 @@ internal class StackTextRenderer(
             val context = EffectContext(
                 sourceId = spellEntityId,
                 controllerId = spellOnStack.casterId,
-                xValue = spellOnStack.xValue,
+                xValue = spellOnStack.additionalCostPayXLifeAmount ?: spellOnStack.xValue,
                 declaredCostSlot = spellOnStack.declaredCostSlot,
                 wasBlightPaid = spellOnStack.wasBlightPaid,
                 sacrificedPermanents = spellOnStack.sacrificedPermanents,
@@ -135,7 +135,7 @@ internal class StackTextRenderer(
         val context = EffectContext(
             sourceId = spellEntityId,
             controllerId = spellOnStack.casterId,
-            xValue = spellOnStack.xValue,
+            xValue = spellOnStack.additionalCostPayXLifeAmount ?: spellOnStack.xValue,
             sacrificedPermanents = spellOnStack.sacrificedPermanents,
             discardedAsCostCards = spellOnStack.discardedAsCostCards,
             exiledCardCount = spellOnStack.exiledCardCount,

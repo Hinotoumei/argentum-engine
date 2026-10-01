@@ -841,7 +841,9 @@ definitions construct these through the facade, e.g. `Costs.additional.Sacrifice
   `DynamicAmount.AdditionalCostBlightAmount`.
 - `Costs.additional.PayXLife(minCount = 0)` — "as an additional cost to cast this spell, pay X life."
   The caster declares X at cast time (capped at their current life total) and X is fed to the spell's
-  effects through the resolution **X value** — i.e. read it with `DynamicAmount.XValue` and filter with
+  effects through the resolution **X value**. The validated life payment, including zero, takes
+  precedence over an unrelated submitted mana-X field, and spell copies inherit that value without
+  paying life again. The native stack badge and effect text display this same validated X to both players. Read it with `DynamicAmount.XValue` and filter with
   `CardPredicate.ManaValueAtMostX` / `manaValueAtMostX()` (Vicious Rivalry: "pay X life; destroy all
   artifacts and creatures with mana value X or less"). A card using this cost must **not** also have an
   `{X}` in its mana cost — both write the same X slot. The client shows a numeric X picker (no target

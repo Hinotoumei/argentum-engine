@@ -9,7 +9,6 @@ import com.wingedsheep.engine.state.GameState
 import com.wingedsheep.engine.state.components.identity.CardComponent
 import com.wingedsheep.engine.state.components.stack.SpellOnStackComponent
 import com.wingedsheep.engine.state.components.stack.TargetsComponent
-import com.wingedsheep.engine.state.components.stack.TriggeredAbilityOnStackComponent
 import com.wingedsheep.sdk.model.EntityId
 import com.wingedsheep.sdk.scripting.effects.CopyTargetSpellEffect
 import kotlin.reflect.KClass
@@ -49,9 +48,8 @@ class CopyTargetSpellExecutor(
         val cardComponent = container.get<CardComponent>()
             ?: return EffectResult.error(state, "Target spell has no CardComponent")
 
-        // Permanent spells (creatures, artifacts, ...) have no spellEffect; their
-        // resolution puts a permanent onto the battlefield. Only the
-        // TriggeredAbilityOnStackComponent fallback path needs a spellEffect.
+        // Permanent spells have no spellEffect; the shared spell-copy path keeps their
+        // characteristics and resolves them onto the battlefield as tokens.
         val spellEffect = cardComponent.spellEffect
         val spellName = cardComponent.name
         val targetsComponent = container.get<TargetsComponent>()
@@ -109,47 +107,15 @@ class CopyTargetSpellExecutor(
             ))
         }
 
-        // If the original spell has no targets, create the copy immediately.
-        // For permanent spells (no spellEffect) and when removing the Legendary supertype
-        // (CR 707.10f resolves the copy into a token), we use putSpellCopy so we get a real
-        // spell entity whose CardComponent can be patched. For instant/sorcery spells
-        // without the legendary clause, the lightweight TriggeredAbilityOnStackComponent
-        // path is sufficient.
+        // A copy remains a spell even when it has no targets. The shared spell-copy path
+        // preserves X, paid additional costs, modes and all other cast-time choices.
         if (targetRequirements.isEmpty()) {
-            if (effect.removeLegendary || spellEffect == null) {
-                return EffectResult.from(
-                    putInheritedCopies(
-                        state, spellEntityId, context.controllerId, copyCount,
-                        effect.keywordsForCopy.toSet(), effect.removeLegendary, tokenRiders
-                    )
+            return EffectResult.from(
+                putInheritedCopies(
+                    state, spellEntityId, context.controllerId, copyCount,
+                    effect.keywordsForCopy.toSet(), effect.removeLegendary, tokenRiders
                 )
-            }
-            var currentState = state
-            val allEvents = mutableListOf<GameEvent>()
-            val contextSourceId = context.sourceId
-            repeat(copyCount) {
-                val sourceId = if (contextSourceId != null) contextSourceId else {
-                    val (id, s) = currentState.newEntity()
-                    currentState = s
-                    id
-                }
-                val copyAbility = TriggeredAbilityOnStackComponent(
-                    sourceId = sourceId,
-            objectReferences = context.objectReferences,
-                    sourceName = spellName,
-                    controllerId = context.controllerId,
-                    effect = spellEffect,
-                    description = "Copy of $spellName"
-                )
-                val pushed = applyKeywordsToCopy(
-                    StackPlacement.putTriggeredAbility(currentState, copyAbility),
-                    effect.keywordsForCopy
-                )
-                if (pushed.outcome !is Outcome.Done) return EffectResult.from(pushed)
-                currentState = pushed.newState
-                allEvents.addAll(pushed.events)
-            }
-            return EffectResult.success(currentState, allEvents)
+            )
         }
 
         // Spell has targets — prompt for new target selection. Permanent spells

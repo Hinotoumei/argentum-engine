@@ -224,8 +224,9 @@ internal class NonPermanentSpellResolver(
             // A pay-X-life additional cost (AdditionalCost.PayXLife, e.g. Vicious Rivalry) feeds
             // its declared X through the same X slot read by DynamicAmount.XValue and the
             // ManaValue*X predicates. Such a card never also carries an {X} mana cost, so
-            // coalescing is unambiguous (CR 601.2b — the value is locked in as the spell is cast).
-            xValue = spellComponent.xValue ?: spellComponent.additionalCostPayXLifeAmount,
+            // the validated life payment is authoritative, including zero. An unrelated action X
+            // must not override that payment. Ordinary mana-X spells retain their cast-time X.
+            xValue = spellComponent.additionalCostPayXLifeAmount ?: spellComponent.xValue,
             totalManaSpent = spellComponent.manaSpentWhite + spellComponent.manaSpentBlue +
                 spellComponent.manaSpentBlack + spellComponent.manaSpentRed +
                 spellComponent.manaSpentGreen + spellComponent.manaSpentColorless,

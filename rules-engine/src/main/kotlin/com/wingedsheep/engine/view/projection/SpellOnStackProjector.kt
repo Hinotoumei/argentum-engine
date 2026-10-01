@@ -114,7 +114,7 @@ internal class SpellOnStackProjector(
             wasBlightPaid = spellOnStack.wasBlightPaid,
             giftPromised = giftPromised(spellOnStack, cardDef),
             // Get chosen X value for spells on the stack
-            chosenX = spellOnStack.xValue,
+            chosenX = spellOnStack.additionalCostPayXLifeAmount ?: spellOnStack.xValue,
             // Get sacrificed creature types for spells with sacrifice-as-cost (e.g., Endemic Plague)
             sacrificedCreatureTypes = spellOnStack.sacrificedPermanents
                 .flatMap { it.subtypes }.toSet()
