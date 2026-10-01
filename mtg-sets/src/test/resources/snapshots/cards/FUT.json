@@ -36,6 +36,62 @@
     ]
 }
 
+// Cutthroat il-Dal
+{
+    "name": "Cutthroat il-Dal",
+    "manaCost": "{3}{B}",
+    "typeLine": "Creature — Human Rogue",
+    "oracleText": "Hellbent — This creature has shadow as long as you have no cards in hand. (It can block or be blocked by only creatures with shadow.)",
+    "creatureStats": {
+        "power": 4,
+        "toughness": 1
+    },
+    "script": {
+        "staticAbilities": [
+            {
+                "type": "ConditionalStaticAbility",
+                "ability": {
+                    "type": "GrantKeyword",
+                    "keyword": "SHADOW",
+                    "filter": {
+                        "baseFilter": "permanent",
+                        "scope": "Self"
+                    }
+                },
+                "condition": {
+                    "type": "Exists",
+                    "player": "You",
+                    "zone": "Hand",
+                    "negate": true
+                }
+            }
+        ]
+    },
+    "metadata": {
+        "collectorNumber": "64",
+        "artist": "Vance Kovacs",
+        "flavorText": "Her blades slashed across the noble's shadow. He scoffed, then fell over dead.",
+        "imageUri": "https://cards.scryfall.io/normal/front/1/9/192bc089-696d-41b4-a02f-d7dc166feedd.jpg?1783943115",
+        "rulings": [
+            {
+                "date": "2021-03-19",
+                "text": "Once a creature has been blocked, that creature remains blocked and will deal and be dealt combat damage even if it gains or loses shadow or if the blocking creature gains or loses shadow."
+            },
+            {
+                "date": "2021-03-19",
+                "text": "If an attacking creature has multiple evasion abilities, such as shadow and flying, a creature can block it only if that creature satisfies all of the appropriate evasion abilities."
+            },
+            {
+                "date": "2021-03-19",
+                "text": "Multiple instances of shadow on the same creature are redundant."
+            }
+        ]
+    },
+    "colorIdentityOverride": [
+        "BLACK"
+    ]
+}
+
 // Dryad Arbor
 {
     "name": "Dryad Arbor",
