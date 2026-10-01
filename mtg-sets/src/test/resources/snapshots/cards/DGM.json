@@ -39,6 +39,73 @@
     ]
 }
 
+// Blood Scrivener
+{
+    "name": "Blood Scrivener",
+    "manaCost": "{1}{B}",
+    "typeLine": "Creature — Zombie Wizard",
+    "oracleText": "If you would draw a card while you have no cards in hand, instead you draw two cards and you lose 1 life.",
+    "creatureStats": {
+        "power": 2,
+        "toughness": 1
+    },
+    "script": {
+        "replacementEffects": [
+            {
+                "type": "ReplaceDrawWith",
+                "replacementEffect": {
+                    "type": "Composite",
+                    "effects": [
+                        {
+                            "type": "DrawCards",
+                            "count": {
+                                "type": "Fixed",
+                                "amount": 2
+                            }
+                        },
+                        {
+                            "type": "LoseLife",
+                            "amount": {
+                                "type": "Fixed",
+                                "amount": 1
+                            },
+                            "target": "Controller"
+                        }
+                    ]
+                },
+                "restrictions": [
+                    {
+                        "type": "Exists",
+                        "player": "You",
+                        "zone": "Hand",
+                        "negate": true
+                    }
+                ]
+            }
+        ]
+    },
+    "metadata": {
+        "collectorNumber": "22",
+        "rarity": "RARE",
+        "artist": "Peter Mohrbacher",
+        "flavorText": "Make sure you bleed the fine print.",
+        "imageUri": "https://cards.scryfall.io/normal/front/9/e/9ea8179a-d3c9-4cdc-a5b5-68cc73279050.jpg?1783940040",
+        "rulings": [
+            {
+                "date": "2013-04-15",
+                "text": "Any time you are instructed to draw more than one card, you draw them one at a time. For example, if you control Blood Scrivener and have no cards in hand and you’re instructed to “draw two cards,” your first card draw is replaced by drawing two cards and losing 1 life, then you’ll draw the second card from the original instruction. In total, you’ll draw three cards and lose 1 life."
+            },
+            {
+                "date": "2013-04-15",
+                "text": "Each additional Blood Scrivener you control will effectively add one card and 1 life lost. Say you control two Blood Scriveners and would draw a card while you have no cards in hand. The effect of one Blood Scrivener will replace the event “draw a card” with “draw two cards and lose 1 life.” The effect of the other Blood Scrivener will replace the drawing of the first of those two cards with “draw two cards and lose 1 life.” You’ll draw two cards and lose 1 life, then draw another card and lose another 1 life."
+            }
+        ]
+    },
+    "colorIdentityOverride": [
+        "BLACK"
+    ]
+}
+
 // Clear a Path
 {
     "name": "Clear a Path",
