@@ -1,0 +1,9 @@
+{
+  "scenario": "Native Gathan Raiders face-down casting and discard-to-morph through normal adapter controls",
+  "faceDownStats": "2/2",
+  "faceUpStats": "5/5",
+  "discardedCards": 1,
+  "handCards": 0,
+  "life": 20,
+  "pageErrors": []
+}

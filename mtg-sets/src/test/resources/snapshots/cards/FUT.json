@@ -144,6 +144,63 @@
     ]
 }
 
+// Gathan Raiders
+{
+    "name": "Gathan Raiders",
+    "manaCost": "{3}{R}{R}",
+    "typeLine": "Creature — Human Warrior",
+    "oracleText": "Hellbent — This creature gets +2/+2 as long as you have no cards in hand.\nMorph—Discard a card. (You may cast this card face down as a 2/2 creature for {3}. Turn it face up any time for its morph cost.)",
+    "creatureStats": {
+        "power": 3,
+        "toughness": 3
+    },
+    "keywordAbilities": [
+        {
+            "type": "Morph",
+            "morphCost": {
+                "type": "PayAtom",
+                "atom": "AtomDiscard"
+            }
+        }
+    ],
+    "script": {
+        "staticAbilities": [
+            {
+                "type": "ConditionalStaticAbility",
+                "ability": {
+                    "type": "ModifyStats",
+                    "powerBonus": 2,
+                    "toughnessBonus": 2,
+                    "filter": {
+                        "baseFilter": "permanent",
+                        "scope": "Self"
+                    }
+                },
+                "condition": {
+                    "type": "Exists",
+                    "player": "You",
+                    "zone": "Hand",
+                    "negate": true
+                }
+            }
+        ]
+    },
+    "metadata": {
+        "collectorNumber": "99",
+        "artist": "Paolo Parente",
+        "imageUri": "https://cards.scryfall.io/normal/front/8/a/8af5c695-d0f4-4ea7-bc12-f3a24d5b6a11.jpg?1783943106",
+        "rulings": [
+            {
+                "date": "2021-03-19",
+                "text": "Because damage remains marked on a creature until the damage is removed as the turn ends, nonlethal damage dealt to Gathan Raiders while your hand is empty may become lethal if a card is put into your hand during that turn."
+            }
+        ]
+    },
+    "colorIdentityOverride": [
+        "RED"
+    ]
+}
+
 // Keldon Megaliths
 {
     "name": "Keldon Megaliths",
