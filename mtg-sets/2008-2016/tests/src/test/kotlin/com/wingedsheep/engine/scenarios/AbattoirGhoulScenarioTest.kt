@@ -14,10 +14,12 @@ import io.kotest.matchers.shouldBe
  */
 class AbattoirGhoulScenarioTest : FunSpec({
 
+    // Catalog discovery belongs to shared spec setup, outside the timed gameplay test.
+    val cards = TestCards.all + listOf(AbattoirGhoul)
+
     fun createDriver(): GameTestDriver {
         val driver = GameTestDriver()
-        driver.registerCards(TestCards.all)
-        driver.registerCard(AbattoirGhoul)
+        driver.registerCards(cards)
         return driver
     }
 

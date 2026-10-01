@@ -26,10 +26,12 @@ import io.kotest.matchers.shouldNotBe
  */
 class ARealmRebornTest : FunSpec({
 
+    // Catalog discovery belongs to shared spec setup, outside the timed gameplay test.
+    val cards = TestCards.all + listOf(ARealmReborn)
+
     fun createDriver(): GameTestDriver {
         val driver = GameTestDriver()
-        driver.registerCards(TestCards.all)
-        driver.registerCard(ARealmReborn)
+        driver.registerCards(cards)
         return driver
     }
 
