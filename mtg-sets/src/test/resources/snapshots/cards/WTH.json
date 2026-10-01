@@ -475,6 +475,51 @@
     "colorIdentityOverride": []
 }
 
+// Null Rod
+{
+    "name": "Null Rod",
+    "manaCost": "{2}",
+    "typeLine": "Artifact",
+    "oracleText": "Activated abilities of artifacts can't be activated.",
+    "script": {
+        "staticAbilities": [
+            {
+                "type": "PreventActivatedAbilities",
+                "filter": {
+                    "cardPredicates": [
+                        "IsArtifact"
+                    ],
+                    "statePredicates": [
+                        "IsOnBattlefield"
+                    ]
+                }
+            }
+        ]
+    },
+    "metadata": {
+        "collectorNumber": "154",
+        "rarity": "RARE",
+        "artist": "Anson Maddocks",
+        "flavorText": "Gerrard: \"But it doesn't *do* anything!\"\nHanna: \"No—it *does* nothing.\"",
+        "imageUri": "https://cards.scryfall.io/normal/front/b/c/bc45f2cb-c256-4a0f-879a-c7db5b1a0b94.jpg?1783946713",
+        "rulings": [
+            {
+                "date": "2013-07-01",
+                "text": "This effect applies to all activated abilities of artifacts, including mana abilities."
+            },
+            {
+                "date": "2013-07-01",
+                "text": "This effect does not prevent triggered abilities from triggering and it doesn’t stop the effects of static abilities."
+            },
+            {
+                "date": "2008-04-01",
+                "text": "This covers only artifacts that are on the battlefield."
+            }
+        ]
+    },
+    "colorIdentityOverride": []
+}
+
 // Sage Owl
 {
     "name": "Sage Owl",
