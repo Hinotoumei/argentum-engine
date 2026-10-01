@@ -684,6 +684,52 @@
     ]
 }
 
+// Taste for Mayhem
+{
+    "name": "Taste for Mayhem",
+    "manaCost": "{R}",
+    "typeLine": "Enchantment — Aura",
+    "oracleText": "Enchant creature\nEnchanted creature gets +2/+0.\nHellbent — Enchanted creature gets an additional +2/+0 as long as you have no cards in hand.",
+    "script": {
+        "staticAbilities": [
+            {
+                "type": "ModifyStats",
+                "powerBonus": 2,
+                "toughnessBonus": 0
+            },
+            {
+                "type": "ConditionalStaticAbility",
+                "ability": {
+                    "type": "ModifyStats",
+                    "powerBonus": 2,
+                    "toughnessBonus": 0
+                },
+                "condition": {
+                    "type": "Exists",
+                    "player": "You",
+                    "zone": "Hand",
+                    "negate": true
+                }
+            }
+        ],
+        "auraTarget": {
+            "type": "TargetObject",
+            "filter": {
+                "baseFilter": "creature"
+            }
+        }
+    },
+    "metadata": {
+        "collectorNumber": "75",
+        "artist": "Greg Hildebrandt",
+        "flavorText": "The taste of blood breaks down what little self-control the Rakdos possess.",
+        "imageUri": "https://cards.scryfall.io/normal/front/2/0/20fbb2eb-5738-46e5-a0a6-8ee98c7c8cfb.jpg?1783943417"
+    },
+    "colorIdentityOverride": [
+        "RED"
+    ]
+}
+
 // Trygon Predator
 {
     "name": "Trygon Predator",
