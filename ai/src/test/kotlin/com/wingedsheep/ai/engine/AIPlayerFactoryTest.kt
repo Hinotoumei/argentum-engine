@@ -25,8 +25,11 @@ import io.kotest.matchers.types.shouldNotBeSameInstanceAs
 import com.wingedsheep.engine.core.Outcome
 
 class AIPlayerFactoryTest : FunSpec({
+    // Catalog discovery belongs to shared fixture setup, outside timed AI assertions.
+    val cards = TestCards.all
+
     fun game() = GameTestDriver().apply {
-        registerCards(TestCards.all)
+        registerCards(cards)
         initMirrorMatch(Deck.of("Forest" to 40), skipMulligans = true, startingPlayer = 0)
         passPriorityUntil(Step.PRECOMBAT_MAIN)
     }

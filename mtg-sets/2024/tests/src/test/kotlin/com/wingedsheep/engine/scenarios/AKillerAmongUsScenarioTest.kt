@@ -39,10 +39,11 @@ import com.wingedsheep.engine.core.Outcome
 class AKillerAmongUsScenarioTest : FunSpec({
 
     val abilityId = AKillerAmongUs.activatedAbilities.first().id
+    val cards = TestCards.all
 
     fun newDriver(): GameTestDriver {
         val driver = GameTestDriver()
-        driver.registerCards(TestCards.all)
+        driver.registerCards(cards)
         driver.registerCard(AKillerAmongUs)
         driver.initMirrorMatch(Deck.of("Forest" to 40), skipMulligans = true, startingPlayer = 0)
         driver.passPriorityUntil(Step.PRECOMBAT_MAIN)
