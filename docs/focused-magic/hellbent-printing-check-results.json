@@ -1,0 +1,9 @@
+{
+  "command": "scripts/check-card-printing.py <card> --refresh",
+  "checks": [
+    {"card": "Gathan Raiders", "canonical": "FUT", "earliestRelease": "2007-05-04", "scaffoldedReprints": ["ARC"], "unscaffoldedLaterSets": ["TSR", "PLST"], "exitCode": 0},
+    {"card": "Jagged Poppet", "canonical": "DIS", "earliestRelease": "2006-05-05", "scaffoldedReprints": [], "unscaffoldedLaterSets": ["GK2"], "exitCode": 0},
+    {"card": "Cutthroat il-Dal", "canonical": "FUT", "earliestRelease": "2007-05-04", "scaffoldedReprints": [], "unscaffoldedLaterSets": ["TSR"], "exitCode": 0}
+  ],
+  "result": "All canonical definitions are in the earliest real printing; all scaffolded later printings have rows. This is printing verification, not gameplay proof."
+}

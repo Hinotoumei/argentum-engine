@@ -1,0 +1,64 @@
+{
+  "cards": [
+    {
+      "card": "Gathan Raiders",
+      "canonicalSet": "fut",
+      "firstRelease": "2007-05-04",
+      "verifiedFields": [
+        "manaCost",
+        "typeLine",
+        "oracleText",
+        "collectorNumber",
+        "artist",
+        "imageUri",
+        "colorIdentity",
+        "power",
+        "toughness",
+        "rarity",
+        "rulings"
+      ],
+      "sourceId": "8af5c695-d0f4-4ea7-bc12-f3a24d5b6a11"
+    },
+    {
+      "card": "Jagged Poppet",
+      "canonicalSet": "dis",
+      "firstRelease": "2006-05-05",
+      "verifiedFields": [
+        "manaCost",
+        "typeLine",
+        "oracleText",
+        "collectorNumber",
+        "artist",
+        "imageUri",
+        "colorIdentity",
+        "flavorText",
+        "power",
+        "toughness",
+        "rarity",
+        "rulings"
+      ],
+      "sourceId": "e796a838-3599-4769-b90b-9bbbaad76fcb"
+    },
+    {
+      "card": "Cutthroat il-Dal",
+      "canonicalSet": "fut",
+      "firstRelease": "2007-05-04",
+      "verifiedFields": [
+        "manaCost",
+        "typeLine",
+        "oracleText",
+        "collectorNumber",
+        "artist",
+        "imageUri",
+        "colorIdentity",
+        "flavorText",
+        "power",
+        "toughness",
+        "rarity",
+        "rulings"
+      ],
+      "sourceId": "192bc089-696d-41b4-a02f-d7dc166feedd"
+    }
+  ],
+  "reprint": "Gathan Raiders ARC 40 fields verified, image HTTP 200; later unscaffolded TSR/PLST and Jagged GK2 packages not created"
+}

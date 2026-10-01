@@ -1,0 +1,13 @@
+{
+  "verification": "Fresh installed Assay differential against reviewed FUT and DIS snapshots",
+  "sets": [
+    {"set": "FUT", "handWritten": 14, "compared": 9, "agree": 9, "divergent": 0, "grammarDeclines": 4, "unmodelledScriptSlots": 1, "exitCode": 0},
+    {"set": "DIS", "handWritten": 14, "compared": 5, "agree": 5, "divergent": 0, "grammarDeclines": 9, "unmodelledScriptSlots": 0, "exitCode": 0}
+  ],
+  "newCards": [
+    {"name": "Gathan Raiders", "wholeCardAssayPass": false},
+    {"name": "Jagged Poppet", "wholeCardAssayPass": false},
+    {"name": "Cutthroat il-Dal", "wholeCardAssayPass": false}
+  ],
+  "limits": "Zero divergences applies only to compared cards. Declines and unmodelled slots are not passes; this check does not establish deployment or live acceptance."
+}

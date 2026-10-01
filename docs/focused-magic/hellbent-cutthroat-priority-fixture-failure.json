@@ -1,0 +1,30 @@
+{
+  "scope": "Initial Cutthroat response fixtures",
+  "suite": {
+    "name": "com.wingedsheep.engine.scenarios.CutthroatIlDalScenarioTest",
+    "tests": "8",
+    "skipped": "0",
+    "failures": "2",
+    "errors": "0",
+    "timestamp": "2026-10-01T16:14:33.239Z",
+    "hostname": "DESKTOP-6K9JG6J",
+    "time": "105.555"
+  },
+  "interpretation": "Two authored response tests submitted the attacker spell while the opponent held priority. Both were correctly rejected with You do not have priority. The fixtures now pass priority through the real PassPriority action before the response; their combat outcome assertions remain unchanged. This record is not an established shadow engine defect.",
+  "failures": [
+    {
+      "name": "gaining shadow after a normal block does not undo that block",
+      "failure": {
+        "message": "org.opentest4j.AssertionFailedError: expected:<Done> but was:<Rejected(reason=IllegalAction(message=You don't have priority))>",
+        "type": "org.opentest4j.AssertionFailedError"
+      }
+    },
+    {
+      "name": "losing shadow after a shadow block does not undo that block",
+      "failure": {
+        "message": "org.opentest4j.AssertionFailedError: expected:<Done> but was:<Rejected(reason=IllegalAction(message=You don't have priority))>",
+        "type": "org.opentest4j.AssertionFailedError"
+      }
+    }
+  ]
+}

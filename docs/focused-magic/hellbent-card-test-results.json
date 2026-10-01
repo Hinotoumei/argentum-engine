@@ -1,0 +1,179 @@
+{
+  "scope": "Dedicated native hellbent card scenarios",
+  "results": [
+    {
+      "suite": {
+        "name": "com.wingedsheep.engine.scenarios.GathanRaidersScenarioTest",
+        "tests": "7",
+        "skipped": "0",
+        "failures": "0",
+        "errors": "0",
+        "timestamp": "2026-10-01T16:21:35.110Z",
+        "hostname": "DESKTOP-6K9JG6J",
+        "time": "0.765"
+      },
+      "cases": [
+        {
+          "name": "normal casting pays printed mana and hellbent follows hand changes",
+          "seconds": "0.051",
+          "status": "passed",
+          "failure": null
+        },
+        {
+          "name": "face-down casting hides hellbent even when the hand becomes empty",
+          "seconds": "0.067",
+          "status": "passed",
+          "failure": null
+        },
+        {
+          "name": "printed casting cost cannot be paid with only four mana",
+          "seconds": "0.112",
+          "status": "passed",
+          "failure": null
+        },
+        {
+          "name": "drawing a card makes three marked damage lethal when hellbent ends",
+          "seconds": "0.139",
+          "status": "passed",
+          "failure": null
+        },
+        {
+          "name": "hellbent changes to the new controller's hand after Control Magic resolves",
+          "seconds": "0.101",
+          "status": "passed",
+          "failure": null
+        },
+        {
+          "name": "morph discards exactly one card with 0 cards remaining",
+          "seconds": "0.09",
+          "status": "passed",
+          "failure": null
+        },
+        {
+          "name": "morph discards exactly one card with 1 cards remaining",
+          "seconds": "0.035",
+          "status": "passed",
+          "failure": null
+        }
+      ]
+    },
+    {
+      "suite": {
+        "name": "com.wingedsheep.engine.scenarios.JaggedPoppetScenarioTest",
+        "tests": "7",
+        "skipped": "0",
+        "failures": "0",
+        "errors": "0",
+        "timestamp": "2026-10-01T16:21:36.787Z",
+        "hostname": "DESKTOP-6K9JG6J",
+        "time": "1.008"
+      },
+      "cases": [
+        {
+          "name": "normal casting pays black and red and creates the printed 3-4 creature",
+          "seconds": "0.052",
+          "status": "passed",
+          "failure": null
+        },
+        {
+          "name": "Shock damage makes its controller discard the event amount even if lethal",
+          "seconds": "0.104",
+          "status": "passed",
+          "failure": null
+        },
+        {
+          "name": "Flame Slash damage makes its controller discard the event amount even if lethal",
+          "seconds": "0.043",
+          "status": "passed",
+          "failure": null
+        },
+        {
+          "name": "damage with an empty hand resolves the mandatory discard without a choice",
+          "seconds": "0.048",
+          "status": "passed",
+          "failure": null
+        },
+        {
+          "name": "hellbent combat damage makes the damaged player choose exactly three discards",
+          "seconds": "0.071",
+          "status": "passed",
+          "failure": null
+        },
+        {
+          "name": "a nonempty hand at combat damage prevents the hellbent trigger",
+          "seconds": "0.046",
+          "status": "passed",
+          "failure": null
+        },
+        {
+          "name": "drawing in response turns off the intervening condition at resolution",
+          "seconds": "0.054",
+          "status": "passed",
+          "failure": null
+        }
+      ]
+    },
+    {
+      "suite": {
+        "name": "com.wingedsheep.engine.scenarios.CutthroatIlDalScenarioTest",
+        "tests": "8",
+        "skipped": "0",
+        "failures": "0",
+        "errors": "0",
+        "timestamp": "2026-10-01T16:19:25.080Z",
+        "hostname": "DESKTOP-6K9JG6J",
+        "time": "128.816"
+      },
+      "cases": [
+        {
+          "name": "printed cast creates a 4-1 and shadow tracks the controller's empty hand",
+          "seconds": "2.764",
+          "status": "passed",
+          "failure": null
+        },
+        {
+          "name": "normal and shadow blockers respect hellbent false at declaration",
+          "seconds": "0.372",
+          "status": "passed",
+          "failure": null
+        },
+        {
+          "name": "normal and shadow blockers respect hellbent true at declaration",
+          "seconds": "0.078",
+          "status": "passed",
+          "failure": null
+        },
+        {
+          "name": "gaining shadow after a normal block does not undo that block",
+          "seconds": "0.101",
+          "status": "passed",
+          "failure": null
+        },
+        {
+          "name": "shadow and flying both constrain blockers",
+          "seconds": "0.175",
+          "status": "passed",
+          "failure": null
+        },
+        {
+          "name": "losing shadow after a shadow block does not undo that block",
+          "seconds": "0.083",
+          "status": "passed",
+          "failure": null
+        },
+        {
+          "name": "an empty-handed defender's Cutthroat can block only shadow attackers",
+          "seconds": "0.095",
+          "status": "passed",
+          "failure": null
+        },
+        {
+          "name": "an additional shadow grant stays redundant with hellbent shadow",
+          "seconds": "0.059",
+          "status": "passed",
+          "failure": null
+        }
+      ]
+    }
+  ]
+}

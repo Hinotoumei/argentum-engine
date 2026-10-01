@@ -1,0 +1,19 @@
+# Native hellbent card verification
+
+October 1, 2026. Three native definitions compose existing SDK vocabulary without engine, SDK, server DTO, or provider rules changes. Each has its own scenario file and canonical original printing.
+
+- Gathan Raiders (FUT, ARC printing-only row): seven passing scenarios prove printed casting, actual face-down casting, hidden hellbent while face down, unpaid morph rejection, discarding with zero/one cards remaining, marked damage becoming lethal after a real Mind Stone draw, and projected control changing whose hand governs the bonus.
+- Jagged Poppet (DIS): seven passing scenarios prove printed casting, exact self-discard after Shock and lethal Flame Slash, an empty-hand discard, real hellbent combat causing the damaged opponent's discard, nonempty-hand trigger suppression, and a real draw in response invalidating its intervening condition at resolution.
+- Cutthroat il-Dal (FUT): eight passing scenarios prove printed casting and live shadow, normal/shadow blocker eligibility with and without hellbent, gaining/losing shadow after legal blocks preserving those blocks, all evasion requirements applying together, opposing conditional-shadow defenders, and redundant additional shadow.
+
+All 22 dedicated scenarios passed with snapshots, JSON round-trips, and lint. The full regression build also passed: 19,546 passes, 24 skips, zero failures/errors across 20 modules, with only the accepted legacy mtgish test exclusion. Unchanged tasks may reuse valid Gradle results. See hellbent-card-test-results.json and hellbent-card-full-build-results.json.
+
+The real local-server Chrome browser scenario drives normal adapter controls: casts Gathan face down as a 2/2 for three mana, chooses its turn-face-up action, answers the discard decision with the last hand card, and observes 5/5, empty hand, one graveyard card, and unchanged 20 life. No page errors occurred. The saved harness is focused-magic-app/assessment/gathan-raiders-local-browser.cjs; gathan-local-browser-results.json and verification-images/gathan-morph-local.png preserve evidence. A dev-scenario connection hook supplies local sessions in memory; production provider origins and deployment pins are unchanged.
+
+Fresh Scryfall field comparisons verify exact Oracle text, mana cost, type, stats, color identity, rarity, collector number, artist, image identity/HTTP 200, flavor when present, rulings, and earliest real printing. The repository's fresh printing check passes for all three, including Gathan's ARC row. Unscaffolded TSR/PLST/GK2 packages were not created. See hellbent-card-metadata-verification.json and hellbent-printing-check-results.json.
+
+Reviewed snapshots add only these three definitions; all earlier FUT/DIS definitions are semantically unchanged. Fresh Assay differentials have no divergences among compared cards: FUT nine of fourteen compared, DIS five of fourteen compared. Assay does not read any of these three new cards whole; a decline is not a pass. See hellbent-assay-results.json.
+
+Two authored-fixture mistakes were corrected before the successful gate: Gathan's first controller assertion read the base controller rather than projected control, and two Cutthroat response fixtures tried to cast while the opponent held priority. The corrected tests read projected control and submit a real pass before the response. The initial failures are preserved in hellbent-initial-test-assertion-failure.json and hellbent-cutthroat-priority-fixture-failure.json; they were not established engine defects.
+
+Fourteen packet cards still need native implementation and behavioral verification. Broader provider decisions, mandatory exact-deck Constructed admission/start, deployment, and live acceptance remain unfinished. The browser fixture and registry availability do not establish those results.
