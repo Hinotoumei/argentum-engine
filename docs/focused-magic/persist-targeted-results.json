@@ -1,0 +1,42 @@
+{
+  "status": "Final focused gate PASS after alternate artist correction",
+  "duration": "6m 13s",
+  "tests": 24,
+  "suites": [
+    {
+      "name": "com.wingedsheep.sdk.scripting.EntryCounterDestinationTest",
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "timestamp": "2026-10-02T09:57:22.276Z"
+    },
+    {
+      "name": "com.wingedsheep.engine.handlers.effects.library.EntryCounterMovementTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "timestamp": "2026-10-02T12:33:38.194Z"
+    },
+    {
+      "name": "com.wingedsheep.engine.scenarios.EntryCounterAuraScenarioTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "timestamp": "2026-10-02T12:33:45.579Z"
+    },
+    {
+      "name": "com.wingedsheep.engine.scenarios.PersistScenarioTest",
+      "tests": "15",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "timestamp": "2026-10-02T12:35:33.478Z"
+    }
+  ],
+  "snapshotAndLint": "PASS",
+  "log": "work/tooling/persist-final-focused-retry.log",
+  "unchangedSdkTests": "reused valid Gradle results"
+}

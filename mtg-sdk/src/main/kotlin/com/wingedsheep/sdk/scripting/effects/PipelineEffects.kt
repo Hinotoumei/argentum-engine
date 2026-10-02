@@ -395,6 +395,24 @@ sealed interface CardDestination {
     val description: String
 
     /**
+     * Counters placed as part of this battlefield entry, before entry tracking and triggers.
+     * The modifier belongs to one movement, not a grant that can affect a later blink.
+     * A typed [ToZone] destination prevents nested modifiers and ambiguous counter merging.
+     */
+    @SerialName("WithEntryCounters")
+    @Serializable
+    data class WithEntryCounters(
+        val destination: ToZone,
+        val counters: Map<CounterType, Int>
+    ) : CardDestination {
+        init {
+            require(destination.zone == Zone.BATTLEFIELD) { "Entry counters require a battlefield destination" }
+            require(counters.values.all { it >= 0 }) { "Entry counter counts must be nonnegative" }
+        }
+        override val description: String = "${destination.description} with entry counters"
+    }
+
+    /**
      * Move cards to a specific zone.
      */
     @SerialName("ToZone")

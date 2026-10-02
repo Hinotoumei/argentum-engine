@@ -1,0 +1,9 @@
+{
+  "status": "Preserved failed final focused run before retry",
+  "test": "saved sequential Aura entry choices preserve counter replacements; prevented=false",
+  "timeoutMilliseconds": 120000,
+  "elapsedSeconds": 144.917,
+  "assertionsRelaxed": false,
+  "report": "work/tooling/persist-final-gate-timeout.xml",
+  "log": "work/tooling/persist-final-focused-gate.log"
+}

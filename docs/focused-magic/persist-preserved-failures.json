@@ -1,0 +1,73 @@
+{
+  "status": "historical failures, corrected; not current gate results",
+  "reports": [
+    {
+      "preservedReport": "entry-counter-prevention-failure.xml",
+      "suite": "com.wingedsheep.engine.scenarios.EntryCounterAuraScenarioTest",
+      "counts": {
+        "tests": 2,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "failures": [
+        {
+          "case": "saved sequential Aura entry choices preserve counter replacements; prevented=true",
+          "message": "org.opentest4j.AssertionFailedError: expected:<0> but was:<2>"
+        }
+      ]
+    },
+    {
+      "preservedReport": "persist-target-fixture-failure.xml",
+      "suite": "com.wingedsheep.engine.scenarios.PersistScenarioTest",
+      "counts": {
+        "tests": 15,
+        "failures": 10,
+        "errors": 0,
+        "skipped": 0
+      },
+      "failures": [
+        {
+          "case": "real casting returns a creature with its entry counter; saved=false",
+          "message": "org.opentest4j.AssertionFailedError: Expected null but actual was \"Target must be a card in a graveyard\""
+        },
+        {
+          "case": "real casting returns a creature with its entry counter; saved=true",
+          "message": "org.opentest4j.AssertionFailedError: Expected null but actual was \"Target must be a card in a graveyard\""
+        },
+        {
+          "case": "the actual entry trigger observes the reduced power",
+          "message": "org.opentest4j.AssertionFailedError: Expected null but actual was \"Target must be a card in a graveyard\""
+        },
+        {
+          "case": "a one toughness creature dies at the state-based-action boundary",
+          "message": "org.opentest4j.AssertionFailedError: Expected null but actual was \"Target must be a card in a graveyard\""
+        },
+        {
+          "case": "counter prevention applies during entry",
+          "message": "org.opentest4j.AssertionFailedError: Expected null but actual was \"Target must be a card in a graveyard\""
+        },
+        {
+          "case": "Doubling Season replaces the entry counter placement",
+          "message": "org.opentest4j.AssertionFailedError: Expected null but actual was \"Target must be a card in a graveyard\""
+        },
+        {
+          "case": "a zone replacement redirects entry without placing counters in exile",
+          "message": "org.opentest4j.AssertionFailedError: Expected null but actual was \"Target must be a card in a graveyard\""
+        },
+        {
+          "case": "exiling the target in response makes Persist resolve with no valid target",
+          "message": "org.opentest4j.AssertionFailedError: Expected null but actual was \"Target must be a card in a graveyard\""
+        },
+        {
+          "case": "a copied spell independently reanimates its chosen target; saved=false",
+          "message": "org.opentest4j.AssertionFailedError: Expected null but actual was \"Target must be a card in a graveyard\""
+        },
+        {
+          "case": "a copied spell independently reanimates its chosen target; saved=true",
+          "message": "org.opentest4j.AssertionFailedError: Expected null but actual was \"Target must be a card in a graveyard\""
+        }
+      ]
+    }
+  ]
+}

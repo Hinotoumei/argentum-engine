@@ -246,6 +246,7 @@ object EntersWithReplacements {
         predicateEvaluator: PredicateEvaluator
     ): Pair<GameState, List<GameEvent>> {
         if (count <= 0) return state to emptyList()
+        if (!state.projectedState.canReceiveCounters(entityId)) return state to emptyList()
         val modifiedCount = ReplacementEffectUtils.applyCounterPlacementModifiers(
             state, entityId, counterType, count, placerId = controllerId,
             predicateEvaluator = predicateEvaluator

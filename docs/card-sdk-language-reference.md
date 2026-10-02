@@ -2773,6 +2773,7 @@ Types that are not effects no longer carry the `Effect` suffix, so the rule has 
   that card…", with the permission to play arriving only on the back face). Ignored for a card that
   ends up face up or outside exile; the grant is read only from the exile branch, so it ends when the
   card leaves exile.
+- `CardDestination.WithEntryCounters(destination: ToZone, counters: Map<CounterType, Int>)` — compose a battlefield destination with counters placed during this movement's entry. Counts are parameterized, nonnegative integers; the wrapped destination must name the battlefield. The typed wrapper forbids nested entry modifiers and ambiguous merging. It uses ordinary counter prevention/multiplication and emits counter events before entry events. It is not a lasting replacement grant, so it cannot add these counters again after a later blink. Movement continuations retain the modifier for Aura entry choices. This differs from `MoveCollectionEffect.addCounterType`, which adds a counter after movement and remains suitable for counters on exiled cards. Native Persist composes this destination with its chosen-target pipeline.
 - `CardDestination.ToZoneExiledFrom(fallback = Zone.BATTLEFIELD)` — a **per-card** destination: each
   card goes back to the zone it was exiled from, i.e. CR 610.3's "this second one-shot effect returns
   the object to its previous zone". Backed by `ExiledFromZoneComponent`, which

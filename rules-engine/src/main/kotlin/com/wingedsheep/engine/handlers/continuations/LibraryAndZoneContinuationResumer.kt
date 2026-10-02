@@ -267,7 +267,7 @@ class LibraryAndZoneContinuationResumer(
             cardRegistry = services.cardRegistry,
             targetFinder = services.targetFinder
         )
-        val (newState, moveEvents) = executor.moveAuraToBattlefield(state, auraId, targetId, destPlayerId)
+        val (newState, moveEvents) = executor.moveAuraToBattlefield(state, auraId, targetId, destPlayerId, continuation.entryCounters)
 
         // Continue with remaining auras
         val remainingAuras = continuation.remainingAuras
@@ -358,7 +358,8 @@ class LibraryAndZoneContinuationResumer(
                 objectReferences = continuation.objectReferences,
                 sourceName = continuation.sourceName,
                 underOwnersControl = continuation.underOwnersControl,
-                excludedHosts = continuation.excludedHosts
+                excludedHosts = continuation.excludedHosts,
+                entryCounters = continuation.entryCounters
             )
 
             return newState.suspendForDecision(question, nextContinuation, moveEvents)

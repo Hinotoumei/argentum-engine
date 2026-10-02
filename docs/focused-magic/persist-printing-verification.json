@@ -1,0 +1,22 @@
+{
+  "canonicalSet": "MH2",
+  "earliestRealPrinting": "MH2",
+  "scryfallPrintingRows": 6,
+  "liveRepositoryPrintingChecker": "PASS",
+  "checkerScope": "earliest canonical and scaffolded set coverage; set-level rather than per-collector coverage",
+  "alternatePrintingSourceChecks": [
+    {
+      "collectorNumber": "345",
+      "sourceMetadataMatchesScryfall": true
+    },
+    {
+      "collectorNumber": "400",
+      "sourceMetadataMatchesScryfall": true
+    }
+  ],
+  "unscaffoldedReprints": [
+    "SPG",
+    "ECC"
+  ],
+  "promoExcludedFromCanonical": "PMH2"
+}

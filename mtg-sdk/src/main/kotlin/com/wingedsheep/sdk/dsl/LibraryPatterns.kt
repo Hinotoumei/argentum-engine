@@ -194,6 +194,7 @@ object LibraryPatterns {
             else -> "Move"
         }
         is CardDestination.ToZoneExiledFrom -> "Put back where it came from"
+        is CardDestination.WithEntryCounters -> "Put onto the battlefield with counters"
     }
 
     /**

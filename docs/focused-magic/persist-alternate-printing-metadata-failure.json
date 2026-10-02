@@ -1,0 +1,18 @@
+{
+  "status": "Historical source-audit failure; both artists corrected and final focused gate passed",
+  "cause": "cached UTF-8 JSON was read using the Windows default code page while authoring variant rows",
+  "rows": [
+    {
+      "collectorNumber": "345",
+      "field": "artist",
+      "actual": "Milivoj \u00c4\u2020eran",
+      "expected": "Milivoj \u0106eran"
+    },
+    {
+      "collectorNumber": "400",
+      "field": "artist",
+      "actual": "Milivoj \u00c4\u2020eran",
+      "expected": "Milivoj \u0106eran"
+    }
+  ]
+}

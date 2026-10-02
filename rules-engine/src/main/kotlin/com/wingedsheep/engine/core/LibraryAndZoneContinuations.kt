@@ -203,6 +203,8 @@ data class MoveCollectionAuraTargetContinuation(
      * there — Warp World's ruling), so these are never offered as hosts.
      */
     val excludedHosts: List<EntityId> = emptyList(),
+    /** Counters scoped to the suspended movement; not a lasting replacement grant. */
+    val entryCounters: Map<com.wingedsheep.sdk.core.CounterType, Int> = emptyMap(),
 ) : AnswerContinuation
 
 /**

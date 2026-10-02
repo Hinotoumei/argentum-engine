@@ -1,0 +1,13 @@
+{
+  "set": "MH2",
+  "handWritten": 66,
+  "compared": 58,
+  "declined": 3,
+  "unmodeled": 5,
+  "divergent": 0,
+  "PersistWholeCard": "DECLINED at nonlegendary; not a pass",
+  "logs": [
+    "persist-mh2-assay.log",
+    "persist-final-assay-explain.log"
+  ]
+}

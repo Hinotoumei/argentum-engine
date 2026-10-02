@@ -1,0 +1,21 @@
+{
+  "name": "Persist",
+  "set": "MH2",
+  "collectorNumber": "96",
+  "scryfallId": "90f390c3-af1c-424f-9721-e26e9321e5a3",
+  "compiledMetadataMatches": true,
+  "officialRulings": 0,
+  "imageStatus": 200,
+  "alternatePrintings": [
+    {
+      "collectorNumber": "345",
+      "scryfallId": "9beb3062-b3a2-4af5-867c-e6389554c1f5",
+      "imageStatus": 200
+    },
+    {
+      "collectorNumber": "400",
+      "scryfallId": "b92a8dbf-d5b1-4337-8c3e-bc0c8308e426",
+      "imageStatus": 200
+    }
+  ]
+}
