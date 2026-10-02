@@ -162,3 +162,13 @@ test('tabletop displays server-provided counter types and counts without derivin
  assert.match(card.innerHTML,/argentum-tabletop-counter">charge: 1/);
  assert.match(card.innerHTML,/plus one plus one: 3/);assert.doesNotMatch(card.innerHTML,/loyalty: 0|charge: 2/);
 });
+
+
+test('a target chooser cannot submit into a replacement session',async()=>{
+ const h=harness(['1']);
+ const pending=h.api.submitLegalAction({action:{type:'CastSpell',cardId:'command',playerId:'me'},requiresTargets:true,targetRequirements:[target(['bear'])]});
+ h.api.setActive({interactionEpoch:{id:'replacement'},state:h.state,submitAction:action=>h.sent.push(action)});
+ await pending;
+ assert.equal(h.sent.length,0);
+ assert.match(h.elements.argentumStatus.textContent,/game changed during selection/);
+});

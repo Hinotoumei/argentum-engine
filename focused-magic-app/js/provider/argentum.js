@@ -485,6 +485,38 @@ SIDEBOARD:
     return picked;
   }
 
+  async function pickActionTargets(promptText, ids, min=1, max=1, cardInfo={}) {
+    const options=[...new Set(ids||[])];
+    if(options.length<min)throw new Error(`${promptText}: no legal targets.`);
+    if(max===0)return [];
+    const dialog=document.createElement('dialog');
+    if(typeof dialog.showModal!=='function')return pickIds(promptText,options,min,max,cardInfo);
+    dialog.className='argentum-target-dialog';
+    const heading=document.createElement('h3');heading.textContent=promptText;dialog.appendChild(heading);
+    const help=document.createElement('p');help.textContent=`Choose ${min===max?min:`${min}-${max}`} target(s).`;dialog.appendChild(help);
+    return await new Promise((resolve,reject)=>{
+      const selected=new Set();
+      const confirmButton=document.createElement('button');confirmButton.type='button';confirmButton.textContent='Confirm targets';confirmButton.disabled=min>0;
+      const finish=value=>{dialog.close();dialog.remove();resolve(value);};
+      for(const id of options){
+        const label=document.createElement('label');
+        const input=document.createElement('input');input.type='checkbox';
+        const text=document.createElement('span');text.textContent=entityLabel(id,cardInfo[id]);
+        input.onchange=()=>{
+          if(input.checked && max===1){for(const other of dialog.querySelectorAll('input'))if(other!==input)other.checked=false;selected.clear();}
+          if(input.checked)selected.add(id);else selected.delete(id);
+          confirmButton.disabled=selected.size<min||selected.size>max;
+        };
+        label.appendChild(input);label.appendChild(text);dialog.appendChild(label);
+      }
+      confirmButton.onclick=()=>{if(selected.size>=min&&selected.size<=max)finish(options.filter(id=>selected.has(id)));};
+      const cancel=document.createElement('button');cancel.type='button';cancel.textContent='Cancel';
+      const abort=()=>{dialog.close();dialog.remove();reject(new Error('Action cancelled.'));};
+      cancel.onclick=abort;dialog.addEventListener('cancel',event=>{event.preventDefault();abort();});
+      dialog.appendChild(confirmButton);dialog.appendChild(cancel);document.body.appendChild(dialog);dialog.showModal();
+    });
+  }
+
   function collectModalTargets(action, enumeration, chooseIds, toTarget) {
     const picks=action.chosenModes||[];
     const min=enumeration.minChooseCount??1, max=enumeration.chooseCount??min;
@@ -512,6 +544,7 @@ SIDEBOARD:
   async function submitLegalAction(info) {
     try {
       if(!active?.interactionEpoch)throw new Error('No live interaction epoch; request a resync first.');
+      const actionSession=active, actionEpoch=JSON.stringify(active.interactionEpoch);
       const action=clone(info.action);
       if(/DeclareAttackers/.test(info.actionType||action.type||'')){
         const valid=info.validAttackers||[],mandatory=info.mandatoryAttackers||[];
@@ -556,7 +589,7 @@ SIDEBOARD:
       if(info.requiresTargets && !info.modalEnumeration){
         const chosen=[];
         const reqs=info.targetRequirements?.length?info.targetRequirements:[{description:info.targetDescription||'Choose target',minTargets:info.minTargets??info.targetCount??1,maxTargets:info.targetCount??1,validTargets:info.validTargets||[]}];
-        for(const req of reqs){const ids=pickIds(req.description||'Choose target',req.validTargets||[],req.minTargets??1,req.maxTargets??1);chosen.push(...ids.map(chosenTarget));}
+        for(const req of reqs){const ids=await pickActionTargets(req.description||'Choose target',req.validTargets||[],req.minTargets??1,req.maxTargets??1);chosen.push(...ids.map(chosenTarget));}
         action.targets=chosen;
       }
       if(info.requiresManaColorChoice){const colors=info.availableManaColors?.length?info.availableManaColors:['WHITE','BLUE','BLACK','RED','GREEN'];const raw=prompt(`Choose mana color: ${colors.join(', ')}`,colors[0]);if(raw==null)return;action.manaColorChoice=String(raw).toUpperCase();}
@@ -566,6 +599,7 @@ SIDEBOARD:
         const raw=prompt('This action has a provider-defined additional cost. Edit the exact action JSON if needed; Cancel to abort.',JSON.stringify(action));
         if(raw==null)return; Object.assign(action,JSON.parse(raw));
       }
+      if(active!==actionSession||JSON.stringify(active.interactionEpoch)!==actionEpoch)throw new Error('The game changed during selection; choose the action again.');
       active.submitAction(action);
     }catch(e){setStatus(e.message,true);log(`Action blocked: ${e.message}`);}
   }
