@@ -1,0 +1,264 @@
+{
+  "scope": "Dedicated native gameplay scenarios only; full regression and live acceptance are separate gates",
+  "scenarioPasses": 41,
+  "results": [
+    {
+      "suite": {
+        "name": "com.wingedsheep.engine.scenarios.EngineeredExplosivesScenarioTest",
+        "tests": "14",
+        "skipped": "0",
+        "failures": "0",
+        "errors": "0",
+        "timestamp": "2026-10-02T00:46:07.046Z",
+        "hostname": "DESKTOP-6K9JG6J",
+        "time": "248.933"
+      },
+      "cases": [
+        {
+          "name": "X=0 with [] and 0 colorless enters with 0 charge counters",
+          "classname": "com.wingedsheep.engine.scenarios.EngineeredExplosivesScenarioTest",
+          "time": "3.756"
+        },
+        {
+          "name": "X=2 with [BLACK, BLACK] and 0 colorless enters with 1 charge counters",
+          "classname": "com.wingedsheep.engine.scenarios.EngineeredExplosivesScenarioTest",
+          "time": "0.125"
+        },
+        {
+          "name": "X=2 with [BLACK, BLUE] and 0 colorless enters with 2 charge counters",
+          "classname": "com.wingedsheep.engine.scenarios.EngineeredExplosivesScenarioTest",
+          "time": "0.053"
+        },
+        {
+          "name": "X=3 with [BLACK, BLUE, RED] and 0 colorless enters with 3 charge counters",
+          "classname": "com.wingedsheep.engine.scenarios.EngineeredExplosivesScenarioTest",
+          "time": "0.093"
+        },
+        {
+          "name": "X=2 with [] and 2 colorless enters with 0 charge counters",
+          "classname": "com.wingedsheep.engine.scenarios.EngineeredExplosivesScenarioTest",
+          "time": "0.113"
+        },
+        {
+          "name": "X=2 with [GREEN] and 1 colorless enters with 1 charge counters",
+          "classname": "com.wingedsheep.engine.scenarios.EngineeredExplosivesScenarioTest",
+          "time": "0.07"
+        },
+        {
+          "name": "insufficient X payment rejects without removing the card or consuming mana",
+          "classname": "com.wingedsheep.engine.scenarios.EngineeredExplosivesScenarioTest",
+          "time": "0.129"
+        },
+        {
+          "name": "sacrifice cost preserves two charge counters for destroying both players' matching permanents",
+          "classname": "com.wingedsheep.engine.scenarios.EngineeredExplosivesScenarioTest",
+          "time": "0.624"
+        },
+        {
+          "name": "zero counters destroys zero-value nonland permanents while leaving lands",
+          "classname": "com.wingedsheep.engine.scenarios.EngineeredExplosivesScenarioTest",
+          "time": "0.203"
+        },
+        {
+          "name": "zero counters destroys a normally created token with zero mana value",
+          "classname": "com.wingedsheep.engine.scenarios.EngineeredExplosivesScenarioTest",
+          "time": "0.147"
+        },
+        {
+          "name": "additional counters placed before activation determine the destruction amount",
+          "classname": "com.wingedsheep.engine.scenarios.EngineeredExplosivesScenarioTest",
+          "time": "0.116"
+        },
+        {
+          "name": "unaffordable activation does not sacrifice its source",
+          "classname": "com.wingedsheep.engine.scenarios.EngineeredExplosivesScenarioTest",
+          "time": "0.056"
+        },
+        {
+          "name": "Doubling Season doubles the charge counters placed by sunburst",
+          "classname": "com.wingedsheep.engine.scenarios.EngineeredExplosivesScenarioTest",
+          "time": "0.048"
+        },
+        {
+          "name": "a matching indestructible artifact survives the destruction",
+          "classname": "com.wingedsheep.engine.scenarios.EngineeredExplosivesScenarioTest",
+          "time": "0.172"
+        }
+      ]
+    },
+    {
+      "suite": {
+        "name": "com.wingedsheep.engine.scenarios.SurgicalExtractionScenarioTest",
+        "tests": "13",
+        "skipped": "0",
+        "failures": "0",
+        "errors": "0",
+        "timestamp": "2026-10-02T00:31:05.865Z",
+        "hostname": "DESKTOP-6K9JG6J",
+        "time": "87.779"
+      },
+      "cases": [
+        {
+          "name": "searches opponent's zones and permits none matching cards",
+          "classname": "com.wingedsheep.engine.scenarios.SurgicalExtractionScenarioTest",
+          "time": "1.868"
+        },
+        {
+          "name": "searches opponent's zones and permits subset matching cards",
+          "classname": "com.wingedsheep.engine.scenarios.SurgicalExtractionScenarioTest",
+          "time": "0.099"
+        },
+        {
+          "name": "searches opponent's zones and permits all matching cards",
+          "classname": "com.wingedsheep.engine.scenarios.SurgicalExtractionScenarioTest",
+          "time": "0.064"
+        },
+        {
+          "name": "searches own zones and permits none matching cards",
+          "classname": "com.wingedsheep.engine.scenarios.SurgicalExtractionScenarioTest",
+          "time": "0.044"
+        },
+        {
+          "name": "searches own zones and permits subset matching cards",
+          "classname": "com.wingedsheep.engine.scenarios.SurgicalExtractionScenarioTest",
+          "time": "0.038"
+        },
+        {
+          "name": "searches own zones and permits all matching cards",
+          "classname": "com.wingedsheep.engine.scenarios.SurgicalExtractionScenarioTest",
+          "time": "0.036"
+        },
+        {
+          "name": "Phyrexian life payment costs two life without requiring mana",
+          "classname": "com.wingedsheep.engine.scenarios.SurgicalExtractionScenarioTest",
+          "time": "0.063"
+        },
+        {
+          "name": "one life cannot pay the Phyrexian cost and rejection is atomic",
+          "classname": "com.wingedsheep.engine.scenarios.SurgicalExtractionScenarioTest",
+          "time": "0.063"
+        },
+        {
+          "name": "a basic land is an illegal target",
+          "classname": "com.wingedsheep.engine.scenarios.SurgicalExtractionScenarioTest",
+          "time": "0.036"
+        },
+        {
+          "name": "the search exposes nonmatching hidden cards only to the caster and shuffling hides the library again",
+          "classname": "com.wingedsheep.engine.scenarios.SurgicalExtractionScenarioTest",
+          "time": "0.032"
+        },
+        {
+          "name": "search selection resumes after serializing the whole game",
+          "classname": "com.wingedsheep.engine.scenarios.SurgicalExtractionScenarioTest",
+          "time": "2.098"
+        },
+        {
+          "name": "a nonbasic land is a legal target",
+          "classname": "com.wingedsheep.engine.scenarios.SurgicalExtractionScenarioTest",
+          "time": "0.032"
+        },
+        {
+          "name": "exiling the original target in response makes the spell fizzle without searching the other zones",
+          "classname": "com.wingedsheep.engine.scenarios.SurgicalExtractionScenarioTest",
+          "time": "0.113"
+        }
+      ]
+    },
+    {
+      "suite": {
+        "name": "com.wingedsheep.engine.scenarios.BarrowgoyfScenarioTest",
+        "tests": "14",
+        "skipped": "0",
+        "failures": "0",
+        "errors": "0",
+        "timestamp": "2026-10-02T00:46:50.652Z",
+        "hostname": "DESKTOP-6K9JG6J",
+        "time": "246.436"
+      },
+      "cases": [
+        {
+          "name": "both suspended choices resume after serializing the entire game",
+          "classname": "com.wingedsheep.engine.scenarios.BarrowgoyfScenarioTest",
+          "time": "9.804"
+        },
+        {
+          "name": "normal casting pays printed cost and has live zero-type stats",
+          "classname": "com.wingedsheep.engine.scenarios.BarrowgoyfScenarioTest",
+          "time": "0.452"
+        },
+        {
+          "name": "two mana cannot cast the three-mana spell",
+          "classname": "com.wingedsheep.engine.scenarios.BarrowgoyfScenarioTest",
+          "time": "0.092"
+        },
+        {
+          "name": "graveyard card types are deduplicated across both players",
+          "classname": "com.wingedsheep.engine.scenarios.BarrowgoyfScenarioTest",
+          "time": "0.059"
+        },
+        {
+          "name": "declining the outer may leaves library and hand unchanged while lifelink applies",
+          "classname": "com.wingedsheep.engine.scenarios.BarrowgoyfScenarioTest",
+          "time": "0.075"
+        },
+        {
+          "name": "accepted mill independently permits creature return false",
+          "classname": "com.wingedsheep.engine.scenarios.BarrowgoyfScenarioTest",
+          "time": "0.21"
+        },
+        {
+          "name": "accepted mill independently permits creature return true",
+          "classname": "com.wingedsheep.engine.scenarios.BarrowgoyfScenarioTest",
+          "time": "0.14"
+        },
+        {
+          "name": "mill handles a library of 0 cards without losing to a failed draw",
+          "classname": "com.wingedsheep.engine.scenarios.BarrowgoyfScenarioTest",
+          "time": "0.098"
+        },
+        {
+          "name": "mill handles a library of 1 cards without losing to a failed draw",
+          "classname": "com.wingedsheep.engine.scenarios.BarrowgoyfScenarioTest",
+          "time": "0.083"
+        },
+        {
+          "name": "noncombat damage to the player does not cause Barrowgoyf to mill",
+          "classname": "com.wingedsheep.engine.scenarios.BarrowgoyfScenarioTest",
+          "time": "0.057"
+        },
+        {
+          "name": "deathtouch kills a larger blocker and creature combat damage does not trigger milling",
+          "classname": "com.wingedsheep.engine.scenarios.BarrowgoyfScenarioTest",
+          "time": "0.182"
+        },
+        {
+          "name": "the combat trigger survives exiling its source in response",
+          "classname": "com.wingedsheep.engine.scenarios.BarrowgoyfScenarioTest",
+          "time": "0.115"
+        },
+        {
+          "name": "a creature redirected to exile cannot be returned by the mill trigger",
+          "classname": "com.wingedsheep.engine.scenarios.BarrowgoyfScenarioTest",
+          "time": "0.104"
+        },
+        {
+          "name": "characteristic defining stats remain live in hand graveyard library exile and stack",
+          "classname": "com.wingedsheep.engine.scenarios.BarrowgoyfScenarioTest",
+          "time": "0.041"
+        }
+      ]
+    }
+  ],
+  "snapshotReview": {
+    "5DN": "Only Engineered Explosives added",
+    "NPH": "Only Surgical Extraction added",
+    "M3C": "Only Barrowgoyf in new incomplete set",
+    "FUT": "No semantic diff"
+  },
+  "fixtureRepairs": [
+    "JSON serialization test dependencies declared for saved-game scenarios",
+    "Surgical Extraction definitions loaded before timed cases",
+    "Clue predefined card explicitly registered for real token creation"
+  ]
+}

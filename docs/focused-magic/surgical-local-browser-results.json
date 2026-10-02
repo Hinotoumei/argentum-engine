@@ -1,0 +1,14 @@
+{
+  "scope": "Real loopback native server and normal Focused Magic cast/choice buttons; not production deployment or complete deck acceptance",
+  "scenario": "Surgical Extraction chooses only the matching copy in the opponent hand",
+  "selectionLabels": [
+    "graveyard (Opponent)",
+    "hand (Opponent)",
+    "library (Opponent)"
+  ],
+  "graveyard": 1,
+  "exile": 1,
+  "library": 21,
+  "casterLife": 20,
+  "pageErrors": []
+}

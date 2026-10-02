@@ -1,0 +1,10 @@
+{
+  "gate": "Full build with accepted mtgish-only exclusion",
+  "result": "Failed in 18 minutes 12 seconds",
+  "failingTask": ":ai:test",
+  "failingCase": "JevClientTest uses Decisions API choice schema and bearer auth, accepts typed answer",
+  "exception": "java.net.http.HttpConnectTimeoutException: HTTP connect timed out",
+  "subjectChanged": false,
+  "testTimeoutChanged": false,
+  "followUp": "Prior human authorization permits unchanged retry followed by full gate if it passes"
+}

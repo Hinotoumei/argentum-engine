@@ -1,0 +1,26 @@
+{
+  "gate": "Second full build, after unchanged Jev retry passed",
+  "duration": "34 minutes 7 seconds",
+  "suite": {
+    "name": "com.wingedsheep.engine.scenarios.AccursedCentaurTest",
+    "tests": "3",
+    "skipped": "0",
+    "failures": "1",
+    "errors": "0",
+    "timestamp": "2026-10-02T01:41:50.637Z",
+    "hostname": "DESKTOP-6K9JG6J",
+    "time": "174.399"
+  },
+  "case": {
+    "name": "Accursed Centaur ETB requires sacrificing a creature when only the Centaur is on battlefield",
+    "classname": "com.wingedsheep.engine.scenarios.AccursedCentaurTest",
+    "time": "173.62"
+  },
+  "failure": {
+    "message": "kotlinx.coroutines.TimeoutCancellationException: Coroutine \"spec-scope-1705904476\" timed out waiting for 120000 ms",
+    "type": "kotlinx.coroutines.TimeoutCancellationException"
+  },
+  "scope": "Unchanged first Accursed Centaur test loaded TestCards.all inside timed createDriver; later cases passed",
+  "repair": "Move identical catalog discovery to spec setup under existing authorization for Windows test-harness blockers",
+  "assertionsAndTimeoutUnchanged": true
+}

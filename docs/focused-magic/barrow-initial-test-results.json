@@ -1,0 +1,44 @@
+{
+  "failures": 0,
+  "errors": 0,
+  "targetedGate": "BUILD SUCCESSFUL in 12m51s",
+  "scope": "Initial native Barrowgoyf gameplay scenarios; remaining edge cases and full gate are incomplete",
+  "cases": [
+    {
+      "seconds": "1.878",
+      "name": "normal casting pays printed cost and has live zero-type stats",
+      "status": "passed"
+    },
+    {
+      "seconds": "0.094",
+      "name": "two mana cannot cast the three-mana spell",
+      "status": "passed"
+    },
+    {
+      "seconds": "0.059",
+      "name": "graveyard card types are deduplicated across both players",
+      "status": "passed"
+    },
+    {
+      "seconds": "0.28",
+      "name": "declining the outer may leaves library and hand unchanged while lifelink applies",
+      "status": "passed"
+    },
+    {
+      "seconds": "0.121",
+      "name": "accepted mill independently permits creature return false",
+      "status": "passed"
+    },
+    {
+      "seconds": "0.057",
+      "name": "accepted mill independently permits creature return true",
+      "status": "passed"
+    },
+    {
+      "seconds": "0.066",
+      "name": "a creature redirected to exile cannot be returned by the mill trigger",
+      "status": "passed"
+    }
+  ],
+  "tests": 7
+}

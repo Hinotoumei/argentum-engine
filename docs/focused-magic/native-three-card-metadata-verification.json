@@ -1,0 +1,38 @@
+{
+  "scope": "Fresh set-qualified Scryfall verification of compiled definitions after authoring",
+  "cards": [
+    {
+      "name": "Engineered Explosives",
+      "set": "5DN",
+      "collectorNumber": "118",
+      "scryfallId": "8492a272-e595-4f94-a6eb-08d29f211fd6",
+      "oracleId": "95fd897e-9086-42c4-8e0d-61bb02333c5f",
+      "source": "https://api.scryfall.com/cards/named?exact=Engineered+Explosives&set=5dn",
+      "metadataMatchesCompiledGolden": true,
+      "imageStatus": 200,
+      "officialRulings": 4
+    },
+    {
+      "name": "Surgical Extraction",
+      "set": "NPH",
+      "collectorNumber": "74",
+      "scryfallId": "dca7e072-edb5-4f7e-bdec-a3a393053c80",
+      "oracleId": "3bfa088c-9a47-4123-aee5-4de44e355bef",
+      "source": "https://api.scryfall.com/cards/named?exact=Surgical+Extraction&set=nph",
+      "metadataMatchesCompiledGolden": true,
+      "imageStatus": 200,
+      "officialRulings": 6
+    },
+    {
+      "name": "Barrowgoyf",
+      "set": "M3C",
+      "collectorNumber": "102",
+      "scryfallId": "cea3b218-0e6e-443a-84f7-380f1021e8e1",
+      "oracleId": "74c0164c-130f-4572-9066-626c77f6e2ff",
+      "source": "https://api.scryfall.com/cards/named?exact=Barrowgoyf&set=m3c",
+      "metadataMatchesCompiledGolden": true,
+      "imageStatus": 200,
+      "officialRulings": 3
+    }
+  ]
+}

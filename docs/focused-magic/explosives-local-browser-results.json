@@ -1,0 +1,19 @@
+{
+  "scope": "Real loopback native server and normal Focused Magic cast/activate buttons; not production deployment or complete deck acceptance",
+  "scenario": "X=2 paid with two black mana gives one charge counter; sacrificed Explosives destroys both one-mana Elves, preserving lands and Hill Giant",
+  "chargeCounters": 1,
+  "chargeCounterDisplayed": true,
+  "graveyard": [
+    "Engineered Explosives",
+    "Llanowar Elves",
+    "Llanowar Elves"
+  ],
+  "battlefield": [
+    "Hill Giant",
+    "Swamp",
+    "Swamp",
+    "Swamp",
+    "Swamp"
+  ],
+  "pageErrors": []
+}

@@ -1,0 +1,57 @@
+{
+  "gate": "Previously authorized unchanged retry via ai-focused just recipe",
+  "result": "Passed in 2 minutes 45 seconds",
+  "sourceAndTimeoutUnchanged": true,
+  "suites": [
+    {
+      "name": "com.wingedsheep.ai.engine.budget.DecisionBudgetTest",
+      "tests": "9",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-02T01:14:45.135Z",
+      "hostname": "DESKTOP-6K9JG6J",
+      "time": "0.239"
+    },
+    {
+      "name": "com.wingedsheep.ai.arena.ArenaHarnessTest",
+      "tests": "7",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-02T01:12:18.896Z",
+      "hostname": "DESKTOP-6K9JG6J",
+      "time": "66.601"
+    },
+    {
+      "name": "com.wingedsheep.ai.arena.FrozenBaselineTest",
+      "tests": "1",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-02T01:13:25.518Z",
+      "hostname": "DESKTOP-6K9JG6J",
+      "time": "1.334"
+    },
+    {
+      "name": "com.wingedsheep.ai.engine.AIPlayerFactoryTest",
+      "tests": "3",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-02T01:13:26.957Z",
+      "hostname": "DESKTOP-6K9JG6J",
+      "time": "77.884"
+    },
+    {
+      "name": "com.wingedsheep.ai.jev.JevClientTest",
+      "tests": "4",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-02T01:14:45.579Z",
+      "hostname": "DESKTOP-6K9JG6J",
+      "time": "0.89"
+    }
+  ]
+}

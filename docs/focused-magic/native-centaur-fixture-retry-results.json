@@ -1,0 +1,33 @@
+{
+  "verification": "Existing Windows test-harness repair authorization: identical shared catalog moved into spec setup",
+  "gate": "retry-centaur-fixture via just",
+  "buildDuration": "2 minutes 7 seconds",
+  "assertionsAndTimeoutUnchanged": true,
+  "suite": {
+    "name": "com.wingedsheep.engine.scenarios.AccursedCentaurTest",
+    "tests": "3",
+    "skipped": "0",
+    "failures": "0",
+    "errors": "0",
+    "timestamp": "2026-10-02T01:51:32.933Z",
+    "hostname": "DESKTOP-6K9JG6J",
+    "time": "82.606"
+  },
+  "cases": [
+    {
+      "name": "Accursed Centaur ETB requires sacrificing a creature when only the Centaur is on battlefield",
+      "classname": "com.wingedsheep.engine.scenarios.AccursedCentaurTest",
+      "time": "1.696"
+    },
+    {
+      "name": "Accursed Centaur ETB prompts sacrifice choice when multiple creatures exist",
+      "classname": "com.wingedsheep.engine.scenarios.AccursedCentaurTest",
+      "time": "0.131"
+    },
+    {
+      "name": "Accursed Centaur ETB allows sacrificing the Centaur itself when other creatures exist",
+      "classname": "com.wingedsheep.engine.scenarios.AccursedCentaurTest",
+      "time": "0.048"
+    }
+  ]
+}
