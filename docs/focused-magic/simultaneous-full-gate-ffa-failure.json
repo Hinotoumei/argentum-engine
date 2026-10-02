@@ -1,0 +1,9 @@
+{
+  "scope": "Full regression gate stopped in unchanged FreeForAllLobbyTest before card acceptance; unchanged retry pending",
+  "failures": [
+    {
+      "name": "3-player premade FFA pod: one game, mid-game concede continues, standings = elimination order, play again",
+      "message": "org.opentest4j.AssertionFailedError: Block failed after 10.041764900s; attempted 267 time(s)\nThe first error was caused by: expected:<true> but was:<false>\n"
+    }
+  ]
+}

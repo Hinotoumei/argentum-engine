@@ -1,0 +1,25 @@
+{
+  "tests": 14,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "duration": "3m 55s",
+  "sourceChanges": false,
+  "assertionOrTimeoutChanges": false,
+  "cases": [
+    "3-player premade FFA pod: one game, mid-game concede continues, standings = elimination order, play again",
+    "FFA lobby seats AI players and caps the pod at 6",
+    "a Two-Headed Giant lobby seats AI teammates and opponents",
+    "switching a lobby holding AI players to a multiplayer table is allowed",
+    "an AI seated in a premade-decks pod is dealt a deck, the way a quick game rolls one",
+    "the host picks each AI seat's deck separately, and only that seat's changes",
+    "choosing an AI's deck is refused in a limited lobby, where it builds from its pool",
+    "a Commander premade lobby deals an AI its own commander deck, and the host can override it",
+    "a premade lobby holding an AI re-rolls its deck when the host switches to Commander",
+    "a sealed FFA pod of one human and two AI builds its decks, starts, and the AI plays",
+    "4-player Commander FFA pod: every seat starts at 40 life with its own commander in its own command zone",
+    "4-player Commander FFA pod reached explicitly through the Rules axis, with no deck-format restriction",
+    "Two-Headed Giant refuses Commander rules before touching submitted decks",
+    "switching a Commander lobby to Two-Headed Giant is refused at the switch, not at Start"
+  ]
+}

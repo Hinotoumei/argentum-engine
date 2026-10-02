@@ -1,0 +1,149 @@
+{
+  "scope": "APNAP simultaneous movement, Geier Reach Sanitarium, Sheoldreds Edict",
+  "suites": [
+    {
+      "module": "rules-engine",
+      "suite": "ForEachOpponentApnapTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": "2026-10-02T02:42:02.626Z",
+      "cases": [
+        {
+          "name": "opponent iteration rotates around the active player, not the caster or first seat",
+          "time": "2.133",
+          "failure": null
+        },
+        {
+          "name": "rotated opponent iteration still excludes teammates and players who have lost",
+          "time": "0.021",
+          "failure": null
+        }
+      ]
+    },
+    {
+      "module": "rules-engine",
+      "suite": "MoveCollectionMultiplayerAttributionTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": "2026-10-02T02:42:06.545Z",
+      "cases": [
+        {
+          "name": "simultaneous discards reach each owner's graveyard with separate owner-attributed events and counters",
+          "time": "0.979",
+          "failure": null
+        },
+        {
+          "name": "stolen permanents are sacrificed by their controllers but move to their owners' graveyards",
+          "time": "0.383",
+          "failure": null
+        },
+        {
+          "name": "simultaneous sacrifices preserve previous per-player and table counts",
+          "time": "0.031",
+          "failure": null
+        },
+        {
+          "name": "a control effect ending when an earlier selected source leaves does not reattribute the later simultaneous sacrifice",
+          "time": "0.273",
+          "failure": null
+        }
+      ]
+    },
+    {
+      "module": "mtg-sets/2008-2016/tests",
+      "suite": "GeierReachSanitariumScenarioTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": "2026-10-02T02:42:41.854Z",
+      "cases": [
+        {
+          "name": "all three players draw before hidden APNAP selections and simultaneous owner-routed discards; saved=false",
+          "time": "2.302",
+          "failure": null
+        },
+        {
+          "name": "all three players draw before hidden APNAP selections and simultaneous owner-routed discards; saved=true",
+          "time": "3.254",
+          "failure": null
+        },
+        {
+          "name": "the first ability supplies colorless mana without using the stack",
+          "time": "0.063",
+          "failure": null
+        },
+        {
+          "name": "unaffordable draw-discard activation leaves the state untouched",
+          "time": "0.064",
+          "failure": null
+        },
+        {
+          "name": "a player cannot select a card in another player's hand for their discard",
+          "time": "0.039",
+          "failure": null
+        }
+      ]
+    },
+    {
+      "module": "mtg-sets/2023/tests",
+      "suite": "SheoldredsEdictScenarioTest",
+      "tests": 9,
+      "failures": 3,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": "2026-10-02T02:47:48.638Z",
+      "cases": [
+        {
+          "name": "opponents choose in APNAP order before any sacrifices; saved=false",
+          "time": "1.361",
+          "failure": null
+        },
+        {
+          "name": "opponents choose in APNAP order before any sacrifices; saved=true",
+          "time": "1.353",
+          "failure": null
+        },
+        {
+          "name": "an opponent without an eligible nontoken creature does not stop later opponents choosing",
+          "time": "0.096",
+          "failure": null
+        },
+        {
+          "name": "unaffordable casting is rejected without changing state",
+          "time": "0.055",
+          "failure": null
+        },
+        {
+          "name": "mode 0 filters nontoken creatures, creature tokens, and planeswalkers independently",
+          "time": "0.118",
+          "failure": "org.opentest4j.AssertionFailedError: expected:<true> but was:<false>"
+        },
+        {
+          "name": "mode 1 filters nontoken creatures, creature tokens, and planeswalkers independently",
+          "time": "0.086",
+          "failure": "org.opentest4j.AssertionFailedError: expected:<true> but was:<false>"
+        },
+        {
+          "name": "mode 2 filters nontoken creatures, creature tokens, and planeswalkers independently",
+          "time": "0.108",
+          "failure": "org.opentest4j.AssertionFailedError: Expecting actual not to be null"
+        },
+        {
+          "name": "the nontoken choice cannot be replaced with a creature token and rejection preserves the pending choice",
+          "time": "0.063",
+          "failure": null
+        },
+        {
+          "name": "indestructibility does not prevent sacrifice, and an opponent graveyard replacement redirects it",
+          "time": "0.07",
+          "failure": null
+        }
+      ]
+    }
+  ]
+}

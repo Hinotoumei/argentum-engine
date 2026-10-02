@@ -1,0 +1,102 @@
+{
+  "scope": "APNAP simultaneous movement, Geier Reach Sanitarium, Sheoldreds Edict",
+  "suites": [
+    {
+      "module": "rules-engine",
+      "suite": "ForEachOpponentApnapTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": "2026-10-02T02:35:14.063Z",
+      "cases": [
+        {
+          "name": "opponent iteration rotates around the active player, not the caster or first seat",
+          "time": "2.112",
+          "failure": null
+        },
+        {
+          "name": "rotated opponent iteration still excludes teammates and players who have lost",
+          "time": "0.052",
+          "failure": null
+        }
+      ]
+    },
+    {
+      "module": "rules-engine",
+      "suite": "MoveCollectionMultiplayerAttributionTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": "2026-10-02T02:35:17.683Z",
+      "cases": [
+        {
+          "name": "simultaneous discards reach each owner's graveyard with separate owner-attributed events and counters",
+          "time": "0.58",
+          "failure": null
+        },
+        {
+          "name": "stolen permanents are sacrificed by their controllers but move to their owners' graveyards",
+          "time": "0.252",
+          "failure": null
+        },
+        {
+          "name": "simultaneous sacrifices preserve previous per-player and table counts",
+          "time": "0.008",
+          "failure": null
+        },
+        {
+          "name": "a control effect ending when an earlier selected source leaves does not reattribute the later simultaneous sacrifice",
+          "time": "0.162",
+          "failure": null
+        }
+      ]
+    },
+    {
+      "module": "mtg-sets/2008-2016/tests",
+      "suite": "GeierReachSanitariumScenarioTest",
+      "tests": 5,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": "2026-10-02T02:36:10.259Z",
+      "cases": [
+        {
+          "name": "all three players draw before hidden APNAP selections and simultaneous owner-routed discards; saved=false",
+          "time": "1.744",
+          "failure": null
+        },
+        {
+          "name": "all three players draw before hidden APNAP selections and simultaneous owner-routed discards; saved=true",
+          "time": "0.311",
+          "failure": "kotlinx.serialization.SerializationException: Serializer for subclass 'PlayerComponent' is not found in the polymorphic scope of 'Component'.\nCheck if class with serial name 'PlayerComponent' exists and serializer is registered in a corresponding SerializersModule.\nTo be registered automatically, class 'PlayerComponent' has to be '@Serializable', and the base class 'Component' has to be sealed and '@Serializable'."
+        },
+        {
+          "name": "the first ability supplies colorless mana without using the stack",
+          "time": "0.127",
+          "failure": null
+        },
+        {
+          "name": "unaffordable draw-discard activation leaves the state untouched",
+          "time": "0.061",
+          "failure": null
+        },
+        {
+          "name": "a player cannot select a card in another player's hand for their discard",
+          "time": "0.052",
+          "failure": null
+        }
+      ]
+    },
+    {
+      "module": "mtg-sets/2023/tests",
+      "suite": "SheoldredsEdictScenarioTest",
+      "tests": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "status": "Not reached before gate stopped"
+    }
+  ]
+}

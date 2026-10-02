@@ -1,0 +1,27 @@
+{
+  "scope": "Fresh set-qualified Scryfall verification of compiled definitions after authoring",
+  "cards": [
+    {
+      "name": "Geier Reach Sanitarium",
+      "set": "EMN",
+      "collectorNumber": "203",
+      "scryfallId": "96093739-fedc-4d8f-a29d-0e57f571e5a9",
+      "oracleId": "7b9fafe7-d26a-4ed5-b4c4-ce13763770b5",
+      "source": "https://api.scryfall.com/cards/named?exact=Geier+Reach+Sanitarium&set=emn",
+      "metadataMatchesCompiledGolden": true,
+      "imageStatus": 200,
+      "officialRulings": 2
+    },
+    {
+      "name": "Sheoldred's Edict",
+      "set": "ONE",
+      "collectorNumber": "108",
+      "scryfallId": "a9225cc3-90f0-448f-a8d9-7c6c2796d077",
+      "oracleId": "217062f5-96f1-454c-9507-17f34ef37070",
+      "source": "https://api.scryfall.com/cards/named?exact=Sheoldred%27s+Edict&set=one",
+      "metadataMatchesCompiledGolden": true,
+      "imageStatus": 200,
+      "officialRulings": 0
+    }
+  ]
+}

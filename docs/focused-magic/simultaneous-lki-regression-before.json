@@ -1,0 +1,23 @@
+{
+  "scope": "strengthened simultaneous controller look-back regression before repair",
+  "tests": 4,
+  "failures": 1,
+  "cases": [
+    {
+      "name": "simultaneous discards reach each owner's graveyard with separate owner-attributed events and counters",
+      "failure": null
+    },
+    {
+      "name": "stolen permanents are sacrificed by their controllers but move to their owners' graveyards",
+      "failure": null
+    },
+    {
+      "name": "simultaneous sacrifices preserve previous per-player and table counts",
+      "failure": null
+    },
+    {
+      "name": "a control effect ending when an earlier selected source leaves does not reattribute the later simultaneous sacrifice",
+      "failure": "org.opentest4j.AssertionFailedError: expected:<4492462a-2b32-46c0-8c18-70a69146b64f> but was:<76d53367-f5dc-44ca-9e24-786b2e5f6fec>"
+    }
+  ]
+}

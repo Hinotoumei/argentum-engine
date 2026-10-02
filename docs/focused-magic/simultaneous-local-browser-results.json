@@ -1,0 +1,15 @@
+{
+  "scope": "Real loopback native engine and normal provider buttons; test fixture/reconnect only. Not production deployment or complete deck acceptance.",
+  "results": [
+    {
+      "card": "Geier Reach Sanitarium",
+      "pageErrors": [],
+      "localProviderFlowPassed": true
+    },
+    {
+      "card": "Sheoldred's Edict",
+      "pageErrors": [],
+      "localProviderFlowPassed": true
+    }
+  ]
+}

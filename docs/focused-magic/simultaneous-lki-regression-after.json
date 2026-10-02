@@ -1,0 +1,30 @@
+{
+  "duration": "6m 39s",
+  "suites": [
+    {
+      "suite": "MoveCollectionMultiplayerAttributionTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "simultaneous discards reach each owner's graveyard with separate owner-attributed events and counters",
+        "stolen permanents are sacrificed by their controllers but move to their owners' graveyards",
+        "simultaneous sacrifices preserve previous per-player and table counts",
+        "a control effect ending when an earlier selected source leaves does not reattribute the later simultaneous sacrifice",
+        "zone-service batch freezes projected power and toughness before an earlier source leaves"
+      ]
+    },
+    {
+      "suite": "ForEachOpponentApnapTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "opponent iteration rotates around the active player, not the caster or first seat",
+        "rotated opponent iteration still excludes teammates and players who have lost"
+      ]
+    }
+  ]
+}

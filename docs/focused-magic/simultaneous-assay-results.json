@@ -1,0 +1,32 @@
+{
+  "scope": "Set-scoped differential against compiled goldens; coverage limitations are not passes",
+  "sets": [
+    {
+      "set": "EMN",
+      "compared": 23,
+      "declined": 41,
+      "unmodeled": 0,
+      "unfolded": 0,
+      "multifaceOutOfScope": 6,
+      "oracleTextMismatches": 0,
+      "decodeFailures": 0,
+      "divergences": 0
+    },
+    {
+      "set": "ONE",
+      "compared": 37,
+      "declined": 6,
+      "unmodeled": 0,
+      "unfolded": 1,
+      "multifaceOutOfScope": 0,
+      "oracleTextMismatches": 0,
+      "decodeFailures": 0,
+      "divergences": 0
+    }
+  ],
+  "newCardWholeModel": {
+    "Geier Reach Sanitarium": "DECLINED: each-player draw/discard activation",
+    "Sheoldreds Edict": "DECLINED: modal opponent sacrifice grammar"
+  },
+  "notes": "Individual explain runs confirmed these declines. Native scenarios establish gameplay behavior; Assay does not read either new card whole."
+}
