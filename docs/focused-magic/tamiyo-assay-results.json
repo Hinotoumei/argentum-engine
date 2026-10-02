@@ -1,0 +1,15 @@
+{
+  "scope": "MH3 differential against compiled goldens; coverage limitations are not passes",
+  "handWrittenCards": 26,
+  "comparedAndAgreeing": 7,
+  "grammarDeclines": 15,
+  "unmodeledScripts": 2,
+  "unfolded": 0,
+  "multifaceOutOfScope": 1,
+  "missingOracle": 0,
+  "oracleTextMismatches": 1,
+  "decodeFailures": 0,
+  "divergences": 0,
+  "tamiyoWholeCard": "Multiface out of differential scope; individual explain declines ability grammar",
+  "notes": "Direct canonical comparison verifies both Tamiyo faces. The remaining scoped Oracle mismatch is excluded from model comparison, so no all-set metadata or whole-card Assay pass is claimed."
+}

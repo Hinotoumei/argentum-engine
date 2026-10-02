@@ -70,7 +70,8 @@ class CreatePermanentEmblemExecutor : EffectExecutor<CreatePermanentEmblemEffect
         val (emblemId, stateWithId) = state.newEntity()
         var emblemContainer: ComponentContainer = ComponentContainer.EMPTY
             .with(ControllerComponent(controllerId))
-            .with(EmblemSourceComponent(sourceName = sourceName, description = resolvedDescription))
+            .with(EmblemSourceComponent(sourceName = sourceName, description = resolvedDescription,
+                createdAtTimestamp = state.timestamp))
         if (chosenType != null) {
             emblemContainer = emblemContainer.withCastChoice(
                 ChoiceSlot.CREATURE_TYPE, ChoiceValue.TextChoice(chosenType)
@@ -89,7 +90,7 @@ class CreatePermanentEmblemExecutor : EffectExecutor<CreatePermanentEmblemEffect
             )
         }
 
-        var newState = stateWithId.withEntity(emblemId, emblemContainer)
+        var newState = stateWithId.withEntity(emblemId, emblemContainer).tick()
         val emblemContext = context.copy(sourceId = emblemId)
 
         // Power/toughness modification (Layer 7c).

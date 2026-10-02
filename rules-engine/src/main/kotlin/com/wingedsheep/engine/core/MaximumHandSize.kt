@@ -8,6 +8,9 @@ import com.wingedsheep.engine.state.GameState
 import com.wingedsheep.engine.state.components.battlefield.BattlefieldEntryTimestampComponent
 import com.wingedsheep.engine.state.components.battlefield.chosenOpponent
 import com.wingedsheep.engine.state.components.identity.CardComponent
+import com.wingedsheep.engine.state.components.identity.ControllerComponent
+import com.wingedsheep.engine.state.components.identity.EmblemSourceComponent
+import com.wingedsheep.engine.state.components.identity.EmblemStaticAbilityComponent
 import com.wingedsheep.engine.state.components.identity.RoomFaceStatics
 import com.wingedsheep.engine.state.components.player.PlayerMaximumHandSizeReductionComponent
 import com.wingedsheep.engine.state.components.player.PlayerNoMaximumHandSizeComponent
@@ -49,6 +52,7 @@ object MaximumHandSize {
      *   source's controller, so "as long as …" gates (Winter's Delirium) are honored. A set effect
      *   can raise the limit above [DEFAULT] as readily as lower it (Doctor Octopus sets eight).
      * - [NoMaximumHandSize] statics on permanents [playerId] controls (Reliquary Tower).
+     * - Owned set/no-maximum statics on emblems, using their creation timestamp.
      * - The rest-of-game [PlayerNoMaximumHandSizeComponent] (Wisdom of Ages).
      *
      * A static ability's effect takes its permanent's battlefield-entry timestamp (CR 613.7a).
@@ -89,6 +93,22 @@ object MaximumHandSize {
                 val value = dynamicAmountEvaluator.evaluate(state, setAbility.amount, context)
                     .coerceAtLeast(0)
                 candidates += timestamp to value
+            }
+        }
+        // Emblems live outside every zone, so a battlefield-only scan cannot see their rules.
+        for ((emblemId, container) in state.entities) {
+            val statics = container.get<EmblemStaticAbilityComponent>() ?: continue
+            val controllerId = container.get<ControllerComponent>()?.playerId ?: continue
+            val timestamp = container.get<EmblemSourceComponent>()?.createdAtTimestamp ?: 0L
+            val context = EffectContext(sourceId = emblemId, controllerId = controllerId)
+            for (raw in statics.abilities) {
+                if (raw is NoMaximumHandSize && controllerId == playerId) {
+                    candidates += timestamp to null
+                }
+                val setAbility = activeSetMaximumHandSize(state, raw, context, conditionEvaluator) ?: continue
+                if (!playerScopeIncludes(setAbility.player, playerId, controllerId, state, emblemId)) continue
+                candidates += timestamp to dynamicAmountEvaluator.evaluate(state, setAbility.amount, context)
+                    .coerceAtLeast(0)
             }
         }
         // sortedBy is stable, so two effects sharing a timestamp keep scan order.

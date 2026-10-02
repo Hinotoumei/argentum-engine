@@ -17,5 +17,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class EmblemSourceComponent(
     val sourceName: String,
-    val description: String
+    val description: String,
+    /** Timestamp of emblem creation; older saved emblems default to the earliest timestamp. */
+    val createdAtTimestamp: Long = 0,
 ) : Component

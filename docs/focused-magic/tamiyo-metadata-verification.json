@@ -1,0 +1,18 @@
+{
+  "set": "MH3",
+  "collectorNumber": "242",
+  "scryfallId": "2a717b98-cdac-416d-bf6c-f6b6638e65d1",
+  "officialRulings": 10,
+  "faces": [
+    {
+      "name": "Tamiyo, Inquisitive Student",
+      "metadataMatchesCompiledGolden": true,
+      "imageStatus": 200
+    },
+    {
+      "name": "Tamiyo, Seasoned Scholar",
+      "metadataMatchesCompiledGolden": true,
+      "imageStatus": 200
+    }
+  ]
+}

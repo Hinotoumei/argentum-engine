@@ -1571,6 +1571,241 @@
     ]
 }
 
+// Tamiyo, Inquisitive Student
+{
+    "name": "Tamiyo, Inquisitive Student",
+    "manaCost": "{U}",
+    "typeLine": "Legendary Creature — Moonfolk Wizard",
+    "oracleText": "Flying\nWhenever Tamiyo attacks, investigate. (Create a Clue token. It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")\nWhen you draw your third card in a turn, exile Tamiyo, then return her to the battlefield transformed under her owner's control.",
+    "creatureStats": {
+        "power": 0,
+        "toughness": 3
+    },
+    "keywords": [
+        "FLYING"
+    ],
+    "script": {
+        "triggeredAbilities": [
+            {
+                "id": "Tamiyo, Inquisitive Student:1",
+                "trigger": "AttackEvent",
+                "effect": {
+                    "type": "CreatePredefinedToken",
+                    "tokenType": "Clue"
+                }
+            },
+            {
+                "id": "Tamiyo, Inquisitive Student:2",
+                "trigger": {
+                    "type": "NthCardDrawnEvent",
+                    "nthCard": 3
+                },
+                "binding": "ANY",
+                "effect": "ExileAndReturnTransformed"
+            }
+        ]
+    },
+    "backFace": {
+        "name": "Tamiyo, Seasoned Scholar",
+        "manaCost": "",
+        "typeLine": "Legendary Planeswalker — Tamiyo",
+        "oracleText": "+2: Until your next turn, whenever a creature attacks you or a planeswalker you control, it gets -1/-0 until end of turn.\n−3: Return target instant or sorcery card from your graveyard to your hand. If it's a green card, add one mana of any color.\n−7: Draw cards equal to half the number of cards in your library, rounded up. You get an emblem with \"You have no maximum hand size.\"",
+        "script": {
+            "activatedAbilities": [
+                {
+                    "id": "Tamiyo, Seasoned Scholar:1",
+                    "cost": {
+                        "type": "CostLoyalty",
+                        "change": 2
+                    },
+                    "effect": {
+                        "type": "CreateDelayedTrigger",
+                        "effect": {
+                            "type": "ModifyStats",
+                            "powerModifier": {
+                                "type": "Fixed",
+                                "amount": -1
+                            },
+                            "toughnessModifier": {
+                                "type": "Fixed",
+                                "amount": 0
+                            },
+                            "target": "TriggeringEntity"
+                        },
+                        "trigger": {
+                            "event": {
+                                "type": "AttackEvent",
+                                "filter": {
+                                    "cardPredicates": [
+                                        "IsCreature"
+                                    ],
+                                    "statePredicates": [
+                                        "IsAttackingYouOrYourPlaneswalkers"
+                                    ]
+                                }
+                            },
+                            "binding": "ANY"
+                        },
+                        "expiry": "DelayedTriggerExpiry.UntilControllersNextTurn"
+                    },
+                    "timing": "SorcerySpeed",
+                    "isPlaneswalkerAbility": true,
+                    "descriptionOverride": "+2: Until your next turn, whenever a creature attacks you or a planeswalker you control, it gets -1/-0 until end of turn."
+                },
+                {
+                    "id": "Tamiyo, Seasoned Scholar:2",
+                    "cost": {
+                        "type": "CostLoyalty",
+                        "change": -3
+                    },
+                    "effect": {
+                        "type": "Composite",
+                        "effects": [
+                            {
+                                "type": "GatherCards",
+                                "source": "ChosenTargets",
+                                "storeAs": "gathered0"
+                            },
+                            {
+                                "type": "MoveCollection",
+                                "from": "gathered0",
+                                "destination": {
+                                    "type": "ToZone",
+                                    "zone": "Hand"
+                                }
+                            },
+                            {
+                                "type": "ConditionalOnCollection",
+                                "collection": "gathered0",
+                                "ifNotEmpty": "AddManaOfChoice",
+                                "filter": "green"
+                            }
+                        ]
+                    },
+                    "targetRequirements": [
+                        {
+                            "type": "TargetObject",
+                            "filter": {
+                                "baseFilter": "instant|sorcery own:you",
+                                "zone": "Graveyard"
+                            },
+                            "id": "t0"
+                        }
+                    ],
+                    "timing": "SorcerySpeed",
+                    "isPlaneswalkerAbility": true,
+                    "descriptionOverride": "-3: Return target instant or sorcery card from your graveyard to your hand. If it's a green card, add one mana of any color."
+                },
+                {
+                    "id": "Tamiyo, Seasoned Scholar:3",
+                    "cost": {
+                        "type": "CostLoyalty",
+                        "change": -7
+                    },
+                    "effect": {
+                        "type": "Composite",
+                        "effects": [
+                            {
+                                "type": "DrawCards",
+                                "count": {
+                                    "type": "Divide",
+                                    "numerator": {
+                                        "type": "AggregateZone",
+                                        "player": "You",
+                                        "zone": "Library"
+                                    },
+                                    "denominator": {
+                                        "type": "Fixed",
+                                        "amount": 2
+                                    }
+                                }
+                            },
+                            {
+                                "type": "CreatePermanentEmblem",
+                                "ownedStaticAbilities": [
+                                    "NoMaximumHandSize"
+                                ],
+                                "emblemDescription": "You have no maximum hand size."
+                            }
+                        ]
+                    },
+                    "timing": "SorcerySpeed",
+                    "isPlaneswalkerAbility": true,
+                    "descriptionOverride": "-7: Draw cards equal to half the number of cards in your library, rounded up. You get an emblem with \"You have no maximum hand size.\""
+                }
+            ]
+        },
+        "metadata": {
+            "collectorNumber": "242",
+            "rarity": "MYTHIC",
+            "artist": "Magali Villeneuve",
+            "imageUri": "https://cards.scryfall.io/normal/back/2/a/2a717b98-cdac-416d-bf6c-f6b6638e65d1.jpg?1783911236"
+        },
+        "startingLoyalty": 2,
+        "colorIdentityOverride": [
+            "GREEN",
+            "BLUE"
+        ],
+        "colorIndicator": [
+            "GREEN",
+            "BLUE"
+        ],
+        "hasNoManaCost": true
+    },
+    "metadata": {
+        "collectorNumber": "242",
+        "rarity": "MYTHIC",
+        "artist": "Magali Villeneuve",
+        "imageUri": "https://cards.scryfall.io/normal/front/2/a/2a717b98-cdac-416d-bf6c-f6b6638e65d1.jpg?1783911236",
+        "rulings": [
+            {
+                "date": "2024-06-07",
+                "text": "In some rare cases, a spell or ability may cause Tamiyo, Inquisitive Student to transform while she's a creature (front face up) on the battlefield. If this happens, Tamiyo, Seasoned Scholar won't have any loyalty counters on her and will subsequently be put into her owner's graveyard."
+            },
+            {
+                "date": "2024-06-07",
+                "text": "You can activate one of Tamiyo, Seasoned Scholar's loyalty abilities the turn she enters the battlefield. However, you may do so only during one of your main phases when the stack is empty. For example, if Tamiyo, Seasoned Scholar enters the battlefield during combat, there will be an opportunity for your opponent to remove her before you can activate one of her abilities."
+            },
+            {
+                "date": "2024-06-07",
+                "text": "If multiple effects modify your hand size, apply them in timestamp order. For example, if you put Necrodominance (an enchantment that says your maximum hand size is five) onto the battlefield and then activate Tamiyo, Seasoned Scholar's last ability, you'll have no maximum hand size. However, if the emblem from Tamiyo, Seasoned Scholar's last ability was created before you put Necrodominance onto the battlefield, your maximum hand size would be five."
+            },
+            {
+                "date": "2024-06-07",
+                "text": "Each face of a transforming double-faced card has its own set of characteristics: name, types, subtypes, abilities, and so on. While a transforming double-faced permanent is on the battlefield, consider only the characteristics of the face that's currently up. The other set of characteristics is ignored."
+            },
+            {
+                "date": "2024-06-07",
+                "text": "Each transforming double-faced card in this set is cast with its front face up. In every zone other than the battlefield, consider only the characteristics of its front face. If it is on the battlefield, consider only the characteristics of the face that's up; the other face's characteristics are ignored."
+            },
+            {
+                "date": "2024-06-07",
+                "text": "The mana value of a transforming double-faced card is the mana value of its front face, no matter which face is up."
+            },
+            {
+                "date": "2024-06-07",
+                "text": "The back face of a transforming double-faced card usually has a color indicator that defines its color. Colorless back faces, such as lands, do not."
+            },
+            {
+                "date": "2024-06-07",
+                "text": "In the Commander variant, a double-faced card's color identity is determined by the mana costs and mana symbols in the rules text of both faces combined. If either face has a color indicator or basic land type, those are also considered. For example, Ral, Monsoon Mage's color identity is blue and red, since its front face is red and its back face has a blue and red color indicator."
+            },
+            {
+                "date": "2024-06-07",
+                "text": "A transforming double-faced card enters the battlefield with its front face up by default, unless a spell or ability instructs you to put it onto the battlefield transformed or allows you to cast it transformed, in which case it enters with its back face up."
+            },
+            {
+                "date": "2024-06-07",
+                "text": "If you are instructed to put a card that isn't a double-faced card onto the battlefield transformed, it will not enter the battlefield at all. In that case, it stays in the zone it was previously in. For example, if a single-faced card is a copy of Ral, Monsoon Mage, choosing to exile that permanent during the resolution of its triggered ability will cause it to remain in exile."
+            }
+        ]
+    },
+    "colorIdentityOverride": [
+        "GREEN",
+        "BLUE"
+    ]
+}
+
 // Thraben Charm
 {
     "name": "Thraben Charm",

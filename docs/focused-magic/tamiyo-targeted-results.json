@@ -1,0 +1,132 @@
+{
+  "scope": "Native Tamiyo scenarios and generic emblem hand-size regressions; full regression and live acceptance are separate",
+  "passed": 18,
+  "results": [
+    {
+      "module": "rules-engine",
+      "suite": {
+        "name": "com.wingedsheep.engine.core.EmblemMaximumHandSizeTest",
+        "tests": "4",
+        "skipped": "0",
+        "failures": "0",
+        "errors": "0",
+        "timestamp": "2026-10-02T09:31:41.300Z",
+        "hostname": "DESKTOP-6K9JG6J",
+        "time": "6.662"
+      },
+      "cases": [
+        {
+          "name": "a later no-maximum emblem overrides an earlier permanent cap and survives serialization",
+          "classname": "com.wingedsheep.engine.core.EmblemMaximumHandSizeTest",
+          "time": "2.38"
+        },
+        {
+          "name": "a later permanent cap overrides an earlier no-maximum emblem",
+          "classname": "com.wingedsheep.engine.core.EmblemMaximumHandSizeTest",
+          "time": "0.022"
+        },
+        {
+          "name": "successive emblems with set and no-maximum statics follow creation order",
+          "classname": "com.wingedsheep.engine.core.EmblemMaximumHandSizeTest",
+          "time": "0.003"
+        },
+        {
+          "name": "emblem set limits resolve their player scope relative to their own controller",
+          "classname": "com.wingedsheep.engine.core.EmblemMaximumHandSizeTest",
+          "time": "0.014"
+        }
+      ]
+    },
+    {
+      "module": "mtg-sets/2024/tests",
+      "suite": {
+        "name": "com.wingedsheep.engine.scenarios.TamiyoInquisitiveStudentScenarioTest",
+        "tests": "14",
+        "skipped": "0",
+        "failures": "0",
+        "errors": "0",
+        "timestamp": "2026-10-02T09:32:02.936Z",
+        "hostname": "DESKTOP-6K9JG6J",
+        "time": "85.071"
+      },
+      "cases": [
+        {
+          "name": "real blue casting enters a flying 0/3 front face; unaffordable casting is atomic",
+          "classname": "com.wingedsheep.engine.scenarios.TamiyoInquisitiveStudentScenarioTest",
+          "time": "2.556"
+        },
+        {
+          "name": "the third real draw exiles and returns with exactly two loyalty; saved=false",
+          "classname": "com.wingedsheep.engine.scenarios.TamiyoInquisitiveStudentScenarioTest",
+          "time": "0.463"
+        },
+        {
+          "name": "the third real draw exiles and returns with exactly two loyalty; saved=true",
+          "classname": "com.wingedsheep.engine.scenarios.TamiyoInquisitiveStudentScenarioTest",
+          "time": "1.444"
+        },
+        {
+          "name": "a batch crossing the third draw triggers once, and a stolen Tamiyo returns to her owner",
+          "classname": "com.wingedsheep.engine.scenarios.TamiyoInquisitiveStudentScenarioTest",
+          "time": "0.151"
+        },
+        {
+          "name": "an actual attack investigates, and the Clue can be sacrificed to draw",
+          "classname": "com.wingedsheep.engine.scenarios.TamiyoInquisitiveStudentScenarioTest",
+          "time": "0.311"
+        },
+        {
+          "name": "+2 works immediately after the exile-return transform, once per turn",
+          "classname": "com.wingedsheep.engine.scenarios.TamiyoInquisitiveStudentScenarioTest",
+          "time": "0.092"
+        },
+        {
+          "name": "-3 returns Think Twice and adds mana only for a green returned card",
+          "classname": "com.wingedsheep.engine.scenarios.TamiyoInquisitiveStudentScenarioTest",
+          "time": "0.134"
+        },
+        {
+          "name": "-3 returns Regrowth and adds mana only for a green returned card",
+          "classname": "com.wingedsheep.engine.scenarios.TamiyoInquisitiveStudentScenarioTest",
+          "time": "0.124"
+        },
+        {
+          "name": "-7 draws rounded-up half of library size 0 and creates a persistent emblem",
+          "classname": "com.wingedsheep.engine.scenarios.TamiyoInquisitiveStudentScenarioTest",
+          "time": "0.128"
+        },
+        {
+          "name": "-7 draws rounded-up half of library size 5 and creates a persistent emblem",
+          "classname": "com.wingedsheep.engine.scenarios.TamiyoInquisitiveStudentScenarioTest",
+          "time": "0.129"
+        },
+        {
+          "name": "-7 draws rounded-up half of library size 6 and creates a persistent emblem",
+          "classname": "com.wingedsheep.engine.scenarios.TamiyoInquisitiveStudentScenarioTest",
+          "time": "0.118"
+        },
+        {
+          "name": "+2 weakens each attacker of you or your planeswalker, including after Tamiyo leaves; saved=false",
+          "classname": "com.wingedsheep.engine.scenarios.TamiyoInquisitiveStudentScenarioTest",
+          "time": "0.469"
+        },
+        {
+          "name": "+2 weakens each attacker of you or your planeswalker, including after Tamiyo leaves; saved=true",
+          "classname": "com.wingedsheep.engine.scenarios.TamiyoInquisitiveStudentScenarioTest",
+          "time": "0.722"
+        },
+        {
+          "name": "the third-draw trigger does not bring Tamiyo back after a response exiles her",
+          "classname": "com.wingedsheep.engine.scenarios.TamiyoInquisitiveStudentScenarioTest",
+          "time": "0.15"
+        }
+      ]
+    }
+  ],
+  "snapshotReview": "Only Tamiyo added to MH3; existing trees unchanged",
+  "earlierFixtureFailure": {
+    "tests": 14,
+    "failures": 3,
+    "cause": "reorderZone requires the same library membership; the corrected fixture removes excess cards explicitly"
+  }
+}
