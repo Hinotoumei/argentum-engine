@@ -9,7 +9,7 @@ function harness(answers=[]){
   const window={addEventListener(){},prompt(question){prompts.push(question);return answers.shift()??null;}};
   const context={window,document:{getElementById:id=>elements[id]||null,createElement:()=>({dataset:{},classList:{add(){}},innerHTML:''})},prompt:window.prompt,console,setTimeout,clearTimeout};
   vm.createContext(context);
-  const source=fs.readFileSync(process.env.ARGENTUM_TEST_SOURCE||require.resolve('../js/provider/argentum.js'),'utf8').replace('  window.FocusedMagicArgentum={','  window.__test={decisionResponse,providerTableCard,submitLegalAction,completeActionForBot,setActive(value){active=value;}};\n  window.FocusedMagicArgentum={');
+  const source=fs.readFileSync(process.env.ARGENTUM_TEST_SOURCE||require.resolve('../js/provider/argentum.js'),'utf8').replace('  window.FocusedMagicArgentum={','  window.__test={decisionResponse,providerTableCard,playerEffectsSummary,submitLegalAction,completeActionForBot,setActive(value){active=value;}};\n  window.FocusedMagicArgentum={');
   vm.runInContext(source,context);
   const state={viewingPlayerId:'me',players:[{playerId:'me',life:20},{playerId:'opp',life:20}],cards:{bear:{name:'Bear',controllerId:'opp'},spell:{name:'Spell',controllerId:'opp'}},zones:[{zoneId:{zoneType:'BATTLEFIELD'},cardIds:['bear']},{zoneId:{zoneType:'STACK'},cardIds:['spell']}]};
   window.__test.setActive({interactionEpoch:{id:'epoch'},state,submitAction:action=>sent.push(JSON.parse(JSON.stringify(action)))});
@@ -18,6 +18,41 @@ function harness(answers=[]){
 const target=(ids,min=1,max=1,extra={})=>({description:'Choose target',validTargets:ids,minTargets:min,maxTargets:max,...extra});
 const modal=modes=>({action:{type:'CastSpell',cardId:'command',playerId:'me'},modalEnumeration:{minChooseCount:2,chooseCount:2,allowRepeat:false,modes,unavailableIndices:[]},requiresTargets:true});
 const mode=(index,reqs=[])=>({index,description:`Mode ${index}`,available:true,targetRequirements:reqs});
+
+test('tabletop preserves an unlimited hand and its server-provided emblem text',()=>{
+ const h=harness();
+ assert.equal(h.api.playerEffectsSummary({maxHandSize:null,activeEffects:[{name:'Tamiyo Emblem',description:'You have no maximum hand size.'}]}),'No maximum hand size • Tamiyo Emblem: You have no maximum hand size.');
+});
+test('tabletop displays a later server limit even while an emblem remains',()=>{
+ const h=harness();
+ assert.equal(h.api.playerEffectsSummary({maxHandSize:0,activeEffects:[{name:'Emblem'}]}),'Hand limit: 0 • Emblem');
+});
+
+test('human attack selection preserves each provider-advertised attack target',async()=>{
+ const h=harness(['1,2','1','2']);
+ await h.api.submitLegalAction({actionType:'DeclareAttackers',action:{type:'DeclareAttackers',playerId:'me',attackers:{}},validAttackers:['bear','spell'],validAttackTargets:['opp','bear']});
+ assert.deepEqual(h.sent[0].attackers,{bear:'opp',spell:'bear'});
+});
+test('human can explicitly declare no attackers',async()=>{
+ const h=harness(['']);
+ await h.api.submitLegalAction({actionType:'DeclareAttackers',action:{type:'DeclareAttackers',playerId:'me',attackers:{}},validAttackers:['bear'],validAttackTargets:['opp']});
+ assert.deepEqual(h.sent[0].attackers,{});
+});
+test('omitting a provider-mandatory attacker submits nothing',async()=>{
+ const h=harness(['2']);
+ await h.api.submitLegalAction({actionType:'DeclareAttackers',action:{type:'DeclareAttackers',playerId:'me',attackers:{}},validAttackers:['bear','spell'],mandatoryAttackers:['bear'],validAttackTargets:['opp']});
+ assert.equal(h.sent.length,0);
+});
+test('cancelling the attack-target chooser submits nothing',async()=>{
+ const h=harness(['1',null]);
+ await h.api.submitLegalAction({actionType:'DeclareAttackers',action:{type:'DeclareAttackers',playerId:'me',attackers:{}},validAttackers:['bear'],validAttackTargets:['opp']});
+ assert.equal(h.sent.length,0);
+});
+test('required-blocks continuation preserves the exact provider assignments',async()=>{
+ const h=harness();
+ await h.api.submitLegalAction({actionType:'DeclareBlockers',action:{type:'DeclareBlockers',playerId:'me',blockers:{}},mandatoryBlockerAssignments:{bear:['spell']}});
+ assert.deepEqual(h.sent[0].blockers,{bear:['spell']});
+});
 test('human command submits player and stack targets in selected-mode order',async()=>{
  const h=harness(['2,1','1','1']);
  await h.api.submitLegalAction(modal([mode(0,[target(['spell'])]),mode(1,[target(['opp'])])]));

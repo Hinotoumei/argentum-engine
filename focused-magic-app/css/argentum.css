@@ -17,6 +17,9 @@
 
 .argentum-tabletop-card{position:relative}
 .argentum-tabletop-player{overflow:auto}
+.argentum-tabletop-panel{overflow-y:auto}
+.argentum-tabletop-panel > :not(.argentum-tabletop-board){flex-shrink:0}
+.argentum-tabletop-board{flex:1 0 500px}
 .argentum-tabletop-stat,.argentum-tabletop-x{position:absolute;background:#101722e8;color:#fff;border:1px solid #8095b0;border-radius:4px;padding:2px 4px;font-size:.72rem;font-weight:700;line-height:1.1}
 .argentum-tabletop-stat{bottom:4px;right:4px}
 .argentum-tabletop-x{top:4px;right:4px}

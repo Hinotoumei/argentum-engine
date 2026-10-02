@@ -285,7 +285,9 @@ SIDEBOARD:
           <section class="argentum-tabletop-player self"><div class="argentum-tabletop-playerhead"><b id="argentumTabletopMyName">You</b><span>Life <b id="argentumTabletopMyLife">?</b></span><span>GY <b id="argentumTabletopMyGyCount">0</b></span><span>Library <b id="argentumTabletopMyLibCount">?</b></span></div><div class="argentum-tabletop-zone-title">Your battlefield</div><div id="argentumTabletopMyBattlefield" class="argentum-tabletop-cards"></div></section>
           <section class="argentum-tabletop-hand"><div class="argentum-tabletop-zone-title">Your hand — tap a card to play/cast</div><div id="argentumTabletopMyHand" class="argentum-tabletop-cards hand"></div></section>
         </div>
+        <div id="argentumTabletopPlayerEffects" class="sub"></div>
         <section id="argentumTabletopCardActions" class="argentum-tabletop-actions"><span class="sub">Select a card or use Pass/Continue.</span></section>
+        <section id="argentumTabletopTurnActions" class="argentum-tabletop-actions"></section>
         <section class="argentum-tabletop-decision"><div id="argentumTabletopDecision" class="sub">No pending decision.</div></section>
         <div class="argentum-tabletop-footer"><button id="argentumTabletopPass" class="good" type="button">Pass / Continue</button><span class="sub">Argentum is authoritative. Only provider-advertised legal actions are shown.</span></div>
       </div>`;
@@ -348,6 +350,12 @@ SIDEBOARD:
     if(!d){box.textContent='No pending decision.';return;}
     box.innerHTML=`<b>${esc(d.prompt||d.type)}</b> `;const b=document.createElement('button');b.className='primary';b.textContent='Resolve decision';b.onclick=()=>{try{const r=decisionResponse(d,'human');if(r)active.submitDecision(r);}catch(e){setTabletopStatus(e.message,true)}};box.appendChild(b);
   }
+  function playerEffectsSummary(player){
+    const limit=player?.maxHandSize;
+    const limitText=limit===null?'No maximum hand size':Number.isFinite(limit)?`Hand limit: ${limit}`:'Hand limit: unknown';
+    const effects=(player?.activeEffects||[]).map(effect=>[effect.name,effect.description].filter(Boolean).join(': '));
+    return [limitText,...effects].join(' • ');
+  }
   function renderTabletop(){
     ensureTabletopUI();const s=active?.state;if(!s)return;openTabletopUI();
     const me=s.viewingPlayerId,my=s.players?.find(p=>p.playerId===me),opp=s.players?.find(p=>p.playerId!==me);
@@ -357,6 +365,14 @@ SIDEBOARD:
     $('argentumTabletopScore').textContent=`Turn ${s.turnNumber??'?'} • ${s.currentPhase||''}${s.currentStep?'/'+s.currentStep:''} • Priority: ${s.players?.find(p=>p.playerId===s.priorityPlayerId)?.name||s.priorityPlayerId||'—'}`;
     fillTableZone('argentumTabletopMyHand',s,myHand);fillTableZone('argentumTabletopMyBattlefield',s,stateZone(s,me,'BATTLEFIELD'));if(opp)fillTableZone('argentumTabletopOppBattlefield',s,stateZone(s,opp.playerId,'BATTLEFIELD'));fillTableZone('argentumTabletopStack',s,s.zones?.find(z=>String(zoneType(z)).toUpperCase()==='STACK'));
     $('argentumTabletopCardActions').innerHTML='<span class="sub">Select a card or use Pass/Continue.</span>';
+    $('argentumTabletopPlayerEffects').textContent=playerEffectsSummary(my);
+    const turnActions=$('argentumTabletopTurnActions');turnActions.innerHTML='';
+    if(!active.pendingDecision)for(const info of active.legalActions||[]){
+      if(!/DeclareAttackers|DeclareBlockers/.test(info.actionType||''))continue;
+      const button=document.createElement('button');button.type='button';button.className='primary';
+      button.textContent=/DeclareAttackers/.test(info.actionType)?'Choose attackers':'Continue with required blocks only';
+      button.onclick=()=>submitLegalAction(info);turnActions.appendChild(button);
+    }
     renderTabletopDecision();setTabletopStatus('Argentum game active.');
   }
 
@@ -497,6 +513,19 @@ SIDEBOARD:
     try {
       if(!active?.interactionEpoch)throw new Error('No live interaction epoch; request a resync first.');
       const action=clone(info.action);
+      if(/DeclareAttackers/.test(info.actionType||action.type||'')){
+        const valid=info.validAttackers||[],mandatory=info.mandatoryAttackers||[];
+        const chosen=pickIds('Choose attackers (leave empty to attack with none)',valid,mandatory.length,valid.length);
+        if(mandatory.some(id=>!chosen.includes(id)))throw new Error('Choose every mandatory attacker.');
+        action.attackers={};
+        for(const id of chosen){
+          const targets=pickIds(`Choose attack target for ${entityLabel(id)}`,info.validAttackTargets||[],1,1);
+          action.attackers[id]=targets[0];
+        }
+      }
+      if(/DeclareBlockers/.test(info.actionType||action.type||'')){
+        action.blockers=clone(info.mandatoryBlockerAssignments||{});
+      }
       if(info.modalEnumeration && action.type==='CastSpell') {
         const e=info.modalEnumeration;
         const available=(e.modes||[]).filter(m=>m.available!==false && !(e.unavailableIndices||[]).includes(m.index));
