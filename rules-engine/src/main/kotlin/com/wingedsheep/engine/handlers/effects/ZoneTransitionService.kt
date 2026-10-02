@@ -226,7 +226,8 @@ class ZoneTransitionService(
         entityId: EntityId,
         destinationZone: Zone,
         options: ZoneEntryOptions = ZoneEntryOptions(),
-        fromZoneKey: ZoneKey? = null
+        fromZoneKey: ZoneKey? = null,
+        lookBackState: GameState? = null
     ): ZoneTransitionResult {
         // 1. Look up entity info
         val container = state.getEntity(entityId)
@@ -244,6 +245,12 @@ class ZoneTransitionService(
         val oldObject = state.objectRef(entityId)
         val fromZone = currentZoneKey.zoneType
         val leavingBattlefield = fromZone == Zone.BATTLEFIELD
+
+        // Simultaneous moves share the immutable board from before the event. Actual zone
+        // mutations still use state; only battlefield exit information uses this look-back.
+        val snapshotState = lookBackState ?: state
+        val snapshotContainer = snapshotState.getEntity(entityId) ?: container
+        val snapshotCard = snapshotContainer.get<CardComponent>() ?: cardComponent
 
         // 2. Capture last-known info if leaving battlefield (assembled into one EntitySnapshot
         // below). The +1/+1, -1/-1, and total counter counts are derived from this map by the
@@ -270,14 +277,14 @@ class ZoneTransitionService(
         var lastKnownWasFaceDown = false
 
         if (leavingBattlefield) {
-            val countersComponent = container.get<CountersComponent>()
+            val countersComponent = snapshotContainer.get<CountersComponent>()
             lastKnownCounters = countersComponent?.counters?.filterValues { it > 0 } ?: emptyMap()
-            val projected = state.projectedState
+            val projected = snapshotState.projectedState
             lastKnownPower = projected.getPower(entityId)
             lastKnownToughness = projected.getToughness(entityId)
             // Capture the projected typeLine so leaves-battlefield triggers see types/subtypes
             // granted by continuous effects (e.g., Ygra makes other creatures Food artifacts).
-            lastKnownTypeLine = buildProjectedTypeLine(cardComponent, state, entityId)
+            lastKnownTypeLine = buildProjectedTypeLine(snapshotCard, snapshotState, entityId)
             // Capture projected keywords so dies/leaves triggers can check keyword filters
             // (e.g., Jackdaw Savior: "whenever a creature you control with flying dies").
             lastKnownKeywords = projected.getKeywords(entityId)
@@ -286,45 +293,45 @@ class ZoneTransitionService(
             // (e.g., Xu-Ifit reanimating Festering Goblin without its "When this dies" trigger).
             lastKnownLostAllAbilities = projected.hasLostAllAbilities(entityId)
             if (lastKnownAttachedTo == null) {
-                lastKnownAttachedTo = container.get<AttachedToComponent>()?.targetId
+                lastKnownAttachedTo = snapshotContainer.get<AttachedToComponent>()?.targetId
             }
             // CR 509 combat pairing, captured before the cross-references are torn down: the
             // creatures blocking this one (its BlockedComponent) and the creatures it was blocking
             // (its BlockingComponent). Read by "destroy all creatures blocking or blocked by it".
             run {
-                val blockingThis = container.get<BlockedComponent>()?.blockerIds ?: emptyList()
-                val blockedByThis = container.get<BlockingComponent>()?.blockedAttackerIds ?: emptyList()
+                val blockingThis = snapshotContainer.get<BlockedComponent>()?.blockerIds ?: emptyList()
+                val blockedByThis = snapshotContainer.get<BlockingComponent>()?.blockedAttackerIds ?: emptyList()
                 lastKnownBlockingOrBlockedByIds = (blockingThis + blockedByThis).distinct()
             }
             // Whether it was still an attacking creature as it left (CR 506.4), captured before
             // cleanupCombatReferences strips the live AttackingComponent — "draw a card if it was
             // attacking" (Garna, Bloodfist of Keld) resolves after the death, so it can only read
             // last known information (CR 608.2h).
-            lastKnownWasAttacking = container.has<AttackingComponent>()
-            lastKnownWasBlocking = container.has<BlockingComponent>()
+            lastKnownWasAttacking = snapshotContainer.has<AttackingComponent>()
+            lastKnownWasBlocking = snapshotContainer.has<BlockingComponent>()
             // …and *what* it was attacking. CR 802.2a keeps naming a defending player after the
             // creature "is no longer attacking" — the player it *was* attacking before it left
             // combat — so an ability that outlives its own attacking source still has an answer.
             // Mindstab Thrull sacrifices itself before the defending player discards.
-            lastKnownAttackedDefenderId = container.get<AttackingComponent>()?.defenderId
-            lastKnownWasToken = container.has<TokenComponent>()
+            lastKnownAttackedDefenderId = snapshotContainer.get<AttackingComponent>()?.defenderId
+            lastKnownWasToken = snapshotContainer.has<TokenComponent>()
             // Which permanent minted this one — a token is gone from state by the time a
             // leaves-the-battlefield trigger gates (CR 704.5d), so "when the token leaves the
             // battlefield" (Dance of Many) can only recognise *its own* token from here.
-            lastKnownCreatedBy = container
+            lastKnownCreatedBy = snapshotContainer
                 .get<com.wingedsheep.engine.state.components.identity.CreatedByComponent>()?.creatorId
             lastKnownDamageDealtByPlayers =
-                container.get<DamageDealtByPlayersThisTurnComponent>()?.perPlayer ?: emptyMap()
+                snapshotContainer.get<DamageDealtByPlayersThisTurnComponent>()?.perPlayer ?: emptyMap()
             lastKnownDamageSources =
-                container.get<com.wingedsheep.engine.state.components.battlefield.DamagedBySourcesThisTurnComponent>()
+                snapshotContainer.get<com.wingedsheep.engine.state.components.battlefield.DamagedBySourcesThisTurnComponent>()
                     ?.sources ?: emptySet()
-            lastKnownCastX = container
+            lastKnownCastX = snapshotContainer
                 .get<com.wingedsheep.engine.state.components.battlefield.CastChoicesComponent>()?.x
             // A card is turned face up as it leaves the battlefield for a graveyard (CR 708.4), and
             // the battlefield entity is gone by trigger-gating time either way, so "whenever a
             // face-down creature you control dies" (Yarus, Roar of the Old Gods) has to read this
             // as last-known information (CR 608.2h).
-            lastKnownWasFaceDown = container
+            lastKnownWasFaceDown = snapshotContainer
                 .has<com.wingedsheep.engine.state.components.identity.FaceDownComponent>()
         }
 
@@ -353,8 +360,8 @@ class ZoneTransitionService(
         // it becomes the last-known controller (CR 608.2h) carried on the snapshot and credited
         // by the per-player LTB/death trackers below.
         val controllerId = if (leavingBattlefield) {
-            state.projectedState.getController(entityId)
-                ?: container.get<ControllerComponent>()?.playerId
+            snapshotState.projectedState.getController(entityId)
+                ?: snapshotContainer.get<ControllerComponent>()?.playerId
                 ?: ownerId
         } else {
             ownerId
@@ -425,13 +432,13 @@ class ZoneTransitionService(
         // down by the exit cleanup below (CR 704.5m/n), so "modified/equipped/enchanted creature
         // leaves the battlefield" triggers must freeze it here as last-known information (CR 608.2h).
         val lastKnownAttachmentIds = if (leavingBattlefield) {
-            state.getEntity(entityId)
+            snapshotState.getEntity(entityId)
                 ?.get<com.wingedsheep.engine.state.components.battlefield.AttachmentsComponent>()
                 ?.attachedIds
                 ?: emptyList()
         } else emptyList()
         val lastKnownAttachedTypeLines = lastKnownAttachmentIds.mapNotNull { attachId ->
-            state.getEntity(attachId)
+            snapshotState.getEntity(attachId)
                 ?.get<com.wingedsheep.engine.state.components.identity.CardComponent>()?.typeLine
         }
         val lastKnownWasEquipped = lastKnownAttachedTypeLines.any { it.isEquipment }
@@ -440,7 +447,7 @@ class ZoneTransitionService(
         val lastKnownSnapshot = if (leavingBattlefield) {
             com.wingedsheep.engine.state.components.stack.EntitySnapshot(
                 entityId = entityId,
-                battlefieldEntryTimestamp = container.get<BattlefieldEntryTimestampComponent>()?.timestamp,
+                battlefieldEntryTimestamp = snapshotContainer.get<BattlefieldEntryTimestampComponent>()?.timestamp,
                 power = lastKnownPower,
                 toughness = lastKnownToughness,
                 // Mirror the projected type line's subtypes into the snapshot's own `subtypes`
@@ -453,7 +460,7 @@ class ZoneTransitionService(
                 keywords = lastKnownKeywords,
                 lostAllAbilities = lastKnownLostAllAbilities,
                 typeLine = lastKnownTypeLine,
-                cardDefinitionId = cardComponent.cardDefinitionId,
+                cardDefinitionId = snapshotCard.cardDefinitionId,
                 attachedTo = lastKnownAttachedTo,
                 wasEquipped = lastKnownWasEquipped,
                 attachmentIds = lastKnownAttachmentIds,
@@ -468,7 +475,7 @@ class ZoneTransitionService(
                 damageSources = lastKnownDamageSources,
                 wasFaceDown = lastKnownWasFaceDown,
                 conditionalSelfGrantIds = options.conditionalSelfGrantIds
-                    ?: ConditionalSelfGrants.activeIds(state, entityId, cardRegistry, conditionEvaluator),
+                    ?: ConditionalSelfGrants.activeIds(snapshotState, entityId, cardRegistry, conditionEvaluator),
             )
         } else null
 
@@ -1157,7 +1164,8 @@ class ZoneTransitionService(
                 currentState, entityId, destinationZone,
                 perCardOptions.copy(
                     conditionalSelfGrantIds = perCardOptions.conditionalSelfGrantIds ?: lookBack[entityId]
-                )
+                ),
+                lookBackState = state
             )
             currentState = result.state
             allEvents.addAll(result.events)

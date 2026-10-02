@@ -800,6 +800,29 @@ class MoveCollectionExecutor(
             state
         }
 
+        // Freeze the acting players before the simultaneous move. A chosen control effect
+        // may itself leave in this collection; subsequent cards still belong to the controller
+        // who chose them, not whoever controls them after the earlier card has moved.
+        val sacrificeGroups = if (moveType == MoveType.Sacrifice) cards.groupBy { cardId ->
+            state.projectedState.getController(cardId)
+                ?: state.getEntity(cardId)?.get<ControllerComponent>()?.playerId
+                ?: context.controllerId
+        } else emptyMap()
+        for ((controllerId, sacrificed) in sacrificeGroups) {
+            // Evaluate Food/artifact characteristics against the same pre-event board for
+            // every player, including effects conditioned on earlier sacrifice trackers.
+            val tracked = ZoneTransitionService.trackPermanentSacrifice(state, sacrificed, controllerId)
+            tracked.getEntity(controllerId)?.let { player ->
+                newState = newState.copy(entities = newState.entities + (controllerId to player))
+            }
+        }
+        if (sacrificeGroups.isNotEmpty()) {
+            newState = newState.copy(
+                permanentsSacrificedThisTurn = state.permanentsSacrificedThisTurn + cards.size,
+                pendingSacrificeIds = state.pendingSacrificeIds + cards
+            )
+        }
+
         // Leaves-the-battlefield abilities look back to before this one simultaneous event
         // (CR 603.10a): freeze each card's conditional self-grants before the first card moves.
         val lookBack = com.wingedsheep.engine.event.ConditionalSelfGrants.frozen(
@@ -863,7 +886,7 @@ class MoveCollectionExecutor(
             // graveyard — never to a "destination player" chosen by the effect — so routing
             // collapses to ownerId for those cases regardless of the destination's nominal player.
             val actualDestPlayerId = when {
-                (moveType == MoveType.Sacrifice || moveType == MoveType.Destroy) && destZone == Zone.GRAVEYARD -> ownerId
+                (moveType == MoveType.Sacrifice || moveType == MoveType.Destroy || moveType == MoveType.Discard) && destZone == Zone.GRAVEYARD -> ownerId
                 destZone == Zone.HAND && fromZone == Zone.BATTLEFIELD -> ownerId
                 destZone == Zone.EXILE && fromZone == Zone.BATTLEFIELD -> ownerId
                 // CR 400.3: a card bound for a library always goes to its *owner's* library,
@@ -909,7 +932,7 @@ class MoveCollectionExecutor(
             // Delegate to ZoneTransitionService for full cleanup + entry
             val fromZoneKey = if (fromZone != null) ZoneKey(ownerId, fromZone) else null
             val transitionResult = zones.moveToZone(
-                newState, cardId, destZone, entryOptions, fromZoneKey
+                newState, cardId, destZone, entryOptions, fromZoneKey, lookBackState = state
             )
             newState = transitionResult.state
             events.addAll(transitionResult.events)
@@ -956,35 +979,26 @@ class MoveCollectionExecutor(
             }
         }
 
-        // Emit discard event if configured
+        // Discards are attributed to each card's hand owner, irrespective of the effect's
+        // controller and of any replacement that changes the card's final destination.
         if (moveType == MoveType.Discard && cards.isNotEmpty()) {
-            val discardNames = cards.map { state.getEntity(it)?.get<CardComponent>()?.name ?: "Card" }
-            events.add(CardsDiscardedEvent(destPlayerId, cards, discardNames))
-            newState = com.wingedsheep.engine.handlers.effects.ZoneTransitionService
-                .trackDiscard(newState, destPlayerId, cards)
-        }
-
-        // Emit sacrifice event if configured. Track the per-turn sacrifice count + Food
-        // sacrifice off the *pre-move* state, where the sacrificed permanents (and their
-        // projected subtypes) still exist on the battlefield.
-        if (moveType == MoveType.Sacrifice && cards.isNotEmpty()) {
-            val sacrificeNames = cards.map { cardId ->
-                state.getEntity(cardId)?.get<CardComponent>()?.name ?: "Unknown"
+            val groups = cards.groupBy { cardId ->
+                state.getEntity(cardId)?.get<OwnerComponent>()?.playerId
+                    ?: state.getEntity(cardId)?.get<CardComponent>()?.ownerId ?: destPlayerId
             }
-            val tracked = com.wingedsheep.engine.handlers.effects.ZoneTransitionService
-                .trackPermanentSacrifice(state, cards, context.controllerId)
-            newState = newState.copy(
-                permanentsSacrificedThisTurn = tracked.permanentsSacrificedThisTurn,
-            )
-            // trackPermanentSacrifice also tags the controller with SacrificedFoodThisTurnComponent
-            // when a sacrificed permanent was a Food. That tag lives on the controller entity (which
-            // the move above leaves untouched), so carry it over too — otherwise "whenever you
-            // sacrifice a Food" triggers never fire for Foods sacrificed through this path.
-            if (tracked.getEntity(context.controllerId)?.has<SacrificedFoodThisTurnComponent>() == true) {
-                newState = newState.updateEntity(context.controllerId) { it.with(SacrificedFoodThisTurnComponent) }
+            for ((playerId, discarded) in groups) {
+                val names = discarded.map { state.getEntity(it)?.get<CardComponent>()?.name ?: "Card" }
+                events.add(CardsDiscardedEvent(playerId, discarded, names))
+                newState = ZoneTransitionService.trackDiscard(newState, playerId, discarded)
             }
-            events.add(0, PermanentsSacrificedEvent(context.controllerId, cards, sacrificeNames))
         }
+        // Bookkeeping and sacrifice markers were applied before moving; preserve them and
+        // report every original controller's sacrifice without re-filtering the changed board.
+        val sacrificeEvents = sacrificeGroups.map { (controllerId, sacrificed) ->
+            val names = sacrificed.map { state.getEntity(it)?.get<CardComponent>()?.name ?: "Unknown" }
+            PermanentsSacrificedEvent(controllerId, sacrificed, names)
+        }
+        events.addAll(0, sacrificeEvents)
 
         // Emit reveal event if configured
         if (revealed && cards.isNotEmpty()) {

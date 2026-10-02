@@ -3303,6 +3303,17 @@ Types that are not effects no longer carry the `Effect` suffix, so the rule has 
   does not leak one player's working collections into the next player's body. Syphon Mind maps each
   opponent's `discarded_this_opponent` output into `discarded_by_opponents`, then draws from that
   aggregate.
+  For a simultaneous action, collect every player's choices inside the loop and move the union
+  once outside it. Moving inside the body is still sequential. `Player.EachOpponent` iterates in
+  active-player-first order restricted to opponents, excluding teammates and eliminated players.
+  `MoveCollection` discards route to each card owner's graveyard and emit owner-attributed events.
+  Sacrifices freeze projected controllers and characteristics before any selected permanent moves:
+  events, per-player counts, Food/artifact tags, and zone-change sacrifice markers retain that
+  pre-move attribution even if a chosen control effect leaves first. Owners determine graveyard
+  destinations; the outer effect's controller does not replace the actual acting players.
+  Battlefield exit snapshots and leave/death trackers also use the board before the entire
+  collection or zone-service batch moves, preserving controller, projected characteristics,
+  counters, attachments, and combat relationships when an earlier selected source leaves.
 - `Effects.If(condition, then, otherwise?, descriptionOverride?)` — "If [condition], [then].
   Otherwise, [otherwise]." Lowers to `GatedEffect(Gate.WhenCondition(condition), then, otherwise)`. It
   is a synchronous state test — no decision, no pause. Engine paths that recognize a conditional branch
