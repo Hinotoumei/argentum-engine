@@ -32,9 +32,12 @@ import com.wingedsheep.engine.core.Outcome
  */
 class AccursedCentaurTest : FunSpec({
 
+    // Discover the shared catalog during spec setup, outside timed gameplay cases.
+    val cards = TestCards.all
+
     fun createDriver(): GameTestDriver {
         val driver = GameTestDriver()
-        driver.registerCards(TestCards.all)
+        driver.registerCards(cards)
         driver.registerCard(AccursedCentaur)
         return driver
     }
