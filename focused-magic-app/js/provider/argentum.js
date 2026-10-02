@@ -326,6 +326,9 @@ SIDEBOARD:
     // Display the provider's projected values, including X=0; never derive card rules here.
     if(c.power!=null&&c.toughness!=null)b.innerHTML+=`<small class="argentum-tabletop-stat">${esc(c.power)}/${esc(c.toughness)}</small>`;
     if(c.chosenX!=null)b.innerHTML+=`<small class="argentum-tabletop-x">X=${esc(c.chosenX)}</small>`;
+    for(const [type,count] of Object.entries(c.counters||{})){
+      if(count>0)b.innerHTML+=`<small class="argentum-tabletop-counter">${esc(type.toLowerCase().replaceAll('_',' '))}: ${esc(count)}</small>`;
+    }
     b.title=c.stackText||c.oracleText||c.name||'';
     if(c.isTapped)b.classList.add('tapped');
     b.onclick=()=>showCardActions(id,zone);
@@ -429,10 +432,17 @@ SIDEBOARD:
     }
   }
 
-  function entityLabel(id) {
+  function entityLabel(id, decisionCardInfo) {
     const s=active?.state;
     const p=s?.players?.find(x=>x.playerId===id); if(p)return `${p.name} (${p.life})`;
-    const c=s?.cards?.[id]; if(c)return `${c.name} [${id}]`;
+    const c=s?.cards?.[id];
+    const z=s?.zones?.find(x=>(x.cardIds||[]).includes(id));
+    const location=c?.zone||z;
+    const zone=String(zoneType(location)).toLowerCase().replaceAll('_',' ');
+    const ownerId=c?.ownerId||zoneOwner(location);
+    const owner=s?.players?.find(x=>x.playerId===ownerId)?.name;
+    const name=c?.name||decisionCardInfo?.name;
+    if(name)return `${name}${zone?` — ${zone}${owner?` (${owner})`:''}`:''} [${id}]`;
     return String(id);
   }
 
@@ -447,8 +457,8 @@ SIDEBOARD:
     return {type:'Card',cardId:id,ownerId:c?.ownerId||zoneOwner(z)||s.viewingPlayerId,zone:zoneType(z)};
   }
 
-  function pickIds(promptText, ids, min=1, max=1) {
-    const opts=(ids||[]).map((id,i)=>`${i+1}. ${entityLabel(id)}`).join('\n');
+  function pickIds(promptText, ids, min=1, max=1, cardInfo={}) {
+    const opts=(ids||[]).map((id,i)=>`${i+1}. ${entityLabel(id,cardInfo[id])}`).join('\n');
     if(!ids?.length && min>0) throw new Error(`${promptText}: no legal targets.`);
     if(max===0)return [];
     const d=(ids||[]).slice(0,min).map(id=>String((ids||[]).indexOf(id)+1)).join(',');
@@ -556,7 +566,7 @@ SIDEBOARD:
     }
     if(type==='SelectCardsDecision' || type==='SearchLibraryDecision'){
       const options=decision.options||[]; const min=decision.minSelections??decision.minCards??0,max=decision.maxSelections??decision.maxCards??options.length;
-      const picks=ai?options.slice(0,min):pickIds(decision.prompt||'Choose cards',options,min,max);
+      const picks=ai?options.slice(0,min):pickIds(decision.prompt||'Choose cards',options,min,max,decision.cardInfo||{});
       return {type:'CardsSelectedResponse',decisionId:id,selectedCards:picks};
     }
     if(type==='ChooseTargetsDecision'){

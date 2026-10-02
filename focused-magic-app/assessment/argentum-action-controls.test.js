@@ -9,7 +9,7 @@ function harness(answers=[]){
   const window={addEventListener(){},prompt(question){prompts.push(question);return answers.shift()??null;}};
   const context={window,document:{getElementById:id=>elements[id]||null,createElement:()=>({dataset:{},classList:{add(){}},innerHTML:''})},prompt:window.prompt,console,setTimeout,clearTimeout};
   vm.createContext(context);
-  const source=fs.readFileSync(process.env.ARGENTUM_TEST_SOURCE||require.resolve('../js/provider/argentum.js'),'utf8').replace('  window.FocusedMagicArgentum={','  window.__test={providerTableCard,submitLegalAction,completeActionForBot,setActive(value){active=value;}};\n  window.FocusedMagicArgentum={');
+  const source=fs.readFileSync(process.env.ARGENTUM_TEST_SOURCE||require.resolve('../js/provider/argentum.js'),'utf8').replace('  window.FocusedMagicArgentum={','  window.__test={decisionResponse,providerTableCard,submitLegalAction,completeActionForBot,setActive(value){active=value;}};\n  window.FocusedMagicArgentum={');
   vm.runInContext(source,context);
   const state={viewingPlayerId:'me',players:[{playerId:'me',life:20},{playerId:'opp',life:20}],cards:{bear:{name:'Bear',controllerId:'opp'},spell:{name:'Spell',controllerId:'opp'}},zones:[{zoneId:{zoneType:'BATTLEFIELD'},cardIds:['bear']},{zoneId:{zoneType:'STACK'},cardIds:['spell']}]};
   window.__test.setActive({interactionEpoch:{id:'epoch'},state,submitAction:action=>sent.push(JSON.parse(JSON.stringify(action)))});
@@ -96,4 +96,34 @@ for(const x of [0,2])test(`tabletop stack badge preserves X=${x}`,()=>{
 });
 test('tabletop does not invent a chosen X when the provider omits it',()=>{
  const h=harness();const card=h.api.providerTableCard(h.state,'spell','STACK');assert.doesNotMatch(card.innerHTML,/argentum-tabletop-x/);
+});
+
+test('matching card selections show zones and owners and preserve the selected copy',()=>{
+ const h=harness(['2']);h.state.players[1].name='Opponent';
+ h.state.cards.gy={name:'Grizzly Bears',ownerId:'opp',zone:{zoneType:'GRAVEYARD'}};
+ h.state.cards.hand={name:'Grizzly Bears',ownerId:'opp',zone:{zoneType:'HAND'}};
+ h.state.cards.library={name:'Grizzly Bears',ownerId:'opp',zone:{zoneType:'LIBRARY'}};
+ const response=h.api.decisionResponse({type:'SelectCardsDecision',id:'search',options:['gy','hand','library'],minSelections:0,maxSelections:3});
+ assert.deepEqual(JSON.parse(JSON.stringify(response.selectedCards)),['hand']);
+ for(const zone of ['graveyard','hand','library'])assert.match(h.prompts[0],new RegExp(`Grizzly Bears — ${zone} \\(Opponent\\)`));
+});
+test('a hidden-zone option uses provider decision card information when the ordinary state omits it',()=>{
+ const h=harness(['1']);
+ const response=h.api.decisionResponse({type:'SelectCardsDecision',id:'search',options:['hidden'],minSelections:0,maxSelections:1,cardInfo:{hidden:{name:'Grizzly Bears'}}});
+ assert.match(h.prompts[0],/Grizzly Bears \[hidden\]/);assert.equal(response.selectedCards[0],'hidden');
+});
+test('optional card selections preserve an empty choice',()=>{
+ const h=harness(['']);const response=h.api.decisionResponse({type:'SelectCardsDecision',id:'search',options:['bear'],minSelections:0,maxSelections:1});
+ assert.equal(response.selectedCards.length,0);
+});
+test('cancelling a card selection returns no choice',()=>{
+ const h=harness([null]);assert.throws(()=>h.api.decisionResponse({type:'SelectCardsDecision',id:'search',options:['bear'],minSelections:0,maxSelections:1}),/Action cancelled/);
+ assert.equal(h.sent.length,0);
+});
+
+test('tabletop displays server-provided counter types and counts without deriving them from chosen X',()=>{
+ const h=harness();h.state.cards.bear.chosenX=2;h.state.cards.bear.counters={CHARGE:1,PLUS_ONE_PLUS_ONE:3,LOYALTY:0};
+ const card=h.api.providerTableCard(h.state,'bear','BATTLEFIELD');
+ assert.match(card.innerHTML,/argentum-tabletop-counter">charge: 1/);
+ assert.match(card.innerHTML,/plus one plus one: 3/);assert.doesNotMatch(card.innerHTML,/loyalty: 0|charge: 2/);
 });
