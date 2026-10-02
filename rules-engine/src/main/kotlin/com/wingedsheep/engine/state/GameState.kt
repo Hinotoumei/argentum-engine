@@ -645,7 +645,11 @@ data class GameState(
                 objectIdentities = objectIdentities + (entityId to old.copy(logicalZone = key))
             )
         }
-        return copy(
+        // Damage history belongs to the source object, not to later visits of the same physical card.
+        val fresh = if (old != null && getEntity(entityId)?.has<com.wingedsheep.engine.state.components.battlefield.DamageDealtToCreaturesThisTurnComponent>() == true)
+            updateEntity(entityId) { it.without<com.wingedsheep.engine.state.components.battlefield.DamageDealtToCreaturesThisTurnComponent>() }
+        else this
+        return fresh.copy(
             objectIdentities = objectIdentities + (entityId to ObjectIdentity(nextObjectGeneration, key)),
             nextObjectGeneration = nextObjectGeneration + 1
         )

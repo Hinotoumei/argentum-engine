@@ -172,3 +172,22 @@ test('a target chooser cannot submit into a replacement session',async()=>{
  assert.equal(h.sent.length,0);
  assert.match(h.elements.argentumStatus.textContent,/game changed during selection/);
 });
+
+for(const value of ['0','3','5'])test(`X chooser submits integer ${value} within advertised bounds`,async()=>{
+ const h=harness([value]);await h.api.submitLegalAction({action:{type:'CastSpell',cardId:'spell',playerId:'me'},hasXCost:true,minX:0,maxAffordableX:5});
+ assert.equal(h.sent[0].xValue,Number(value));
+});
+for(const value of ['', '1.5', '-1', '6', 'bad', null])test(`X chooser rejects invalid or cancelled value ${value}`,async()=>{
+ const h=harness([value]);await h.api.submitLegalAction({action:{type:'CastSpell',cardId:'spell',playerId:'me'},hasXCost:true,minX:0,maxAffordableX:5});
+ assert.equal(h.sent.length,0);
+});
+test('X chooser honors an advertised nonzero minimum',async()=>{
+ const h=harness(['1']);await h.api.submitLegalAction({action:{type:'CastSpell',cardId:'spell',playerId:'me'},hasXCost:true,minX:2,maxAffordableX:5});assert.equal(h.sent.length,0);
+});
+
+test('an X chooser cannot submit into a replacement session',async()=>{
+ const h=harness(['3']);
+ const pending=h.api.submitLegalAction({action:{type:'CastSpell',cardId:'spell',playerId:'me'},hasXCost:true,minX:0,maxAffordableX:5});
+ h.api.setActive({interactionEpoch:{id:'replacement'},state:h.state,submitAction:action=>h.sent.push(action)});
+ await pending;assert.equal(h.sent.length,0);assert.match(h.elements.argentumStatus.textContent,/game changed during selection/);
+});

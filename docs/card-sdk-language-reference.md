@@ -7665,6 +7665,10 @@ ComparisonOperator.GTE, DynamicAmount.Fixed(8))`, `effect = Effects.WinGame(...)
 
 ## 9. Static abilities
 
+### Intrinsic stack counter protection
+
+`CantBeCountered` protects only its own source spell on the stack. Wrap it in `ConditionalStaticAbility` for state-dependent protection, evaluated using the current spell controller and X at each counter attempt. It does not grant protection to other spells and is distinct from the battlefield-only `GrantCantBeCountered`. Rules removal for illegal targets and direct spell exile remain allowed.
+
 ```kotlin
 staticAbility {
     // The whole continuous modification is the `ability`; the affected objects (filter),

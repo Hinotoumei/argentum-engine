@@ -1,0 +1,14 @@
+{
+  "tool": "Fresh successful-full-build Assay installation",
+  "set": "DIS",
+  "cards": 15,
+  "compared": 5,
+  "confirmed": 5,
+  "divergent": 0,
+  "grammarNotCovered": 10,
+  "demonfire": "Both lines DECLINED; not a whole-card model pass",
+  "logs": [
+    "work/tooling/demonfire-fresh-assay.log",
+    "work/tooling/demonfire-fresh-assay-explain.log"
+  ]
+}

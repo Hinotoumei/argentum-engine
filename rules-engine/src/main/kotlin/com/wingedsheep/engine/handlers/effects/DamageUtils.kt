@@ -1152,8 +1152,8 @@ object DamageUtils {
      * Used for triggers like Soul Collector's "whenever a creature dealt damage by this creature this turn dies".
      */
     fun trackDamageDealtToCreature(state: GameState, sourceId: EntityId, targetCreatureId: EntityId): GameState {
-        // Only track if source is still on the battlefield
-        if (sourceId !in state.getBattlefield()) return state
+        // Resolution pops the stack list before damage, but retains the spell component until zone movement.
+        if (sourceId !in state.getBattlefield() && state.getEntity(sourceId)?.has<SpellOnStackComponent>() != true) return state
         return state.updateEntity(sourceId) { container ->
             val existing = container.get<DamageDealtToCreaturesThisTurnComponent>()
                 ?: DamageDealtToCreaturesThisTurnComponent()

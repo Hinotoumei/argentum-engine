@@ -1,0 +1,54 @@
+{
+  "firstDevelopmentGate": "FAILED in 31m4s at scenario fixture compilation",
+  "fixtureErrors": [
+    "e: file:///C:/Users/hinot/Documents/Codex/2026-09-29/github-plugin-github-openai-curated-remote/work/argentum-engine/mtg-sets/2003-2007/tests/src/test/kotlin/com/wingedsheep/engine/scenarios/DemonfireScenarioTest.kt:46:30 Unresolved reference 'gatherChosenTargets'.",
+    "e: file:///C:/Users/hinot/Documents/Codex/2026-09-29/github-plugin-github-openai-curated-remote/work/argentum-engine/mtg-sets/2003-2007/tests/src/test/kotlin/com/wingedsheep/engine/scenarios/DemonfireScenarioTest.kt:56:21 Unresolved reference 'gatherChosenTargets'.",
+    "e: file:///C:/Users/hinot/Documents/Codex/2026-09-29/github-plugin-github-openai-curated-remote/work/argentum-engine/mtg-sets/2003-2007/tests/src/test/kotlin/com/wingedsheep/engine/scenarios/DemonfireScenarioTest.kt:161:29 No value passed for parameter 'makePlotted'."
+  ],
+  "log": "work/tooling/demonfire-development.log",
+  "repair": "Use gather(CardSource.ChosenTargets) and explicit makePlotted=false for direct exile; no assertions/timeouts relaxed",
+  "retry": "work/tooling/demonfire-targeted-retry.log; pending",
+  "intrinsicTimeout": {
+    "milliseconds": 120000,
+    "report": "work/tooling/demonfire-intrinsic-timeout.xml",
+    "diagnostic": "work/tooling/demonfire-test-thread-dump.txt: TestCards static initializer -> whole-catalog CardDiscovery.scan",
+    "unchangedRetry": "six shared tests passed; card suite pending"
+  },
+  "laterDeathFailures": {
+    "tests": 31,
+    "failures": [
+      {
+        "name": "surviving damaged creature is exiled on later destruction this turn",
+        "message": "org.opentest4j.AssertionFailedError: expected:<true> but was:<false>"
+      },
+      {
+        "name": "prevention uses hand at resolution; empty=true",
+        "message": "org.opentest4j.AssertionFailedError: expected:<true> but was:<false>"
+      },
+      {
+        "name": "partial prevention still marks the actual damaged creature",
+        "message": "org.opentest4j.AssertionFailedError: expected:<true> but was:<false>"
+      }
+    ],
+    "report": "work/tooling/demonfire-later-death-failures.xml",
+    "cause": "ExileOnDeath was read only by the SBA helper, not ordinary destruction/sacrifice zone transitions",
+    "repairGate": "work/tooling/demonfire-death-rider-repair.log; pending"
+  },
+  "recastHistoryFailure": {
+    "tests": 33,
+    "failures": 1,
+    "report": "work/tooling/demonfire-recast-history-failure.xml",
+    "cause": "Damage history was stripped only by battlefield departure, so a resolved spell carried it into subsequent casts",
+    "repair": "Clear it at real object-generation changes; retain it for same-zone/control changes and popped/resumed resolution",
+    "gate": "work/tooling/demonfire-object-history-repair.log; pending"
+  },
+  "fullBuildDiskFailure": {
+    "gate": "full regression",
+    "log": "work/tooling/demonfire-full-build.log",
+    "duration": "27m 20s",
+    "failure": ":game-server:compileKotlin: not enough space on disk; fileHashes cache write also failed",
+    "diskFreeAtFailure": 0,
+    "recovery": "Removed redundant downloaded tool installers and regenerable workspace Gradle build-cache-1 after stopping idle daemons. Source, compiled outputs, dependency downloads and test records preserved. Drive reported 7889989632 bytes free afterward.",
+    "retry": "demonfire-full-build-retry.log; pending"
+  }
+}

@@ -785,6 +785,11 @@ object ZoneMovementUtils {
         // Check for finality counter — if a permanent with a finality counter
         // would die (go from battlefield to graveyard), exile it instead.
         if (fromZone == Zone.BATTLEFIELD && toZone == Zone.GRAVEYARD) {
+            // A resolved exile-on-death rider also replaces destruction and sacrifice, not only SBA deaths.
+            if (state.floatingEffects.any { effect ->
+                    effect.effect.modification is com.wingedsheep.engine.mechanics.layers.SerializableModification.ExileOnDeath &&
+                        entityId in effect.effect.affectedEntities
+                }) return ZoneChangeRedirectResult(Zone.EXILE)
             val counters = container.get<CountersComponent>()
             if (counters != null && counters.getCount(CounterType.FINALITY) > 0) {
                 return ZoneChangeRedirectResult(Zone.EXILE)

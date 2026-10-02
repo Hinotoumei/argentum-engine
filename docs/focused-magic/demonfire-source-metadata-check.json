@@ -1,0 +1,16 @@
+{
+  "status": "Source fields match freshly fetched canonical Scryfall data; compiled verification pending",
+  "set": "DIS",
+  "collectorNumber": "60",
+  "imageStatus": 200,
+  "officialRulings": 0,
+  "scryfallId": "af2ad333-722e-4d7e-972a-903c24068931",
+  "printingChecker": "PASS: earliest canonical and scaffolded set coverage",
+  "unscaffoldedReprints": [
+    "DD2",
+    "JVC",
+    "GK2",
+    "RVR"
+  ],
+  "printingLog": "work/tooling/demonfire-printing-check.log"
+}

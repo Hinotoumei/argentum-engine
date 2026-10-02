@@ -1,0 +1,51 @@
+{
+  "environment": "Fresh local native server at loopback 8083, fixture mirror 8874; no deployment claim",
+  "setup": "Dev API creates initial state only; gameplay uses ordinary provider commands and WebSocket events",
+  "unitTests": {
+    "passed": 48,
+    "failed": 0,
+    "cacheVersion": "0.6.9-x1",
+    "scope": "Fallback X chooser, bounds, cancellation, stale-session rejection; HTML dialog separately exercised in browser"
+  },
+  "browserCases": [
+    {
+      "card": "Engineered Explosives",
+      "steps": [
+        "Float black and red using native Swamp/Mountain abilities",
+        "X bounds 0\u20133",
+        "1.5 and 4 disable confirmation",
+        "Cancel preserves hand and empty stack",
+        "Confirm X=2"
+      ],
+      "result": "Battlefield artifact with charge: 2; hand/stack empty"
+    },
+    {
+      "card": "Demonfire",
+      "steps": [
+        "Cancel X preserves hand/empty stack",
+        "Confirm X=3",
+        "Choose Hill Giant in ordinary target dialog",
+        "Observe native resolution and visible diagnostics"
+      ],
+      "result": {
+        "opponentBattlefield": 0,
+        "opponentGraveyard": 0,
+        "opponentExile": [
+          "Hill Giant"
+        ],
+        "ownHand": 0,
+        "ownGraveyard": [
+          "Demonfire"
+        ],
+        "mountainsTapped": 4,
+        "stack": 0
+      }
+    }
+  ],
+  "screenshots": [
+    "demonfire-x-dialog-explosives-acceptance.jpg",
+    "demonfire-native-exile-acceptance.jpg"
+  ],
+  "diagnosticsNote": "Static production pin/configuration defaults remain old; fixture connects explicitly to loopback. Screenshot is not deployment evidence.",
+  "remaining": "Modal, X-pay-life, combat, pending-decision controls and Constructed admission/start not accepted here"
+}

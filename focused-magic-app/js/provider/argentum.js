@@ -517,6 +517,32 @@ SIDEBOARD:
     });
   }
 
+  async function pickActionNumber(promptText, min, max) {
+    if(!Number.isSafeInteger(min)||!Number.isSafeInteger(max)||min<0||max<min)throw new Error('Invalid provider number bounds.');
+    const valid=raw=>raw!==''&&Number.isSafeInteger(Number(raw))&&Number(raw)>=min&&Number(raw)<=max;
+    const dialog=document.createElement('dialog');
+    if(typeof dialog.showModal!=='function'){
+      const raw=window.prompt(`${promptText} (${min}–${max})`,String(min));
+      if(raw==null)throw new Error('Action cancelled.');
+      if(!valid(raw.trim()))throw new Error(`Choose a whole number from ${min} to ${max}.`);
+      return Number(raw);
+    }
+    dialog.className='argentum-target-dialog';
+    const heading=document.createElement('h3');heading.textContent=promptText;dialog.appendChild(heading);
+    const label=document.createElement('label');label.textContent=`Whole number (${min}–${max})`;
+    const input=document.createElement('input');input.type='number';input.min=String(min);input.max=String(max);input.step='1';input.value=String(min);
+    label.appendChild(input);dialog.appendChild(label);
+    return await new Promise((resolve,reject)=>{
+      const confirm=document.createElement('button');confirm.type='button';confirm.textContent='Confirm number';
+      input.oninput=()=>{confirm.disabled=!valid(input.value);};
+      confirm.onclick=()=>{if(valid(input.value)){const value=Number(input.value);dialog.close();dialog.remove();resolve(value);}};
+      const abort=()=>{dialog.close();dialog.remove();reject(new Error('Action cancelled.'));};
+      const cancel=document.createElement('button');cancel.type='button';cancel.textContent='Cancel';cancel.onclick=abort;
+      dialog.addEventListener('cancel',event=>{event.preventDefault();abort();});
+      dialog.appendChild(confirm);dialog.appendChild(cancel);document.body.appendChild(dialog);dialog.showModal();input.focus();
+    });
+  }
+
   function collectModalTargets(action, enumeration, chooseIds, toTarget) {
     const picks=action.chosenModes||[];
     const min=enumeration.minChooseCount??1, max=enumeration.chooseCount??min;
@@ -573,7 +599,7 @@ SIDEBOARD:
         if(picks.length<min||picks.length>max)throw new Error(`Choose ${min===max?min:`${min}-${max}`} legal mode(s).`);
         action.chosenModes=picks;
       }
-      if(info.hasXCost){const max=info.maxAffordableX??20;const raw=prompt(`Choose X (${info.minX??0}–${max})`,String(info.minX??0));if(raw==null)return;action.xValue=Math.max(info.minX??0,Math.min(max,Number(raw)||0));}
+      if(info.hasXCost)action.xValue=await pickActionNumber('Choose X',info.minX??0,info.maxAffordableX??0);
       if(info.modalEnumeration && action.type==='CastSpell') {
         collectModalTargets(action,info.modalEnumeration,
           (req,mode)=>pickIds(`${mode.description||'Selected mode'}: ${req.description||'Choose target'}`,req.validTargets,req.minTargets??1,req.maxTargets??1),chosenTarget);

@@ -23,6 +23,11 @@ import com.wingedsheep.engine.state.permissions.addMayPlayPermission
 import com.wingedsheep.sdk.core.Zone
 import com.wingedsheep.sdk.model.EntityId
 import com.wingedsheep.sdk.scripting.GrantCantBeCountered
+import com.wingedsheep.sdk.scripting.CantBeCountered
+import com.wingedsheep.sdk.scripting.ConditionalStaticAbility
+import com.wingedsheep.sdk.scripting.CompositeStaticAbility
+import com.wingedsheep.sdk.scripting.StaticAbility
+import com.wingedsheep.engine.handlers.EffectContext
 import com.wingedsheep.sdk.scripting.effects.LibraryChoicePosition
 import com.wingedsheep.sdk.scripting.targets.*
 
@@ -609,6 +614,19 @@ class SpellCounterer(
     }
 
     private fun isGrantedCantBeCountered(state: GameState, spellId: EntityId): Boolean {
+        val spell = state.getEntity(spellId)?.get<SpellOnStackComponent>()
+        val card = state.getEntity(spellId)?.get<CardComponent>()
+        if (spell != null && card != null) {
+            val context = EffectContext(sourceId = spellId, controllerId = spell.casterId, xValue = spell.xValue)
+            fun intrinsic(ability: StaticAbility): Boolean = when (ability) {
+                CantBeCountered -> true
+                is CompositeStaticAbility -> ability.abilities.any(::intrinsic)
+                is ConditionalStaticAbility -> predicateEvaluator.conditions.evaluate(state, ability.condition, context) &&
+                    intrinsic(ability.ability)
+                else -> false
+            }
+            if (cardRegistry.getCard(card.cardDefinitionId)?.staticAbilities?.any(::intrinsic) == true) return true
+        }
         for (playerId in state.turnOrder) {
             for (entityId in state.getBattlefield(playerId)) {
                 val card = state.getEntity(entityId)?.get<CardComponent>() ?: continue

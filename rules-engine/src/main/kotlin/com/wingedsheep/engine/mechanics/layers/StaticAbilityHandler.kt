@@ -1045,6 +1045,7 @@ class StaticAbilityHandler(
 
             // Spells on the stack (StackResolver / GrantedKeywordResolver):
             is GrantCantBeCountered,
+            is com.wingedsheep.sdk.scripting.CantBeCountered,
             is GrantKeywordToOwnSpells,
             is com.wingedsheep.sdk.scripting.GrantWebSlingingToSpells,
             // Cast-time optional additional mana (AdditionalManaForCounters / CastSpellHandler /

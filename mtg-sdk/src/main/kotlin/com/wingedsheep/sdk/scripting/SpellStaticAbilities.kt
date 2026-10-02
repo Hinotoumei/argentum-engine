@@ -1179,3 +1179,10 @@ data class ExtraOnceOnlyActivations(
         return if (newCondition === condition) this else copy(condition = newCondition)
     }
 }
+
+/** Intrinsic protection of this spell on the stack. Conditions are evaluated at each counter attempt. */
+@SerialName("CantBeCountered")
+@Serializable
+data object CantBeCountered : StaticAbility {
+    override val description: String = "this spell can't be countered"
+}

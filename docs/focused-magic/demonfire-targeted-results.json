@@ -1,0 +1,74 @@
+{
+  "build": "demonfire-object-history-repair.log",
+  "duration": "18m 14s",
+  "total_passed": 53,
+  "suites": [
+    {
+      "path": "mtg-sdk/build/test-results/test/TEST-com.wingedsheep.sdk.scripting.IntrinsicCounterProtectionSerializationTest.xml",
+      "name": "com.wingedsheep.sdk.scripting.IntrinsicCounterProtectionSerializationTest",
+      "tests": "2",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-02T13:39:21.405Z",
+      "hostname": "DESKTOP-6K9JG6J",
+      "time": "4.171"
+    },
+    {
+      "path": "rules-engine/build/test-results/test/TEST-com.wingedsheep.engine.scenarios.DeathMarkerZoneTransitionTest.xml",
+      "name": "com.wingedsheep.engine.scenarios.DeathMarkerZoneTransitionTest",
+      "tests": "3",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-02T14:43:13.456Z",
+      "hostname": "DESKTOP-6K9JG6J",
+      "time": "7.45"
+    },
+    {
+      "path": "rules-engine/build/test-results/test/TEST-com.wingedsheep.engine.scenarios.IntrinsicCounterProtectionTest.xml",
+      "name": "com.wingedsheep.engine.scenarios.IntrinsicCounterProtectionTest",
+      "tests": "6",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-02T14:43:21.677Z",
+      "hostname": "DESKTOP-6K9JG6J",
+      "time": "3.115"
+    },
+    {
+      "path": "rules-engine/build/test-results/test/TEST-com.wingedsheep.engine.scenarios.SourceDamageObjectIdentityTest.xml",
+      "name": "com.wingedsheep.engine.scenarios.SourceDamageObjectIdentityTest",
+      "tests": "6",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-02T14:43:25.811Z",
+      "hostname": "DESKTOP-6K9JG6J",
+      "time": "0.162"
+    },
+    {
+      "path": "mtg-sets/2003-2007/tests/build/test-results/test/TEST-com.wingedsheep.engine.scenarios.DemonfireScenarioTest.xml",
+      "name": "com.wingedsheep.engine.scenarios.DemonfireScenarioTest",
+      "tests": "33",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-02T14:48:52.827Z",
+      "hostname": "DESKTOP-6K9JG6J",
+      "time": "8.02"
+    },
+    {
+      "path": "mtg-sets/2003-2007/tests/build/test-results/test/TEST-com.wingedsheep.engine.scenarios.RootSliverTest.xml",
+      "name": "com.wingedsheep.engine.scenarios.RootSliverTest",
+      "tests": "3",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-02T14:49:02.590Z",
+      "hostname": "DESKTOP-6K9JG6J",
+      "time": "69.24"
+    }
+  ],
+  "scope": "33 Demonfire gameplay scenarios, 17 SDK/engine checks, 3 existing Root Sliver checks; full regression and browser acceptance pending"
+}

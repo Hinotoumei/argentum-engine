@@ -1,0 +1,30 @@
+{
+  "build": "demonfire-snapshot.log",
+  "duration": "4m 40s",
+  "suites": [
+    {
+      "path": "mtg-sets/build/test-results/test/TEST-com.wingedsheep.mtg.sets.CardDefinitionSnapshotTest.xml",
+      "name": "com.wingedsheep.mtg.sets.CardDefinitionSnapshotTest",
+      "tests": "340",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-02T16:40:01.927Z",
+      "hostname": "DESKTOP-6K9JG6J",
+      "time": "186.069"
+    },
+    {
+      "path": "mtg-sets/build/test-results/test/TEST-com.wingedsheep.mtg.sets.CardLintTest.xml",
+      "name": "com.wingedsheep.mtg.sets.CardLintTest",
+      "tests": "3",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-02T16:43:08.073Z",
+      "hostname": "DESKTOP-6K9JG6J",
+      "time": "14.86"
+    }
+  ],
+  "snapshotChange": "DIS.json: Demonfire entry only",
+  "diffCheck": "passed"
+}

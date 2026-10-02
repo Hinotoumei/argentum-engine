@@ -7,7 +7,6 @@ import com.wingedsheep.engine.mechanics.layers.Layer
 import com.wingedsheep.engine.mechanics.layers.SerializableModification
 import com.wingedsheep.engine.mechanics.layers.addFloatingEffect
 import com.wingedsheep.engine.state.GameState
-import com.wingedsheep.engine.state.components.identity.LifeTotalComponent
 import com.wingedsheep.sdk.scripting.Duration
 import com.wingedsheep.sdk.scripting.effects.MarkExileOnDeathEffect
 import kotlin.reflect.KClass
@@ -31,9 +30,8 @@ class MarkExileOnDeathExecutor : EffectExecutor<MarkExileOnDeathEffect> {
         val targetId = context.resolveTarget(effect.target)
             ?: return EffectResult.error(state, "No valid target for exile-on-death marker")
 
-        // Only applies to creatures, not players
-        val isPlayer = state.getEntity(targetId)?.get<LifeTotalComponent>() != null
-        if (isPlayer) {
+        // The rider identifies creatures when it is created; it then follows that battlefield object.
+        if (!state.projectedState.isCreature(targetId)) {
             return EffectResult.success(state)
         }
 
