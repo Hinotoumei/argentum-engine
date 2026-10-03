@@ -1,0 +1,53 @@
+{
+  "scope": "Focused shared regression; not full module gate or provider acceptance",
+  "log": "work/tooling/murktide-regression.log",
+  "buildDuration": "8m13s",
+  "suites": [
+    {
+      "scope": "murktide",
+      "name": "com.wingedsheep.engine.scenarios.MurktideRegentScenarioTest",
+      "tests": "32",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-02T21:24:37.220Z",
+      "hostname": "DESKTOP-6K9JG6J",
+      "time": "8.514"
+    },
+    {
+      "scope": "persist",
+      "name": "com.wingedsheep.engine.scenarios.PersistScenarioTest",
+      "tests": "15",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-02T21:24:45.832Z",
+      "hostname": "DESKTOP-6K9JG6J",
+      "time": "88.326"
+    },
+    {
+      "scope": "garland",
+      "name": "com.wingedsheep.engine.scenarios.GarlandKnightOfCorneliaScenarioTest",
+      "tests": "3",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-02T21:31:12.890Z",
+      "hostname": "DESKTOP-6K9JG6J",
+      "time": "63.843"
+    },
+    {
+      "scope": "sdk",
+      "name": "com.wingedsheep.sdk.scripting.DelvePaymentAmountSerializationTest",
+      "tests": "2",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-02T20:55:24.910Z",
+      "hostname": "DESKTOP-6K9JG6J",
+      "time": "1.24"
+    }
+  ],
+  "passed": 52,
+  "unchangedTasksMayReuseValidResults": true
+}

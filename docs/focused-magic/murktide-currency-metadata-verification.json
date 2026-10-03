@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Murktide Regent",
+    "set": "MH2",
+    "collectorNumber": "52",
+    "scryfallId": "20c4aae1-7665-4df7-bd51-a1d95bf8a17d",
+    "compiledMetadataMatches": true,
+    "officialRulings": 3,
+    "imageStatus": 200,
+    "contentType": "image/jpeg"
+  },
+  {
+    "name": "Currency Converter",
+    "set": "NCC",
+    "collectorNumber": "81",
+    "scryfallId": "187b6719-e5ed-4615-a00b-3313ceca055b",
+    "compiledMetadataMatches": true,
+    "officialRulings": 0,
+    "imageStatus": 200,
+    "contentType": "image/jpeg"
+  }
+]

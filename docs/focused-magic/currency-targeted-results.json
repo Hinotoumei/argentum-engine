@@ -1,0 +1,41 @@
+{
+  "scope": "Dedicated Currency Converter gameplay scenarios only",
+  "suite": {
+    "name": "com.wingedsheep.engine.scenarios.CurrencyConverterScenarioTest",
+    "tests": "22",
+    "skipped": "0",
+    "failures": "0",
+    "errors": "0",
+    "timestamp": "2026-10-02T23:22:32.272Z",
+    "hostname": "DESKTOP-6K9JG6J",
+    "time": "8.669"
+  },
+  "cases": [
+    "real casting pays one and an artifact may tap on its entry turn",
+    "discard exile is optional and survives a saved choice; accept=false saved=false",
+    "discard exile is optional and survives a saved choice; accept=false saved=true",
+    "discard exile is optional and survives a saved choice; accept=true saved=false",
+    "discard exile is optional and survives a saved choice; accept=true saved=true",
+    "returning a linked card creates the correct token; land=false saved=false",
+    "returning a linked card creates the correct token; land=false saved=true",
+    "returning a linked card creates the correct token; land=true saved=false",
+    "returning a linked card creates the correct token; land=true saved=true",
+    "unrelated cards in exile are not linked and create no token",
+    "two mana and tap draws then discards and offers the new discard for exile",
+    "insufficient mana for the draw ability rejects before tapping",
+    "a tapped Converter cannot activate either ability",
+    "blink loses this artifact visit's linked pile",
+    "conversion already on the stack keeps its original linked pile after blink; saved=false",
+    "conversion already on the stack keeps its original linked pile after blink; saved=true",
+    "choose one of two linked cards and retain the other; saved=false",
+    "choose one of two linked cards and retain the other; saved=true",
+    "conversion resolves from its departed source's linked pile; saved=false",
+    "conversion resolves from its departed source's linked pile; saved=true",
+    "a card that leaves exile and returns is no longer linked; saved=false",
+    "a card that leaves exile and returns is no longer linked; saved=true"
+  ],
+  "fullGatePassed": false,
+  "providerAccepted": false,
+  "published": false,
+  "log": "work/tooling/currency-lifecycle.log"
+}

@@ -410,6 +410,27 @@ class MoveCollectionExecutor(
 
         val destZone = destination.zone
 
+        if (moveType == MoveType.Discard && destZone == Zone.GRAVEYARD) {
+            var runningState = state
+            val events = mutableListOf<GameEvent>()
+            for ((playerId, discarded) in cards.groupBy { cardId ->
+                state.getEntity(cardId)?.get<OwnerComponent>()?.playerId ?: destPlayerId
+            }) {
+                val result = zones.discardCards(
+                    runningState,
+                    playerId,
+                    discarded,
+                    causedByControllerId = context.controllerId,
+                )
+                runningState = result.state
+                events.addAll(result.events)
+                if (runningState.pendingDecision != null) {
+                    return EffectResult.propagatePause(runningState, events)
+                }
+            }
+            return EffectResult.success(runningState, events)
+        }
+
         // ControllerChooses ordering: pause for player to see/reorder cards going to library
         if (order == CardOrder.ControllerChooses && destZone == Zone.LIBRARY) {
             val isBottom = destination.placement == ZonePlacement.Bottom

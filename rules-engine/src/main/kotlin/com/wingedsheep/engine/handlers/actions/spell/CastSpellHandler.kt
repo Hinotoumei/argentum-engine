@@ -622,6 +622,7 @@ class CastSpellHandler(
             totalManaSpent = paid.manaSpent,
             beheldCards = ledger.beheldCards,
             convokedCreatures = ledger.convokedCreatures,
+            delvedCardTypes = ledger.delvedCardTypes.toList(),
             discardedAsCostCards = ledger.discardedAsCostCards,
             exiledAsCostCards = ledger.exiledAsCostCards,
             exiledAsCostSnapshots = ledger.exiledAsCostSnapshots,

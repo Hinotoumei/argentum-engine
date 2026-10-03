@@ -50,6 +50,12 @@ data class ZoneChangeEvent(
      * / `totalCounters` accessors for the former counter-count scalars.
      */
     val lastKnown: com.wingedsheep.engine.state.components.stack.EntitySnapshot? = null,
+    /**
+     * Public graveyard characteristics before departure (CR 603.10a). Separate from battlefield
+     * LKI: a sorcery can return transformed as a creature, while its graveyard-leave trigger
+     * must still see the sorcery. Unset for private-zone departures.
+     */
+    val departedTypeLine: TypeLine? = null,
     /** Battlefield visit created by this entry; distinct from the departed visit in lastKnown. */
     val enteredBattlefieldTimestamp: Long? = null,
     /** The original card name when this permanent entered as a copy (e.g., "Clever Impersonator") */

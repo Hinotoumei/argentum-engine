@@ -311,6 +311,7 @@ class CreateDelayedTriggerExecutor(
         DynamicAmount.CreaturesThatCrewedOrSaddledThisTurn,
         is DynamicAmount.DevotionTo,
         DynamicAmount.DistinctColorsManaSpent,
+        is DynamicAmount.CardsExiledForDelve,
         is DynamicAmount.EntityProperty,
         is DynamicAmount.Fixed,
         is DynamicAmount.LargestSharedCreatureTypeCount,

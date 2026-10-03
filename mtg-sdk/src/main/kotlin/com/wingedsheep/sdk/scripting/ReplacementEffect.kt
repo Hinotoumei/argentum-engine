@@ -78,6 +78,12 @@ enum class ZoneChangeCause {
      * spell or ability.
      */
     DiscardedByOpponentEffect,
+
+    /**
+     * The move is a discard caused by any resolving spell or ability. Excludes discarding to hand
+     * size in the cleanup step and discarding to pay a cost.
+     */
+    DiscardedByEffect,
 }
 
 @Serializable
@@ -440,6 +446,8 @@ data class RedirectZoneChange(
             ZoneChangeCause.Any -> append("If ${appliesTo.description}, ")
             ZoneChangeCause.DiscardedByOpponentEffect ->
                 append("If a spell or ability an opponent controls causes you to discard this card, ")
+            ZoneChangeCause.DiscardedByEffect ->
+                append("If a spell or ability causes you to discard this card, ")
         }
         if (reveal) append("reveal it and ")
         if (shuffleIntoLibrary && newDestination == Zone.LIBRARY) {
@@ -2415,6 +2423,25 @@ data class RedirectZoneChangeWith(
             copy(appliesTo = newAppliesTo, additionalEffect = newAdditionalEffect)
         else this
     }
+}
+
+/**
+ * Optional replacement for cards like Library of Leng: when an effect causes you to discard a card,
+ * you may put that card on top of its owner's library instead of into its graveyard.
+ */
+@SerialName("PutDiscardOnTopOfLibrary")
+@Serializable
+data object PutDiscardOnTopOfLibrary : ReplacementEffect {
+    override val appliesTo: EventPattern = EventPattern.ZoneChangeEvent(
+        filter = GameObjectFilter.Any,
+        from = Zone.HAND,
+        to = Zone.GRAVEYARD,
+    )
+    override val optional: Boolean = true
+    override val description: String =
+        "If an effect causes you to discard a card, you may put it on top of its owner's library instead"
+
+    override fun applyTextReplacement(replacer: TextReplacer): ReplacementEffect = this
 }
 
 // =============================================================================

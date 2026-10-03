@@ -128,6 +128,8 @@ data class SpellOnStackComponent(
      * [ChoiceSlot.CONVOKED_CREATURES]. Empty when convoke paid nothing.
      */
     val convokedCreatures: Map<EntityId, Long> = emptyMap(),
+    /** Payment-time types of each card exiled for delve; copied under CR 707.10. */
+    val delvedCardTypes: List<Set<com.wingedsheep.sdk.core.CardType>> = emptyList(),
     /**
      * Entity ids of cards discarded to pay this spell's additional discard cost
      * (`Costs.additional.DiscardCards(...)`). Read at resolution via

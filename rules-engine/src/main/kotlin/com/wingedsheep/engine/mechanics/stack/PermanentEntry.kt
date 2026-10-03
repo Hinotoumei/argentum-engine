@@ -232,6 +232,11 @@ internal class PermanentEntry(
         updated = withAlternativeCostMarkers(updated, spellComponent, cardDef)
         updated = withRoomDoors(updated, spellComponent, cardDef)
         updated = withCastRecord(updated, spellComponent)
+        if (spellComponent.delvedCardTypes.isNotEmpty()) {
+            updated = updated.with(com.wingedsheep.engine.state.components.battlefield.DelvePaymentComponent(spellComponent.delvedCardTypes))
+        } else {
+            updated = updated.without<com.wingedsheep.engine.state.components.battlefield.DelvePaymentComponent>()
+        }
 
         // Add continuous effects from static abilities (but not for face-down creatures)
         if (!spellComponent.castFaceDown) {

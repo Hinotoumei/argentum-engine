@@ -1,0 +1,43 @@
+{
+  "scope": "Dedicated Dauthi Voidwalker gameplay only; not full gate or provider acceptance",
+  "log": "work/tooling/dauthi-final-focused.log",
+  "buildDuration": "21s",
+  "suite": {
+    "name": "com.wingedsheep.engine.scenarios.DauthiVoidwalkerScenarioTest",
+    "tests": "23",
+    "skipped": "0",
+    "failures": "0",
+    "errors": "0",
+    "timestamp": "2026-10-02T23:49:09.573Z",
+    "hostname": "DESKTOP-6K9JG6J",
+    "time": "6.447"
+  },
+  "cases": [
+    "opponent creature death is replaced by exile with one void counter; saved=false",
+    "opponent creature death is replaced by exile with one void counter; saved=true",
+    "own creature still goes to its owner's graveyard without a void counter",
+    "library cards are also redirected with void counters; saved=false",
+    "library cards are also redirected with void counters; saved=true",
+    "may cast a card marked by another source for free after sacrificing Voidwalker; saved=false",
+    "may cast a card marked by another source for free after sacrificing Voidwalker; saved=true",
+    "may play the chosen opponent-owned land using a normal land play; saved=false",
+    "may play the chosen opponent-owned land using a normal land play; saved=true",
+    "summoning sickness rejects activation before sacrifice",
+    "activation with no eligible card still pays sacrifice and grants no free play",
+    "discard is still emitted when the card goes directly to exile; saved=false",
+    "discard is still emitted when the card goes directly to exile; saved=true",
+    "opponent creature tokens still die rather than receiving a void counter in exile",
+    "actual shadow combat restricts blockers; blocker shadow=false",
+    "actual shadow combat restricts blockers; blocker shadow=true",
+    "free casting permits only X zero; X=0",
+    "free casting permits only X zero; X=3",
+    "the destination owner's graveyard controls replacement after control changes; opponent owns=false",
+    "the destination owner's graveyard controls replacement after control changes; opponent owns=true",
+    "choosing one of two void-marked cards grants only the selected card",
+    "unused play permission expires at the end of the activation turn",
+    "free play does not permit a sorcery during the opponent's turn"
+  ],
+  "published": false,
+  "fullGatePassed": false,
+  "providerAccepted": false
+}

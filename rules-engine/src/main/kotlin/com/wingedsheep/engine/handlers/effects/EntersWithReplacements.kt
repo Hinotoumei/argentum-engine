@@ -246,7 +246,18 @@ object EntersWithReplacements {
         predicateEvaluator: PredicateEvaluator
     ): Pair<GameState, List<GameEvent>> {
         if (count <= 0) return state to emptyList()
-        if (!state.projectedState.canReceiveCounters(entityId)) return state to emptyList()
+        // CR 614.12: entry replacements see the object as it would exist on the battlefield.
+        // A resolving spell has no battlefield projection yet, so global counter prohibitions
+        // otherwise miss it. Use an immutable preview only; no preview movement/events persist.
+        val counterCheckState = if (entityId in state.getBattlefield()) state else {
+            var preview = state.removeFromStack(entityId)
+            val origin = preview.logicalZone(entityId)
+            if (origin != null && entityId in preview.getZone(origin)) {
+                preview = preview.removeFromZone(origin, entityId)
+            }
+            preview.addToZone(com.wingedsheep.engine.state.ZoneKey(controllerId, Zone.BATTLEFIELD), entityId)
+        }
+        if (!counterCheckState.projectedState.canReceiveCounters(entityId)) return state to emptyList()
         val modifiedCount = ReplacementEffectUtils.applyCounterPlacementModifiers(
             state, entityId, counterType, count, placerId = controllerId,
             predicateEvaluator = predicateEvaluator

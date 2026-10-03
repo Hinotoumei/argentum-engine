@@ -333,6 +333,7 @@ val engineSerializersModule = SerializersModule {
         subclass(GuessConditionContinuation::class)
         subclass(RedistributeLifeTotalsContinuation::class)
         subclass(HandSizeDiscardContinuation::class)
+        subclass(PutDiscardOnTopOfLibraryContinuation::class)
         subclass(EachPlayerDiscardsOrLoseLifeContinuation::class)
         subclass(DrawUpToContinuation::class)
         subclass(StaticDrawReplacementContinuation::class)
@@ -575,6 +576,7 @@ val engineSerializersModule = SerializersModule {
         subclass(SuspendedComponent::class)
         subclass(ParadigmComponent::class)
         subclass(CastRecordComponent::class)
+        subclass(DelvePaymentComponent::class)
         subclass(CastChoicesComponent::class)
 
         // Combat components

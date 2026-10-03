@@ -1,0 +1,75 @@
+{
+  "scope": "Preliminary Oracle grammar reading with the previously installed distribution; requires final freshly built Assay assessment",
+  "log": "work/tooling/remaining-three-preliminary-assay.log",
+  "declinesAreNotPasses": true,
+  "cards": [
+    {
+      "name": "Murktide Regent",
+      "lines": [
+        {
+          "index": 0,
+          "oracleLine": "Delve",
+          "verdict": "ROUND_TRIP"
+        },
+        {
+          "index": 1,
+          "oracleLine": "Flying",
+          "verdict": "ROUND_TRIP"
+        },
+        {
+          "index": 2,
+          "oracleLine": "~ enters with a +1/+1 counter on it for each instant and sorcery card exiled with it.",
+          "verdict": "DECLINED"
+        },
+        {
+          "index": 3,
+          "oracleLine": "Whenever an instant or sorcery card leaves your graveyard, put a +1/+1 counter on ~.",
+          "verdict": "DECLINED"
+        }
+      ],
+      "wholeCardConfirmed": false
+    },
+    {
+      "name": "Currency Converter",
+      "lines": [
+        {
+          "index": 0,
+          "oracleLine": "Whenever you discard a card, you may exile that card from your graveyard.",
+          "verdict": "DECLINED"
+        },
+        {
+          "index": 1,
+          "oracleLine": "{2}, {T}: Draw a card, then discard a card.",
+          "verdict": "VARIANT"
+        },
+        {
+          "index": 2,
+          "oracleLine": "{T}: Put a card exiled with ~ into its owner's graveyard. If it's a land card, create a Treasure token. If it's a nonland card, create a 2/2 black Rogue creature token.",
+          "verdict": "DECLINED"
+        }
+      ],
+      "wholeCardConfirmed": false
+    },
+    {
+      "name": "Dauthi Voidwalker",
+      "lines": [
+        {
+          "index": 0,
+          "oracleLine": "Shadow",
+          "verdict": "ROUND_TRIP"
+        },
+        {
+          "index": 1,
+          "oracleLine": "If a card would be put into an opponent's graveyard from anywhere, instead exile it with a void counter on it.",
+          "verdict": "DECLINED"
+        },
+        {
+          "index": 2,
+          "oracleLine": "{T}, Sacrifice ~: Choose an exiled card an opponent owns with a void counter on it. You may play it this turn without paying its mana cost.",
+          "verdict": "DECLINED"
+        }
+      ],
+      "wholeCardConfirmed": false
+    }
+  ]
+}

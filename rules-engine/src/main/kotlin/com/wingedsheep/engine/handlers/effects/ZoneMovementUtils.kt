@@ -478,6 +478,7 @@ object ZoneMovementUtils {
             // Note: CastRecordComponent is NOT stripped here — it needs to persist
             // for intervening-if checks on mana-spent-gated triggers that may still
             // be on the stack when the permanent leaves the battlefield (e.g., evoke).
+            .without<com.wingedsheep.engine.state.components.battlefield.DelvePaymentComponent>()
             .without<DamageComponent>()
             .without<DamageDealtToCreaturesThisTurnComponent>()
             .without<WasDealtDamageThisTurnComponent>()
@@ -669,6 +670,7 @@ object ZoneMovementUtils {
                 discardingPlayerId != null &&
                 causeControllerId != discardingPlayerId
         }
+        ZoneChangeCause.DiscardedByEffect -> state.pendingDiscardCauseControllers[entityId] != null
     }
 
     /**
@@ -1010,7 +1012,13 @@ object ZoneMovementUtils {
             val newState = state.updateEntity(entityId) { container ->
                 container.with(current.withAdded(counterType, effect.count))
             }
-            return newState to emptyList()
+            val events = if (effect.count > 0) listOf(CountersAddedEvent(
+                entityId = entityId,
+                counterType = counterType,
+                amount = effect.count,
+                entityName = state.getEntity(entityId)?.get<CardComponent>()?.name.orEmpty(),
+            )) else emptyList()
+            return newState to events
         }
         if (effect is com.wingedsheep.sdk.scripting.effects.GainLifeEffect) {
             // The rider's controller (the replacement's source controller) gains the life. Only a

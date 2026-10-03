@@ -1,0 +1,67 @@
+[
+  {
+    "record": "dauthi-expanded-failures.xml",
+    "suite": {
+      "name": "com.wingedsheep.engine.scenarios.DauthiVoidwalkerScenarioTest",
+      "tests": "18",
+      "skipped": "0",
+      "failures": "1",
+      "errors": "0",
+      "timestamp": "2026-10-02T23:42:11.130Z",
+      "hostname": "DESKTOP-6K9JG6J",
+      "time": "9.239"
+    },
+    "failures": [
+      {
+        "case": "free casting permits only X zero; X=3",
+        "message": "org.opentest4j.AssertionFailedError: expected:<false> but was:<true>"
+      }
+    ]
+  },
+  {
+    "record": "dauthi-timing-failures.xml",
+    "suite": {
+      "name": "com.wingedsheep.engine.scenarios.DauthiVoidwalkerScenarioTest",
+      "tests": "23",
+      "skipped": "0",
+      "failures": "3",
+      "errors": "0",
+      "timestamp": "2026-10-02T23:46:00.463Z",
+      "hostname": "DESKTOP-6K9JG6J",
+      "time": "7.885"
+    },
+    "failures": [
+      {
+        "case": "the destination owner's graveyard controls replacement after control changes; opponent owns=false",
+        "message": "org.opentest4j.AssertionFailedError: expected:<e1> but was:<e0>"
+      },
+      {
+        "case": "the destination owner's graveyard controls replacement after control changes; opponent owns=true",
+        "message": "org.opentest4j.AssertionFailedError: expected:<e0> but was:<e1>"
+      },
+      {
+        "case": "free play does not permit a sorcery during the opponent's turn",
+        "message": "org.opentest4j.AssertionFailedError: Expected null but actual was \"You don't have priority\""
+      }
+    ]
+  },
+  {
+    "record": "dauthi-give-fixture-failure.xml",
+    "suite": {
+      "name": "com.wingedsheep.engine.scenarios.DauthiVoidwalkerScenarioTest",
+      "tests": "23",
+      "skipped": "0",
+      "failures": "1",
+      "errors": "0",
+      "timestamp": "2026-10-02T23:47:29.059Z",
+      "hostname": "DESKTOP-6K9JG6J",
+      "time": "10.13"
+    },
+    "failures": [
+      {
+        "case": "the destination owner's graveyard controls replacement after control changes; opponent owns=false",
+        "message": "org.opentest4j.AssertionFailedError: expected:<e1> but was:<e0>"
+      }
+    ]
+  }
+]

@@ -12087,6 +12087,7 @@ forbids `DynamicAmount.X` in card definitions.
   down by color. Used by payoffs that scale with how much of a color went into X — Soul Burn ("you gain
   life equal to the amount of black mana spent on X"). Pair with `xManaRestriction` (see below) so the X
   can only be paid with the relevant colors.
+- `CardsExiledForDelve(types)` — counts cards actually exiled to pay delve, using their payment-time card types. Empty `types` counts all; multiple types are an OR and count each card once. `DynamicAmounts.cardsExiledForDelve(CardType.INSTANT, CardType.SORCERY)` composes with entry counters. The record survives stack saves and spell copies (CR 707.10), reaches permanent entry, and is cleared when the permanent leaves; later movement of the exiled cards cannot change it. Additional exile costs are separate.
 - `DistinctColorsManaSpent` — the number of distinct *colors* of mana spent to cast the source spell
   (0–5), counting how many of the W/U/B/R/G payment buckets are non-zero. Colorless is not a color
   (CR 105.1) and never counts; mana spent on `{X}` and on generic costs still has its color counted.

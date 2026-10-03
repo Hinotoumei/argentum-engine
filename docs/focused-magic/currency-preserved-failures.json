@@ -1,0 +1,56 @@
+[
+  {
+    "record": "currency-initial-failures.xml",
+    "suite": {
+      "name": "com.wingedsheep.engine.scenarios.CurrencyConverterScenarioTest",
+      "tests": "14",
+      "skipped": "0",
+      "failures": "4",
+      "errors": "0",
+      "timestamp": "2026-10-02T23:13:14.789Z",
+      "hostname": "DESKTOP-6K9JG6J",
+      "time": "7.918"
+    },
+    "failures": [
+      {
+        "case": "returning a linked card creates the correct token; land=false saved=false",
+        "message": "org.opentest4j.AssertionFailedError: expected:<1> but was:<0>"
+      },
+      {
+        "case": "returning a linked card creates the correct token; land=false saved=true",
+        "message": "org.opentest4j.AssertionFailedError: expected:<1> but was:<0>"
+      },
+      {
+        "case": "returning a linked card creates the correct token; land=true saved=false",
+        "message": "org.opentest4j.AssertionFailedError: expected:<1> but was:<0>"
+      },
+      {
+        "case": "returning a linked card creates the correct token; land=true saved=true",
+        "message": "org.opentest4j.AssertionFailedError: expected:<1> but was:<0>"
+      }
+    ]
+  },
+  {
+    "record": "currency-expanded-failures.xml",
+    "suite": {
+      "name": "com.wingedsheep.engine.scenarios.CurrencyConverterScenarioTest",
+      "tests": "18",
+      "skipped": "0",
+      "failures": "2",
+      "errors": "0",
+      "timestamp": "2026-10-02T23:17:57.363Z",
+      "hostname": "DESKTOP-6K9JG6J",
+      "time": "5.697"
+    },
+    "failures": [
+      {
+        "case": "conversion already on the stack keeps its original linked pile after blink; saved=false",
+        "message": "org.opentest4j.AssertionFailedError: expected:<true> but was:<false>"
+      },
+      {
+        "case": "conversion already on the stack keeps its original linked pile after blink; saved=true",
+        "message": "org.opentest4j.AssertionFailedError: expected:<true> but was:<false>"
+      }
+    ]
+  }
+]

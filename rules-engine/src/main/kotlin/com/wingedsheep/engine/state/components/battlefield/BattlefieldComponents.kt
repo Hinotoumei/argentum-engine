@@ -292,10 +292,15 @@ data object SuspendedComponent : Component
 data object ParadigmComponent : Component
 
 /**
- * Records the mana colors spent to cast this permanent.
- * Used by mana-spent-gated trigger conditions (e.g., "if {W}{W} was spent to cast it").
- * Stripped when the permanent leaves the battlefield.
+ * Payment-time card types of cards exiled for delve. Retained through entry replacements
+ * and removed when this permanent leaves the battlefield (CR 400.7).
  */
+@Serializable
+data class DelvePaymentComponent(
+    val cardTypes: List<Set<com.wingedsheep.sdk.core.CardType>> = emptyList()
+) : Component
+
+/** Mana payment retained for mana-spent-gated triggers, including after departure. */
 @Serializable
 data class CastRecordComponent(
     val whiteSpent: Int = 0,

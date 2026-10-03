@@ -19,6 +19,7 @@ class DiscardAndDrawContinuationResumer(
 
     override fun resumers(): List<ContinuationResumer<*>> = listOf(
         resumer(HandSizeDiscardContinuation::class, ::resumeHandSizeDiscard),
+        resumer(PutDiscardOnTopOfLibraryContinuation::class, ::resumePutDiscardOnTopOfLibrary),
         resumer(EachPlayerDiscardsOrLoseLifeContinuation::class, ::resumeEachPlayerDiscardsOrLoseLife),
         resumer(CycleCardChooseXContinuation::class, ::resumeCycleCardChooseX)
     )
@@ -62,6 +63,49 @@ class DiscardAndDrawContinuationResumer(
         // and kills the creature on the following turn's state-based-action check.
         val cleanedState = CleanupPhaseManager.applyCleanupTurnBasedActions(result.state, services.cardRegistry)
         return checkForMore(cleanedState, result.events)
+    }
+
+    fun resumePutDiscardOnTopOfLibrary(
+        state: GameState,
+        continuation: PutDiscardOnTopOfLibraryContinuation,
+        response: DecisionResponse,
+        checkForMore: CheckForMore
+    ): ExecutionResult {
+        if (response !is YesNoResponse) {
+            return ExecutionResult.error(state, "Expected yes/no response for discard replacement")
+        }
+
+        val destination = if (response.choice) Zone.LIBRARY else Zone.GRAVEYARD
+        val options = if (response.choice) {
+            com.wingedsheep.engine.handlers.effects.ZoneEntryOptions(
+                libraryPlacement = com.wingedsheep.engine.handlers.effects.LibraryPlacement.Top,
+                libraryMoverId = continuation.playerId,
+                libraryMovePublic = false,
+            )
+        } else {
+            com.wingedsheep.engine.handlers.effects.ZoneEntryOptions()
+        }
+        val moved = services.zones.moveToZone(
+            state = state,
+            entityId = continuation.cardId,
+            destinationZone = destination,
+            options = options,
+            fromZoneKey = ZoneKey(continuation.playerId, Zone.HAND),
+        )
+        val result = services.zones.resumeDiscardCards(
+            state = moved.state,
+            playerId = continuation.playerId,
+            remainingCardIds = continuation.remainingCardIds,
+            causedByControllerId = continuation.causedByControllerId,
+            asCyclingCost = continuation.asCyclingCost,
+            discardedCardIdsSoFar = continuation.discardedCardIdsSoFar + continuation.cardId,
+            accumulatedEvents = continuation.accumulatedEvents + moved.events,
+        )
+        return if (result.state.pendingDecision != null) {
+            ExecutionResult.propagatePause(result.state, result.events)
+        } else {
+            checkForMore(result.state, result.events)
+        }
     }
 
     fun resumeEachPlayerDiscardsOrLoseLife(

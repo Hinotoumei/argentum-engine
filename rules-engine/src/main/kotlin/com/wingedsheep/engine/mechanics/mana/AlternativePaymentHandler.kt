@@ -35,7 +35,9 @@ data class AlternativePaymentResult(
      * The creatures actually tapped for convoke (CR 702.51c — they "convoked" the spell), each with
      * its battlefield-entry stamp, in tap order. Empty when convoke paid nothing.
      */
-    val convokedCreatures: Map<EntityId, Long> = emptyMap()
+    val convokedCreatures: Map<EntityId, Long> = emptyMap(),
+    /** One immutable type snapshot for each card actually exiled to pay delve. */
+    val delvedCardTypes: List<Set<com.wingedsheep.sdk.core.CardType>> = emptyList()
 )
 
 /**
@@ -231,6 +233,7 @@ class AlternativePaymentHandler(
         var reducedCost = cost
         val events = mutableListOf<GameEvent>()
         var convoked: Map<EntityId, Long> = emptyMap()
+        var delved: List<Set<com.wingedsheep.sdk.core.CardType>> = emptyList()
 
         // Handle Delve
         if (payment.delvedCards.isNotEmpty()) {
@@ -240,6 +243,7 @@ class AlternativePaymentHandler(
                 currentState = delveResult.newState
                 reducedCost = delveResult.reducedCost
                 events.addAll(delveResult.events)
+                delved = delveResult.delvedCardTypes
             }
         }
 
@@ -264,7 +268,7 @@ class AlternativePaymentHandler(
             events.addAll(harmonizeResult.events)
         }
 
-        return AlternativePaymentResult(reducedCost, currentState, events, convoked)
+        return AlternativePaymentResult(reducedCost, currentState, events, convoked, delved)
     }
 
     /**
@@ -279,6 +283,7 @@ class AlternativePaymentHandler(
         var currentState = state
         val events = mutableListOf<GameEvent>()
         var genericReduction = 0
+        val delvedTypes = mutableListOf<Set<com.wingedsheep.sdk.core.CardType>>()
 
         val graveyardZone = ZoneKey(playerId, Zone.GRAVEYARD)
         val exileZone = ZoneKey(playerId, Zone.EXILE)
@@ -291,6 +296,9 @@ class AlternativePaymentHandler(
 
             val cardComponent = currentState.getEntity(cardId)?.get<CardComponent>()
                 ?: continue
+
+            // Freeze characteristics before the zone change creates a new object.
+            delvedTypes.add(cardComponent.typeLine.cardTypes.toSet())
 
             // Move card from graveyard to exile
             currentState = currentState.removeFromZone(graveyardZone, cardId)
@@ -313,7 +321,7 @@ class AlternativePaymentHandler(
         }
 
         val reducedCost = reduceGenericCost(cost, genericReduction)
-        return AlternativePaymentResult(reducedCost, currentState, events)
+        return AlternativePaymentResult(reducedCost, currentState, events, delvedCardTypes = delvedTypes.toList())
     }
 
     /**

@@ -20,6 +20,21 @@ data class HandSizeDiscardContinuation(
 ) : AnswerContinuation
 
 /**
+ * Resume an effect-caused discard after Library of Leng asks whether the current discarded card
+ * goes to the top of its owner's library instead of the graveyard.
+ */
+@Serializable
+data class PutDiscardOnTopOfLibraryContinuation(
+    val playerId: EntityId,
+    val cardId: EntityId,
+    val remainingCardIds: List<EntityId>,
+    val causedByControllerId: EntityId?,
+    val asCyclingCost: Boolean = false,
+    val discardedCardIdsSoFar: List<EntityId> = emptyList(),
+    val accumulatedEvents: List<GameEvent> = emptyList()
+) : AnswerContinuation
+
+/**
  * Resume after a player selects a card to discard for "each player discards or lose life" effects.
  *
  * Used for Strongarm Tactics: "Each player discards a card. Then each player who didn't

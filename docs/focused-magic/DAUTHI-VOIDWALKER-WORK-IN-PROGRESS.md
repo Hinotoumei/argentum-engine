@@ -1,0 +1,11 @@
+# Dauthi Voidwalker work in progress
+
+The canonical MH2/81 definition composes shadow, a nontoken opponent-owned graveyard redirect with an added void counter, and a tap/sacrifice ability. Selection occurs at resolution and considers all opponent-owned exile cards with a void counter, regardless of which source marked them. The chosen card receives normal-timing play permission through the end of the turn and a mana-cost waiver. Existing open counter vocabulary handles the void counter.
+
+The latest dedicated run passed all 23 scenarios in 21 seconds (`work/tooling/dauthi-final-focused.log`). Tests use a paid native cast. They cover creature death, library movement, own cards, saved games, discard events, tokens, real shadow combat, sacrifice and summoning sickness, externally marked cards, one-of-two selection, free spells, normal land-play limits, X=0, ownership after real control changes, expiration, and off-turn sorcery rejection. Exact names and counts are in `dauthi-targeted-results.json`.
+
+The 18-case run found an actual free-play validation failure: an explicitly announced X=3 was accepted for a free {X} spell. `CastValidator` now applies the X=0 and incompatible-alternative-cost constraints to card-scoped free-play permissions as well as battlefield free-cast grants. The repaired 18-case run passed before expansion. The replacement counter rider now emits `CountersAddedEvent`; the dedicated scenarios verify one void-counter event rather than silently observing only state mutation.
+
+Preserved failures include the actual X failure and later fixture errors. Initial compilation used a nonexistent mill facade; the fixture now composes the existing pipeline mill. Control assertions now read projected state, off-turn activation uses the source controller, and the single-recipient give-control fixture uses a single opponent reference. See `dauthi-preserved-failures.json` and the separate tooling logs. No failed gameplay assertion was suppressed.
+
+Shared regression is running. Full regression, final snapshots/lint, compiled canonical metadata/image verification, fresh Assay assessment, provider acceptance, and publication remain outstanding. This is not a card completion or deployment claim.

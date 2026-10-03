@@ -472,7 +472,8 @@ internal fun returnDfcFace(
         prepared,
         entityId,
         Zone.BATTLEFIELD,
-        options = ZoneEntryOptions(controllerId = ownerId, tapped = tapped)
+        options = ZoneEntryOptions(controllerId = ownerId, tapped = tapped),
+        lookBackState = state
     )
 }
 

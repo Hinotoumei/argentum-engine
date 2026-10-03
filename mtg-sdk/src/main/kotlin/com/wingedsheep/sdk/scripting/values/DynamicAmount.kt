@@ -843,6 +843,13 @@ sealed interface DynamicAmount : TextReplaceable<DynamicAmount> {
      * feeding `ReplacementEffect.EntersWithDynamicCounters`). A permanent put onto the
      * battlefield without being cast spent no mana, so this is 0 for it.
      */
+    /** Cards actually exiled for delve, counted once when any requested type matches. */
+    @SerialName("CardsExiledForDelve")
+    @Serializable
+    data class CardsExiledForDelve(val types: Set<com.wingedsheep.sdk.core.CardType> = emptySet()) : DynamicAmount {
+        override val description: String = "the number of cards exiled to pay delve"
+    }
+
     @SerialName("DistinctColorsManaSpent")
     @Serializable
     data object DistinctColorsManaSpent : DynamicAmount {

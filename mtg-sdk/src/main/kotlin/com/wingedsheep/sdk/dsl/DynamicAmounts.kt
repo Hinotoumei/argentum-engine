@@ -368,6 +368,10 @@ object DynamicAmounts {
      */
     fun colorsOfManaSpent(): DynamicAmount = DynamicAmount.DistinctColorsManaSpent
 
+    /** Empty types counts all delved cards; otherwise matches any listed card type once. */
+    fun cardsExiledForDelve(vararg types: com.wingedsheep.sdk.core.CardType): DynamicAmount =
+        DynamicAmount.CardsExiledForDelve(types.toSet())
+
     /**
      * The number of distinct colors of mana spent to cast the spell that fired this trigger
      * (0–5). The triggering-spell analogue of [colorsOfManaSpent] (which reads the resolving

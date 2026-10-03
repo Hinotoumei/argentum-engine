@@ -4,6 +4,11 @@ import com.wingedsheep.engine.handlers.PredicateEvaluator
 import com.wingedsheep.engine.core.CardExiledWithMadnessEvent
 import com.wingedsheep.engine.core.CardsDiscardedEvent
 import com.wingedsheep.engine.core.CountersAddedEvent
+import com.wingedsheep.engine.core.DecisionContext
+import com.wingedsheep.engine.core.DecisionPhase
+import com.wingedsheep.engine.core.PutDiscardOnTopOfLibraryContinuation
+import com.wingedsheep.engine.core.suspendForDecision
+import com.wingedsheep.engine.core.YesNoDecision
 import com.wingedsheep.engine.core.ZoneChangeEvent
 import com.wingedsheep.engine.core.ZoneTransitionCause
 import com.wingedsheep.engine.core.GameEvent as EngineGameEvent
@@ -62,6 +67,7 @@ import com.wingedsheep.sdk.core.TypeLine
 import com.wingedsheep.sdk.core.Zone
 import com.wingedsheep.sdk.model.EntityId
 import com.wingedsheep.sdk.scripting.EntersTapped
+import com.wingedsheep.sdk.scripting.PutDiscardOnTopOfLibrary
 import com.wingedsheep.engine.event.ConditionalSelfGrants
 
 
@@ -877,6 +883,7 @@ class ZoneTransitionService(
                 // The former ~16 lastKnown* scalars are now the snapshot's fields; the counter
                 // counts derive from its `counters` map (plusOnePlusOneCounters / etc.).
                 lastKnown = lastKnownSnapshot,
+                departedTypeLine = snapshotCard.typeLine.takeIf { fromZone == Zone.GRAVEYARD },
                 enteredBattlefieldTimestamp = if (actualDestZone == Zone.BATTLEFIELD)
                     newState.getEntity(entityId)?.get<BattlefieldEntryTimestampComponent>()?.timestamp else null,
                 xValue = lastKnownCastX,
@@ -1232,12 +1239,70 @@ class ZoneTransitionService(
         causedByControllerId: EntityId? = null,
         asCyclingCost: Boolean = false
     ): ZoneTransitionResult {
-        if (cardIds.isEmpty()) return ZoneTransitionResult(state, emptyList())
-        val cardNames = cardIds.map { state.getEntity(it)?.get<CardComponent>()?.name ?: "Card" }
+        return resumeDiscardCards(
+            state = state,
+            playerId = playerId,
+            remainingCardIds = cardIds,
+            causedByControllerId = causedByControllerId,
+            asCyclingCost = asCyclingCost,
+            accumulatedEvents = emptyList(),
+        )
+    }
+
+    fun resumeDiscardCards(
+        state: GameState,
+        playerId: EntityId,
+        remainingCardIds: List<EntityId>,
+        causedByControllerId: EntityId? = null,
+        asCyclingCost: Boolean = false,
+        accumulatedEvents: List<EngineGameEvent> = emptyList(),
+        discardedCardIdsSoFar: List<EntityId> = emptyList()
+    ): ZoneTransitionResult {
+        val cardIds = remainingCardIds
+        if (cardIds.isEmpty()) {
+            val names = discardedCardIdsSoFar.map { state.getEntity(it)?.get<CardComponent>()?.name ?: "Card" }
+            val discardEvent = CardsDiscardedEvent(playerId, discardedCardIdsSoFar, names, asCyclingCost = asCyclingCost)
+            return ZoneTransitionResult(
+                trackDiscard(state, playerId, discardedCardIdsSoFar),
+                accumulatedEvents + listOf(discardEvent)
+            )
+        }
+        val allDiscardedCardIds = discardedCardIdsSoFar + cardIds
+        val cardNames = allDiscardedCardIds.map { state.getEntity(it)?.get<CardComponent>()?.name ?: "Card" }
         var newState = markDiscardCause(state, cardIds, causedByControllerId)
         val moveEvents = mutableListOf<EngineGameEvent>()
         val transitions = mutableListOf<ZoneTransitionOutcome>()
-        for (cardId in cardIds) {
+        for ((index, cardId) in cardIds.withIndex()) {
+            val libraryPrompt = putDiscardOnTopPrompt(newState, playerId, cardId, causedByControllerId)
+            if (libraryPrompt != null) {
+                val remaining = cardIds.drop(index + 1)
+                val pause = newState.suspendForDecision(
+                    question = { decisionId ->
+                        YesNoDecision(
+                            id = decisionId,
+                            playerId = playerId,
+                            prompt = libraryPrompt,
+                            context = DecisionContext(
+                                sourceId = cardId,
+                                sourceName = state.getEntity(cardId)?.get<CardComponent>()?.name ?: "Card",
+                                phase = DecisionPhase.RESOLUTION,
+                            ),
+                            yesText = "Put on top",
+                            noText = "Discard",
+                        )
+                    },
+                    answer = PutDiscardOnTopOfLibraryContinuation(
+                        playerId = playerId,
+                        cardId = cardId,
+                        remainingCardIds = remaining,
+                        causedByControllerId = causedByControllerId,
+                        asCyclingCost = asCyclingCost,
+                        discardedCardIdsSoFar = discardedCardIdsSoFar + cardIds.take(index),
+                        accumulatedEvents = accumulatedEvents + moveEvents,
+                    ),
+                )
+                return ZoneTransitionResult(pause.newState, pause.events, transitions = transitions)
+            }
             val result = moveToZone(
                 state = newState,
                 entityId = cardId,
@@ -1248,9 +1313,38 @@ class ZoneTransitionService(
             moveEvents.addAll(result.events)
             transitions.addAll(result.transitions)
         }
-        newState = trackDiscard(newState, playerId, cardIds)
-        val discardEvent = CardsDiscardedEvent(playerId, cardIds, cardNames, asCyclingCost = asCyclingCost)
-        return ZoneTransitionResult(newState, listOf(discardEvent) + moveEvents, transitions = transitions)
+        newState = trackDiscard(newState, playerId, allDiscardedCardIds)
+        val discardEvent = CardsDiscardedEvent(playerId, allDiscardedCardIds, cardNames, asCyclingCost = asCyclingCost)
+        return ZoneTransitionResult(
+            newState,
+            accumulatedEvents + moveEvents + discardEvent,
+            transitions = transitions
+        )
+    }
+
+    private fun putDiscardOnTopPrompt(
+        state: GameState,
+        playerId: EntityId,
+        cardId: EntityId,
+        causedByControllerId: EntityId?
+    ): String? {
+        if (causedByControllerId == null) return null
+        val cardName = state.getEntity(cardId)?.get<CardComponent>()?.name ?: "that card"
+        val replacement = state.getBattlefield().firstNotNullOfOrNull { sourceId ->
+            val source = state.getEntity(sourceId) ?: return@firstNotNullOfOrNull null
+            val controllerId = state.projectedState.getController(sourceId)
+                ?: source.get<ControllerComponent>()?.playerId
+                ?: return@firstNotNullOfOrNull null
+            if (controllerId != playerId) return@firstNotNullOfOrNull null
+            val effects = source.get<ReplacementEffectSourceComponent>()?.replacementEffects
+                ?: return@firstNotNullOfOrNull null
+            if (effects.any { it is PutDiscardOnTopOfLibrary }) {
+                source.get<CardComponent>()?.name ?: "Library of Leng"
+            } else {
+                null
+            }
+        } ?: return null
+        return "Use $replacement to put $cardName on top of its owner's library instead of into the graveyard?"
     }
 
     // ── Private helpers ──

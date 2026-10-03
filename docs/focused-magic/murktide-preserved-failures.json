@@ -1,0 +1,32 @@
+{
+  "scope": "Expanded pre-repair focused failures; retained, not accepted",
+  "suite": {
+    "name": "com.wingedsheep.engine.scenarios.MurktideRegentScenarioTest",
+    "tests": "32",
+    "skipped": "0",
+    "failures": "3",
+    "errors": "0",
+    "timestamp": "2026-10-02T21:14:22.770Z",
+    "hostname": "DESKTOP-6K9JG6J",
+    "time": "9.568"
+  },
+  "failures": [
+    {
+      "test": "entry and trigger counters respect replacements; prevented=true",
+      "message": "org.opentest4j.AssertionFailedError: expected:<0> but was:<5>"
+    },
+    {
+      "test": "a sorcery returning transformed triggers from its graveyard characteristics; saved=false",
+      "message": "org.opentest4j.AssertionFailedError: expected:<1> but was:<0>"
+    },
+    {
+      "test": "a sorcery returning transformed triggers from its graveyard characteristics; saved=true",
+      "message": "org.opentest4j.AssertionFailedError: expected:<1> but was:<0>"
+    }
+  ],
+  "log": "work/tooling/murktide-expanded.log",
+  "repairsAwaitingVerification": [
+    "Incoming battlefield preview for counter prohibitions",
+    "Public graveyard departure type snapshot and pre-transform look-back"
+  ]
+}

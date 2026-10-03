@@ -1065,12 +1065,15 @@ class TriggerMatcher(
             // captures the projected types/subtypes at the moment of leaving (e.g., a creature
             // that was a Food artifact only because of Ygra's continuous effect). The base
             // cardComponent.typeLine in the new zone has only the printed types.
-            val typeLine = if (event.fromZone == Zone.BATTLEFIELD && event.lastKnown?.typeLine != null) {
+            val graveyardDeparture = trigger.from == Zone.GRAVEYARD && event.fromZone == Zone.GRAVEYARD
+            val typeLine = if (graveyardDeparture && event.departedTypeLine != null) {
+                event.departedTypeLine
+            } else if (event.fromZone == Zone.BATTLEFIELD && event.lastKnown?.typeLine != null) {
                 event.lastKnown.typeLine
             } else {
                 cardComponent?.typeLine ?: event.lastKnown?.typeLine
             }
-            val isFaceDown = entity?.has<FaceDownComponent>() == true
+            val isFaceDown = !graveyardDeparture && entity?.has<FaceDownComponent>() == true
 
             // LKI-aware predicate evaluation. Composites (Or/And/Not — e.g. the collapsed
             // `Artifact or Creature` union on Tarrian's Soulcleaver) must recurse through THIS
@@ -1094,6 +1097,10 @@ class TriggerMatcher(
                         // Courageous Rescuer) silently misses a leaving token.
                         isFaceDown || typeLine?.isPermanent == true
                     }
+                    is com.wingedsheep.sdk.scripting.predicates.CardPredicate.IsInstant ->
+                        typeLine?.isInstant == true
+                    is com.wingedsheep.sdk.scripting.predicates.CardPredicate.IsSorcery ->
+                        typeLine?.isSorcery == true
                     is com.wingedsheep.sdk.scripting.predicates.CardPredicate.IsLand ->
                         typeLine?.isLand == true
                     is com.wingedsheep.sdk.scripting.predicates.CardPredicate.IsArtifact ->
@@ -1103,7 +1110,7 @@ class TriggerMatcher(
                     is com.wingedsheep.sdk.scripting.predicates.CardPredicate.HasSubtype -> {
                         // For entering creatures: use projected state (they're on battlefield)
                         // For dying creatures: use base state (they're in graveyard, no projected subtypes)
-                        if (event.toZone == Zone.BATTLEFIELD) {
+                        if (event.toZone == Zone.BATTLEFIELD && !graveyardDeparture) {
                             projected.hasSubtype(event.entityId, predicate.subtype.value)
                         } else {
                             !isFaceDown && typeLine?.hasSubtype(predicate.subtype) == true
@@ -1114,7 +1121,7 @@ class TriggerMatcher(
                         // (OR) form used by the Outlaw subtype group. For dying/leaving creatures
                         // the entity (and its CardComponent) may already be gone, so read the
                         // last-known type line rather than the generic cardComponent path.
-                        if (event.toZone == Zone.BATTLEFIELD) {
+                        if (event.toZone == Zone.BATTLEFIELD && !graveyardDeparture) {
                             predicate.subtypes.any { projected.hasSubtype(event.entityId, it.value) }
                         } else {
                             !isFaceDown && typeLine != null && predicate.subtypes.any { typeLine.hasSubtype(it) }
@@ -1138,7 +1145,7 @@ class TriggerMatcher(
                         val chosenType = state.getEntity(sourceId)
                             ?.chosenCreatureType()
                             ?: return false
-                        val hasSubtype = if (event.toZone == Zone.BATTLEFIELD) {
+                        val hasSubtype = if (event.toZone == Zone.BATTLEFIELD && !graveyardDeparture) {
                             projected.hasSubtype(event.entityId, chosenType)
                         } else {
                             typeLine?.subtypes?.any { it.value.equals(chosenType, ignoreCase = true) } == true
@@ -1178,7 +1185,7 @@ class TriggerMatcher(
                         // For other predicates, check the entity's type
                         if (cardComponent == null) return false
                         matchesCardPredicate(
-                            predicate, cardComponent, projected, event.entityId, isFaceDown,
+                            predicate, if (graveyardDeparture && typeLine != null) cardComponent.copy(typeLine = typeLine) else cardComponent, projected, event.entityId, isFaceDown,
                             lastKnownPower = event.lastKnown?.power,
                             lastKnownToughness = event.lastKnown?.toughness,
                             lastKnownWasToken = event.lastKnown?.wasToken == true

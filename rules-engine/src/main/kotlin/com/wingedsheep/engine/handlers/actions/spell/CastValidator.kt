@@ -692,6 +692,14 @@ internal class CastValidator(
         }
         val playForFree = zoneResolver.hasPlayWithoutPayingCost(state, action.playerId, action.cardId) ||
             action.useWithoutPayingManaCost
+        // A card-scoped free-play permission obeys the same constraints as a free-cast grant.
+        // Validate before payment so a forged announcement cannot consume the card or its grant.
+        if (playForFree && action.useAlternativeCost) {
+            return "Cannot combine 'without paying its mana cost' with another alternative cost"
+        }
+        if (playForFree && cardComponent.manaCost.hasX && (action.xValue ?: 0) != 0) {
+            return "X must be 0 when casting a spell without paying its mana cost"
+        }
         if (com.wingedsheep.engine.mechanics.BestowCasts.selected(action) && (playForFree ||
             state.getEntity(action.cardId)?.has<PlayWithFixedAlternativeManaCostComponent>() == true)) {
             return "Bestow cannot be combined with another alternative cost"
@@ -714,6 +722,18 @@ internal class CastValidator(
             alternativePaymentHandler.validateForSpell(
                 state, alternativePayment, action.playerId, cardDef, action.cardId, tapForGeneric
             )?.let { return it }
+            // CR 702.66: delve pays generic mana only, never more than the total generic owed.
+            // Price before alternative payments, including increases/reductions and announced X.
+            if (alternativePayment.delvedCards.isNotEmpty()) {
+                val total = castCostTotaller.totalCost(
+                    state, action, cardDef, cardComponent, playForFree,
+                    castingFromCommandZone = source.route == CastSourceRoute.COMMANDER,
+                ) ?: return "No alternative casting cost available"
+                val genericOwed = total.genericAmount + total.xCount * (action.xValue ?: 0)
+                if (alternativePayment.delvedCards.size > genericOwed) {
+                    return "Can't exile more cards for delve than the generic mana owed"
+                }
+            }
         }
         val computedCost = castCostTotaller.validationCost(
             state, action, cardDef, cardComponent, playForFree,

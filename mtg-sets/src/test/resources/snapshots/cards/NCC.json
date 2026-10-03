@@ -1,3 +1,177 @@
+// Currency Converter
+{
+    "name": "Currency Converter",
+    "manaCost": "{1}",
+    "typeLine": "Artifact",
+    "oracleText": "Whenever you discard a card, you may exile that card from your graveyard.\n{2}, {T}: Draw a card, then discard a card.\n{T}: Put a card exiled with this artifact into its owner's graveyard. If it's a land card, create a Treasure token. If it's a nonland card, create a 2/2 black Rogue creature token.",
+    "script": {
+        "triggeredAbilities": [
+            {
+                "id": "Currency Converter:1",
+                "trigger": "DiscardEvent",
+                "binding": "ANY",
+                "effect": {
+                    "type": "Gated",
+                    "gate": "Gate.MayDecide",
+                    "then": {
+                        "type": "MoveToZone",
+                        "target": "TriggeringEntity",
+                        "destination": "Exile",
+                        "fromZone": "Graveyard",
+                        "linkToSource": true
+                    }
+                }
+            }
+        ],
+        "activatedAbilities": [
+            {
+                "id": "Currency Converter:2",
+                "cost": {
+                    "type": "CostComposite",
+                    "costs": [
+                        {
+                            "type": "CostAtomWrapper",
+                            "atom": {
+                                "type": "AtomMana",
+                                "cost": "{2}"
+                            }
+                        },
+                        "CostTap"
+                    ]
+                },
+                "effect": {
+                    "type": "Composite",
+                    "effects": [
+                        {
+                            "type": "DrawCards",
+                            "count": {
+                                "type": "Fixed",
+                                "amount": 1
+                            }
+                        },
+                        {
+                            "type": "Composite",
+                            "effects": [
+                                {
+                                    "type": "GatherCards",
+                                    "source": {
+                                        "type": "FromZone",
+                                        "zone": "Hand"
+                                    },
+                                    "storeAs": "hand"
+                                },
+                                {
+                                    "type": "SelectFromCollection",
+                                    "from": "hand",
+                                    "selection": {
+                                        "type": "ChooseExactly",
+                                        "count": {
+                                            "type": "Fixed",
+                                            "amount": 1
+                                        }
+                                    },
+                                    "storeSelected": "discarded",
+                                    "prompt": "Choose 1 card to discard"
+                                },
+                                {
+                                    "type": "MoveCollection",
+                                    "from": "discarded",
+                                    "destination": {
+                                        "type": "ToZone",
+                                        "zone": "Graveyard"
+                                    },
+                                    "moveType": "Discard"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                "id": "Currency Converter:3",
+                "cost": "CostTap",
+                "effect": {
+                    "type": "Composite",
+                    "effects": [
+                        {
+                            "type": "GatherCards",
+                            "source": "FromLinkedExile",
+                            "storeAs": "gathered0"
+                        },
+                        {
+                            "type": "ConditionalOnCollection",
+                            "collection": "gathered0",
+                            "ifNotEmpty": {
+                                "type": "Composite",
+                                "effects": [
+                                    {
+                                        "type": "SelectFromCollection",
+                                        "from": "gathered0",
+                                        "selection": {
+                                            "type": "ChooseExactly",
+                                            "count": {
+                                                "type": "Fixed",
+                                                "amount": 1
+                                            }
+                                        },
+                                        "storeSelected": "selected2",
+                                        "prompt": "Choose a card exiled with Currency Converter"
+                                    },
+                                    {
+                                        "type": "FilterCollection",
+                                        "from": "selected2",
+                                        "filter": "land",
+                                        "storeMatching": "matching3",
+                                        "storeNonMatching": "rest3"
+                                    },
+                                    {
+                                        "type": "MoveCollection",
+                                        "from": "selected2",
+                                        "destination": {
+                                            "type": "ToZone",
+                                            "zone": "Graveyard"
+                                        }
+                                    },
+                                    {
+                                        "type": "ConditionalOnCollection",
+                                        "collection": "matching3",
+                                        "ifNotEmpty": {
+                                            "type": "CreatePredefinedToken",
+                                            "tokenType": "Treasure"
+                                        }
+                                    },
+                                    {
+                                        "type": "ConditionalOnCollection",
+                                        "collection": "rest3",
+                                        "ifNotEmpty": {
+                                            "type": "CreateToken",
+                                            "power": 2,
+                                            "toughness": 2,
+                                            "colors": [
+                                                "BLACK"
+                                            ],
+                                            "creatureTypes": [
+                                                "Rogue"
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "metadata": {
+        "collectorNumber": "81",
+        "rarity": "RARE",
+        "artist": "Sean Murray",
+        "imageUri": "https://cards.scryfall.io/normal/front/1/8/187b6719-e5ed-4615-a00b-3313ceca055b.jpg?1783923344"
+    },
+    "colorIdentityOverride": []
+}
+
 // Extravagant Replication
 {
     "name": "Extravagant Replication",

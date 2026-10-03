@@ -246,6 +246,7 @@ internal class CastCostPayer(
             ledger.state = result.newState
             ledger.events.addAll(result.events)
             ledger.convokedCreatures.putAll(result.convokedCreatures)
+            ledger.delvedCardTypes.addAll(result.delvedCardTypes)
         }
 
         // Waterbend (Avatar): tap the chosen artifacts/creatures, each paying {1} of the waterbend

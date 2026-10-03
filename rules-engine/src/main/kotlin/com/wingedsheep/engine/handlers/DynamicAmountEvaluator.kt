@@ -176,6 +176,7 @@ class DynamicAmountEvaluator(
         is DynamicAmount.DevotionTo,
         is DynamicAmount.DistinctCardTypesInCollections,
         DynamicAmount.DistinctColorsManaSpent,
+        is DynamicAmount.CardsExiledForDelve,
         is DynamicAmount.DistinctEntitiesInCollections,
         is DynamicAmount.Fixed,
         is DynamicAmount.LargestSharedCreatureTypeCount,
@@ -297,6 +298,14 @@ class DynamicAmountEvaluator(
             // total being irrelevant — color breakdown only lives on the entity's components.
             is DynamicAmount.DistinctColorsManaSpent ->
                 context.sourceId?.let { ManaSpentReader.distinctColorsSpent(state, it) } ?: 0
+
+            is DynamicAmount.CardsExiledForDelve -> {
+                val source = context.sourceId?.let(state::getEntity)
+                val paidTypes = source?.get<com.wingedsheep.engine.state.components.stack.SpellOnStackComponent>()?.delvedCardTypes
+                    ?: source?.get<com.wingedsheep.engine.state.components.battlefield.DelvePaymentComponent>()?.cardTypes
+                    ?: emptyList()
+                paidTypes.count { types -> amount.types.isEmpty() || types.any { it in amount.types } }
+            }
 
             is DynamicAmount.ManaSpentFromSubtype ->
                 context.sourceId?.let { ManaSpentReader.subtypeSpent(state, it, amount.subtype) } ?: 0
