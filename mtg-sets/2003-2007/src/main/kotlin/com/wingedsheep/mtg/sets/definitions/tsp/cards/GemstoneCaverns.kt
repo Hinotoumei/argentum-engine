@@ -58,5 +58,7 @@ val GemstoneCaverns = card("Gemstone Caverns") {
     metadata {
         rarity = Rarity.RARE
         collectorNumber = "274"
+        artist = "Martina Pilcerova"
+        imageUri = "https://cards.scryfall.io/normal/front/9/4/94d74254-4750-4fb3-9e53-473a5f98b315.jpg?1783943194"
     }
 }
