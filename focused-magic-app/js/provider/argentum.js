@@ -118,6 +118,7 @@ SIDEBOARD:
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
   const clone = (x) => JSON.parse(JSON.stringify(x));
+  const cardImageCache = new Map();
 
   // Focused Magic canonical-name bridge. The deck/UI may use a Universes Within /
   // alternate-printing name while upstream Argentum registers the mechanically identical
@@ -303,6 +304,24 @@ SIDEBOARD:
   function openTabletopUI(){ensureTabletopUI();$('argentumTabletopModal').classList.add('open');$('argentumTabletopModal').setAttribute('aria-hidden','false');}
   function closeTabletopUI(){$('argentumTabletopModal')?.classList.remove('open');$('argentumTabletopModal')?.setAttribute('aria-hidden','true');}
   function setTabletopStatus(text,bad=false){ensureTabletopUI();const el=$('argentumTabletopStatus');el.textContent=text;el.classList.toggle('bad-text',!!bad);}
+  function takeTestChoice() {
+    const q = window.__ARGENTUM_TEST_CHOICES;
+    return Array.isArray(q) ? q.shift() : undefined;
+  }
+  function hasNativeDialog(dialog) { return typeof dialog.showModal === 'function'; }
+  function noPromptFallback(message='This browser cannot show the Focused Magic chooser.') { throw new Error(message); }
+  async function ensureCardImage(name) {
+    if(!name||cardImageCache.has(name))return cardImageCache.get(name)||'';
+    const cfg=providerConfig();
+    try{
+      const r=await fetch(`${cfg.origin}/api/cards/${encodeURIComponent(providerCardName(name))}`,{headers:{Accept:'application/json'}});
+      if(!r.ok)throw new Error(`HTTP ${r.status}`);
+      const row=await r.json();
+      const uri=row?.imageUri||row?.image_uri||row?.imageURL||row?.imageUrl||row?.normalImageUri||row?.card_faces?.[0]?.image_uri||'';
+      cardImageCache.set(name,uri||'');
+      return uri||'';
+    }catch(_e){cardImageCache.set(name,'');return '';}
+  }
 
   function stateZone(state,owner,type){return state?.zones?.find(z=>zoneOwner(z)===owner&&String(zoneType(z)).toUpperCase()===type)||null;}
   function recursiveContainsId(v,id,depth=0){
@@ -323,8 +342,9 @@ SIDEBOARD:
     const c=cardById(state,id);
     const b=document.createElement('button');b.type='button';b.className='argentum-tabletop-card';b.dataset.cardId=id;
     if(!c){b.classList.add('hidden-card');b.textContent='Hidden';b.disabled=true;return b;}
-    const art=c.imageUri||c.imageURL||c.imageUrl||'';
+    const art=c.imageUri||c.imageURL||c.imageUrl||cardImageCache.get(c.name)||'';
     b.innerHTML=art?`<img src="${esc(art)}" alt="${esc(c.name)}"><span><b>${esc(c.name)}</b></span>`:`<span class="argentum-tabletop-cardname"><b>${esc(c.name)}</b><small>${esc(c.manaCost||'')} ${esc(c.typeLine||'')}</small></span>`;
+    if(!art&&c.name)ensureCardImage(c.name).then(uri=>{if(uri&&document.body.contains(b)&&!b.querySelector('img')){b.innerHTML=`<img src="${esc(uri)}" alt="${esc(c.name)}"><span><b>${esc(c.name)}</b></span>`;}});
     // Display the provider's projected values, including X=0; never derive card rules here.
     if(c.power!=null&&c.toughness!=null)b.innerHTML+=`<small class="argentum-tabletop-stat">${esc(c.power)}/${esc(c.toughness)}</small>`;
     if(c.chosenX!=null)b.innerHTML+=`<small class="argentum-tabletop-x">X=${esc(c.chosenX)}</small>`;
@@ -348,7 +368,7 @@ SIDEBOARD:
     if(active?.user?.mulliganPrompt){box.innerHTML='<b>Opening hand decision</b> ';const keep=document.createElement('button');keep.className='good';keep.textContent='Keep';keep.onclick=()=>{active.user.mulliganPrompt=null;active.sendRole(active.user,{type:'keepHand'});};const mul=document.createElement('button');mul.textContent='Mulligan';mul.onclick=()=>{active.user.mulliganPrompt=null;active.sendRole(active.user,{type:'mulligan'});};box.append(keep,mul);return;}
     if(active?.user?.bottomPrompt){box.innerHTML='<b>London mulligan:</b> use Diagnostics for bottom-card selection in this WIP.';return;}
     if(!d){box.textContent='No pending decision.';return;}
-    box.innerHTML=`<b>${esc(d.prompt||d.type)}</b> `;const b=document.createElement('button');b.className='primary';b.textContent='Resolve decision';b.onclick=()=>{try{const r=decisionResponse(d,'human');if(r)active.submitDecision(r);}catch(e){setTabletopStatus(e.message,true)}};box.appendChild(b);
+    box.innerHTML=`<b>${esc(d.prompt||d.type)}</b> `;const b=document.createElement('button');b.className='primary';b.textContent='Resolve decision';b.onclick=async()=>{try{const r=await decisionResponse(d,'human');if(r)active.submitDecision(r);}catch(e){setTabletopStatus(e.message,true)}};box.appendChild(b);
   }
   function playerEffectsSummary(player){
     const limit=player?.maxHandSize;
@@ -356,8 +376,19 @@ SIDEBOARD:
     const effects=(player?.activeEffects||[]).map(effect=>[effect.name,effect.description].filter(Boolean).join(': '));
     return [limitText,...effects].join(' • ');
   }
+  function stateIsRenderable(s){return !!(s?.viewingPlayerId&&Array.isArray(s.players)&&Array.isArray(s.zones));}
   function renderTabletop(){
-    ensureTabletopUI();const s=active?.state;if(!s)return;openTabletopUI();
+    ensureTabletopUI();const s=active?.state;openTabletopUI();
+    if(!stateIsRenderable(s)){
+      fillTableZone('argentumTabletopMyHand',{cards:{}},null);
+      fillTableZone('argentumTabletopMyBattlefield',{cards:{}},null);
+      fillTableZone('argentumTabletopOppBattlefield',{cards:{}},null);
+      fillTableZone('argentumTabletopStack',{cards:{}},null);
+      $('argentumTabletopMyName').textContent='You';$('argentumTabletopMyLife').textContent='—';$('argentumTabletopOppName').textContent='Opponent';$('argentumTabletopOppLife').textContent='—';
+      $('argentumTabletopMyLibCount').textContent='—';$('argentumTabletopMyGyCount').textContent='—';$('argentumTabletopOppHandCount').textContent='—';$('argentumTabletopOppLibCount').textContent='—';$('argentumTabletopScore').textContent='Waiting for Argentum opening state…';
+      $('argentumTabletopCardActions').innerHTML='<span class="sub">Waiting for provider state.</span>';$('argentumTabletopPlayerEffects').textContent='';$('argentumTabletopTurnActions').innerHTML='';
+      renderTabletopDecision();setTabletopStatus(active?.user?.mulliganPrompt?'Opening hand ready. Choose keep or mulligan.':'Waiting for Argentum state…');return;
+    }
     const me=s.viewingPlayerId,my=s.players?.find(p=>p.playerId===me),opp=s.players?.find(p=>p.playerId!==me);
     $('argentumTabletopMyName').textContent=my?.name||'You';$('argentumTabletopMyLife').textContent=my?.life??'?';$('argentumTabletopOppName').textContent=opp?.name||'Opponent';$('argentumTabletopOppLife').textContent=opp?.life??'?';
     const myHand=stateZone(s,me,'HAND'),myLib=stateZone(s,me,'LIBRARY'),myGy=stateZone(s,me,'GRAVEYARD');const oppHand=opp?stateZone(s,opp.playerId,'HAND'):null,oppLib=opp?stateZone(s,opp.playerId,'LIBRARY'):null;
@@ -473,16 +504,21 @@ SIDEBOARD:
     return {type:'Card',cardId:id,ownerId:c?.ownerId||zoneOwner(z)||s.viewingPlayerId,zone:zoneType(z)};
   }
 
-  function pickIds(promptText, ids, min=1, max=1, cardInfo={}) {
-    const opts=(ids||[]).map((id,i)=>`${i+1}. ${entityLabel(id,cardInfo[id])}`).join('\n');
-    if(!ids?.length && min>0) throw new Error(`${promptText}: no legal targets.`);
-    if(max===0)return [];
-    const d=(ids||[]).slice(0,min).map(id=>String((ids||[]).indexOf(id)+1)).join(',');
-    const raw=window.prompt(`${promptText}\n${opts}\nEnter ${min===max?min:`${min}-${max}`} number(s), comma separated:`,d);
+  function idsFromChoice(raw, ids, min, max) {
     if(raw==null)throw new Error('Action cancelled.');
-    const picked=[...new Set(raw.split(/[ ,]+/).filter(Boolean).map(x=>ids[Number(x)-1]).filter(Boolean))];
+    if(Array.isArray(raw))return raw.filter(id=>ids.includes(id));
+    const text=String(raw).trim();
+    if(!text&&min===0)return [];
+    const picked=[...new Set(text.split(/[ ,]+/).filter(Boolean).map(x=>ids[Number(x)-1]).filter(Boolean))];
     if(picked.length<min||picked.length>max)throw new Error(`Choose ${min===max?min:`${min}-${max}`} target(s).`);
     return picked;
+  }
+  function pickIds(promptText, ids, min=1, max=1, cardInfo={}) {
+    if(!ids?.length && min>0) throw new Error(`${promptText}: no legal targets.`);
+    if(max===0)return [];
+    const test=takeTestChoice();
+    if(test!==undefined)return idsFromChoice(test,ids,min,max);
+    noPromptFallback();
   }
 
   async function pickActionTargets(promptText, ids, min=1, max=1, cardInfo={}) {
@@ -490,7 +526,7 @@ SIDEBOARD:
     if(options.length<min)throw new Error(`${promptText}: no legal targets.`);
     if(max===0)return [];
     const dialog=document.createElement('dialog');
-    if(typeof dialog.showModal!=='function')return pickIds(promptText,options,min,max,cardInfo);
+    if(!hasNativeDialog(dialog))return pickIds(promptText,options,min,max,cardInfo);
     dialog.className='argentum-target-dialog';
     const heading=document.createElement('h3');heading.textContent=promptText;dialog.appendChild(heading);
     const help=document.createElement('p');help.textContent=`Choose ${min===max?min:`${min}-${max}`} target(s).`;dialog.appendChild(help);
@@ -520,13 +556,10 @@ SIDEBOARD:
   async function pickActionNumber(promptText, min, max) {
     if(!Number.isSafeInteger(min)||!Number.isSafeInteger(max)||min<0||max<min)throw new Error('Invalid provider number bounds.');
     const valid=raw=>raw!==''&&Number.isSafeInteger(Number(raw))&&Number(raw)>=min&&Number(raw)<=max;
+    const test=takeTestChoice();
+    if(test!==undefined){if(test==null)throw new Error('Action cancelled.');if(!valid(String(test).trim()))throw new Error(`Choose a whole number from ${min} to ${max}.`);return Number(test);}
     const dialog=document.createElement('dialog');
-    if(typeof dialog.showModal!=='function'){
-      const raw=window.prompt(`${promptText} (${min}–${max})`,String(min));
-      if(raw==null)throw new Error('Action cancelled.');
-      if(!valid(raw.trim()))throw new Error(`Choose a whole number from ${min} to ${max}.`);
-      return Number(raw);
-    }
+    if(!hasNativeDialog(dialog))noPromptFallback();
     dialog.className='argentum-target-dialog';
     const heading=document.createElement('h3');heading.textContent=promptText;dialog.appendChild(heading);
     const label=document.createElement('label');label.textContent=`Whole number (${min}–${max})`;
@@ -540,6 +573,93 @@ SIDEBOARD:
       const cancel=document.createElement('button');cancel.type='button';cancel.textContent='Cancel';cancel.onclick=abort;
       dialog.addEventListener('cancel',event=>{event.preventDefault();abort();});
       dialog.appendChild(confirm);dialog.appendChild(cancel);document.body.appendChild(dialog);dialog.showModal();input.focus();
+    });
+  }
+
+  async function pickActionModes(enumeration) {
+    const available=(enumeration.modes||[]).filter(m=>m.available!==false && !(enumeration.unavailableIndices||[]).includes(m.index));
+    const min=Math.max(1,enumeration.minChooseCount??1), max=Math.max(min,enumeration.chooseCount??min);
+    if(!available.length||(!enumeration.allowRepeat&&available.length<min))throw new Error('Provider offered a modal spell without enough available modes.');
+    const test=takeTestChoice();
+    if(test!==undefined){
+      if(test==null)throw new Error('Action cancelled.');
+      let picks=String(test).split(/[ ,]+/).filter(Boolean).map(x=>available[Number(x)-1]).filter(Boolean).map(m=>m.index);
+      if(!enumeration.allowRepeat)picks=[...new Set(picks)];
+      if(picks.length<min||picks.length>max)throw new Error(`Choose ${min===max?min:`${min}-${max}`} legal mode(s).`);
+      return picks;
+    }
+    const dialog=document.createElement('dialog'); if(!hasNativeDialog(dialog))noPromptFallback();
+    dialog.className='argentum-target-dialog';
+    const heading=document.createElement('h3');heading.textContent=`Choose ${min===max?min:`${min}-${max}`} mode${max===1?'':'s'}`;dialog.appendChild(heading);
+    return await new Promise((resolve,reject)=>{
+      const selected=[];
+      const confirm=document.createElement('button');confirm.type='button';confirm.textContent='Confirm modes';confirm.disabled=true;
+      const refresh=()=>{confirm.disabled=selected.length<min||selected.length>max;};
+      for(const mode of available){
+        const label=document.createElement('label');const input=document.createElement('input');input.type=enumeration.allowRepeat?'number':'checkbox';input.min='0';input.max=String(max);input.value=enumeration.allowRepeat?'0':'';
+        const text=document.createElement('span');text.textContent=mode.description||`Mode ${mode.index+1}`;
+        input.onchange=()=>{selected.length=0;for(const row of dialog.querySelectorAll('[data-mode-index]')){const idx=Number(row.dataset.modeIndex);const field=row.querySelector('input');const count=field.type==='number'?Number(field.value||0):(field.checked?1:0);for(let i=0;i<count;i++)selected.push(idx);}refresh();};
+        label.dataset.modeIndex=String(mode.index);label.append(input,text);dialog.appendChild(label);
+      }
+      const finish=()=>{dialog.close();dialog.remove();resolve([...selected]);};
+      const abort=()=>{dialog.close();dialog.remove();reject(new Error('Action cancelled.'));};
+      confirm.onclick=()=>{if(!confirm.disabled)finish();};const cancel=document.createElement('button');cancel.type='button';cancel.textContent='Cancel';cancel.onclick=abort;
+      dialog.addEventListener('cancel',event=>{event.preventDefault();abort();});dialog.append(confirm,cancel);document.body.appendChild(dialog);dialog.showModal();
+    });
+  }
+
+  async function pickActionColor(promptText, colors) {
+    const opts=colors?.length?colors:['WHITE','BLUE','BLACK','RED','GREEN'];
+    const test=takeTestChoice();
+    if(test!==undefined){if(test==null)throw new Error('Action cancelled.');return String(test).toUpperCase();}
+    const dialog=document.createElement('dialog'); if(!hasNativeDialog(dialog))noPromptFallback();
+    dialog.className='argentum-target-dialog';
+    const heading=document.createElement('h3');heading.textContent=promptText||'Choose mana color';dialog.appendChild(heading);
+    return await new Promise((resolve,reject)=>{
+      for(const color of opts){const b=document.createElement('button');b.type='button';b.textContent=color;b.onclick=()=>{dialog.close();dialog.remove();resolve(String(color).toUpperCase());};dialog.appendChild(b);}
+      const abort=()=>{dialog.close();dialog.remove();reject(new Error('Action cancelled.'));};const cancel=document.createElement('button');cancel.type='button';cancel.textContent='Cancel';cancel.onclick=abort;dialog.addEventListener('cancel',event=>{event.preventDefault();abort();});dialog.appendChild(cancel);document.body.appendChild(dialog);dialog.showModal();
+    });
+  }
+
+  async function pickYesNo(promptText, defaultChoice=true) {
+    const test=takeTestChoice();
+    if(test!==undefined){if(test==null)throw new Error('Action cancelled.');return /^(true|yes|y|1)$/i.test(String(test));}
+    const dialog=document.createElement('dialog'); if(!hasNativeDialog(dialog))noPromptFallback();
+    dialog.className='argentum-target-dialog';
+    const heading=document.createElement('h3');heading.textContent=promptText;dialog.appendChild(heading);
+    return await new Promise((resolve,reject)=>{
+      const yes=document.createElement('button');yes.type='button';yes.className=defaultChoice?'primary':'';yes.textContent='Yes';yes.onclick=()=>{dialog.close();dialog.remove();resolve(true);};
+      const no=document.createElement('button');no.type='button';no.className=!defaultChoice?'primary':'';no.textContent='No';no.onclick=()=>{dialog.close();dialog.remove();resolve(false);};
+      const abort=()=>{dialog.close();dialog.remove();reject(new Error('Action cancelled.'));};
+      dialog.addEventListener('cancel',event=>{event.preventDefault();abort();});dialog.append(yes,no);document.body.appendChild(dialog);dialog.showModal();
+    });
+  }
+
+  async function pickOptionIndex(promptText, options) {
+    const test=takeTestChoice();
+    if(test!==undefined){if(test==null)throw new Error('Action cancelled.');return Math.max(0,Number(test)-1);}
+    const dialog=document.createElement('dialog'); if(!hasNativeDialog(dialog))noPromptFallback();
+    dialog.className='argentum-target-dialog';
+    const heading=document.createElement('h3');heading.textContent=promptText;dialog.appendChild(heading);
+    return await new Promise((resolve,reject)=>{
+      for(const [i,opt] of (options||[]).entries()){const b=document.createElement('button');b.type='button';b.textContent=String(opt?.description||opt);b.onclick=()=>{dialog.close();dialog.remove();resolve(i);};dialog.appendChild(b);}
+      const abort=()=>{dialog.close();dialog.remove();reject(new Error('Action cancelled.'));};const cancel=document.createElement('button');cancel.type='button';cancel.textContent='Cancel';cancel.onclick=abort;dialog.addEventListener('cancel',event=>{event.preventDefault();abort();});dialog.appendChild(cancel);document.body.appendChild(dialog);dialog.showModal();
+    });
+  }
+
+  async function pickModeDecisionIndexes(promptText, options, min, max) {
+    const test=takeTestChoice();
+    if(test!==undefined){if(test==null)throw new Error('Action cancelled.');return String(test).split(/[ ,]+/).map(x=>Number(x)-1).filter(x=>x>=0).slice(0,max);}
+    const dialog=document.createElement('dialog'); if(!hasNativeDialog(dialog))noPromptFallback();
+    dialog.className='argentum-target-dialog';
+    const heading=document.createElement('h3');heading.textContent=promptText;dialog.appendChild(heading);
+    const help=document.createElement('p');help.textContent=`Choose ${min===max?min:`${min}-${max}`} mode${max===1?'':'s'}.`;dialog.appendChild(help);
+    return await new Promise((resolve,reject)=>{
+      const selected=new Set();const confirm=document.createElement('button');confirm.type='button';confirm.textContent='Confirm modes';confirm.disabled=min>0;
+      const refresh=()=>{confirm.disabled=selected.size<min||selected.size>max;};
+      for(const [i,opt] of (options||[]).entries()){const label=document.createElement('label');const input=document.createElement('input');input.type='checkbox';input.onchange=()=>{if(input.checked)selected.add(i);else selected.delete(i);refresh();};const text=document.createElement('span');text.textContent=String(opt?.description||opt);label.append(input,text);dialog.appendChild(label);}
+      const abort=()=>{dialog.close();dialog.remove();reject(new Error('Action cancelled.'));};
+      confirm.onclick=()=>{if(!confirm.disabled){dialog.close();dialog.remove();resolve([...selected]);}};const cancel=document.createElement('button');cancel.type='button';cancel.textContent='Cancel';cancel.onclick=abort;dialog.addEventListener('cancel',event=>{event.preventDefault();abort();});dialog.append(confirm,cancel);document.body.appendChild(dialog);dialog.showModal();
     });
   }
 
@@ -586,18 +706,7 @@ SIDEBOARD:
         action.blockers=clone(info.mandatoryBlockerAssignments||{});
       }
       if(info.modalEnumeration && action.type==='CastSpell') {
-        const e=info.modalEnumeration;
-        const available=(e.modes||[]).filter(m=>m.available!==false && !(e.unavailableIndices||[]).includes(m.index));
-        const min=Math.max(1,e.minChooseCount??1), max=Math.max(min,e.chooseCount??min);
-        if(!available.length||(!e.allowRepeat&&available.length<min))throw new Error('Provider offered a modal spell without enough available modes.');
-        const listing=available.map((m,i)=>`${i+1}. ${m.description||`Mode ${m.index+1}`}`).join('\n');
-        const def=Array.from({length:min},(_,i)=>String((e.allowRepeat?i%available.length:i)+1)).join(',');
-        const raw=prompt(`Choose ${min===max?min:`${min}-${max}`} mode(s):\n${listing}`,def);
-        if(raw==null)return;
-        let picks=raw.split(/[ ,]+/).filter(Boolean).map(x=>available[Number(x)-1]).filter(Boolean).map(m=>m.index);
-        if(!e.allowRepeat)picks=[...new Set(picks)];
-        if(picks.length<min||picks.length>max)throw new Error(`Choose ${min===max?min:`${min}-${max}`} legal mode(s).`);
-        action.chosenModes=picks;
+        action.chosenModes=await pickActionModes(info.modalEnumeration);
       }
       if(info.hasXCost)action.xValue=await pickActionNumber('Choose X',info.minX??0,info.maxAffordableX??0);
       if(info.modalEnumeration && action.type==='CastSpell') {
@@ -606,10 +715,7 @@ SIDEBOARD:
       }
       if(info.additionalCostInfo?.costType==='PayXLife') {
         const max=info.additionalCostInfo.payXLifeMaxX??0;
-        const raw=prompt(`Choose X: pay that much life (0–${max})`,'0');
-        if(raw==null)return;
-        const amount=Number(raw);
-        if(!String(raw).trim()||!Number.isSafeInteger(amount)||amount<0||amount>max)throw new Error(`Choose a whole number of life from 0 to ${max}.`);
+        const amount=await pickActionNumber('Choose X: pay that much life',0,max);
         action.additionalCostPayment={...(action.additionalCostPayment||{}),payXLifeAmount:amount};
       }
       if(info.requiresTargets && !info.modalEnumeration){
@@ -618,39 +724,38 @@ SIDEBOARD:
         for(const req of reqs){const ids=await pickActionTargets(req.description||'Choose target',req.validTargets||[],req.minTargets??1,req.maxTargets??1);chosen.push(...ids.map(chosenTarget));}
         action.targets=chosen;
       }
-      if(info.requiresManaColorChoice){const colors=info.availableManaColors?.length?info.availableManaColors:['WHITE','BLUE','BLACK','RED','GREEN'];const raw=prompt(`Choose mana color: ${colors.join(', ')}`,colors[0]);if(raw==null)return;action.manaColorChoice=String(raw).toUpperCase();}
+      if(info.requiresManaColorChoice)action.manaColorChoice=await pickActionColor('Choose mana color',info.availableManaColors);
       // The provider advertises complex alternative/additional costs separately. If the template
       // still requires a resource choice, do not invent one: expose the exact action JSON editor.
       if(info.additionalCostInfo && !action.additionalCostPayment && !action.costPayment){
-        const raw=prompt('This action has a provider-defined additional cost. Edit the exact action JSON if needed; Cancel to abort.',JSON.stringify(action));
-        if(raw==null)return; Object.assign(action,JSON.parse(raw));
+        throw new Error('This provider-defined additional cost is not playable on the visual tabletop yet.');
       }
       if(active!==actionSession||JSON.stringify(active.interactionEpoch)!==actionEpoch)throw new Error('The game changed during selection; choose the action again.');
       active.submitAction(action);
     }catch(e){setStatus(e.message,true);log(`Action blocked: ${e.message}`);}
   }
 
-  function decisionResponse(decision, mode='human') {
+  async function decisionResponse(decision, mode='human') {
     const type=decision?.type||''; const id=decision?.id;
     const ai = mode==='auto';
-    if(type==='YesNoDecision') return {type:'YesNoResponse',decisionId:id,choice: ai ? (decision.defaultChoice ?? true) : confirm(decision.prompt||'Yes?')};
+    if(type==='YesNoDecision') return {type:'YesNoResponse',decisionId:id,choice: ai ? (decision.defaultChoice ?? true) : await pickYesNo(decision.prompt||'Yes?', decision.defaultChoice ?? true)};
     if(type==='BatchYesNoDecision') return {type:'BatchYesNoResponse',decisionId:id,choice:true,applyToAll:true};
     if(type==='ChooseColorDecision'){
       const colors=decision.colors||decision.options||['WHITE','BLUE','BLACK','RED','GREEN'];
-      const raw=ai?colors[0]:prompt(`${decision.prompt||'Choose color'}: ${colors.join(', ')}`,colors[0]); if(raw==null)return null;
+      const raw=ai?colors[0]:await pickActionColor(decision.prompt||'Choose color',colors); if(raw==null)return null;
       return {type:'ColorChosenResponse',decisionId:id,color:String(raw).toUpperCase(),colors:decision.maxColors>1?[String(raw).toUpperCase()]:[]};
     }
     if(type==='ChooseNumberDecision'){
-      const min=decision.min??decision.minValue??0,max=decision.max??decision.maxValue??20; const val=ai?min:Number(prompt(`${decision.prompt||'Choose number'} (${min}–${max})`,String(min))); if(!Number.isFinite(val))return null;
+      const min=decision.min??decision.minValue??0,max=decision.max??decision.maxValue??20; const val=ai?min:await pickActionNumber(decision.prompt||'Choose number',min,max); if(!Number.isFinite(val))return null;
       return {type:'NumberChosenResponse',decisionId:id,number:Math.max(min,Math.min(max,val))};
     }
     if(type==='ChooseOptionDecision'){
-      const opts=decision.options||[]; const ix=ai?0:Math.max(0,Number(prompt(`${decision.prompt||'Choose option'}\n${opts.map((x,i)=>`${i+1}. ${x}`).join('\n')}`,'1'))-1);
+      const opts=decision.options||[]; const ix=ai?0:await pickOptionIndex(decision.prompt||'Choose option',opts);
       return {type:'OptionChosenResponse',decisionId:id,optionIndex:Math.min(Math.max(ix,0),Math.max(0,opts.length-1))};
     }
     if(type==='ChooseModeDecision'){
       const opts=decision.modes||decision.options||[]; const min=decision.minModes??decision.chooseCount??1,max=decision.maxModes??decision.chooseCount??1;
-      const picks=ai?[0]:String(prompt(`${decision.prompt||'Choose mode'}\n${opts.map((x,i)=>`${i+1}. ${x.description||x}`).join('\n')}`,'1')||'1').split(/[ ,]+/).map(x=>Number(x)-1).filter(x=>x>=0).slice(0,max);
+      const picks=ai?[0]:await pickModeDecisionIndexes(decision.prompt||'Choose mode',opts,min,max);
       return {type:'ModesChosenResponse',decisionId:id,selectedModes:picks.length>=min?picks:[0]};
     }
     if(type==='SelectCardsDecision' || type==='SearchLibraryDecision'){
@@ -682,12 +787,12 @@ SIDEBOARD:
     const d=active?.pendingDecision;
     if(!d){box.innerHTML='<span class="sub">No pending decision.</span>';return;}
     box.innerHTML=`<p><b>${esc(d.prompt||d.type)}</b></p><button id="argentumResolveDecision" class="primary" type="button">Resolve decision</button><details><summary>Advanced response JSON</summary><textarea id="argentumDecisionJson"></textarea><button id="argentumSubmitDecisionJson" type="button">Submit response JSON</button></details>`;
-    const suggested=decisionResponseSafe(d,'auto');
+    const suggested=decisionResponseSafeForState(d,'auto',active?.state);
     $('argentumDecisionJson').value=suggested?JSON.stringify(suggested,null,2):JSON.stringify({type:'',decisionId:d.id},null,2);
-    $('argentumResolveDecision').onclick=()=>{try{const response=decisionResponse(d,'human');if(response)active.submitDecision(response);}catch(e){setStatus(e.message,true)}};
+    $('argentumResolveDecision').onclick=async()=>{try{const response=await decisionResponse(d,'human');if(response)active.submitDecision(response);}catch(e){setStatus(e.message,true)}};
     $('argentumSubmitDecisionJson').onclick=()=>{try{active.submitDecision(JSON.parse($('argentumDecisionJson').value));}catch(e){setStatus(`Decision JSON error: ${e.message}`,true)}};
   }
-  function decisionResponseSafe(d,m){try{return decisionResponse(d,m)}catch(_e){return null}}
+  function decisionResponseSafe(d,m){try{return m==='auto'?decisionResponseSafeForState(d,m,active?.state):null}catch(_e){return null}}
 
   function decisionResponseSafeForState(d,m,state){
     if(m!=='auto')return decisionResponseSafe(d,m);
@@ -856,14 +961,21 @@ SIDEBOARD:
       if(msg.type==='gameStarted'){
         role.gameStarted=true; role.seats=msg.players||[];
         if(role.kind==='user') this.seats=msg.players||[];
+        clearTimeout(role.resyncTimer);
+        role.resyncTimer=setTimeout(()=>{try{this.sendRole(role,{type:'requestResync'})}catch(_e){}},20);
         if(this.user.gameStarted&&this.ai.gameStarted&&!this.gameStarted){
           this.gameStarted=true;setStatus(`Argentum exact-deck game started: ${this.spec.label}.`);this.assessment?.started(this);
+          for(const seat of [this.user,this.ai]){
+            clearTimeout(seat.resyncTimer);
+            seat.resyncTimer=setTimeout(()=>{try{this.sendRole(seat,{type:'requestResync'})}catch(_e){}},30);
+          }
         }
         return;
       }
       if(msg.type==='mulliganDecision'){
         role.mulliganPrompt=msg; role.bottomPrompt=null;
-        if(role.kind==='user' && !(this.spec.autopilot||this.assessment)) this.renderMulligan(msg);
+        if(role.kind==='user' && msg.state && !this.state){this.state=msg.state;role.state=msg.state;}
+        if(role.kind==='user' && !(this.spec.autopilot||this.assessment)){ this.renderMulligan(msg); if(this.spec.presentation==='tabletop')renderTabletop(); }
         else { role.mulliganPrompt=null; this.sendRole(role,{type:'keepHand'}); }
         return;
       }

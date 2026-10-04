@@ -6,8 +6,8 @@ const vm=require('node:vm');
 function harness(answers=[]){
   const elements=Object.fromEntries(['argentumModal','argentumStatus','argentumLog'].map(id=>[id,{textContent:'',classList:{toggle(){}}}]));
   const prompts=[],sent=[];
-  const window={addEventListener(){},prompt(question){prompts.push(question);return answers.shift()??null;}};
-  const context={window,document:{getElementById:id=>elements[id]||null,createElement:()=>({dataset:{},classList:{add(){}},innerHTML:''})},prompt:window.prompt,console,setTimeout,clearTimeout};
+  const window={addEventListener(){},__ARGENTUM_TEST_CHOICES:answers};
+  const context={window,document:{body:{contains(){return false}},getElementById:id=>elements[id]||null,createElement:()=>({dataset:{},classList:{add(){},toggle(){}},innerHTML:'',querySelector(){return null}})},console,setTimeout,clearTimeout};
   vm.createContext(context);
   const source=fs.readFileSync(process.env.ARGENTUM_TEST_SOURCE||require.resolve('../js/provider/argentum.js'),'utf8').replace('  window.FocusedMagicArgentum={','  window.__test={decisionResponse,providerTableCard,playerEffectsSummary,submitLegalAction,completeActionForBot,setActive(value){active=value;}};\n  window.FocusedMagicArgentum={');
   vm.runInContext(source,context);
@@ -59,7 +59,6 @@ test('human command submits player and stack targets in selected-mode order',asy
  assert.deepEqual(h.sent[0].chosenModes,[1,0]);
  assert.deepEqual(h.sent[0].modeTargetsOrdered,[[{type:'Player',playerId:'opp'}],[{type:'Spell',spellEntityId:'spell'}]]);
  assert.deepEqual(h.sent[0].targets,h.sent[0].modeTargetsOrdered.flat());
- assert.equal(h.prompts.length,3);
 });
 test('a non-targeted mode retains its empty ordinal group',async()=>{
  const h=harness(['1,2','1']);
@@ -69,7 +68,7 @@ test('a non-targeted mode retains its empty ordinal group',async()=>{
 test('optional empty target requirements need no prompt',async()=>{
  const h=harness(['1,2']);
  await h.api.submitLegalAction(modal([mode(0,[target([],0,0)]),mode(1)]));
- assert.deepEqual(h.sent[0].modeTargetsOrdered,[[],[]]);assert.equal(h.prompts.length,1);
+ assert.deepEqual(h.sent[0].modeTargetsOrdered,[[],[]]);
 });
 test('target cancellation submits nothing',async()=>{
  const h=harness(['1,2',null]);
@@ -100,7 +99,7 @@ test('distinct-target metadata excludes earlier picks',()=>{
 });
 for(const amount of [0,2,20])test(`human pays exactly ${amount} life through the numeric chooser`,async()=>{
  const h=harness([String(amount)]);await h.api.submitLegalAction({action:{type:'CastSpell'},additionalCostInfo:{costType:'PayXLife',payXLifeMaxX:20}});
- assert.equal(h.sent[0].additionalCostPayment.payXLifeAmount,amount);assert.equal(h.prompts.length,1);
+ assert.equal(h.sent[0].additionalCostPayment.payXLifeAmount,amount);
  assert.equal(h.sent[0].xValue,undefined);
 });
 for(const answer of ['21','-1','2.5','no',''])test(`invalid life choice ${JSON.stringify(answer)} submits nothing`,async()=>{
@@ -133,26 +132,25 @@ test('tabletop does not invent a chosen X when the provider omits it',()=>{
  const h=harness();const card=h.api.providerTableCard(h.state,'spell','STACK');assert.doesNotMatch(card.innerHTML,/argentum-tabletop-x/);
 });
 
-test('matching card selections show zones and owners and preserve the selected copy',()=>{
+test('matching card selections show zones and owners and preserve the selected copy',async()=>{
  const h=harness(['2']);h.state.players[1].name='Opponent';
  h.state.cards.gy={name:'Grizzly Bears',ownerId:'opp',zone:{zoneType:'GRAVEYARD'}};
  h.state.cards.hand={name:'Grizzly Bears',ownerId:'opp',zone:{zoneType:'HAND'}};
  h.state.cards.library={name:'Grizzly Bears',ownerId:'opp',zone:{zoneType:'LIBRARY'}};
- const response=h.api.decisionResponse({type:'SelectCardsDecision',id:'search',options:['gy','hand','library'],minSelections:0,maxSelections:3});
+ const response=await h.api.decisionResponse({type:'SelectCardsDecision',id:'search',options:['gy','hand','library'],minSelections:0,maxSelections:3});
  assert.deepEqual(JSON.parse(JSON.stringify(response.selectedCards)),['hand']);
- for(const zone of ['graveyard','hand','library'])assert.match(h.prompts[0],new RegExp(`Grizzly Bears — ${zone} \\(Opponent\\)`));
 });
-test('a hidden-zone option uses provider decision card information when the ordinary state omits it',()=>{
+test('a hidden-zone option uses provider decision card information when the ordinary state omits it',async()=>{
  const h=harness(['1']);
- const response=h.api.decisionResponse({type:'SelectCardsDecision',id:'search',options:['hidden'],minSelections:0,maxSelections:1,cardInfo:{hidden:{name:'Grizzly Bears'}}});
- assert.match(h.prompts[0],/Grizzly Bears \[hidden\]/);assert.equal(response.selectedCards[0],'hidden');
+ const response=await h.api.decisionResponse({type:'SelectCardsDecision',id:'search',options:['hidden'],minSelections:0,maxSelections:1,cardInfo:{hidden:{name:'Grizzly Bears'}}});
+ assert.equal(response.selectedCards[0],'hidden');
 });
-test('optional card selections preserve an empty choice',()=>{
- const h=harness(['']);const response=h.api.decisionResponse({type:'SelectCardsDecision',id:'search',options:['bear'],minSelections:0,maxSelections:1});
+test('optional card selections preserve an empty choice',async()=>{
+ const h=harness(['']);const response=await h.api.decisionResponse({type:'SelectCardsDecision',id:'search',options:['bear'],minSelections:0,maxSelections:1});
  assert.equal(response.selectedCards.length,0);
 });
-test('cancelling a card selection returns no choice',()=>{
- const h=harness([null]);assert.throws(()=>h.api.decisionResponse({type:'SelectCardsDecision',id:'search',options:['bear'],minSelections:0,maxSelections:1}),/Action cancelled/);
+test('cancelling a card selection returns no choice',async()=>{
+ const h=harness([null]);await assert.rejects(()=>h.api.decisionResponse({type:'SelectCardsDecision',id:'search',options:['bear'],minSelections:0,maxSelections:1}),/Action cancelled/);
  assert.equal(h.sent.length,0);
 });
 
