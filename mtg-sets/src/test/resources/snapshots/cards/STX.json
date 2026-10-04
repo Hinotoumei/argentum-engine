@@ -4755,7 +4755,9 @@
     },
     "metadata": {
         "collectorNumber": "214",
-        "rarity": "UNCOMMON"
+        "rarity": "RARE",
+        "artist": "Johannes Voss",
+        "imageUri": "https://cards.scryfall.io/normal/front/8/6/866b7fd4-86e3-4b42-b1ea-33bad0db1f9f.jpg?1783927301"
     },
     "colorIdentityOverride": [
         "BLUE",

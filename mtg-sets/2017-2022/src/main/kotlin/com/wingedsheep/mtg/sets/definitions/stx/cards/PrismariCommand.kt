@@ -37,5 +37,10 @@ val PrismariCommand = card("Prismari Command") {
             }
         }
     }
-    metadata { rarity = Rarity.UNCOMMON; collectorNumber = "214" }
+    metadata {
+        rarity = Rarity.RARE
+        collectorNumber = "214"
+        artist = "Johannes Voss"
+        imageUri = "https://cards.scryfall.io/normal/front/8/6/866b7fd4-86e3-4b42-b1ea-33bad0db1f9f.jpg?1783927301"
+    }
 }
