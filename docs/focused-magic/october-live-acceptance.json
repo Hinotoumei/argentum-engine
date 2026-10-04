@@ -1,0 +1,761 @@
+{
+  "checkedAt": "2026-10-04T19:34:20.622Z",
+  "diagnosisOnly": false,
+  "results": [
+    {
+      "kind": "catalog admission only",
+      "total": 84,
+      "missing": [],
+      "needsFocusedPatch": [],
+      "publicUpstream": false
+    },
+    {
+      "kind": "deployed printing metadata and browser image decoding",
+      "cards": [
+        {
+          "name": "Bilbo, Thief in the Night",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/4/8/484c7f83-8339-4ae1-8350-68ce1f7d05a3.jpg?1783902786"
+        },
+        {
+          "name": "Blood Crypt",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/6/d/6da63cc5-4624-4491-abd9-9b600c3fefe2.jpg?1759144844"
+        },
+        {
+          "name": "Blood Scrivener",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/9/e/9ea8179a-d3c9-4cdc-a5b5-68cc73279050.jpg?1783940040"
+        },
+        {
+          "name": "Commit // Memory",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/e/f/ef94afa5-0110-4a12-bf37-c1d3310f52c4.jpg?1783923283"
+        },
+        {
+          "name": "Currency Converter",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/4/e/4eab054c-93f8-4da4-afb9-8f4c73c19213.jpg?1783903220"
+        },
+        {
+          "name": "Demonfire",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/a/f/af2ad333-722e-4d7e-972a-903c24068931.jpg?1783943425"
+        },
+        {
+          "name": "Erebos's Intervention",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/8/8/88e35c80-6cfe-49fc-8138-562233ccf987.jpg"
+        },
+        {
+          "name": "Exclusive Nightclub",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/1/e/1e609d6e-9e37-45d2-87de-8c76675f7cec.jpg?1783905299"
+        },
+        {
+          "name": "Gamble",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/0/e/0ee0f160-7339-4d98-8a8c-f08889ee52f5.jpg"
+        },
+        {
+          "name": "Geier Reach Sanitarium",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/9/6/96093739-fedc-4d8f-a29d-0e57f571e5a9.jpg?1783937421"
+        },
+        {
+          "name": "Infernal Tutor",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/6/a/6a4e4be5-e057-4b50-9f86-76bc0b9987de.jpg?1783943429"
+        },
+        {
+          "name": "Island",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/b/7/b74648fc-587c-4d20-9432-58465bd7dca9.jpg"
+        },
+        {
+          "name": "Keldon Megaliths",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/3/a/3a6d546d-df98-4cb4-a68b-2a0c8bac5a72.jpg?1783943090"
+        },
+        {
+          "name": "Library of Leng",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/2/3/2340edcb-8cd5-4ccd-99e2-b9a29f72c495.jpg?1783948664"
+        },
+        {
+          "name": "Lotus Petal",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/6/c/6c877da3-68fa-41d0-8a24-8c79fcd8ecc1.jpg"
+        },
+        {
+          "name": "Monument to Endurance",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/d/2/d21433ba-0a14-42bc-ad0b-a4ef823a3295.jpg?1783907848"
+        },
+        {
+          "name": "Mountain",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/a/7/a7aae748-27d8-48f8-beb2-8e0192d7cc5c.jpg"
+        },
+        {
+          "name": "Notion Thief",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/7/2/728e660b-ad8b-49d2-a7e5-6588e496519b.jpg?1783940024"
+        },
+        {
+          "name": "One with Nothing",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/5/a/5a5841fa-4f30-495a-b840-3ef5a2af8fad.jpg?1783944151"
+        },
+        {
+          "name": "Page, Loose Leaf",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/8/c/8c6fecfd-8241-4cf0-b1eb-19472b99e0ed.jpg?1775938744"
+        },
+        {
+          "name": "Prismari Command",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/8/6/866b7fd4-86e3-4b42-b1ea-33bad0db1f9f.jpg?1783927301"
+        },
+        {
+          "name": "Reforge the Soul",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/1/c/1c3509c6-2ae7-45be-8ac9-4d14d69db32f.jpg"
+        },
+        {
+          "name": "Scalding Tarn",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/7/1/71e491c5-8c07-449b-b2f1-ffa052e6d311.jpg?1783926793"
+        },
+        {
+          "name": "Sire of Insanity",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/3/6/3665cfb7-51b6-4083-8eae-fbd3fa6c3554.jpg?1783940021"
+        },
+        {
+          "name": "Starting Town",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/f/c/fc7d1912-7e27-49ef-bd98-375d975a42b0.jpg?1748706861"
+        },
+        {
+          "name": "Steam Vents",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/b/6/b66daa94-d367-4812-9f18-f35378c1febb.jpg?1759144847"
+        },
+        {
+          "name": "Swamp",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/f/6/f6497c73-4bbb-4923-8151-8234c98ca6d4.jpg"
+        },
+        {
+          "name": "The Biblioplex",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/8/e/8eae4481-977f-4bb7-bb1a-ab7100e6ba47.jpg?1783927275"
+        },
+        {
+          "name": "Visionary's Dance",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/8/4/846a0e79-a530-429e-8f7f-4b87f1b0156e.jpg?1776000377"
+        },
+        {
+          "name": "Xander's Lounge",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/5/4/54f449ff-4025-465e-9ec5-a5cf42c4c9d3.jpg?1783923052"
+        },
+        {
+          "name": "Barrowgoyf",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/c/e/cea3b218-0e6e-443a-84f7-380f1021e8e1.jpg?1783911410"
+        },
+        {
+          "name": "Brainstorm",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/9/1/91b564f2-e27d-48f3-a7a8-5b0afd801634.jpg"
+        },
+        {
+          "name": "Daze",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/d/0/d03bff25-0d5e-4dcf-8d75-6df846afea3b.jpg?1789015977"
+        },
+        {
+          "name": "Fatal Push",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/b/5/b5e81649-9954-424c-89d1-f87d73b66047.jpg?1783936764"
+        },
+        {
+          "name": "Flow State",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/4/7/47d6093b-b1b6-4956-8bfd-02cce899f832.jpg?1775937249"
+        },
+        {
+          "name": "Force of Negation",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/c/b/cb795f86-3721-4ae5-9893-49d7d9973f86.jpg?1783904858"
+        },
+        {
+          "name": "Force of Will",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/9/a/9a879b60-4381-447d-8a5a-8e0b6a1d49ca.jpg?1783947196"
+        },
+        {
+          "name": "Kaito, Bane of Nightmares",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/5/5/55a14f30-4ff9-4472-90a6-c3139f1c18e5.jpg?1726286689"
+        },
+        {
+          "name": "Misty Rainforest",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/8/8/88231c0d-0cc8-44ec-bf95-81d1710ac141.jpg?1783926795"
+        },
+        {
+          "name": "Murktide Regent",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/2/0/20c4aae1-7665-4df7-bd51-a1d95bf8a17d.jpg?1783926875"
+        },
+        {
+          "name": "Orcish Bowmasters",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/7/c/7c024bae-5631-4e20-ac69-df392ac9e109.jpg?1745319944"
+        },
+        {
+          "name": "Polluted Delta",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/f/f/ff2f5f58-9a95-4ca6-93a0-813738f0072f.jpg?1707235020"
+        },
+        {
+          "name": "Ponder",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/4/4/44dcfc0c-b23d-48be-bf3a-a6fc6806c5e1.jpg"
+        },
+        {
+          "name": "Sheoldred's Edict",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/a/9/a9225cc3-90f0-448f-a8d9-7c6c2796d077.jpg?1783918041"
+        },
+        {
+          "name": "Tamiyo, Inquisitive Student",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/2/a/2a717b98-cdac-416d-bf6c-f6b6638e65d1.jpg?1783911236"
+        },
+        {
+          "name": "Thoughtseize",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/6/5/65b7275a-5305-42e6-b5c3-8b88568b4e28.jpg"
+        },
+        {
+          "name": "Undercity Sewers",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/2/b/2b5801fb-2026-4f25-98bc-ebb2f99684b9.jpg?1759236533"
+        },
+        {
+          "name": "Underground Sea",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/5/e/5e91ce41-053e-4203-8860-49cbf854cc18.jpg"
+        },
+        {
+          "name": "Verdant Catacombs",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/9/4/94c229ea-90da-4aa0-bfda-b162fb3b5b8b.jpg?1783926791"
+        },
+        {
+          "name": "Wasteland",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/9/9/99ff731b-8399-40c8-b539-ba6ba5783771.jpg"
+        },
+        {
+          "name": "Consign to Memory",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/b/c/bc95af55-d1dd-4fe6-adb0-3ad6db20d986.jpg?1783911293"
+        },
+        {
+          "name": "Dauthi Voidwalker",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/d/c/dce5db87-4a78-4b8d-b5c2-918ccd1ba4e3.jpg?1783926864"
+        },
+        {
+          "name": "Engineered Explosives",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/8/4/8492a272-e595-4f94-a6eb-08d29f211fd6.jpg?1783944383"
+        },
+        {
+          "name": "Hydroblast",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/f/6/f62716f0-fde2-49ef-b8a4-c1b03f451194.jpg?1783947514"
+        },
+        {
+          "name": "Long Goodbye",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/c/3/c3896705-bbd2-4ffb-a590-ee78e0eabdc5.jpg?1783912896"
+        },
+        {
+          "name": "Null Rod",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/b/c/bc45f2cb-c256-4a0f-879a-c7db5b1a0b94.jpg?1783946713"
+        },
+        {
+          "name": "Toxic Deluge",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/d/e/de5afccc-8d42-4bd6-b068-b9ea2361655e.jpg?1783903236"
+        },
+        {
+          "name": "Bloodstained Mire",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/7/f/7f430794-0d86-4f6a-97e0-4bbb6716d613.jpg?1707235037"
+        },
+        {
+          "name": "Desperate Ritual",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/c/8/c8bdb92a-7bdb-434b-8cc0-873969faf566.jpg?1783944301"
+        },
+        {
+          "name": "Faithless Looting",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/5/2/52e47757-0aa9-48b0-8b43-e2483d7eed67.jpg"
+        },
+        {
+          "name": "Gemstone Caverns",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/9/4/94d74254-4750-4fb3-9e53-473a5f98b315.jpg?1783943194"
+        },
+        {
+          "name": "Jace's Machinations",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/2/8/282588b9-3656-453b-aa25-2419e078ddc1.jpg?1788878150"
+        },
+        {
+          "name": "Kasmina, Enigma Sage",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/1/7/178bf300-38cf-4ab2-9e66-6fcaa112b649.jpg?1783927310"
+        },
+        {
+          "name": "Manamorphose",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/5/0/50283122-b8c4-4fb3-8eba-6252b72222f4.jpg?1783942721"
+        },
+        {
+          "name": "Reweave",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/4/f/4ff68016-80b4-4801-b796-5c5fdbc8faa1.jpg?1783944322"
+        },
+        {
+          "name": "Way of the Pyromancer",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/c/1/c1a00020-7c14-4503-a057-5763704bb83e.jpg?1788878311"
+        },
+        {
+          "name": "Chandra, Spark Hunter",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/1/1/11f9b98e-48a1-491e-bdab-6e94e4ec747a.jpg?1783907885"
+        },
+        {
+          "name": "Cutthroat il-Dal",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/1/9/192bc089-696d-41b4-a02f-d7dc166feedd.jpg?1783943115"
+        },
+        {
+          "name": "Gathan Raiders",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/1/8/180c5f5e-95b7-4b83-9051-eb64a3b9defc.jpg?1783941908"
+        },
+        {
+          "name": "Izzet Charm",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/1/e/1e3a5af6-5423-442b-a207-364e97a871d8.jpg?1783940338"
+        },
+        {
+          "name": "Jagged Poppet",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/e/7/e796a838-3599-4769-b90b-9bbbaad76fcb.jpg?1783943400"
+        },
+        {
+          "name": "Oscorp Industries",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/1/e/1e609d6e-9e37-45d2-87de-8c76675f7cec.jpg?1783905299"
+        },
+        {
+          "name": "Persist",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/b/9/b92a8dbf-d5b1-4337-8c3e-bc0c8308e426.jpg?1783926735"
+        },
+        {
+          "name": "Taste for Mayhem",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/2/0/20fbb2eb-5738-46e5-a0a6-8ee98c7c8cfb.jpg?1783943417"
+        },
+        {
+          "name": "Surgical Extraction",
+          "status": 200,
+          "imageUri": "https://cards.scryfall.io/normal/front/d/c/dca7e072-edb5-4f7e-bdec-a3a393053c80.jpg?1783941310"
+        }
+      ],
+      "decoded": [
+        {
+          "name": "Bilbo, Thief in the Night",
+          "decoded": true
+        },
+        {
+          "name": "Blood Crypt",
+          "decoded": true
+        },
+        {
+          "name": "Blood Scrivener",
+          "decoded": true
+        },
+        {
+          "name": "Commit // Memory",
+          "decoded": true
+        },
+        {
+          "name": "Currency Converter",
+          "decoded": true
+        },
+        {
+          "name": "Demonfire",
+          "decoded": true
+        },
+        {
+          "name": "Erebos's Intervention",
+          "decoded": true
+        },
+        {
+          "name": "Exclusive Nightclub",
+          "decoded": true
+        },
+        {
+          "name": "Gamble",
+          "decoded": true
+        },
+        {
+          "name": "Geier Reach Sanitarium",
+          "decoded": true
+        },
+        {
+          "name": "Infernal Tutor",
+          "decoded": true
+        },
+        {
+          "name": "Island",
+          "decoded": true
+        },
+        {
+          "name": "Keldon Megaliths",
+          "decoded": true
+        },
+        {
+          "name": "Library of Leng",
+          "decoded": true
+        },
+        {
+          "name": "Lotus Petal",
+          "decoded": true
+        },
+        {
+          "name": "Monument to Endurance",
+          "decoded": true
+        },
+        {
+          "name": "Mountain",
+          "decoded": true
+        },
+        {
+          "name": "Notion Thief",
+          "decoded": true
+        },
+        {
+          "name": "One with Nothing",
+          "decoded": true
+        },
+        {
+          "name": "Page, Loose Leaf",
+          "decoded": true
+        },
+        {
+          "name": "Prismari Command",
+          "decoded": true
+        },
+        {
+          "name": "Reforge the Soul",
+          "decoded": true
+        },
+        {
+          "name": "Scalding Tarn",
+          "decoded": true
+        },
+        {
+          "name": "Sire of Insanity",
+          "decoded": true
+        },
+        {
+          "name": "Starting Town",
+          "decoded": true
+        },
+        {
+          "name": "Steam Vents",
+          "decoded": true
+        },
+        {
+          "name": "Swamp",
+          "decoded": true
+        },
+        {
+          "name": "The Biblioplex",
+          "decoded": true
+        },
+        {
+          "name": "Visionary's Dance",
+          "decoded": true
+        },
+        {
+          "name": "Xander's Lounge",
+          "decoded": true
+        },
+        {
+          "name": "Barrowgoyf",
+          "decoded": true
+        },
+        {
+          "name": "Brainstorm",
+          "decoded": true
+        },
+        {
+          "name": "Daze",
+          "decoded": true
+        },
+        {
+          "name": "Fatal Push",
+          "decoded": true
+        },
+        {
+          "name": "Flow State",
+          "decoded": true
+        },
+        {
+          "name": "Force of Negation",
+          "decoded": true
+        },
+        {
+          "name": "Force of Will",
+          "decoded": true
+        },
+        {
+          "name": "Kaito, Bane of Nightmares",
+          "decoded": true
+        },
+        {
+          "name": "Misty Rainforest",
+          "decoded": true
+        },
+        {
+          "name": "Murktide Regent",
+          "decoded": true
+        },
+        {
+          "name": "Orcish Bowmasters",
+          "decoded": true
+        },
+        {
+          "name": "Polluted Delta",
+          "decoded": true
+        },
+        {
+          "name": "Ponder",
+          "decoded": true
+        },
+        {
+          "name": "Sheoldred's Edict",
+          "decoded": true
+        },
+        {
+          "name": "Tamiyo, Inquisitive Student",
+          "decoded": true
+        },
+        {
+          "name": "Thoughtseize",
+          "decoded": true
+        },
+        {
+          "name": "Undercity Sewers",
+          "decoded": true
+        },
+        {
+          "name": "Underground Sea",
+          "decoded": true
+        },
+        {
+          "name": "Verdant Catacombs",
+          "decoded": true
+        },
+        {
+          "name": "Wasteland",
+          "decoded": true
+        },
+        {
+          "name": "Consign to Memory",
+          "decoded": true
+        },
+        {
+          "name": "Dauthi Voidwalker",
+          "decoded": true
+        },
+        {
+          "name": "Engineered Explosives",
+          "decoded": true
+        },
+        {
+          "name": "Hydroblast",
+          "decoded": true
+        },
+        {
+          "name": "Long Goodbye",
+          "decoded": true
+        },
+        {
+          "name": "Null Rod",
+          "decoded": true
+        },
+        {
+          "name": "Toxic Deluge",
+          "decoded": true
+        },
+        {
+          "name": "Bloodstained Mire",
+          "decoded": true
+        },
+        {
+          "name": "Desperate Ritual",
+          "decoded": true
+        },
+        {
+          "name": "Faithless Looting",
+          "decoded": true
+        },
+        {
+          "name": "Gemstone Caverns",
+          "decoded": true
+        },
+        {
+          "name": "Jace's Machinations",
+          "decoded": true
+        },
+        {
+          "name": "Kasmina, Enigma Sage",
+          "decoded": true
+        },
+        {
+          "name": "Manamorphose",
+          "decoded": true
+        },
+        {
+          "name": "Reweave",
+          "decoded": true
+        },
+        {
+          "name": "Way of the Pyromancer",
+          "decoded": true
+        },
+        {
+          "name": "Chandra, Spark Hunter",
+          "decoded": true
+        },
+        {
+          "name": "Cutthroat il-Dal",
+          "decoded": true
+        },
+        {
+          "name": "Gathan Raiders",
+          "decoded": true
+        },
+        {
+          "name": "Izzet Charm",
+          "decoded": true
+        },
+        {
+          "name": "Jagged Poppet",
+          "decoded": true
+        },
+        {
+          "name": "Oscorp Industries",
+          "decoded": true
+        },
+        {
+          "name": "Persist",
+          "decoded": true
+        },
+        {
+          "name": "Taste for Mayhem",
+          "decoded": true
+        },
+        {
+          "name": "Surgical Extraction",
+          "decoded": true
+        }
+      ]
+    },
+    {
+      "key": "october",
+      "started": true,
+      "passed": true,
+      "confirmedAIAction": {
+        "type": "PlayLand",
+        "name": "Play Underground Sea"
+      },
+      "players": [
+        {
+          "name": "Dimir Tempo",
+          "life": 20
+        },
+        {
+          "name": "Focused Magic",
+          "life": 20
+        }
+      ],
+      "handZonePresent": true,
+      "error": null,
+      "tabletopLifeAndHandImages": true
+    },
+    {
+      "key": "mandatory",
+      "started": true,
+      "passed": true,
+      "confirmedAIAction": {
+        "type": "PlayLand",
+        "name": "Play Misty Rainforest"
+      },
+      "players": [
+        {
+          "name": "Focused Magic",
+          "life": 20
+        },
+        {
+          "name": "Dimir Tempo",
+          "life": 20
+        }
+      ],
+      "handZonePresent": true,
+      "error": null,
+      "tabletopLifeAndHandImages": true
+    },
+    {
+      "key": "legacy",
+      "started": true,
+      "passed": true,
+      "confirmedAIAction": {
+        "type": "PlayLand",
+        "name": "Play Misty Rainforest"
+      },
+      "players": [
+        {
+          "name": "Dimir Tempo",
+          "life": 20
+        },
+        {
+          "name": "Focused Magic",
+          "life": 20
+        }
+      ],
+      "handZonePresent": true,
+      "error": null,
+      "tabletopLifeAndHandImages": true
+    }
+  ]
+}
