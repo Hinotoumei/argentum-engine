@@ -760,12 +760,12 @@ SIDEBOARD:
     }
     if(type==='SelectCardsDecision' || type==='SearchLibraryDecision'){
       const options=decision.options||[]; const min=decision.minSelections??decision.minCards??0,max=decision.maxSelections??decision.maxCards??options.length;
-      const picks=ai?options.slice(0,min):pickIds(decision.prompt||'Choose cards',options,min,max,decision.cardInfo||{});
+      const picks=ai?options.slice(0,min):await pickActionTargets(decision.prompt||'Choose cards',options,min,max,decision.cardInfo||{});
       return {type:'CardsSelectedResponse',decisionId:id,selectedCards:picks};
     }
     if(type==='ChooseTargetsDecision'){
       const reqs=decision.requirements||decision.targetRequirements||[]; const selectedTargets={};
-      reqs.forEach((r,i)=>{selectedTargets[i]=ai?(r.validTargets||[]).slice(0,r.minTargets??1):pickIds(r.description||decision.prompt||'Choose targets',r.validTargets||[],r.minTargets??1,r.maxTargets??1)});
+      for(const [i,r] of reqs.entries())selectedTargets[i]=ai?(r.validTargets||[]).slice(0,r.minTargets??1):await pickActionTargets(r.description||decision.prompt||'Choose targets',r.validTargets||[],r.minTargets??1,r.maxTargets??1);
       return {type:'TargetsResponse',decisionId:id,selectedTargets};
     }
     if(type==='OrderObjectsDecision' || type==='ReorderLibraryDecision') return {type:'OrderedResponse',decisionId:id,orderedObjects:[...(decision.objects||decision.cards||[])]};
