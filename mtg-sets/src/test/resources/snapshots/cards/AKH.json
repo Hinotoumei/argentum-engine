@@ -753,6 +753,145 @@
     ]
 }
 
+// Commit // Memory
+{
+    "name": "Commit // Memory",
+    "manaCost": "{7}{U}{U}{U}",
+    "typeLine": "Instant Sorcery",
+    "oracleText": "Put target spell or nonland permanent into its owner's library second from the top.\n//\nAftermath (Cast this spell only from your graveyard. Then exile it.)\nEach player shuffles their hand and graveyard into their library, then draws seven cards.",
+    "metadata": {
+        "collectorNumber": "211",
+        "rarity": "RARE",
+        "artist": "Ryan Alexander Lee",
+        "imageUri": "https://cards.scryfall.io/normal/front/0/6/06c9e2e8-2b4c-4087-9141-6aa25a506626.jpg",
+        "rulings": [
+            {
+                "date": "2017-04-18",
+                "text": "If a spell is put into its owner's library, it's removed from the stack and thus will not resolve. The spell isn't countered; it just no longer exists. This works against a spell that can't be countered."
+            },
+            {
+                "date": "2017-04-18",
+                "text": "If another effect allows you to cast a split card with aftermath from any zone other than a graveyard, you can't cast the half with aftermath."
+            },
+            {
+                "date": "2017-04-18",
+                "text": "If another effect allows you to cast a split card with aftermath from a graveyard, you may cast either half. If you cast the half that has aftermath, you'll exile the card if it would leave the stack."
+            },
+            {
+                "date": "2017-04-18",
+                "text": "A spell with aftermath cast from a graveyard will always be exiled afterward, whether it resolves, it's countered, or it leaves the stack in some other way."
+            }
+        ]
+    },
+    "colorIdentityOverride": [
+        "BLUE"
+    ],
+    "layout": "SPLIT",
+    "cardFaces": [
+        {
+            "name": "Commit",
+            "manaCost": "{3}{U}",
+            "typeLine": "Instant",
+            "oracleText": "Put target spell or nonland permanent into its owner's library second from the top.",
+            "script": {
+                "spellEffect": {
+                    "type": "MoveToZone",
+                    "target": {
+                        "type": "BoundVariable",
+                        "name": "t0"
+                    },
+                    "destination": "Library",
+                    "positionFromTop": 1
+                },
+                "targetRequirements": [
+                    {
+                        "type": "TargetSpellOrPermanent",
+                        "id": "t0",
+                        "permanentFilter": {
+                            "cardPredicates": [
+                                "IsNonland",
+                                "IsPermanent"
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Memory",
+            "manaCost": "{4}{U}{U}",
+            "typeLine": "Sorcery",
+            "oracleText": "Aftermath (Cast this spell only from your graveyard. Then exile it.)\nEach player shuffles their hand and graveyard into their library, then draws seven cards.",
+            "keywords": [
+                "AFTERMATH"
+            ],
+            "script": {
+                "spellEffect": {
+                    "type": "Composite",
+                    "effects": [
+                        {
+                            "type": "ForEach",
+                            "space": {
+                                "type": "IterationSpace.Players",
+                                "players": "Each"
+                            },
+                            "body": {
+                                "type": "Composite",
+                                "effects": [
+                                    {
+                                        "type": "GatherCards",
+                                        "source": {
+                                            "type": "FromZone",
+                                            "zone": "Hand"
+                                        },
+                                        "storeAs": "gathered0"
+                                    },
+                                    {
+                                        "type": "GatherCards",
+                                        "source": {
+                                            "type": "FromZone",
+                                            "zone": "Graveyard"
+                                        },
+                                        "storeAs": "gathered1"
+                                    },
+                                    {
+                                        "type": "MoveCollection",
+                                        "from": "gathered0",
+                                        "destination": {
+                                            "type": "ToZone",
+                                            "zone": "Library"
+                                        }
+                                    },
+                                    {
+                                        "type": "MoveCollection",
+                                        "from": "gathered1",
+                                        "destination": {
+                                            "type": "ToZone",
+                                            "zone": "Library"
+                                        }
+                                    },
+                                    "ShuffleLibrary"
+                                ]
+                            }
+                        },
+                        {
+                            "type": "DrawCards",
+                            "count": {
+                                "type": "Fixed",
+                                "amount": 7
+                            },
+                            "target": {
+                                "type": "PlayerRef",
+                                "player": "Each"
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}
+
 // Companion of the Trials
 {
     "name": "Companion of the Trials",
