@@ -472,7 +472,9 @@
     },
     "metadata": {
         "collectorNumber": "46",
-        "rarity": "RARE"
+        "rarity": "RARE",
+        "artist": "Kev Walker",
+        "imageUri": "https://cards.scryfall.io/normal/front/6/a/6a4e4be5-e057-4b50-9f86-76bc0b9987de.jpg?1783943429"
     },
     "colorIdentityOverride": [
         "BLACK"

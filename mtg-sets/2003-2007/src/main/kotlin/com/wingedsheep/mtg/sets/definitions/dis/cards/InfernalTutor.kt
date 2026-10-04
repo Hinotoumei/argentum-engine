@@ -41,5 +41,10 @@ val InfernalTutor = card("Infernal Tutor") {
             }
         )
     }
-    metadata { rarity = Rarity.RARE; collectorNumber = "46" }
+    metadata {
+        rarity = Rarity.RARE
+        collectorNumber = "46"
+        artist = "Kev Walker"
+        imageUri = "https://cards.scryfall.io/normal/front/6/a/6a4e4be5-e057-4b50-9f86-76bc0b9987de.jpg?1783943429"
+    }
 }
