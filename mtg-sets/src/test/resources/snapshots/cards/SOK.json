@@ -88,7 +88,9 @@
     },
     "metadata": {
         "collectorNumber": "84",
-        "rarity": "RARE"
+        "rarity": "RARE",
+        "artist": "Jim Nelson",
+        "imageUri": "https://cards.scryfall.io/normal/front/5/a/5a5841fa-4f30-495a-b840-3ef5a2af8fad.jpg?1783944151"
     },
     "colorIdentityOverride": [
         "BLACK"
