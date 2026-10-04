@@ -81,3 +81,10 @@ The current frontend package is `Focused_Magic_frontend_2026-10-04_card_art.zip`
 The first final gate failed after 31m14s at two SDK checks: CounterTypeClientMirrorTest required VOID in the browser enum/display map, and CounterTypeTest's explicit post-legacy kind set omitted VOID. Both omissions came from the new vocabulary entry and are repaired. The printed spelling now has an explicit `void` assertion. AI, server and gym tests passed before the stop. The original failure log is preserved as `work/tooling/october-final-full-counter-failure.log`; this run is not a full-gate pass.
 
 The older-profile image audit found Gemstone Caverns, Kasmina, Enigma Sage and Manamorphose also lacked image metadata and provider printings with art. Their canonical TSP274, STX196 and SHM211 printing artist/image metadata is now supplied. The fresh full gate runs SDK checks first and regenerates the expected metadata snapshots; semantic snapshot review remains required before publication. No gameplay assertion was weakened or excluded for these repairs.
+
+
+## October 4 game board and Brainstorm continuation
+
+Replaced nested scrolling tabletop panels with a fixed full-screen board, bottom hand, stack sidebar and six clickable library/graveyard/exile piles. Pile inspection hides library contents and respects zone visibility. Native card art and projected stats remain. Desktop Chrome 1366x768: panel scrollHeight equals clientHeight; six piles visible.
+
+Automation deduplication now includes pending decisions and legal actions, allowing successive choices when the projected board is unchanged. Live Render Brainstorm acceptance completed selection and ordering, followed by restored human PassPriority. Sixty frontend regression checks passed. This is a targeted gameplay check, not proof of complete matches or all possible crowded-board layouts. Cloudflare requires the replacement ZIP upload; the public frontend has not been deployed by this session.

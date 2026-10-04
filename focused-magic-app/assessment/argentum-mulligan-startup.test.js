@@ -72,3 +72,14 @@ test('an unchanged resync is not an authoritative AI action acknowledgement',()=
  assert.equal(s.aiMeaningful.length,0);
  h.update(s.ai,{turnNumber:2});assert.equal(s.aiMeaningful.length,1);
 });
+
+test('successive Brainstorm choices with unchanged board each receive a response',()=>{
+ const h=harness(),s=h.session;s.user.mulliganComplete=true;s.ai.mulliganComplete=true;
+ const state={viewingPlayerId:'ai',priorityPlayerId:'ai',players:[],cards:{},zones:[]};
+ const choose=id=>s.onRoleMessage(s.ai,{type:'stateUpdate',state,interactionEpoch:{id:'current'},legalActions:[],pendingDecision:{type:'SelectCardsDecision',id,options:['a','b','c'],minSelections:2}});
+ choose('return-two');h.flush();choose('return-two');h.flush();
+ assert.equal(h.sent.filter(m=>m.action?.type==='SubmitDecision').length,1);
+ choose('order-two');h.flush();
+ assert.equal(h.sent.filter(m=>m.action?.type==='SubmitDecision').length,2);
+});
+

@@ -316,13 +316,13 @@ SIDEBOARD:
           <section class="argentum-tabletop-player opponent"><div class="argentum-tabletop-playerhead"><b id="argentumTabletopOppName">Opponent</b><span>Life <b id="argentumTabletopOppLife">?</b></span><span>Hand <b id="argentumTabletopOppHandCount">?</b></span><span>Library <b id="argentumTabletopOppLibCount">?</b></span></div><div class="argentum-tabletop-zone-title">Opponent battlefield</div><div id="argentumTabletopOppBattlefield" class="argentum-tabletop-cards"></div></section>
           <section class="argentum-tabletop-stack"><div class="argentum-tabletop-zone-title">Stack</div><div id="argentumTabletopStack" class="argentum-tabletop-cards compact"></div></section>
           <section class="argentum-tabletop-player self"><div class="argentum-tabletop-playerhead"><b id="argentumTabletopMyName">You</b><span>Life <b id="argentumTabletopMyLife">?</b></span><span>GY <b id="argentumTabletopMyGyCount">0</b></span><span>Library <b id="argentumTabletopMyLibCount">?</b></span></div><div class="argentum-tabletop-zone-title">Your battlefield</div><div id="argentumTabletopMyBattlefield" class="argentum-tabletop-cards"></div></section>
-          <section class="argentum-tabletop-hand"><div class="argentum-tabletop-zone-title">Your hand — tap a card to play/cast</div><div id="argentumTabletopMyHand" class="argentum-tabletop-cards hand"></div></section>
+          <aside id="argentumTabletopPiles" class="argentum-tabletop-piles"></aside><section class="argentum-tabletop-hand"><div class="argentum-tabletop-zone-title">Your hand — tap a card to play/cast</div><div id="argentumTabletopMyHand" class="argentum-tabletop-cards hand"></div></section>
         </div>
         <div id="argentumTabletopPlayerEffects" class="sub"></div>
         <section id="argentumTabletopCardActions" class="argentum-tabletop-actions"><span class="sub">Select a card or use Pass/Continue.</span></section>
         <section id="argentumTabletopTurnActions" class="argentum-tabletop-actions"></section>
         <section class="argentum-tabletop-decision"><div id="argentumTabletopDecision" class="sub">No pending decision.</div></section>
-        <div class="argentum-tabletop-footer"><button id="argentumTabletopPass" class="good" type="button">Pass / Continue</button><span class="sub">Argentum is authoritative. Only provider-advertised legal actions are shown.</span></div>
+        <div class="argentum-tabletop-footer"><button id="argentumTabletopPass" class="good" type="button">Pass / Continue</button><span class="sub">Choose a card to act. Click a pile to inspect it.</span></div>
       </div>`;
     document.body.appendChild(modal);
     $('argentumTabletopClose').onclick=()=>{active?.close();closeTabletopUI();};
@@ -444,7 +444,24 @@ SIDEBOARD:
       button.textContent=/DeclareAttackers/.test(info.actionType)?'Choose attackers':'Choose blockers';
       button.onclick=()=>submitLegalAction(info);turnActions.appendChild(button);
     }
-    renderTabletopDecision();setTabletopStatus('Argentum game active.');
+    const piles=$('argentumTabletopPiles');piles.replaceChildren();
+    for(const [owner,label] of [[opp?.playerId,'Opponent'],[me,'You']])for(const type of ['LIBRARY','GRAVEYARD','EXILE']){
+      if(!owner)continue;const z=stateZone(s,owner,type),ids=z?.cardIds||[],count=z?.size??ids.length;
+      const pile=document.createElement('button');pile.type='button';pile.className='argentum-pile';
+      pile.textContent=`${label} · ${type.toLowerCase()} (${count})`;
+      const top=s.cards?.[ids[ids.length-1]],art=top?.imageUri||top?.imageUrl;
+      if(type!=='LIBRARY'&&art){const img=document.createElement('img');img.src=art;img.alt=top.name;pile.prepend(img);}
+      pile.onclick=()=>{const dialog=document.createElement('dialog');dialog.className='argentum-target-dialog';
+        const heading=document.createElement('h3');heading.textContent=pile.textContent;dialog.append(heading);
+        const cards=document.createElement('div');cards.className='argentum-pile-cards';
+        if(type==='LIBRARY'||z?.isVisible===false)cards.textContent=`${count} cards face down`;
+        else if(!ids.length)cards.textContent='Empty';else for(const id of ids)cards.append(providerTableCard(s,id,type));
+        dialog.append(cards);const close=document.createElement('button');close.textContent='Back to game';close.onclick=()=>dialog.close();dialog.append(close);
+        dialog.addEventListener('close',()=>dialog.remove());document.body.append(dialog);dialog.showModal();};piles.append(pile);
+    }
+    const pass=$('argentumTabletopPass'),canPass=(active.legalActions||[]).some(a=>/PassPriority/i.test(a.actionType||''));
+    pass.disabled=!canPass||!!active.pendingDecision;pass.textContent=active.pendingDecision?'Choose cards':canPass?'Pass priority':'Waiting…';
+    renderTabletopDecision();setTabletopStatus(active.pendingDecision?'Complete your choice to continue.':canPass?'Your move.':'Waiting for the opponent…');
   }
 
   function openUI() { ensureUI(); $('argentumModal').classList.add('open'); $('argentumModal').setAttribute('aria-hidden','false'); }
@@ -1067,7 +1084,7 @@ SIDEBOARD:
         role.playReady=false;clearTimeout(role.autoTimer);return;
       }
       if(msg.type==='stateUpdate'){
-        role.playStateKey=JSON.stringify(msg.state);
+        role.playStateKey=JSON.stringify({state:msg.state,pendingDecision:msg.pendingDecision||null,legalActions:msg.legalActions||[]});
         role.playReady=this.user.mulliganComplete&&this.ai.mulliganComplete;
         role.state=msg.state;role.legalActions=msg.legalActions||[];role.pendingDecision=msg.pendingDecision||null;role.interactionEpoch=msg.interactionEpoch||null;role.lastVersion=msg.stateVersion||role.lastVersion;
         if(role.pendingMeaningful&&role.playStateKey!==role.lastSubmittedStateKey){
