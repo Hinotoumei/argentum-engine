@@ -83,3 +83,15 @@ test('successive Brainstorm choices with unchanged board each receive a response
  assert.equal(h.sent.filter(m=>m.action?.type==='SubmitDecision').length,2);
 });
 
+
+
+test('an unpaid human spell keeps both seats connected and requests fresh actions',()=>{
+ const h=harness(),s=h.session;let failures=0,closed=0;s.spec.onProviderFail=()=>failures++;s.close=()=>closed++;
+ s.onRoleMessage(s.user,{type:'error',code:'INVALID_ACTION',message:'Cannot pay mana cost'});h.flush();
+ assert.equal(failures,0);assert.equal(closed,0);assert(h.sent.some(m=>m.type==='requestResync'));
+});
+test('a genuine provider failure still uses the configured failure handler',()=>{
+ const h=harness(),s=h.session;let failures=0,closed=0;s.spec.onProviderFail=()=>failures++;s.close=()=>closed++;
+ s.onRoleMessage(s.user,{type:'error',code:'SESSION_NOT_FOUND',message:'Missing session'});h.flush();
+ assert.equal(failures,1);assert.equal(closed,1);
+});

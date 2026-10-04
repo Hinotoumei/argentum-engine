@@ -88,3 +88,8 @@ The older-profile image audit found Gemstone Caverns, Kasmina, Enigma Sage and M
 Replaced nested scrolling tabletop panels with a fixed full-screen board, bottom hand, stack sidebar and six clickable library/graveyard/exile piles. Pile inspection hides library contents and respects zone visibility. Native card art and projected stats remain. Desktop Chrome 1366x768: panel scrollHeight equals clientHeight; six piles visible.
 
 Automation deduplication now includes pending decisions and legal actions, allowing successive choices when the projected board is unchanged. Live Render Brainstorm acceptance completed selection and ordering, followed by restored human PassPriority. Sixty frontend regression checks passed. This is a targeted gameplay check, not proof of complete matches or all possible crowded-board layouts. Cloudflare requires the replacement ZIP upload; the public frontend has not been deployed by this session.
+
+
+## Recoverable command rejection
+
+INVALID_ACTION no longer invokes fatal provider fallback or closes Constructed. Rejected commands display the reason and request authoritative resync. Other error codes retain fatal handling. 62 frontend regressions passed. Native live Chrome cast of Monument to Endurance without mana returned Not enough mana to cast this spell; board remained visible and socket open. Exact tapped-land/two-Petal position has not yet been reproduced.

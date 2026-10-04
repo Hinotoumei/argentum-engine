@@ -1020,6 +1020,11 @@ SIDEBOARD:
       log(`${role.kind} ← ${msg.type}${msg.message?`: ${msg.message}`:''}`);
       if(msg.type==='error'){
         role.pendingMeaningful=null;
+        if(msg.code==='INVALID_ACTION'){
+          setStatus(msg.message||'That action cannot be performed now.',true);
+          log(`Action rejected for ${role.kind}; keeping the match open.`);
+          clearTimeout(role.resyncTimer);role.resyncTimer=setTimeout(()=>{try{this.sendRole(role,{type:'requestResync'})}catch(_e){}},10);return;
+        }
         this.fail(`${role.kind} ${msg.code||'ERROR'}: ${msg.message}`);return;
       }
       if(msg.type==='connected' || msg.type==='reconnected'){
