@@ -23,6 +23,7 @@ import com.wingedsheep.engine.state.components.player.SacrificedFoodThisTurnComp
 import com.wingedsheep.sdk.core.CounterType
 import com.wingedsheep.sdk.core.Keyword
 import com.wingedsheep.sdk.core.Zone
+import com.wingedsheep.sdk.scripting.effects.CompositeEffect
 import com.wingedsheep.sdk.model.EntityId
 import com.wingedsheep.sdk.scripting.effects.CardDestination
 import com.wingedsheep.sdk.scripting.effects.CardOrder
@@ -413,9 +414,30 @@ class MoveCollectionExecutor(
         if (moveType == MoveType.Discard && destZone == Zone.GRAVEYARD) {
             var runningState = state
             val events = mutableListOf<GameEvent>()
-            for ((playerId, discarded) in cards.groupBy { cardId ->
+            val groups = cards.groupBy { cardId ->
                 state.getEntity(cardId)?.get<OwnerComponent>()?.playerId ?: destPlayerId
-            }) {
+            }.entries.toList()
+            val outputs = storeMovedAs?.let { mapOf(it to cards) }.orEmpty()
+            for ((index, group) in groups.withIndex()) {
+                val (playerId, discarded) = group
+                // Publish the discard output only after replacements finish. Preserve later
+                // owners' discards too when Library of Leng pauses the current owner.
+                val remainingGroups = groups.drop(index + 1)
+                val needsFrame = outputs.isNotEmpty() || remainingGroups.isNotEmpty()
+                val remainingCollections = remainingGroups.mapIndexed { i, entry ->
+                    "remaining_discard_owner_$i" to entry.value
+                }.toMap()
+                if (needsFrame) {
+                    val remainingEffects = remainingCollections.keys.map { key ->
+                        MoveCollectionEffect(from = key, destination = destination, moveType = MoveType.Discard)
+                    }.ifEmpty { listOf(CompositeEffect(emptyList())) }
+                    runningState = runningState.pushContinuation(EffectContinuation(
+                        remainingEffects = remainingEffects,
+                        effectContext = context.copy(pipeline = context.pipeline.copy(
+                            storedCollections = context.pipeline.storedCollections + outputs + remainingCollections
+                        ))
+                    ))
+                }
                 val result = zones.discardCards(
                     runningState,
                     playerId,
@@ -427,8 +449,9 @@ class MoveCollectionExecutor(
                 if (runningState.pendingDecision != null) {
                     return EffectResult.propagatePause(runningState, events)
                 }
+                if (needsFrame) runningState = runningState.popContinuation().second
             }
-            return EffectResult.success(runningState, events)
+            return EffectResult.success(runningState, events).copy(updatedCollections = outputs)
         }
 
         // ControllerChooses ordering: pause for player to see/reorder cards going to library

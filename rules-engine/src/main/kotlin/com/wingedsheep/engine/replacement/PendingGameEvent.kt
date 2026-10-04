@@ -133,7 +133,14 @@ sealed interface PendingGameEvent {
             context: EffectContext?
         ): Boolean {
             val drawEvent = pattern as? EventPattern.DrawEvent ?: return false
-            if (drawEvent.exceptFirstInDrawStep && drawnCardsSoFar.isEmpty()) return false
+            if (drawEvent.exceptFirstInDrawStep && state.isActiveTurnFor(playerId) &&
+                state.step == com.wingedsheep.sdk.core.Step.DRAW
+            ) {
+                val drawn = state.getEntity(playerId)
+                    ?.get<com.wingedsheep.engine.state.components.player.CardsDrawnThisTurnComponent>()?.count ?: 0
+                val atStepStart = state.drawStepStartDrawCountByPlayer[playerId] ?: 0
+                if (drawn <= atStepStart) return false
+            }
             return matchesPlayerFilter(drawEvent.player, playerId, sourceControllerId, state)
         }
 

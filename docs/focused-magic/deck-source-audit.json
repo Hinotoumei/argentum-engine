@@ -1,0 +1,1433 @@
+{
+  "scope": "Source and test inventory only; existence is not gameplay verification",
+  "decks": {
+    "october": {
+      "mainCount": 60,
+      "sideboardCount": 0,
+      "cards": [
+        {
+          "name": "Bilbo, Thief in the Night",
+          "canonical": "Bilbo, Thief in the Night",
+          "definition": "mtg-sets\\2026\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\hob\\cards\\BilboThiefInTheNight.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2026\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\BilboThiefInTheNightScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Blood Crypt",
+          "canonical": "Blood Crypt",
+          "definition": "mtg-sets\\2003-2007\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\dis\\cards\\BloodCrypt.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Blood Scrivener",
+          "canonical": "Blood Scrivener",
+          "definition": "mtg-sets\\2008-2016\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\dgm\\cards\\BloodScrivener.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2008-2016\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\BloodScrivenerScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Commit // Memory",
+          "canonical": "Commit // Memory",
+          "definition": null,
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Currency Converter",
+          "canonical": "Currency Converter",
+          "definition": "mtg-sets\\2017-2022\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\ncc\\cards\\CurrencyConverter.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2017-2022\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\CurrencyConverterScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Demonfire",
+          "canonical": "Demonfire",
+          "definition": "mtg-sets\\2003-2007\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\dis\\cards\\Demonfire.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2003-2007\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\DemonfireScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Erebos's Intervention",
+          "canonical": "Erebos's Intervention",
+          "definition": "mtg-sets\\2017-2022\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\thb\\cards\\ErebossIntervention.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2017-2022\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\ErebossInterventionScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Exclusive Nightclub",
+          "canonical": "Oscorp Industries",
+          "definition": "mtg-sets\\2025\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\spm\\cards\\OscorpIndustries.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2025\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\OscorpIndustriesScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Gamble",
+          "canonical": "Gamble",
+          "definition": "mtg-sets\\1993-1999\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\usg\\cards\\Gamble.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Geier Reach Sanitarium",
+          "canonical": "Geier Reach Sanitarium",
+          "definition": "mtg-sets\\2008-2016\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\emn\\cards\\GeierReachSanitarium.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2008-2016\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\GeierReachSanitariumScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Infernal Tutor",
+          "canonical": "Infernal Tutor",
+          "definition": "mtg-sets\\2003-2007\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\dis\\cards\\InfernalTutor.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Island",
+          "canonical": "Island",
+          "definition": "mtg-sets\\2026\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\tmt\\cards\\TeenageMutantNinjaTurtlesBasicLands.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Keldon Megaliths",
+          "canonical": "Keldon Megaliths",
+          "definition": "mtg-sets\\2003-2007\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\fut\\cards\\KeldonMegaliths.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Library of Leng",
+          "canonical": "Library of Leng",
+          "definition": "mtg-sets\\1993-1999\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\lea\\cards\\LibraryOfLeng.kt",
+          "scenarioFiles": [
+            "mtg-sets\\1993-1999\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\LibraryOfLengScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Lotus Petal",
+          "canonical": "Lotus Petal",
+          "definition": "mtg-sets\\1993-1999\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\tmp\\cards\\LotusPetal.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Monument to Endurance",
+          "canonical": "Monument to Endurance",
+          "definition": "mtg-sets\\2025\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\dft\\cards\\MonumentToEndurance.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2025\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\MonumentToEnduranceScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Mountain",
+          "canonical": "Mountain",
+          "definition": "mtg-sets\\2026\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\tmt\\cards\\TeenageMutantNinjaTurtlesBasicLands.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Notion Thief",
+          "canonical": "Notion Thief",
+          "definition": "mtg-sets\\2008-2016\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\dgm\\cards\\NotionThief.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2008-2016\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\NotionThiefScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "One with Nothing",
+          "canonical": "One with Nothing",
+          "definition": "mtg-sets\\2003-2007\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\sok\\cards\\OneWithNothing.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Page, Loose Leaf",
+          "canonical": "Page, Loose Leaf",
+          "definition": "mtg-sets\\2026\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\sos\\cards\\PageLooseLeaf.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2026\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\PageLooseLeafScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Prismari Command",
+          "canonical": "Prismari Command",
+          "definition": "mtg-sets\\2017-2022\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\stx\\cards\\PrismariCommand.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Reforge the Soul",
+          "canonical": "Reforge the Soul",
+          "definition": "mtg-sets\\2008-2016\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\avr\\cards\\ReforgeTheSoul.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2008-2016\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\ReforgeTheSoulScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Scalding Tarn",
+          "canonical": "Scalding Tarn",
+          "definition": "mtg-sets\\2008-2016\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\zen\\cards\\ScaldingTarn.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2008-2016\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\ScaldingTarnScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Sire of Insanity",
+          "canonical": "Sire of Insanity",
+          "definition": "mtg-sets\\2008-2016\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\dgm\\cards\\SireOfInsanity.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Starting Town",
+          "canonical": "Starting Town",
+          "definition": "mtg-sets\\2025\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\fin\\cards\\StartingTown.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Steam Vents",
+          "canonical": "Steam Vents",
+          "definition": "mtg-sets\\2003-2007\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\gpt\\cards\\SteamVents.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Swamp",
+          "canonical": "Swamp",
+          "definition": "mtg-sets\\2026\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\tmt\\cards\\TeenageMutantNinjaTurtlesBasicLands.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "The Biblioplex",
+          "canonical": "The Biblioplex",
+          "definition": "mtg-sets\\2017-2022\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\stx\\cards\\TheBiblioplex.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2017-2022\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\TheBiblioplexScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Visionary's Dance",
+          "canonical": "Visionary's Dance",
+          "definition": "mtg-sets\\2026\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\sos\\cards\\VisionarysDance.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2026\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\VisionarysDanceScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Xander's Lounge",
+          "canonical": "Xander's Lounge",
+          "definition": "mtg-sets\\2017-2022\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\snc\\cards\\XandersLounge.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        }
+      ]
+    },
+    "october-ai": {
+      "mainCount": 60,
+      "sideboardCount": 15,
+      "cards": [
+        {
+          "name": "Barrowgoyf",
+          "canonical": "Barrowgoyf",
+          "definition": "mtg-sets\\2024\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\m3c\\cards\\Barrowgoyf.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2024\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\BarrowgoyfScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Brainstorm",
+          "canonical": "Brainstorm",
+          "definition": "mtg-sets\\1993-1999\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\ice\\cards\\Brainstorm.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Daze",
+          "canonical": "Daze",
+          "definition": "mtg-sets\\2000-2002\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\nem\\cards\\Daze.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2000-2002\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\DazeScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Fatal Push",
+          "canonical": "Fatal Push",
+          "definition": "mtg-sets\\2017-2022\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\aer\\cards\\FatalPush.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2017-2022\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\FatalPushScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Flow State",
+          "canonical": "Flow State",
+          "definition": "mtg-sets\\2026\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\sos\\cards\\FlowState.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2026\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\FlowStateTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Force of Negation",
+          "canonical": "Force of Negation",
+          "definition": "mtg-sets\\2017-2022\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\mh1\\cards\\ForceOfNegation.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2017-2022\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\ForceOfNegationScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Force of Will",
+          "canonical": "Force of Will",
+          "definition": "mtg-sets\\1993-1999\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\all\\cards\\ForceOfWill.kt",
+          "scenarioFiles": [
+            "mtg-sets\\1993-1999\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\ForceOfWillScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Island",
+          "canonical": "Island",
+          "definition": "mtg-sets\\2026\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\tmt\\cards\\TeenageMutantNinjaTurtlesBasicLands.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Kaito, Bane of Nightmares",
+          "canonical": "Kaito, Bane of Nightmares",
+          "definition": "mtg-sets\\2024\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\dsk\\cards\\KaitoBaneOfNightmares.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2024\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\KaitoBaneOfNightmaresScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Misty Rainforest",
+          "canonical": "Misty Rainforest",
+          "definition": "mtg-sets\\2008-2016\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\zen\\cards\\MistyRainforest.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Murktide Regent",
+          "canonical": "Murktide Regent",
+          "definition": "mtg-sets\\2017-2022\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\mh2\\cards\\MurktideRegent.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2017-2022\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\MurktideRegentScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Orcish Bowmasters",
+          "canonical": "Orcish Bowmasters",
+          "definition": "mtg-sets\\2023\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\ltr\\cards\\OrcishBowmasters.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2023\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\OrcishBowmastersTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Polluted Delta",
+          "canonical": "Polluted Delta",
+          "definition": "mtg-sets\\2000-2002\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\ons\\cards\\PollutedDelta.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Ponder",
+          "canonical": "Ponder",
+          "definition": "mtg-sets\\2003-2007\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\lrw\\cards\\Ponder.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Scalding Tarn",
+          "canonical": "Scalding Tarn",
+          "definition": "mtg-sets\\2008-2016\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\zen\\cards\\ScaldingTarn.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2008-2016\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\ScaldingTarnScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Sheoldred's Edict",
+          "canonical": "Sheoldred's Edict",
+          "definition": "mtg-sets\\2023\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\one\\cards\\SheoldredsEdict.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2023\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\SheoldredsEdictScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Swamp",
+          "canonical": "Swamp",
+          "definition": "mtg-sets\\2026\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\tmt\\cards\\TeenageMutantNinjaTurtlesBasicLands.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Tamiyo, Inquisitive Student",
+          "canonical": "Tamiyo, Inquisitive Student",
+          "definition": "mtg-sets\\2024\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\mh3\\cards\\TamiyoInquisitiveStudent.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2024\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\TamiyoInquisitiveStudentScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Thoughtseize",
+          "canonical": "Thoughtseize",
+          "definition": "mtg-sets\\2003-2007\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\lrw\\cards\\Thoughtseize.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2003-2007\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\ThoughtseizeScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Undercity Sewers",
+          "canonical": "Undercity Sewers",
+          "definition": "mtg-sets\\2024\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\mkm\\cards\\UndercitySewers.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Underground Sea",
+          "canonical": "Underground Sea",
+          "definition": "mtg-sets\\1993-1999\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\lea\\cards\\UndergroundSea.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Verdant Catacombs",
+          "canonical": "Verdant Catacombs",
+          "definition": "mtg-sets\\2008-2016\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\zen\\cards\\VerdantCatacombs.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Wasteland",
+          "canonical": "Wasteland",
+          "definition": "mtg-sets\\1993-1999\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\tmp\\cards\\Wasteland.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Consign to Memory",
+          "canonical": "Consign to Memory",
+          "definition": "mtg-sets\\2024\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\mh3\\cards\\ConsignToMemory.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2024\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\ConsignToMemoryScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Dauthi Voidwalker",
+          "canonical": "Dauthi Voidwalker",
+          "definition": "mtg-sets\\2017-2022\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\mh2\\cards\\DauthiVoidwalker.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2017-2022\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\DauthiVoidwalkerScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Engineered Explosives",
+          "canonical": "Engineered Explosives",
+          "definition": "mtg-sets\\2003-2007\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\5dn\\cards\\EngineeredExplosives.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2003-2007\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\EngineeredExplosivesScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Hydroblast",
+          "canonical": "Hydroblast",
+          "definition": "mtg-sets\\1993-1999\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\ice\\cards\\Hydroblast.kt",
+          "scenarioFiles": [
+            "mtg-sets\\1993-1999\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\HydroblastScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Long Goodbye",
+          "canonical": "Long Goodbye",
+          "definition": "mtg-sets\\2024\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\mkm\\cards\\LongGoodbye.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2024\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\LongGoodbyeScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Null Rod",
+          "canonical": "Null Rod",
+          "definition": "mtg-sets\\1993-1999\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\wth\\cards\\NullRod.kt",
+          "scenarioFiles": [
+            "mtg-sets\\1993-1999\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\NullRodScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Toxic Deluge",
+          "canonical": "Toxic Deluge",
+          "definition": "mtg-sets\\2008-2016\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\c13\\cards\\ToxicDeluge.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2008-2016\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\ToxicDelugeScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        }
+      ]
+    },
+    "mandatory": {
+      "mainCount": 60,
+      "sideboardCount": 0,
+      "cards": [
+        {
+          "name": "Blood Crypt",
+          "canonical": "Blood Crypt",
+          "definition": "mtg-sets\\2003-2007\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\dis\\cards\\BloodCrypt.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Bloodstained Mire",
+          "canonical": "Bloodstained Mire",
+          "definition": "mtg-sets\\2000-2002\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\ons\\cards\\BloodstainedMire.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Desperate Ritual",
+          "canonical": "Desperate Ritual",
+          "definition": "mtg-sets\\2003-2007\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\chk\\cards\\DesperateRitual.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Exclusive Nightclub",
+          "canonical": "Oscorp Industries",
+          "definition": "mtg-sets\\2025\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\spm\\cards\\OscorpIndustries.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2025\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\OscorpIndustriesScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Faithless Looting",
+          "canonical": "Faithless Looting",
+          "definition": "mtg-sets\\2008-2016\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\dka\\cards\\FaithlessLooting.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2008-2016\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\FaithlessLootingScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Gemstone Caverns",
+          "canonical": "Gemstone Caverns",
+          "definition": "mtg-sets\\2003-2007\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\tsp\\cards\\GemstoneCaverns.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2003-2007\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\GemstoneCavernsScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Infernal Tutor",
+          "canonical": "Infernal Tutor",
+          "definition": "mtg-sets\\2003-2007\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\dis\\cards\\InfernalTutor.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Jace's Machinations",
+          "canonical": "Jace's Machinations",
+          "definition": "mtg-sets\\2026\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\fra\\cards\\JacesMachinations.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2026\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\JacesMachinationsScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Kasmina, Enigma Sage",
+          "canonical": "Kasmina, Enigma Sage",
+          "definition": "mtg-sets\\2017-2022\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\stx\\cards\\KasminaEnigmaSage.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Keldon Megaliths",
+          "canonical": "Keldon Megaliths",
+          "definition": "mtg-sets\\2003-2007\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\fut\\cards\\KeldonMegaliths.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Manamorphose",
+          "canonical": "Manamorphose",
+          "definition": "mtg-sets\\2008-2016\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\shm\\cards\\Manamorphose.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Monument to Endurance",
+          "canonical": "Monument to Endurance",
+          "definition": "mtg-sets\\2025\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\dft\\cards\\MonumentToEndurance.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2025\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\MonumentToEnduranceScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "One with Nothing",
+          "canonical": "One with Nothing",
+          "definition": "mtg-sets\\2003-2007\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\sok\\cards\\OneWithNothing.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Prismari Command",
+          "canonical": "Prismari Command",
+          "definition": "mtg-sets\\2017-2022\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\stx\\cards\\PrismariCommand.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Reweave",
+          "canonical": "Reweave",
+          "definition": "mtg-sets\\2003-2007\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\chk\\cards\\Reweave.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2003-2007\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\ReweaveScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Scalding Tarn",
+          "canonical": "Scalding Tarn",
+          "definition": "mtg-sets\\2008-2016\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\zen\\cards\\ScaldingTarn.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2008-2016\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\ScaldingTarnScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Sire of Insanity",
+          "canonical": "Sire of Insanity",
+          "definition": "mtg-sets\\2008-2016\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\dgm\\cards\\SireOfInsanity.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Starting Town",
+          "canonical": "Starting Town",
+          "definition": "mtg-sets\\2025\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\fin\\cards\\StartingTown.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Steam Vents",
+          "canonical": "Steam Vents",
+          "definition": "mtg-sets\\2003-2007\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\gpt\\cards\\SteamVents.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Way of the Pyromancer",
+          "canonical": "Way of the Pyromancer",
+          "definition": "mtg-sets\\2026\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\fra\\cards\\WayOfThePyromancer.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2026\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\WayOfThePyromancerScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        }
+      ]
+    },
+    "mandatory-ai": {
+      "mainCount": 60,
+      "sideboardCount": 15,
+      "cards": [
+        {
+          "name": "Barrowgoyf",
+          "canonical": "Barrowgoyf",
+          "definition": "mtg-sets\\2024\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\m3c\\cards\\Barrowgoyf.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2024\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\BarrowgoyfScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Brainstorm",
+          "canonical": "Brainstorm",
+          "definition": "mtg-sets\\1993-1999\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\ice\\cards\\Brainstorm.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Daze",
+          "canonical": "Daze",
+          "definition": "mtg-sets\\2000-2002\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\nem\\cards\\Daze.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2000-2002\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\DazeScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Fatal Push",
+          "canonical": "Fatal Push",
+          "definition": "mtg-sets\\2017-2022\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\aer\\cards\\FatalPush.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2017-2022\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\FatalPushScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Flow State",
+          "canonical": "Flow State",
+          "definition": "mtg-sets\\2026\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\sos\\cards\\FlowState.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2026\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\FlowStateTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Force of Negation",
+          "canonical": "Force of Negation",
+          "definition": "mtg-sets\\2017-2022\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\mh1\\cards\\ForceOfNegation.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2017-2022\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\ForceOfNegationScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Force of Will",
+          "canonical": "Force of Will",
+          "definition": "mtg-sets\\1993-1999\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\all\\cards\\ForceOfWill.kt",
+          "scenarioFiles": [
+            "mtg-sets\\1993-1999\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\ForceOfWillScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Island",
+          "canonical": "Island",
+          "definition": "mtg-sets\\2026\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\tmt\\cards\\TeenageMutantNinjaTurtlesBasicLands.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Kaito, Bane of Nightmares",
+          "canonical": "Kaito, Bane of Nightmares",
+          "definition": "mtg-sets\\2024\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\dsk\\cards\\KaitoBaneOfNightmares.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2024\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\KaitoBaneOfNightmaresScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Misty Rainforest",
+          "canonical": "Misty Rainforest",
+          "definition": "mtg-sets\\2008-2016\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\zen\\cards\\MistyRainforest.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Murktide Regent",
+          "canonical": "Murktide Regent",
+          "definition": "mtg-sets\\2017-2022\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\mh2\\cards\\MurktideRegent.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2017-2022\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\MurktideRegentScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Orcish Bowmasters",
+          "canonical": "Orcish Bowmasters",
+          "definition": "mtg-sets\\2023\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\ltr\\cards\\OrcishBowmasters.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2023\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\OrcishBowmastersTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Polluted Delta",
+          "canonical": "Polluted Delta",
+          "definition": "mtg-sets\\2000-2002\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\ons\\cards\\PollutedDelta.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Ponder",
+          "canonical": "Ponder",
+          "definition": "mtg-sets\\2003-2007\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\lrw\\cards\\Ponder.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Scalding Tarn",
+          "canonical": "Scalding Tarn",
+          "definition": "mtg-sets\\2008-2016\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\zen\\cards\\ScaldingTarn.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2008-2016\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\ScaldingTarnScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Sheoldred's Edict",
+          "canonical": "Sheoldred's Edict",
+          "definition": "mtg-sets\\2023\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\one\\cards\\SheoldredsEdict.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2023\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\SheoldredsEdictScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Swamp",
+          "canonical": "Swamp",
+          "definition": "mtg-sets\\2026\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\tmt\\cards\\TeenageMutantNinjaTurtlesBasicLands.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Tamiyo, Inquisitive Student",
+          "canonical": "Tamiyo, Inquisitive Student",
+          "definition": "mtg-sets\\2024\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\mh3\\cards\\TamiyoInquisitiveStudent.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2024\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\TamiyoInquisitiveStudentScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Thoughtseize",
+          "canonical": "Thoughtseize",
+          "definition": "mtg-sets\\2003-2007\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\lrw\\cards\\Thoughtseize.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2003-2007\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\ThoughtseizeScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Undercity Sewers",
+          "canonical": "Undercity Sewers",
+          "definition": "mtg-sets\\2024\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\mkm\\cards\\UndercitySewers.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Underground Sea",
+          "canonical": "Underground Sea",
+          "definition": "mtg-sets\\1993-1999\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\lea\\cards\\UndergroundSea.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Verdant Catacombs",
+          "canonical": "Verdant Catacombs",
+          "definition": "mtg-sets\\2008-2016\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\zen\\cards\\VerdantCatacombs.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Wasteland",
+          "canonical": "Wasteland",
+          "definition": "mtg-sets\\1993-1999\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\tmp\\cards\\Wasteland.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Consign to Memory",
+          "canonical": "Consign to Memory",
+          "definition": "mtg-sets\\2024\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\mh3\\cards\\ConsignToMemory.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2024\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\ConsignToMemoryScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Dauthi Voidwalker",
+          "canonical": "Dauthi Voidwalker",
+          "definition": "mtg-sets\\2017-2022\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\mh2\\cards\\DauthiVoidwalker.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2017-2022\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\DauthiVoidwalkerScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Engineered Explosives",
+          "canonical": "Engineered Explosives",
+          "definition": "mtg-sets\\2003-2007\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\5dn\\cards\\EngineeredExplosives.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2003-2007\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\EngineeredExplosivesScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Hydroblast",
+          "canonical": "Hydroblast",
+          "definition": "mtg-sets\\1993-1999\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\ice\\cards\\Hydroblast.kt",
+          "scenarioFiles": [
+            "mtg-sets\\1993-1999\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\HydroblastScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Long Goodbye",
+          "canonical": "Long Goodbye",
+          "definition": "mtg-sets\\2024\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\mkm\\cards\\LongGoodbye.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2024\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\LongGoodbyeScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Null Rod",
+          "canonical": "Null Rod",
+          "definition": "mtg-sets\\1993-1999\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\wth\\cards\\NullRod.kt",
+          "scenarioFiles": [
+            "mtg-sets\\1993-1999\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\NullRodScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Toxic Deluge",
+          "canonical": "Toxic Deluge",
+          "definition": "mtg-sets\\2008-2016\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\c13\\cards\\ToxicDeluge.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2008-2016\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\ToxicDelugeScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        }
+      ]
+    },
+    "legacy": {
+      "mainCount": 61,
+      "sideboardCount": 2,
+      "cards": [
+        {
+          "name": "Blood Crypt",
+          "canonical": "Blood Crypt",
+          "definition": "mtg-sets\\2003-2007\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\dis\\cards\\BloodCrypt.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Blood Scrivener",
+          "canonical": "Blood Scrivener",
+          "definition": "mtg-sets\\2008-2016\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\dgm\\cards\\BloodScrivener.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2008-2016\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\BloodScrivenerScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Chandra, Spark Hunter",
+          "canonical": "Chandra, Spark Hunter",
+          "definition": "mtg-sets\\2025\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\dft\\cards\\ChandraSparkHunter.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2025\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\ChandraSparkHunterScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Currency Converter",
+          "canonical": "Currency Converter",
+          "definition": "mtg-sets\\2017-2022\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\ncc\\cards\\CurrencyConverter.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2017-2022\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\CurrencyConverterScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Cutthroat il-Dal",
+          "canonical": "Cutthroat il-Dal",
+          "definition": "mtg-sets\\2003-2007\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\fut\\cards\\CutthroatIlDal.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2003-2007\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\CutthroatIlDalScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Demonfire",
+          "canonical": "Demonfire",
+          "definition": "mtg-sets\\2003-2007\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\dis\\cards\\Demonfire.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2003-2007\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\DemonfireScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Gamble",
+          "canonical": "Gamble",
+          "definition": "mtg-sets\\1993-1999\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\usg\\cards\\Gamble.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Gathan Raiders",
+          "canonical": "Gathan Raiders",
+          "definition": "mtg-sets\\2003-2007\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\fut\\cards\\GathanRaiders.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2003-2007\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\GathanRaidersScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Geier Reach Sanitarium",
+          "canonical": "Geier Reach Sanitarium",
+          "definition": "mtg-sets\\2008-2016\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\emn\\cards\\GeierReachSanitarium.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2008-2016\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\GeierReachSanitariumScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Infernal Tutor",
+          "canonical": "Infernal Tutor",
+          "definition": "mtg-sets\\2003-2007\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\dis\\cards\\InfernalTutor.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Island",
+          "canonical": "Island",
+          "definition": "mtg-sets\\2026\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\tmt\\cards\\TeenageMutantNinjaTurtlesBasicLands.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Izzet Charm",
+          "canonical": "Izzet Charm",
+          "definition": "mtg-sets\\2008-2016\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\ddj\\cards\\IzzetCharm.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2008-2016\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\IzzetCharmScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Jagged Poppet",
+          "canonical": "Jagged Poppet",
+          "definition": "mtg-sets\\2003-2007\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\dis\\cards\\JaggedPoppet.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2003-2007\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\JaggedPoppetScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Keldon Megaliths",
+          "canonical": "Keldon Megaliths",
+          "definition": "mtg-sets\\2003-2007\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\fut\\cards\\KeldonMegaliths.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Library of Leng",
+          "canonical": "Library of Leng",
+          "definition": "mtg-sets\\1993-1999\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\lea\\cards\\LibraryOfLeng.kt",
+          "scenarioFiles": [
+            "mtg-sets\\1993-1999\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\LibraryOfLengScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Lotus Petal",
+          "canonical": "Lotus Petal",
+          "definition": "mtg-sets\\1993-1999\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\tmp\\cards\\LotusPetal.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Mountain",
+          "canonical": "Mountain",
+          "definition": "mtg-sets\\2026\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\tmt\\cards\\TeenageMutantNinjaTurtlesBasicLands.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "One with Nothing",
+          "canonical": "One with Nothing",
+          "definition": "mtg-sets\\2003-2007\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\sok\\cards\\OneWithNothing.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Oscorp Industries",
+          "canonical": "Oscorp Industries",
+          "definition": "mtg-sets\\2025\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\spm\\cards\\OscorpIndustries.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2025\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\OscorpIndustriesScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Page, Loose Leaf",
+          "canonical": "Page, Loose Leaf",
+          "definition": "mtg-sets\\2026\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\sos\\cards\\PageLooseLeaf.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2026\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\PageLooseLeafScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Persist",
+          "canonical": "Persist",
+          "definition": "mtg-sets\\2017-2022\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\mh2\\cards\\Persist.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2017-2022\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\PersistScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Prismari Command",
+          "canonical": "Prismari Command",
+          "definition": "mtg-sets\\2017-2022\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\stx\\cards\\PrismariCommand.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Scalding Tarn",
+          "canonical": "Scalding Tarn",
+          "definition": "mtg-sets\\2008-2016\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\zen\\cards\\ScaldingTarn.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2008-2016\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\ScaldingTarnScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Sire of Insanity",
+          "canonical": "Sire of Insanity",
+          "definition": "mtg-sets\\2008-2016\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\dgm\\cards\\SireOfInsanity.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Steam Vents",
+          "canonical": "Steam Vents",
+          "definition": "mtg-sets\\2003-2007\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\gpt\\cards\\SteamVents.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Swamp",
+          "canonical": "Swamp",
+          "definition": "mtg-sets\\2026\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\tmt\\cards\\TeenageMutantNinjaTurtlesBasicLands.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Taste for Mayhem",
+          "canonical": "Taste for Mayhem",
+          "definition": "mtg-sets\\2003-2007\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\dis\\cards\\TasteForMayhem.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2003-2007\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\TasteForMayhemScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "The Biblioplex",
+          "canonical": "The Biblioplex",
+          "definition": "mtg-sets\\2017-2022\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\stx\\cards\\TheBiblioplex.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2017-2022\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\TheBiblioplexScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Visionary's Dance",
+          "canonical": "Visionary's Dance",
+          "definition": "mtg-sets\\2026\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\sos\\cards\\VisionarysDance.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2026\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\VisionarysDanceScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Surgical Extraction",
+          "canonical": "Surgical Extraction",
+          "definition": "mtg-sets\\2008-2016\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\nph\\cards\\SurgicalExtraction.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2008-2016\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\SurgicalExtractionScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        }
+      ]
+    },
+    "legacy-ai": {
+      "mainCount": 60,
+      "sideboardCount": 15,
+      "cards": [
+        {
+          "name": "Barrowgoyf",
+          "canonical": "Barrowgoyf",
+          "definition": "mtg-sets\\2024\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\m3c\\cards\\Barrowgoyf.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2024\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\BarrowgoyfScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Brainstorm",
+          "canonical": "Brainstorm",
+          "definition": "mtg-sets\\1993-1999\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\ice\\cards\\Brainstorm.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Daze",
+          "canonical": "Daze",
+          "definition": "mtg-sets\\2000-2002\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\nem\\cards\\Daze.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2000-2002\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\DazeScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Fatal Push",
+          "canonical": "Fatal Push",
+          "definition": "mtg-sets\\2017-2022\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\aer\\cards\\FatalPush.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2017-2022\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\FatalPushScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Flow State",
+          "canonical": "Flow State",
+          "definition": "mtg-sets\\2026\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\sos\\cards\\FlowState.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2026\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\FlowStateTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Force of Negation",
+          "canonical": "Force of Negation",
+          "definition": "mtg-sets\\2017-2022\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\mh1\\cards\\ForceOfNegation.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2017-2022\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\ForceOfNegationScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Force of Will",
+          "canonical": "Force of Will",
+          "definition": "mtg-sets\\1993-1999\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\all\\cards\\ForceOfWill.kt",
+          "scenarioFiles": [
+            "mtg-sets\\1993-1999\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\ForceOfWillScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Island",
+          "canonical": "Island",
+          "definition": "mtg-sets\\2026\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\tmt\\cards\\TeenageMutantNinjaTurtlesBasicLands.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Kaito, Bane of Nightmares",
+          "canonical": "Kaito, Bane of Nightmares",
+          "definition": "mtg-sets\\2024\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\dsk\\cards\\KaitoBaneOfNightmares.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2024\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\KaitoBaneOfNightmaresScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Misty Rainforest",
+          "canonical": "Misty Rainforest",
+          "definition": "mtg-sets\\2008-2016\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\zen\\cards\\MistyRainforest.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Murktide Regent",
+          "canonical": "Murktide Regent",
+          "definition": "mtg-sets\\2017-2022\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\mh2\\cards\\MurktideRegent.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2017-2022\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\MurktideRegentScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Orcish Bowmasters",
+          "canonical": "Orcish Bowmasters",
+          "definition": "mtg-sets\\2023\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\ltr\\cards\\OrcishBowmasters.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2023\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\OrcishBowmastersTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Polluted Delta",
+          "canonical": "Polluted Delta",
+          "definition": "mtg-sets\\2000-2002\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\ons\\cards\\PollutedDelta.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Ponder",
+          "canonical": "Ponder",
+          "definition": "mtg-sets\\2003-2007\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\lrw\\cards\\Ponder.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Scalding Tarn",
+          "canonical": "Scalding Tarn",
+          "definition": "mtg-sets\\2008-2016\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\zen\\cards\\ScaldingTarn.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2008-2016\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\ScaldingTarnScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Sheoldred's Edict",
+          "canonical": "Sheoldred's Edict",
+          "definition": "mtg-sets\\2023\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\one\\cards\\SheoldredsEdict.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2023\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\SheoldredsEdictScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Swamp",
+          "canonical": "Swamp",
+          "definition": "mtg-sets\\2026\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\tmt\\cards\\TeenageMutantNinjaTurtlesBasicLands.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Tamiyo, Inquisitive Student",
+          "canonical": "Tamiyo, Inquisitive Student",
+          "definition": "mtg-sets\\2024\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\mh3\\cards\\TamiyoInquisitiveStudent.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2024\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\TamiyoInquisitiveStudentScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Thoughtseize",
+          "canonical": "Thoughtseize",
+          "definition": "mtg-sets\\2003-2007\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\lrw\\cards\\Thoughtseize.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2003-2007\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\ThoughtseizeScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Undercity Sewers",
+          "canonical": "Undercity Sewers",
+          "definition": "mtg-sets\\2024\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\mkm\\cards\\UndercitySewers.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Underground Sea",
+          "canonical": "Underground Sea",
+          "definition": "mtg-sets\\1993-1999\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\lea\\cards\\UndergroundSea.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Verdant Catacombs",
+          "canonical": "Verdant Catacombs",
+          "definition": "mtg-sets\\2008-2016\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\zen\\cards\\VerdantCatacombs.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Wasteland",
+          "canonical": "Wasteland",
+          "definition": "mtg-sets\\1993-1999\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\tmp\\cards\\Wasteland.kt",
+          "scenarioFiles": [],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Consign to Memory",
+          "canonical": "Consign to Memory",
+          "definition": "mtg-sets\\2024\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\mh3\\cards\\ConsignToMemory.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2024\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\ConsignToMemoryScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Dauthi Voidwalker",
+          "canonical": "Dauthi Voidwalker",
+          "definition": "mtg-sets\\2017-2022\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\mh2\\cards\\DauthiVoidwalker.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2017-2022\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\DauthiVoidwalkerScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Engineered Explosives",
+          "canonical": "Engineered Explosives",
+          "definition": "mtg-sets\\2003-2007\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\5dn\\cards\\EngineeredExplosives.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2003-2007\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\EngineeredExplosivesScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Hydroblast",
+          "canonical": "Hydroblast",
+          "definition": "mtg-sets\\1993-1999\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\ice\\cards\\Hydroblast.kt",
+          "scenarioFiles": [
+            "mtg-sets\\1993-1999\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\HydroblastScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Long Goodbye",
+          "canonical": "Long Goodbye",
+          "definition": "mtg-sets\\2024\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\mkm\\cards\\LongGoodbye.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2024\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\LongGoodbyeScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Null Rod",
+          "canonical": "Null Rod",
+          "definition": "mtg-sets\\1993-1999\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\wth\\cards\\NullRod.kt",
+          "scenarioFiles": [
+            "mtg-sets\\1993-1999\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\NullRodScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        },
+        {
+          "name": "Toxic Deluge",
+          "canonical": "Toxic Deluge",
+          "definition": "mtg-sets\\2008-2016\\src\\main\\kotlin\\com\\wingedsheep\\mtg\\sets\\definitions\\c13\\cards\\ToxicDeluge.kt",
+          "scenarioFiles": [
+            "mtg-sets\\2008-2016\\tests\\src\\test\\kotlin\\com\\wingedsheep\\engine\\scenarios\\ToxicDelugeScenarioTest.kt"
+          ],
+          "gameplayStatus": "not established by this source audit"
+        }
+      ]
+    }
+  }
+}

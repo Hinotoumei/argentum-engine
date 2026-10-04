@@ -27,6 +27,29 @@ class SyphonMindTest : FunSpec({
         return driver
     }
 
+    for (putOnLibrary in listOf(false, true)) {
+        test("Syphon Mind counts a discard after Library of Leng choice $putOnLibrary") {
+            val driver = createDriver()
+            driver.initMirrorMatch(Deck.of("Swamp" to 40))
+            driver.passPriorityUntil(Step.PRECOMBAT_MAIN)
+            val controller = driver.activePlayer!!
+            val opponent = driver.getOpponent(controller)
+            driver.putPermanentOnBattlefield(opponent, "Library of Leng")
+            val handBefore = driver.getHandSize(controller)
+            val spell = driver.putCardInHand(controller, "Syphon Mind")
+            driver.giveMana(controller, Color.BLACK, 4)
+            driver.castSpell(controller, spell).error shouldBe null
+            driver.bothPass()
+            val discarded = driver.getHand(opponent).first()
+            driver.submitCardSelection(opponent, listOf(discarded)).error shouldBe null
+            (driver.pendingDecision is com.wingedsheep.engine.core.YesNoDecision) shouldBe true
+            driver.submitYesNo(opponent, putOnLibrary).error shouldBe null
+            driver.getHandSize(controller) shouldBe handBefore + 1
+            driver.events.filterIsInstance<CardsDrawnEvent>()
+                .any { it.playerId == controller && it.count == 1 } shouldBe true
+        }
+    }
+
     test("Syphon Mind makes opponent discard 1 and controller draws 1") {
         val driver = createDriver()
         driver.initMirrorMatch(

@@ -2754,7 +2754,10 @@ Types that are not effects no longer carry the `Effect` suffix, so the rule has 
   steps — e.g. revealed lands → battlefield tapped, the rest → graveyard/library (Sméagol, Galadriel
   of Lothlórien, The Ring Goes South). (Equivalent to a `FilterCollection` partition; the inline
   filter just avoids naming an intermediate collection.) `storeMovedAs = "<key>"` captures the
-  resulting entity ids under a pipeline collection; `attachTo = <EffectTarget>` (battlefield
+  resulting entity ids under a pipeline collection. For a discard, this captures the discarded
+  cards even when a replacement sends them to another zone, and publishes them only after all
+  discard choices finish. Later owners' discards and the output collection survive a pause.
+  `attachTo = <EffectTarget>` (battlefield
   destination only) puts every **Aura** in the collection onto the battlefield attached to that
   permanent with no enchant choice — "put that Aura card onto the battlefield attached to it"
   (Auratouched Mage), "return the other cards … attached to that creature" (Flickerform). An Aura the
@@ -14014,7 +14017,13 @@ The priority groups are (CR 616.1a–f):
   `EventPattern.DrawCardsEvent`, not the general `EventPattern`, so pointing one at the per-card
   `DrawEvent` is a **compile error** rather than a hang — a count modification that draws no card
   leaves the game state unchanged, so the per-card loop would re-match and re-apply it forever.
-  Reach for `ReplaceDrawWith` when you genuinely need a per-card replacement. Note that "you"
+  Reach for `ReplaceDrawWith` when you genuinely need a per-card replacement. Its
+  `DrawEvent(exceptFirstInDrawStep = true)` exemption compares the drawing player's current
+  cards-drawn count with the snapshot at entry to their own draw step. The first draw of an
+  unrelated instruction outside that step is not exempt. For a replacement that draws for the
+  source's controller rather than the affected player, use
+  `Effects.DrawCards(1, EffectTarget.PlayerRef(Player.ControllerOfSource))` (Notion Thief).
+  Note that "you"
   in restriction text reads as the drawing player, not the source's controller; for
   `DrawCardsEvent(player = Player.You)` they coincide, but `DrawCardsEvent(player = Player.EachOpponent)`
   cards needing "you" = source controller would have to use a source-relative condition instead. Use
