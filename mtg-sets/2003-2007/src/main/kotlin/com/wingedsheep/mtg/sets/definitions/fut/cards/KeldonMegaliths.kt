@@ -28,5 +28,10 @@ val KeldonMegaliths = card("Keldon Megaliths") {
         effect = Effects.DealDamage(1, t)
         restrictions = listOf(ActivationRestriction.OnlyIfCondition(Conditions.EmptyHand))
     }
-    metadata { rarity = Rarity.RARE; collectorNumber = "170" }
+    metadata {
+        rarity = Rarity.UNCOMMON
+        collectorNumber = "170"
+        artist = "Philip Straub"
+        imageUri = "https://cards.scryfall.io/normal/front/3/a/3a6d546d-df98-4cb4-a68b-2a0c8bac5a72.jpg?1783943090"
+    }
 }

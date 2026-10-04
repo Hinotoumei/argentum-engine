@@ -326,7 +326,9 @@
     },
     "metadata": {
         "collectorNumber": "170",
-        "rarity": "RARE"
+        "rarity": "UNCOMMON",
+        "artist": "Philip Straub",
+        "imageUri": "https://cards.scryfall.io/normal/front/3/a/3a6d546d-df98-4cb4-a68b-2a0c8bac5a72.jpg?1783943090"
     },
     "colorIdentityOverride": [
         "RED"
