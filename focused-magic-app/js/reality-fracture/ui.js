@@ -134,7 +134,7 @@ async function startConstructedMatch(){
   }
   try{
     constructedStatus('Checking the configured Argentum registry before starting the match…');
-    const coverage=await window.FocusedMagicArgentum.catalogCoverage();
+    const coverage=await window.FocusedMagicArgentum.catalogCoverage([...parsed.u.main,...parsed.u.sideboard,...parsed.a.main,...parsed.a.sideboard]);
     if(coverage.missing?.length){
       const publicHint=coverage.publicUpstream?' The configured endpoint is the public upstream registry; Focused Magic requires the patched provider.':'';
       throw new Error(`Registry gate failed. Missing after canonical aliasing: ${coverage.missing.join(', ')}.${publicHint}`);

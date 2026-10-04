@@ -8,6 +8,37 @@
   const STORAGE_KEY = 'focused_magic_argentum_v069_render_pro';
   const LEGACY_PROVIDER_STORAGE_KEYS = ['focused_magic_argentum_v065','focused_magic_argentum_v067','focused_magic_argentum_v067_render_pro','focused_magic_argentum_v068_render_pro'];
 
+  const OCTOBER_DECK = `2 Bilbo, Thief in the Night
+1 Blood Crypt
+4 Blood Scrivener
+1 Commit // Memory
+3 Currency Converter
+1 Demonfire
+2 Erebos's Intervention
+3 Exclusive Nightclub
+3 Gamble
+1 Geier Reach Sanitarium
+2 Infernal Tutor
+1 Island
+1 Keldon Megaliths
+3 Library of Leng
+3 Lotus Petal
+3 Monument to Endurance
+1 Mountain
+1 Notion Thief
+2 One with Nothing
+3 Page, Loose Leaf
+4 Prismari Command
+1 Reforge the Soul
+3 Scalding Tarn
+1 Sire of Insanity
+2 Starting Town
+1 Steam Vents
+1 Swamp
+1 The Biblioplex
+2 Visionary's Dance
+3 Xander's Lounge`;
+
   const MANDATORY_DECK = `2 Blood Crypt
 2 Bloodstained Mire
 4 Desperate Ritual
@@ -110,6 +141,7 @@ SIDEBOARD:
 4 Lava Axe`;
 
   const FIXTURES = Object.freeze({
+    october: { label: 'October 3 uploaded deck', user: OCTOBER_DECK, ai: DIMIR_TEMPO_DECK, expected: [60, 0, 60, 15] },
     mandatory: { label: 'v0.6.5 mandatory deck', user: MANDATORY_DECK, ai: DIMIR_TEMPO_DECK, expected: [60, 0, 60, 15] },
     legacy: { label: 'Page, Loose Leaf legacy', user: PAGE_LEGACY_DECK, ai: DIMIR_TEMPO_DECK, expected: [61, 2, 60, 15] },
     core: { label: 'Core Match', user: CORE_DECK, ai: CORE_DECK, expected: [60, 0, 60, 0] },
@@ -314,9 +346,10 @@ SIDEBOARD:
     if(!name||cardImageCache.has(name))return cardImageCache.get(name)||'';
     const cfg=providerConfig();
     try{
-      const r=await fetch(`${cfg.origin}/api/cards/${encodeURIComponent(providerCardName(name))}`,{headers:{Accept:'application/json'}});
+      const r=await fetch(`${cfg.origin}/api/cards/${encodeURIComponent(providerCardName(name))}/printings`,{headers:{Accept:'application/json'}});
       if(!r.ok)throw new Error(`HTTP ${r.status}`);
-      const row=await r.json();
+      const rows=await r.json();
+      const row=Array.isArray(rows)?rows.find(r=>r.imageUri||r.image_uri||r.imageURL||r.imageUrl):rows;
       const uri=row?.imageUri||row?.image_uri||row?.imageURL||row?.imageUrl||row?.normalImageUri||row?.card_faces?.[0]?.image_uri||'';
       cardImageCache.set(name,uri||'');
       return uri||'';
@@ -344,7 +377,7 @@ SIDEBOARD:
     if(!c){b.classList.add('hidden-card');b.textContent='Hidden';b.disabled=true;return b;}
     const art=c.imageUri||c.imageURL||c.imageUrl||cardImageCache.get(c.name)||'';
     b.innerHTML=art?`<img src="${esc(art)}" alt="${esc(c.name)}"><span><b>${esc(c.name)}</b></span>`:`<span class="argentum-tabletop-cardname"><b>${esc(c.name)}</b><small>${esc(c.manaCost||'')} ${esc(c.typeLine||'')}</small></span>`;
-    if(!art&&c.name)ensureCardImage(c.name).then(uri=>{if(uri&&document.body.contains(b)&&!b.querySelector('img')){b.innerHTML=`<img src="${esc(uri)}" alt="${esc(c.name)}"><span><b>${esc(c.name)}</b></span>`;}});
+    if(!art&&c.name)ensureCardImage(c.name).then(uri=>{if(uri&&document.body.contains(b)&&!b.querySelector('img')){const img=document.createElement('img');img.src=uri;img.alt=c.name;b.prepend(img);const label=b.querySelector('.argentum-tabletop-cardname');if(label)label.innerHTML=`<b>${esc(c.name)}</b>`;}});
     // Display the provider's projected values, including X=0; never derive card rules here.
     if(c.power!=null&&c.toughness!=null)b.innerHTML+=`<small class="argentum-tabletop-stat">${esc(c.power)}/${esc(c.toughness)}</small>`;
     if(c.chosenX!=null)b.innerHTML+=`<small class="argentum-tabletop-x">X=${esc(c.chosenX)}</small>`;
@@ -401,7 +434,7 @@ SIDEBOARD:
     if(!active.pendingDecision)for(const info of active.legalActions||[]){
       if(!/DeclareAttackers|DeclareBlockers/.test(info.actionType||''))continue;
       const button=document.createElement('button');button.type='button';button.className='primary';
-      button.textContent=/DeclareAttackers/.test(info.actionType)?'Choose attackers':'Continue with required blocks only';
+      button.textContent=/DeclareAttackers/.test(info.actionType)?'Choose attackers':'Choose blockers';
       button.onclick=()=>submitLegalAction(info);turnActions.appendChild(button);
     }
     renderTabletopDecision();setTabletopStatus('Argentum game active.');
@@ -687,6 +720,21 @@ SIDEBOARD:
     action.targets=groups.flat();
   }
 
+  async function collectHumanModalTargets(action, enumeration) {
+    const selections=[],earlier=[];
+    for(const index of action.chosenModes||[]){
+      const mode=(enumeration.modes||[]).find(m=>m.index===index);
+      if(!mode)throw new Error('That mode is unavailable.');
+      for(const req of mode.targetRequirements||[]){
+        const valid=[...new Set(req.validTargets||[])].filter(id=>!req.mustDifferFromEarlier||!earlier.includes(id));
+        const ids=await pickActionTargets(`${mode.description||'Selected mode'}: ${req.description||'Choose target'}`,valid,req.minTargets??1,req.maxTargets??req.minTargets??1);
+        selections.push(ids);earlier.push(...ids);
+      }
+    }
+    let next=0;
+    collectModalTargets(action,enumeration,()=>selections[next++],chosenTarget);
+  }
+
   async function submitLegalAction(info) {
     try {
       if(!active?.interactionEpoch)throw new Error('No live interaction epoch; request a resync first.');
@@ -694,24 +742,32 @@ SIDEBOARD:
       const action=clone(info.action);
       if(/DeclareAttackers/.test(info.actionType||action.type||'')){
         const valid=info.validAttackers||[],mandatory=info.mandatoryAttackers||[];
-        const chosen=pickIds('Choose attackers (leave empty to attack with none)',valid,mandatory.length,valid.length);
+        const chosen=await pickActionTargets('Choose attackers (leave empty to attack with none)',valid,mandatory.length,valid.length);
         if(mandatory.some(id=>!chosen.includes(id)))throw new Error('Choose every mandatory attacker.');
         action.attackers={};
         for(const id of chosen){
-          const targets=pickIds(`Choose attack target for ${entityLabel(id)}`,info.validAttackTargets||[],1,1);
+          const targets=await pickActionTargets(`Choose attack target for ${entityLabel(id)}`,info.validAttackTargets||[],1,1);
           action.attackers[id]=targets[0];
         }
       }
       if(/DeclareBlockers/.test(info.actionType||action.type||'')){
         action.blockers=clone(info.mandatoryBlockerAssignments||{});
+        const optional=(info.validBlockers||[]).filter(id=>!Object.hasOwn(action.blockers,id));
+        if(optional.length){
+          const selected=await pickActionTargets('Choose optional blockers (leave empty for none)',optional,0,optional.length);
+          const attackers=(active.state?.combat?.attackers||[]).map(a=>a.creatureId);
+          for(const id of selected){
+            const max=Math.min(info.blockerMaxBlockCounts?.[id]??1,attackers.length);
+            action.blockers[id]=await pickActionTargets(`Choose attackers blocked by ${entityLabel(id)}`,attackers,1,max);
+          }
+        }
       }
       if(info.modalEnumeration && action.type==='CastSpell') {
         action.chosenModes=await pickActionModes(info.modalEnumeration);
       }
       if(info.hasXCost)action.xValue=await pickActionNumber('Choose X',info.minX??0,info.maxAffordableX??0);
       if(info.modalEnumeration && action.type==='CastSpell') {
-        collectModalTargets(action,info.modalEnumeration,
-          (req,mode)=>pickIds(`${mode.description||'Selected mode'}: ${req.description||'Choose target'}`,req.validTargets,req.minTargets??1,req.maxTargets??1),chosenTarget);
+        await collectHumanModalTargets(action,info.modalEnumeration);
       }
       if(info.additionalCostInfo?.costType==='PayXLife') {
         const max=info.additionalCostInfo.payXLifeMaxX??0;
@@ -1085,9 +1141,9 @@ SIDEBOARD:
     return launch({label:opts.label||'Focused Magic match',user,ai,aiLabel:opts.aiLabel||'AI opponent',autopilot:!!opts.autopilot,onProviderFail:opts.onProviderFail||null});
   }
 
-  async function catalogCoverage() {
+  async function catalogCoverage(requestedNames) {
     const cfg=providerConfig();
-    const allNames=[...new Set(Object.values(FIXTURES).flatMap(f=>{const u=parseDecklist(f.user),a=parseDecklist(f.ai);return [...u.uniqueNames,...a.uniqueNames]}))];
+    const allNames=[...new Set(requestedNames||Object.values(FIXTURES).flatMap(f=>{const u=parseDecklist(f.user),a=parseDecklist(f.ai);return [...u.uniqueNames,...a.uniqueNames]}))];
     const r=await fetch(`${cfg.origin}/api/cards`,{headers:{Accept:'application/json'}});
     if(!r.ok)throw new Error(`Catalog HTTP ${r.status}`);
     const rows=await r.json();const have=new Set((rows||[]).map(x=>x.name));
@@ -1128,13 +1184,13 @@ SIDEBOARD:
     const toolbar=document.querySelector('#constructedModal .constructed-toolbar');
     if(!toolbar||$('constructedProfile'))return;
     const label=document.createElement('label');
-    label.innerHTML=`Deck profile<select id="constructedProfile"><option value="mandatory" selected>v0.6.5 mandatory</option><option value="legacy">Page legacy</option></select>`;
+    label.innerHTML=`Deck profile<select id="constructedProfile"><option value="october" selected>October 3 uploaded deck</option><option value="mandatory">v0.6.5 mandatory</option><option value="legacy">Page legacy</option></select>`;
     toolbar.prepend(label);
     const apply=()=>{
       const key=$('constructedProfile').value;
       $('constructedUserDeck').value=FIXTURES[key].user;
       $('constructedAiDeck').value=DIMIR_TEMPO_DECK;
-      const heading=$('constructedUserDeck')?.closest('.constructed-deckbox')?.querySelector('h3');if(heading)heading.textContent=key==='mandatory'?'You — v0.6.5 mandatory deck':'You — Page, Loose Leaf legacy';
+      const heading=$('constructedUserDeck')?.closest('.constructed-deckbox')?.querySelector('h3');if(heading)heading.textContent=`You — ${FIXTURES[key].label}`;
       try{window.validateConstructedUI?.()}catch(_e){}
     };
     $('constructedProfile').onchange=apply;apply();

@@ -53,6 +53,21 @@ test('required-blocks continuation preserves the exact provider assignments',asy
  await h.api.submitLegalAction({actionType:'DeclareBlockers',action:{type:'DeclareBlockers',playerId:'me',blockers:{}},mandatoryBlockerAssignments:{bear:['spell']}});
  assert.deepEqual(h.sent[0].blockers,{bear:['spell']});
 });
+test('human optional blocks preserve provider maximum block count and exact assignment',async()=>{
+ const h=harness(['1','1,2']);h.state.combat={attackers:[{creatureId:'a'},{creatureId:'b'}]};
+ await h.api.submitLegalAction({actionType:'DeclareBlockers',action:{type:'DeclareBlockers',playerId:'me',blockers:{}},validBlockers:['bear'],blockerMaxBlockCounts:{bear:2}});
+ assert.deepEqual(h.sent[0].blockers,{bear:['a','b']});
+});
+test('declining optional blockers still preserves mandatory blocks',async()=>{
+ const h=harness(['']);
+ await h.api.submitLegalAction({actionType:'DeclareBlockers',action:{type:'DeclareBlockers',playerId:'me',blockers:{}},validBlockers:['bear','spell'],mandatoryBlockerAssignments:{bear:['a']}});
+ assert.deepEqual(h.sent[0].blockers,{bear:['a']});
+});
+test('cancelling a blocker target picker submits nothing',async()=>{
+ const h=harness(['1',null]);h.state.combat={attackers:[{creatureId:'a'}]};
+ await h.api.submitLegalAction({actionType:'DeclareBlockers',action:{type:'DeclareBlockers',playerId:'me',blockers:{}},validBlockers:['bear']});
+ assert.equal(h.sent.length,0);
+});
 test('human command submits player and stack targets in selected-mode order',async()=>{
  const h=harness(['2,1','1','1']);
  await h.api.submitLegalAction(modal([mode(0,[target(['spell'])]),mode(1,[target(['opp'])])]));
