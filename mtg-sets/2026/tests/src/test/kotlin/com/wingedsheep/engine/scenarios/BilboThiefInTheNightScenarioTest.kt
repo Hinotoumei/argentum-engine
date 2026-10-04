@@ -3,6 +3,8 @@ package com.wingedsheep.engine.scenarios
 import com.wingedsheep.engine.support.GameTestDriver
 import com.wingedsheep.engine.support.TestCards
 import com.wingedsheep.mtg.sets.definitions.hob.cards.BilboThiefInTheNight
+import com.wingedsheep.engine.state.components.stack.ChosenTarget
+import com.wingedsheep.sdk.core.Color
 import com.wingedsheep.sdk.core.Step
 import com.wingedsheep.sdk.core.Zone
 import com.wingedsheep.sdk.dsl.Effects
@@ -22,10 +24,7 @@ import io.kotest.matchers.shouldNotBe
  *    graveyard. If an instant or sorcery spell cast this way would be put into your graveyard,
  *    exile it instead."
  *
- * The second ability is a turn-long `MayCastFromGraveyard` grant (the Forgotten Cellar path) plus
- * the new `exileInsteadOfGraveyard` cast-this-way rider. These tests pin the three things that could
- * silently regress: the zone scope of the cost reduction, the attack gate on the permission, and the
- * fact that the exile rider follows the *authorizing grant* rather than the graveyard zone.
+ * The trigger offers one paid cast during resolution, including sorceries during combat.
  */
 class BilboThiefInTheNightScenarioTest : FunSpec({
 
@@ -38,27 +37,32 @@ class BilboThiefInTheNightScenarioTest : FunSpec({
         spell { effect = Effects.GainLife(3) }
     }
 
+    val artifact = card("Bilbo Test Artifact") {
+        manaCost = "{2}"
+        typeLine = "Artifact"
+    }
+
     fun createDriver(): GameTestDriver {
         val driver = GameTestDriver()
-        driver.registerCards(TestCards.all + listOf(BilboThiefInTheNight, relic))
+        driver.registerCards(TestCards.all + listOf(BilboThiefInTheNight, relic, artifact))
         driver.initMirrorMatch(deck = Deck.of("Island" to 40), startingLife = 20)
         return driver
     }
 
-    /**
-     * Bilbo on the battlefield, attacking, trigger resolved, then on to postcombat main.
-     *
-     * The step advance is not incidental: the grant respects normal timing, so a *sorcery* in the
-     * graveyard is only castable in a main phase. That is a visible consequence of modelling the
-     * printed resolve-time offer as a turn-long grant — see the card's implementation notes.
-     */
-    fun attackWithBilbo(driver: GameTestDriver, you: EntityId): EntityId {
+    fun attackWithBilbo(driver: GameTestDriver, you: EntityId, chosen: EntityId? = null, mana: Int = 1, resolveSpell: Boolean = true): EntityId {
         val bilbo = driver.putCreatureOnBattlefield(you, "Bilbo, Thief in the Night")
         driver.removeSummoningSickness(bilbo)
         driver.passPriorityUntil(Step.DECLARE_ATTACKERS)
         driver.declareAttackers(you, listOf(bilbo), driver.getOpponent(you)).outcome shouldBe Outcome.Done
         var guard = 0
-        while (driver.state.stack.isNotEmpty() && guard++ < 20) driver.bothPass()
+        while (driver.state.pendingDecision == null && driver.state.stack.isNotEmpty() && guard++ < 20) driver.bothPass()
+        if (driver.state.pendingDecision != null) {
+            driver.state.step shouldBe Step.DECLARE_ATTACKERS
+            if (chosen != null) driver.giveColorlessMana(you, mana)
+            driver.submitCardSelection(you, listOfNotNull(chosen))
+        }
+        if (!resolveSpell) return bilbo
+        while (driver.state.stack.isNotEmpty() && guard++ < 30) driver.bothPass()
         driver.passPriorityUntil(Step.POSTCOMBAT_MAIN)
         return bilbo
     }
@@ -67,12 +71,9 @@ class BilboThiefInTheNightScenarioTest : FunSpec({
         val driver = createDriver()
         val you = driver.activePlayer!!
         val sorcery = driver.putCardInGraveyard(you, "Bilbo Test Relic Sorcery")
-        attackWithBilbo(driver, you)
-
-        // {2} sorcery reduced to {1}: one generic mana is exactly enough.
         driver.giveColorlessMana(you, 1)
         val lifeBefore = driver.getLifeTotal(you)
-        driver.castSpell(you, sorcery).outcome shouldBe Outcome.Done
+        attackWithBilbo(driver, you, sorcery)
         var guard = 0
         while (driver.state.stack.isNotEmpty() && guard++ < 20) driver.bothPass()
 
@@ -110,20 +111,18 @@ class BilboThiefInTheNightScenarioTest : FunSpec({
         var guard = 0
         while (driver.state.stack.isNotEmpty() && guard++ < 20) driver.bothPass()
 
-        // The exile rider rides the graveyard-cast grant, so a hand cast is buried normally.
+        // An ordinary hand cast does not receive the attack trigger’s exile rider.
         driver.getGraveyard(you).contains(sorcery) shouldBe true
         driver.getExile(you).contains(sorcery) shouldBe false
     }
 
-    test("the grant authorizes only one graveyard cast per turn") {
+    test("the resolving trigger offers only one cast and leaves no later permission") {
         val driver = createDriver()
         val you = driver.activePlayer!!
         val first = driver.putCardInGraveyard(you, "Bilbo Test Relic Sorcery")
         val second = driver.putCardInGraveyard(you, "Bilbo Test Relic Sorcery")
-        attackWithBilbo(driver, you)
-
         driver.giveColorlessMana(you, 1)
-        driver.castSpell(you, first).outcome shouldBe Outcome.Done
+        attackWithBilbo(driver, you, first)
         var guard = 0
         while (driver.state.stack.isNotEmpty() && guard++ < 20) driver.bothPass()
 
@@ -131,4 +130,45 @@ class BilboThiefInTheNightScenarioTest : FunSpec({
         driver.castSpell(you, second).outcome shouldNotBe Outcome.Done
         driver.getGraveyard(you).contains(second) shouldBe true
     }
+    test("an unaffordable resolving offer does not cast the spell for free") {
+        val driver = createDriver()
+        val you = driver.activePlayer!!
+        val sorcery = driver.putCardInGraveyard(you, "Bilbo Test Relic Sorcery")
+        val before = driver.getLifeTotal(you)
+        attackWithBilbo(driver, you, sorcery, mana = 0)
+        driver.getLifeTotal(you) shouldBe before
+        driver.getGraveyard(you).contains(sorcery) shouldBe true
+        driver.getExile(you).contains(sorcery) shouldBe false
+        driver.giveColorlessMana(you, 5)
+        driver.castSpell(you, sorcery).outcome shouldNotBe Outcome.Done
+    }
+
+    test("an artifact can be cast during the attack trigger and enters the battlefield") {
+        val driver = createDriver()
+        val you = driver.activePlayer!!
+        val cardId = driver.putCardInGraveyard(you, "Bilbo Test Artifact")
+        attackWithBilbo(driver, you, cardId)
+        driver.state.getBattlefield().contains(cardId) shouldBe true
+        driver.getExile(you).contains(cardId) shouldBe false
+    }
+
+    for (isSorcery in listOf(false, true)) {
+        test("the countered attack-trigger spell is exiled only if instant or sorcery: $isSorcery") {
+            val driver = createDriver()
+            val you = driver.activePlayer!!
+            val opponent = driver.getOpponent(you)
+            val spell = driver.putCardInGraveyard(you,
+                if (isSorcery) "Bilbo Test Relic Sorcery" else "Bilbo Test Artifact")
+            val counter = driver.putCardInHand(opponent, "Counterspell")
+            attackWithBilbo(driver, you, spell, resolveSpell = false)
+            driver.passPriority(you).outcome shouldBe Outcome.Done
+            driver.giveMana(opponent, Color.BLUE, 2)
+            driver.castSpellWithTargets(opponent, counter, listOf(ChosenTarget.Spell(spell))).outcome shouldBe Outcome.Done
+            var guard = 0
+            while (driver.state.stack.isNotEmpty() && guard++ < 20) driver.bothPass()
+            driver.getExile(you).contains(spell) shouldBe isSorcery
+            driver.getGraveyard(you).contains(spell) shouldBe !isSorcery
+        }
+    }
+
 })

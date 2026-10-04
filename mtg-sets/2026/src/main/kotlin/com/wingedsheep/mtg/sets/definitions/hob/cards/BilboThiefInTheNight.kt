@@ -7,10 +7,11 @@ import com.wingedsheep.sdk.dsl.card
 import com.wingedsheep.sdk.model.Rarity
 import com.wingedsheep.sdk.scripting.CostModification
 import com.wingedsheep.sdk.scripting.GameObjectFilter
-import com.wingedsheep.sdk.scripting.MayCastFromGraveyard
+import com.wingedsheep.sdk.scripting.effects.CardSource
+import com.wingedsheep.sdk.scripting.effects.AfterResolveDestination
+import com.wingedsheep.sdk.scripting.references.Player
 import com.wingedsheep.sdk.scripting.ModifySpellCost
 import com.wingedsheep.sdk.scripting.SpellCostTarget
-import com.wingedsheep.sdk.scripting.targets.EffectTarget
 
 /**
  * Bilbo, Thief in the Night
@@ -21,31 +22,8 @@ import com.wingedsheep.sdk.scripting.targets.EffectTarget
  *  Whenever Bilbo attacks, you may cast an artifact, instant, or sorcery spell from your graveyard.
  *  If an instant or sorcery spell cast this way would be put into your graveyard, exile it instead."
  *
- * Implementation:
- *  - **"anywhere other than your hand"** is `SpellCostTarget.YouCastFromZones` over
- *    `Zone.entries - Zone.HAND`, derived rather than hand-listed so a future zone is covered
- *    automatically. Same seam as Doc Aurlock, Grizzled Genius, which names its two zones explicitly;
- *    only generic mana is reduced and the total floors at the spell's colored requirements.
- *  - **The attack trigger** grants Bilbo a `MayCastFromGraveyard` for the turn via
- *    [Effects.GrantStaticAbility]. The cast enumerator already reads durational graveyard-cast
- *    grants out of `grantedStaticAbilities` (the Forgotten Cellar path), so no new permission
- *    machinery is needed. `oncePerTurn` caps it at the single spell the trigger offers.
- *  - **"cast this way … exile it instead"** is the `exileInsteadOfGraveyard` rider on that grant.
- *    `CastSpellHandler` captures the *specific* grant authorizing each graveyard cast, so the rider
- *    can't leak onto a spell cast under some other permission the player happens to have active.
- *    It stamps `AfterResolveDestinationComponent(onlyIfResolved = false)`, which also catches a countered
- *    or fizzled spell — the behaviour the Adventure ruling below requires.
- *
- * Three deliberate approximations, all from modelling a resolve-time offer as a turn-long grant:
- *  - The spell may be cast any time that turn rather than only during the trigger's resolution.
- *  - The grant respects normal timing, so an artifact or **sorcery** in the graveyard is castable
- *    only in a main phase — in practice the postcombat main of the turn Bilbo attacked, rather than
- *    at the printed moment during the declare-attackers step. Instants are unaffected.
- *  - The permission is anchored to Bilbo, so it lapses if he leaves the battlefield before it's used
- *    (strictly it should survive him).
- *
- * Lifting all three means a "cast a spell as this ability resolves" primitive — a decision that
- * pauses resolution and hands the player a cast — which does not exist yet and is its own feature.
+ * The attack trigger offers one paid cast during resolution. The chosen spell face supplies
+ * eligibility and the instant/sorcery exile rider; no turn-long permission remains afterwards.
  *
  * Rulings (2026-08-14):
  *  - Cost reduction applies after cost increases and only to generic mana; it can't reduce a
@@ -81,14 +59,20 @@ val BilboThiefInTheNight = card("Bilbo, Thief in the Night") {
     // exile it instead."
     triggeredAbility {
         trigger = Triggers.self.attacks()
-        effect = Effects.GrantStaticAbility(
-            ability = MayCastFromGraveyard(
+        effect = Effects.Pipeline {
+            val graveyard = gather(CardSource.FromZone(Zone.GRAVEYARD, Player.You))
+            val chosen = chooseSpell(
+                from = graveyard,
                 filter = GameObjectFilter.Artifact or GameObjectFilter.InstantOrSorcery,
-                oncePerTurn = true,
-                exileInsteadOfGraveyard = true,
-            ),
-            target = EffectTarget.Self,
-        )
+                prompt = "You may cast an artifact, instant, or sorcery from your graveyard",
+                showAllCards = true,
+            )
+            run(Effects.CastFromCollection(
+                from = chosen,
+                insteadOfGraveyard = AfterResolveDestination.EXILE,
+                riderOnlyInstantOrSorcery = true,
+            ))
+        }
         description = "Whenever Bilbo attacks, you may cast an artifact, instant, or sorcery spell " +
             "from your graveyard. If an instant or sorcery spell cast this way would be put into " +
             "your graveyard, exile it instead."

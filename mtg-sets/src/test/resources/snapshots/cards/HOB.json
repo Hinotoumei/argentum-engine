@@ -1544,14 +1544,33 @@
                 "id": "Bilbo, Thief in the Night:1",
                 "trigger": "AttackEvent",
                 "effect": {
-                    "type": "GrantStaticAbility",
-                    "ability": {
-                        "type": "MayCastFromGraveyard",
-                        "filter": "artifact|instant|sorcery",
-                        "oncePerTurn": true,
-                        "exileInsteadOfGraveyard": true
-                    },
-                    "target": "Self"
+                    "type": "Composite",
+                    "effects": [
+                        {
+                            "type": "GatherCards",
+                            "source": {
+                                "type": "FromZone",
+                                "zone": "Graveyard"
+                            },
+                            "storeAs": "gathered0"
+                        },
+                        {
+                            "type": "SelectFromCollection",
+                            "from": "gathered0",
+                            "selection": "ChooseSpell",
+                            "filter": "artifact|instant|sorcery",
+                            "storeSelected": "selected1",
+                            "prompt": "You may cast an artifact, instant, or sorcery from your graveyard",
+                            "showAllCards": true
+                        },
+                        {
+                            "type": "CastFromCollectionWithoutPayingCost",
+                            "from": "selected1",
+                            "payManaCost": true,
+                            "insteadOfGraveyard": "EXILE",
+                            "riderOnlyInstantOrSorcery": true
+                        }
+                    ]
                 },
                 "descriptionOverride": "Whenever Bilbo attacks, you may cast an artifact, instant, or sorcery spell from your graveyard. If an instant or sorcery spell cast this way would be put into your graveyard, exile it instead."
             }
