@@ -2798,7 +2798,7 @@ class CastSpellEnumerator(
      * Modal effects, alternative costs, blight, behold, kicker, and convoke on a split half
      * are not yet wired up — cards that need them can extend this method later.
      */
-    private fun enumerateSplitFace(
+    internal fun enumerateSplitFace(
         context: EnumerationContext,
         cardId: EntityId,
         cardDef: CardDefinition,
@@ -2810,6 +2810,8 @@ class CastSpellEnumerator(
         val playerId = context.playerId
 
         // Per-face timing: the chosen half's own type line governs sorcery-speed restriction.
+        if (com.wingedsheep.sdk.core.Keyword.AFTERMATH in face.keywords &&
+            state.turnOrder.none { cardId in state.getGraveyard(it) }) return
         if (!face.typeLine.isInstant && !context.canPlaySorcerySpeed) return
 
         val cachedSources = context.availableManaSources

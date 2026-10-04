@@ -436,6 +436,8 @@ class SelectFromCollectionExecutor(
                     }
                 }
                 if (!definition.isPreparation) definition.cardFaces.forEachIndexed { index, face ->
+                    if (Keyword.AFTERMATH in face.keywords &&
+                        state.turnOrder.none { id in state.getGraveyard(it) }) return@forEachIndexed
                     add(index to card.copy(
                         name = face.name, typeLine = face.typeLine, manaCost = face.manaCost,
                         oracleText = face.oracleText, baseKeywords = face.keywords, colors = face.manaCost.colors

@@ -846,45 +846,15 @@ class LibraryAndZoneContinuationResumer(
         placement: com.wingedsheep.engine.handlers.effects.LibraryPlacement,
         checkForMore: CheckForMore
     ): ExecutionResult {
-        val spellContainer = state.getEntity(spellId)
-            ?: return checkForMore(state, emptyList())
-        val spellName = spellContainer.get<CardComponent>()?.name ?: "Unknown"
-
-        var newState = state.removeFromStack(spellId)
-        newState = newState.updateEntity(spellId) { c ->
-            c.without<com.wingedsheep.engine.state.components.stack.SpellOnStackComponent>()
-                .without<com.wingedsheep.engine.state.components.stack.TargetsComponent>()
-        }
-
-        val libZoneKey = ZoneKey(ownerId, Zone.LIBRARY)
-        val currentLibrary = newState.getZone(libZoneKey)
-        val insertIndex = when (placement) {
-            com.wingedsheep.engine.handlers.effects.LibraryPlacement.Top -> 0
-            is com.wingedsheep.engine.handlers.effects.LibraryPlacement.NthFromTop -> placement.position
-            else -> currentLibrary.size
-        }
-        newState = newState.insertIntoZone(libZoneKey, spellId, insertIndex)
-
-        // Both players watched the spell get placed at this position — mark it revealed to all
-        // so each side's library viewer shows it face-up at the new slot.
-        newState = com.wingedsheep.engine.handlers.effects.library.LibraryRevealUtils
-            .markRevealed(newState, listOf(spellId), newState.turnOrder.toSet())
-
-        // Not a counter: "the owner of target spell puts it on … their library" (Sudden Setback,
-        // Swat Away) moves the spell, so no SpellCounteredEvent — and Guile's counter replacement
-        // (ExileCounteredSpellInstead) rightly never sees it.
-        val events = listOf(
-            ZoneChangeEvent(
-                entityId = spellId,
-                entityName = spellName,
-                fromZone = Zone.STACK,
-                toZone = Zone.LIBRARY,
-                oldObject = state.objectRef(spellId),
-                newObject = newState.objectRef(spellId),
-                ownerId = ownerId
-            )
+        val transition = services.zones.moveToZone(
+            state, spellId, Zone.LIBRARY,
+            com.wingedsheep.engine.handlers.effects.ZoneEntryOptions(
+                libraryPlacement = placement,
+                libraryMovePublic = true,
+            ),
+            ZoneKey(ownerId, Zone.STACK),
         )
-        return checkForMore(newState, events)
+        return checkForMore(transition.state, transition.events)
     }
 
     /**

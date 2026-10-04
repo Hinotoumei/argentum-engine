@@ -111,6 +111,13 @@ class CastFromCollectionWithoutPayingCostExecutor(
         // payManaCost casts route through the normal cost (Kaervek, the Punisher — "you may cast
         // the copy"); only the free-cast path stamps PlayWithoutPayingCostComponent. Both grant a
         // MayPlayPermission so the card is castable from its current (e.g. exile) zone.
+        val component = state.getEntity(cardId)?.get<CardComponent>()
+        val definition = component?.let { cardRegistry.getCard(it.name) }
+        val spellType = faceIndex?.let { definition?.cardFaces?.getOrNull(it)?.typeLine }
+            ?: component?.typeLine
+        val destinationRider = effect.insteadOfGraveyard.takeIf {
+            !effect.riderOnlyInstantOrSorcery || spellType?.let { it.isInstant || it.isSorcery } == true
+        }
         val (permId, newState) = grantFreeCast(
             state = state,
             cardId = cardId,
@@ -118,7 +125,7 @@ class CastFromCollectionWithoutPayingCostExecutor(
             sourceId = context.sourceId,
             withoutPayingCost = !effect.payManaCost,
             castTransformed = castTransformed,
-            insteadOfGraveyard = effect.insteadOfGraveyard,
+            insteadOfGraveyard = destinationRider,
             faceIndex = faceIndex,
         )
 
@@ -227,7 +234,7 @@ class CastFromCollectionWithoutPayingCostExecutor(
             // synthesized cast — inline, post-target-pause, the any-number loop — carries it.
             if (insteadOfGraveyard != null) {
                 stamped = stamped.updateEntity(cardId) { container ->
-                    container.with(AfterResolveDestinationComponent(destination = insteadOfGraveyard))
+                    container.with(AfterResolveDestinationComponent(destination = insteadOfGraveyard, onlyIfResolved = false))
                 }
             }
             val (permId, stateWithPerm) = stamped.newEntity()

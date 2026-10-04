@@ -4292,7 +4292,8 @@ object Effects {
         caster: com.wingedsheep.sdk.scripting.effects.Chooser =
             com.wingedsheep.sdk.scripting.effects.Chooser.Controller,
         storeCastTo: String? = null,
-    ): Effect = CastFromCollection(from.key, storeCastTo, insteadOfGraveyard, caster)
+        riderOnlyInstantOrSorcery: Boolean = false,
+    ): Effect = CastFromCollection(from.key, storeCastTo, insteadOfGraveyard, caster, riderOnlyInstantOrSorcery)
 
     /** Play (land or spell) a card from [from] without paying its mana cost. */
     fun PlayFromCollectionWithoutPayingCost(from: CollectionSlot): Effect =
@@ -4465,12 +4466,14 @@ object Effects {
         insteadOfGraveyard: AfterResolveDestination? = null,
         caster: com.wingedsheep.sdk.scripting.effects.Chooser =
             com.wingedsheep.sdk.scripting.effects.Chooser.Controller,
+        riderOnlyInstantOrSorcery: Boolean = false,
     ): Effect = CastFromCollectionWithoutPayingCostEffect(
         from = from,
         payManaCost = true,
         storeCastTo = storeCastTo,
         insteadOfGraveyard = insteadOfGraveyard,
         caster = caster,
+        riderOnlyInstantOrSorcery = riderOnlyInstantOrSorcery,
     )
 
     /**

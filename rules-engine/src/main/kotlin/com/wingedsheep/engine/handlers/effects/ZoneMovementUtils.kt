@@ -724,6 +724,11 @@ object ZoneMovementUtils {
         predicateEvaluator: PredicateEvaluator
     ): ZoneChangeRedirectResult {
         val container = state.getEntity(entityId) ?: return ZoneChangeRedirectResult(toZone)
+        // A stack-departure rider also applies to bounce/library moves, not only counters.
+        if (fromZone == Zone.STACK) {
+            val rider = container.get<com.wingedsheep.engine.state.components.identity.AfterResolveDestinationComponent>()
+            if (rider != null && rider.onAnyStackDeparture) return ZoneChangeRedirectResult(rider.zone)
+        }
 
         // Card-intrinsic "would be put into [zone] from anywhere → redirect instead" self-replacement
         // (Darksteel Colossus, Progenitus). It says "from anywhere", so it functions from every

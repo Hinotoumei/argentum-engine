@@ -369,6 +369,10 @@ class MoveToZoneEffectExecutor(
     }
 
     private fun findEntityZone(state: GameState, entityId: com.wingedsheep.sdk.model.EntityId): com.wingedsheep.engine.state.ZoneKey? {
+        if (entityId in state.stack) {
+            val owner = state.getEntity(entityId)?.get<CardComponent>()?.ownerId ?: return null
+            return com.wingedsheep.engine.state.ZoneKey(owner, Zone.STACK)
+        }
         for ((zoneKey, entities) in state.zones) {
             if (entityId in entities) {
                 return zoneKey

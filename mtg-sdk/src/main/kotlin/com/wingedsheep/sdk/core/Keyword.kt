@@ -178,6 +178,7 @@ enum class Keyword(val displayName: String) {
     // ── Spell mechanics ─────────────────────────────────────
     STORM("Storm"),
     FLASHBACK("Flashback"),
+    AFTERMATH("Aftermath"),
 
     /**
      * Split second (CR 702.61, Time Spiral). "As long as this spell is on the stack, players can't

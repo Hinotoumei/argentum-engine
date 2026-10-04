@@ -240,7 +240,9 @@ data class AfterResolveDestinationComponent(
      */
     val onlyIfResolved: Boolean = false,
     val linkedSourceId: EntityId? = null,
-    val makePlotted: Boolean = false
+    val makePlotted: Boolean = false,
+    /** Aftermath also replaces bounce/library departures from the stack. */
+    val onAnyStackDeparture: Boolean = false
 ) : Component {
     /** The zone [destination] names — the two members differ in placement, not only in zone. */
     val zone: com.wingedsheep.sdk.core.Zone

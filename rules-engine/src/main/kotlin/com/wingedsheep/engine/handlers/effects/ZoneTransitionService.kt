@@ -600,7 +600,13 @@ class ZoneTransitionService(
         // player's battlefield zone (e.g., control-changed permanents in some zone layouts).
         val removeZoneKey = currentZoneKey
         newState = newState.removeFromZone(removeZoneKey, entityId)
-        if (fromZone == Zone.STACK) newState = newState.removeFromStack(entityId)
+        if (fromZone == Zone.STACK) {
+            newState = newState.removeFromStack(entityId).updateEntity(entityId) { c ->
+                c.without<com.wingedsheep.engine.state.components.stack.SpellOnStackComponent>()
+                    .without<com.wingedsheep.engine.state.components.stack.TargetsComponent>()
+                    .without<com.wingedsheep.engine.state.components.identity.AfterResolveDestinationComponent>()
+            }
+        }
 
         // Drop any remaining linked-exile reference held by a granter still on the
         // battlefield (e.g. Maralen, Fae Ascendant). The card has just left exile by

@@ -72,10 +72,13 @@ class ReturnSpellOrPermanentToOwnersHandExecutor(
                 ?: spellComponent?.casterId
                 ?: return EffectResult.error(state, "Cannot determine spell owner")
 
+            val destination = container.get<com.wingedsheep.engine.state.components.identity.AfterResolveDestinationComponent>()
+                ?.takeIf { it.onAnyStackDeparture }?.zone ?: Zone.HAND
             var newState = state.removeFromStack(targetId)
-            newState = newState.addToZone(ZoneKey(ownerId, Zone.HAND), targetId)
+            newState = newState.addToZone(ZoneKey(ownerId, destination), targetId)
             newState = newState.updateEntity(targetId) { c ->
                 c.without<SpellOnStackComponent>().without<TargetsComponent>()
+                    .without<com.wingedsheep.engine.state.components.identity.AfterResolveDestinationComponent>()
             }
 
             return EffectResult.success(
@@ -85,7 +88,7 @@ class ReturnSpellOrPermanentToOwnersHandExecutor(
                         targetId,
                         cardComponent?.name ?: "Unknown",
                         Zone.STACK,
-                        Zone.HAND,
+                        destination,
                         ownerId,
                         oldObject = state.objectRef(targetId),
                         newObject = newState.objectRef(targetId)

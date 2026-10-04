@@ -144,6 +144,7 @@ internal enum class CastSourceRoute {
     TOP_OF_LIBRARY,
     EXILE_PERMISSION,
     SELF_ZONE_PERMISSION,
+    AFTERMATH,
     PERMANENT_FROM_GRAVEYARD,
     FLASHBACK,
     HARMONIZE,
@@ -240,6 +241,13 @@ internal class CastValidator(
             CastSourceRoute.TOP_OF_LIBRARY to { zoneResolver.isOnTopOfLibraryWithPermission(state, playerId, cardId) },
             CastSourceRoute.EXILE_PERMISSION to { zoneResolver.isInExileWithPlayPermission(state, playerId, cardId) },
             CastSourceRoute.SELF_ZONE_PERMISSION to { zoneResolver.hasMayCastSelfFromZonePermission(state, playerId, cardId) },
+            CastSourceRoute.AFTERMATH to {
+                cardId in state.getGraveyard(playerId) &&
+                    action.faceIndex?.let { index ->
+                        cardRegistry.getCard(cardComponent.cardDefinitionId)?.cardFaces?.getOrNull(index)
+                            ?.keywords?.contains(com.wingedsheep.sdk.core.Keyword.AFTERMATH)
+                    } == true
+            },
             CastSourceRoute.PERMANENT_FROM_GRAVEYARD to {
                 zoneResolver.hasMayPlayPermanentFromGraveyardPermission(state, playerId, cardId, cardComponent)
             },
@@ -307,6 +315,16 @@ internal class CastValidator(
      * zone-scoped casting bans, the single cast-legality chokepoint, and what a may-play permission
      * authorizes.
      */
+    internal fun validateAftermathFace(state: GameState, action: CastSpell, cardDef: CardDefinition?): String? {
+        if (cardDef?.cardFaces?.none { com.wingedsheep.sdk.core.Keyword.AFTERMATH in it.keywords } != false) return null
+        val face = action.faceIndex?.let { cardDef.cardFaces.getOrNull(it) }
+            ?: return "Choose a valid split-card face"
+        return if (com.wingedsheep.sdk.core.Keyword.AFTERMATH in face.keywords &&
+            state.turnOrder.none { action.cardId in state.getGraveyard(it) }) {
+            "Aftermath can only be cast from a graveyard"
+        } else null
+    }
+
     private fun validateAuthority(
         state: GameState,
         action: CastSpell,
@@ -314,6 +332,7 @@ internal class CastValidator(
         cardDef: CardDefinition?,
         source: CastSource,
     ): String? {
+        validateAftermathFace(state, action, cardDef)?.let { return it }
         // Gift (CR 702.174a): the promise is an additional cost whose "payment" is choosing an
         // opponent, so the recipient must be an opponent of the caster and the card must actually
         // have gift.
@@ -380,8 +399,12 @@ internal class CastValidator(
         if (permissions.isEmpty()) return null
         val isPrepareCopy = state.getEntity(action.cardId)?.has<PreparedSpellCopyComponent>() == true &&
             cardDef?.layout == com.wingedsheep.sdk.model.CardLayout.PREPARE
-        val authorizedFaces: Set<Int?> =
-            if (isPrepareCopy) setOf(0) else permissions.map { it.castFaceIndex }.toSet()
+        val authorizedFaces: Set<Int?> = if (isPrepareCopy) setOf(0) else permissions.flatMap {
+            if (it.castFaceIndex == null && cardDef?.cardFaces?.any { face ->
+                    com.wingedsheep.sdk.core.Keyword.AFTERMATH in face.keywords
+                } == true) cardDef.cardFaces.indices.toList()
+            else listOf(it.castFaceIndex)
+        }.toSet()
         if (action.faceIndex !in authorizedFaces) {
             val faceName = action.faceIndex
                 ?.let { cardDef?.cardFaces?.getOrNull(it)?.name }

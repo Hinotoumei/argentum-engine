@@ -395,6 +395,8 @@ data class CastFromCollectionWithoutPayingCostEffect(
     val insteadOfGraveyard: AfterResolveDestination? = null,
     /** Who casts the card. Only matters inside a per-player iteration — see the class KDoc. */
     val caster: Chooser = Chooser.Controller,
+    /** Restrict the destination rider to the instant or sorcery face actually cast. */
+    val riderOnlyInstantOrSorcery: Boolean = false,
 ) : Effect {
     override val description: String = buildString {
         append("Cast that card")

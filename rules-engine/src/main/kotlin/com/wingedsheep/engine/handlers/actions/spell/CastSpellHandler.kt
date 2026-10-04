@@ -254,6 +254,10 @@ class CastSpellHandler(
         val cardDef = com.wingedsheep.engine.mechanics.BestowCasts.definitionForCast(
             cardRegistry.getCard(cardComponent.cardDefinitionId), action
         )
+        // Resolve-time casts bypass ordinary timing validation, but Aftermath's zone rule still applies.
+        castValidator.validateAftermathFace(state, action, cardDef)?.let {
+            return ExecutionResult.error(inputState, it)
+        }
 
         // --- 1. Announce (CR 601.2a–c) -----------------------------------------------------------
 
@@ -398,10 +402,17 @@ class CastSpellHandler(
             return castResult
         }
         currentState = castResult.newState
-
         // --- 5. What the cast sets off -----------------------------------------------------------
 
         currentState = castRecords.applyCastThisWayRiders(currentState, action, cardComponent, authorization, paid.isForageCast)
+        if (action.faceIndex?.let { cardDef?.cardFaces?.getOrNull(it) }
+                ?.keywords?.contains(com.wingedsheep.sdk.core.Keyword.AFTERMATH) == true) {
+            currentState = currentState.updateEntity(action.cardId) { c ->
+                c.with(com.wingedsheep.engine.state.components.identity.AfterResolveDestinationComponent(
+                    onlyIfResolved = false, onAnyStackDeparture = true
+                ))
+            }
+        }
         val spell = CastSpellOnStack(action, cardDef, cardComponent, targeting.requirements)
         val (afterManaRiders, riderTriggers) = castTriggers.applyManaRiders(currentState, spell, paid.payment.consumedRiders)
         currentState = castRecords.consumeCastPermissions(
