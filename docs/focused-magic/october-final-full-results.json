@@ -1,0 +1,26 @@
+{
+  "result": "PASS_COMPOSITE",
+  "scope": "Broad regression completed with one stale Kasmina subtype failure; corrected source passed targeted checks and the entire affected 2017-2022 card module. Other modules passed the broad run. Accepted mtgish-only exclusion.",
+  "single_full_invocation_passed": false,
+  "preserved_failure": "KasminaEnigmaSageScenarioTest > Kasmina has her printed subtype and her +2 scries one",
+  "affected_module_counts": {
+    "tests": 1147,
+    "skipped": 0,
+    "failures": 0,
+    "errors": 0
+  },
+  "evidence": {
+    "broad": {
+      "filename": "october-final-full-kasmina-stale-failure.log",
+      "sha256": "0bd5ab2b500dffdc0eb45d23daac8df62cf865c67fb5a0e2ad74dba0a99b91b6"
+    },
+    "targeted": {
+      "filename": "october-older-gate.log",
+      "sha256": "a7997dd5ef33fd164c4d748e98d6b3e787c527580272e4b77eaae8b668e31164"
+    },
+    "affected_module": {
+      "filename": "october-kasmina-module-gate.log",
+      "sha256": "b296afd8697017e8170d9533b07f7948ebc183b0980ff113ffb03998c5016ec6"
+    }
+  }
+}
