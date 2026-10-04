@@ -2,6 +2,14 @@
 
 ## Final source verification, October 4
 
+### Manual startup correction
+
+The user screenshot exposed `ai INVALID_ACTION: Mulligan phase not complete`. Earlier live acceptance auto-kept both seats and did not cover a human leaving the opening hand undecided. The client scheduled AI actions from opening-state resyncs before both seats finished mulligans. The provider now tracks each seat's mulliganComplete message, waits for both, requests fresh state, and gates automated/manual gameplay actions until that state arrives. London bottom-card selection also clears readiness and cancels scheduled actions.
+
+Four startup regressions fail against the previous provider and pass with the repair; all 55 provider tests pass. Real Chrome against the deployed backend verifies all three profiles while the human opening hand remains pending: zero AI actions during the pause, actual Keep-button click, then both confirmations and an authoritative AI land play. The full 75-image/three-deck acceptance passed again afterward. See october-manual-mulligan-browser.json and the refreshed october-live-acceptance.json. No backend source or InuYasha code changed in this correction.
+
+The replacement frontend is Focused_Magic_frontend_2026-10-04_mulligan_fix.zip, 804236 bytes, SHA256 e363bd3ad1f0b7e47d8f10c283e21d8ad13457c39951b199189da4fddf14e6dc. It must replace the previous frontend upload; public deployment of this correction remains unverified. The existing Drive file ID is retained.
+
 Latest deployed acceptance: c4ce24869bbca3bbb11d315a9f8d5621938aa1be is live in dep-db1aitbncjis73bubmog. The updated local frontend against this deployed backend passed all 75 distinct October/mandatory/legacy printing image decodes, all three exact deck starts, confirmed authoritative AI land plays, real player life totals and hand state, and displayed hand images. Catalog admission also found no missing identities among the 84 names across all fixtures; that catalog result alone is not gameplay evidence. Full match completion is not asserted. See october-live-acceptance.json. The public Cloudflare frontend still requires upload and acceptance.
 
 The final root-layout frontend ZIP is 803824 bytes, SHA256 f34bbfaeedded903af9c97dcb3b5d1e097932a767fa32f8821fef64d28de0905. CRC validation passed; the release manifest and deployment instructions now describe the direct-source backend and verified scopes. Drive file 1xiIehMm696gOSOpgMiH7051KjF2VZBFu was updated in place and its size and Software - Tikunari parent were read back successfully. InuYasha source is unchanged. Earlier package hashes below are preserved historical deliveries.

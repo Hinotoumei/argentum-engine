@@ -1,7 +1,7 @@
 Focused Magic v0.6.9 — October 4 direct-source release
 
 FRONTEND UPLOAD
-Upload this ZIP's root contents to the existing seconddrawfocusedmagic Cloudflare Pages project. index.html is at the archive root. The public frontend has not yet been updated or accepted. After upload, verify the October profile, visible hand images, life totals, and exact deck versus AI.
+Upload this replacement ZIP's root contents to the existing seconddrawfocusedmagic Cloudflare Pages project. index.html is at the archive root. This release adds the manual opening-hand startup repair: the AI waits for both mulligan confirmations and fresh server state. The public deployment of this repair has not yet been verified. After upload, pause at the human opening-hand choice, click Keep, and verify the October profile, hand images, life totals, and exact deck versus AI.
 
 CURRENT HOSTING
 Argentum remains on the existing Render Pro service:

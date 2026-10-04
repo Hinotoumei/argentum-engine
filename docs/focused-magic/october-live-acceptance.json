@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-04T19:34:20.622Z",
+  "checkedAt": "2026-10-04T20:32:54.407Z",
   "diagnosisOnly": false,
   "results": [
     {
@@ -697,7 +697,7 @@
       "passed": true,
       "confirmedAIAction": {
         "type": "PlayLand",
-        "name": "Play Underground Sea"
+        "name": "Play Undercity Sewers"
       },
       "players": [
         {
@@ -719,15 +719,15 @@
       "passed": true,
       "confirmedAIAction": {
         "type": "PlayLand",
-        "name": "Play Misty Rainforest"
+        "name": "Play Polluted Delta"
       },
       "players": [
         {
-          "name": "Focused Magic",
+          "name": "Dimir Tempo",
           "life": 20
         },
         {
-          "name": "Dimir Tempo",
+          "name": "Focused Magic",
           "life": 20
         }
       ],
@@ -741,15 +741,15 @@
       "passed": true,
       "confirmedAIAction": {
         "type": "PlayLand",
-        "name": "Play Misty Rainforest"
+        "name": "Play Island"
       },
       "players": [
         {
-          "name": "Dimir Tempo",
+          "name": "Focused Magic",
           "life": 20
         },
         {
-          "name": "Focused Magic",
+          "name": "Dimir Tempo",
           "life": 20
         }
       ],

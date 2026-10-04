@@ -1,6 +1,6 @@
 {
   "version": "0.6.9",
-  "build": "FOCUSED_MAGIC_OCTOBER_DIRECT_SOURCE_CARD_ART",
+  "build": "FOCUSED_MAGIC_OCTOBER_DIRECT_SOURCE_CARD_ART_MULLIGAN_FIX",
   "date": "2026-10-04",
   "base": {
     "frontend_authority": "Focused_Magic_v0.6.9_INUYASHA_RESOLVE_ARGENTUM_LIVE_REPAIR_2026-09-29.zip",
@@ -23,13 +23,14 @@
   "validation": {
     "native_repair_scenarios": "83_PASS",
     "regression": "PASS_COMPOSITE_SEE_october-final-full-results.json",
-    "provider_controls": "51_PASS",
+    "provider_controls": "55_PASS",
     "provider_js_syntax": "PASS",
+    "manual_opening_hand": "PASS_THREE_DECKS_AI_WAITS_FOR_HUMAN_KEEP_AND_FRESH_STATE",
     "card_art": "PASS_DEPLOYED_PRINTING_METADATA_AND_BROWSER_IMAGE_DECODING",
     "backend_acceptance": "PASS_LOCAL_UPDATED_FRONTEND_AGAINST_DEPLOYED_RENDER",
     "cloudflare_frontend": "PENDING_UPLOAD_AND_PUBLIC_ACCEPTANCE",
     "inuyasha": "PRESERVED_UNCHANGED_USER_REPORTED_WORKING",
-    "checked_at": "2026-10-04T19:34:20.622Z"
+    "checked_at": "2026-10-04T20:32:54.407Z"
   },
   "files": [
     {
@@ -209,8 +210,8 @@
     },
     {
       "path": "js/provider/argentum.js",
-      "bytes": 82001,
-      "sha256": "f4c87b614749116049b465d79c1f9c217d674bb1cb669f4b15d59997c5075e3a"
+      "bytes": 83255,
+      "sha256": "c70f7efa9258faac1b982c5b530c0a89d1536db96f22b8940c4186ae086ce1e4"
     },
     {
       "path": "js/reality-fracture/mandatory-local-db.js",
@@ -239,8 +240,8 @@
     },
     {
       "path": "README_DEPLOY.txt",
-      "bytes": 2608,
-      "sha256": "dd436a076f2c3dce0d577bdee1cce781668c5efe83b9c87e1cf71825c67c6561"
+      "bytes": 2801,
+      "sha256": "8e15ffe9f902543c0d522fbad1fb8773eebb2e81c5d5ac898858860042cbf753"
     },
     {
       "path": "TIKUNARI_PREP_NOTES_2026-09-30.txt",
