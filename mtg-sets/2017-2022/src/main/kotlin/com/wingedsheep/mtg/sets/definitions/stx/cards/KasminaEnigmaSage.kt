@@ -98,5 +98,10 @@ val KasminaEnigmaSage = card("Kasmina, Enigma Sage") {
         )
     }
 
-    metadata { rarity = Rarity.MYTHIC; collectorNumber = "196" }
+    metadata {
+        rarity = Rarity.MYTHIC
+        collectorNumber = "196"
+        artist = "Tyler Jacobson"
+        imageUri = "https://cards.scryfall.io/normal/front/1/7/178bf300-38cf-4ab2-9e66-6fcaa112b649.jpg?1783927310"
+    }
 }

@@ -3529,7 +3529,9 @@
     },
     "metadata": {
         "collectorNumber": "196",
-        "rarity": "MYTHIC"
+        "rarity": "MYTHIC",
+        "artist": "Tyler Jacobson",
+        "imageUri": "https://cards.scryfall.io/normal/front/1/7/178bf300-38cf-4ab2-9e66-6fcaa112b649.jpg?1783927310"
     },
     "startingLoyalty": 2,
     "colorIdentityOverride": [
