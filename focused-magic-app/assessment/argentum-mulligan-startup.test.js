@@ -5,7 +5,7 @@ const fs=require('node:fs');
 const vm=require('node:vm');
 function harness(){
  const timers=new Map();let next=0;const window={addEventListener(){}};
- const context={window,document:{},console,setTimeout(fn){timers.set(++next,fn);return next;},clearTimeout(id){timers.delete(id);}};
+ const context={window,document:{getElementById(){return null;}},console,setTimeout(fn){timers.set(++next,fn);return next;},clearTimeout(id){timers.delete(id);}};
  vm.createContext(context);
  const source=fs.readFileSync(process.env.ARGENTUM_TEST_SOURCE||require.resolve('../js/provider/argentum.js'),'utf8').replace('  window.FocusedMagicArgentum={',
   '  renderState=()=>{};setStatus=()=>{};log=()=>{};window.Session=ArgentumSession;\n  window.FocusedMagicArgentum={');
@@ -13,7 +13,7 @@ function harness(){
  const session=new window.Session(),sent=[];
  session.sendRole=(role,msg)=>sent.push({role:role.kind,...JSON.parse(JSON.stringify(msg))});
  session.renderMulligan=()=>{};session.renderBottomCards=()=>{};
- const update=role=>session.onRoleMessage(role,{type:'stateUpdate',interactionEpoch:{id:'current'},state:{viewingPlayerId:role.kind,priorityPlayerId:role.kind,players:[],cards:{},zones:[]},legalActions:[{actionType:'PlayLand',action:{type:'PlayLand',playerId:role.kind,cardId:'land'},description:'Play Island'}]});
+ const update=(role,extra={})=>session.onRoleMessage(role,{type:'stateUpdate',interactionEpoch:{id:'current'},state:{viewingPlayerId:role.kind,priorityPlayerId:role.kind,players:[],cards:{},zones:[],...extra},legalActions:[{actionType:'PlayLand',action:{type:'PlayLand',playerId:role.kind,cardId:'land'},description:'Play Island'}]});
  const flush=()=>{const pending=[...timers.values()];timers.clear();pending.forEach(fn=>fn());};
  return {session,sent,update,flush};
 }
@@ -24,11 +24,26 @@ test('AI keeps automatically but waits while the human opening hand is pending',
  const h=harness(),s=h.session;
  s.onRoleMessage(s.user,{type:'mulliganDecision'});
  s.onRoleMessage(s.ai,{type:'mulliganDecision'});
- assert.equal(h.sent[0].type,'keepHand');
+ assert(h.sent.some(m=>m.role==='ai'&&m.type==='keepHand'));
  s.onRoleMessage(s.ai,{type:'mulliganComplete'});
  s.onRoleMessage(s.ai,{type:'waitingForOpponentMulligan'});
  h.update(s.ai);h.flush();assert.equal(h.sent.filter(m=>m.type==='submitAction').length,0);
  assert.throws(()=>s.submitAction({type:'PlayLand'}),/opening hands/);
+});
+test('rapid repeated Mulligan clicks send only one opening-hand request',()=>{
+ const h=harness(),s=h.session,prompt={type:'mulliganDecision'};
+ s.onRoleMessage(s.user,prompt);
+ assert.equal(s.submitOpening(s.user,'mulligan',null,prompt),true);
+ assert.equal(s.submitOpening(s.user,'mulligan',null,prompt),false);
+ assert.equal(s.submitOpening(s.user,'keepHand',null,prompt),false);
+ assert.equal(h.sent.filter(m=>m.type==='mulligan').length,1);
+});
+test('a stale Mulligan button cannot act on a newly returned opening hand',()=>{
+ const h=harness(),s=h.session,old={type:'mulliganDecision'},fresh={type:'mulliganDecision',mulliganCount:1};
+ s.onRoleMessage(s.user,old);s.submitOpening(s.user,'mulligan',null,old);
+ s.onRoleMessage(s.user,fresh);
+ assert.equal(s.submitOpening(s.user,'mulligan',null,old),false);
+ assert.equal(s.submitOpening(s.user,'keepHand',null,fresh),true);
 });
 test('both completion messages request fresh state before the AI plays',()=>{
  const h=harness(),s=h.session;h.update(s.ai);h.flush();
@@ -43,4 +58,17 @@ test('London bottom-card selection prevents an already scheduled AI action',()=>
  h.update(s.ai);
  s.onRoleMessage(s.user,{type:'chooseBottomCards',cardsToPutOnBottom:1,cardIds:['land']});
  h.flush();assert.equal(h.sent.filter(m=>m.type==='submitAction').length,0);
+});
+test('identical resyncs cannot submit the same automatic action twice',()=>{
+ const h=harness(),s=h.session;s.user.mulliganComplete=true;s.ai.mulliganComplete=true;
+ h.update(s.ai);h.flush();h.update(s.ai);h.flush();
+ assert.equal(h.sent.filter(m=>m.type==='submitAction').length,1);
+ h.update(s.ai,{turnNumber:2});h.flush();
+ assert.equal(h.sent.filter(m=>m.type==='submitAction').length,2);
+});
+test('an unchanged resync is not an authoritative AI action acknowledgement',()=>{
+ const h=harness(),s=h.session;s.user.mulliganComplete=true;s.ai.mulliganComplete=true;
+ h.update(s.ai);h.flush();h.update(s.ai);
+ assert.equal(s.aiMeaningful.length,0);
+ h.update(s.ai,{turnNumber:2});assert.equal(s.aiMeaningful.length,1);
 });

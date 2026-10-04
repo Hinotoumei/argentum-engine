@@ -1,6 +1,6 @@
 {
   "version": "0.6.9",
-  "build": "FOCUSED_MAGIC_OCTOBER_DIRECT_SOURCE_CARD_ART_MULLIGAN_FIX",
+  "build": "FOCUSED_MAGIC_OCTOBER_DIRECT_SOURCE_CARD_ART_MULLIGAN_FIX_V2",
   "date": "2026-10-04",
   "base": {
     "frontend_authority": "Focused_Magic_v0.6.9_INUYASHA_RESOLVE_ARGENTUM_LIVE_REPAIR_2026-09-29.zip",
@@ -23,14 +23,14 @@
   "validation": {
     "native_repair_scenarios": "83_PASS",
     "regression": "PASS_COMPOSITE_SEE_october-final-full-results.json",
-    "provider_controls": "55_PASS",
+    "provider_controls": "59_PASS",
     "provider_js_syntax": "PASS",
-    "manual_opening_hand": "PASS_THREE_DECKS_AI_WAITS_FOR_HUMAN_KEEP_AND_FRESH_STATE",
+    "manual_opening_hand": "PASS_THREE_DECKS_TWO_MULLIGANS_DOUBLE_CLICKS_KEEP_AND_BOTTOM_TWO",
     "card_art": "PASS_DEPLOYED_PRINTING_METADATA_AND_BROWSER_IMAGE_DECODING",
     "backend_acceptance": "PASS_LOCAL_UPDATED_FRONTEND_AGAINST_DEPLOYED_RENDER",
     "cloudflare_frontend": "PENDING_UPLOAD_AND_PUBLIC_ACCEPTANCE",
     "inuyasha": "PRESERVED_UNCHANGED_USER_REPORTED_WORKING",
-    "checked_at": "2026-10-04T20:32:54.407Z"
+    "checked_at": "2026-10-04T22:30:30.238Z"
   },
   "files": [
     {
@@ -210,8 +210,8 @@
     },
     {
       "path": "js/provider/argentum.js",
-      "bytes": 83255,
-      "sha256": "c70f7efa9258faac1b982c5b530c0a89d1536db96f22b8940c4186ae086ce1e4"
+      "bytes": 84668,
+      "sha256": "d9b88d8d1fae3f2fd43a90bb98725f93c3656f6721be7604bcc5f2754bff0a71"
     },
     {
       "path": "js/reality-fracture/mandatory-local-db.js",
@@ -240,8 +240,8 @@
     },
     {
       "path": "README_DEPLOY.txt",
-      "bytes": 2801,
-      "sha256": "8e15ffe9f902543c0d522fbad1fb8773eebb2e81c5d5ac898858860042cbf753"
+      "bytes": 3091,
+      "sha256": "99939519678a4579d6614f2951e338c146d616376eca52946e58148f08beaf5a"
     },
     {
       "path": "TIKUNARI_PREP_NOTES_2026-09-30.txt",

@@ -1,12 +1,34 @@
 {
-  "checkedAt": "2026-10-04T20:32:04.345Z",
+  "checkedAt": "2026-10-04T22:31:31.386Z",
   "results": [
     {
       "key": "october",
+      "twoMulligans": true,
+      "duplicateClicks": true,
+      "bottomedCards": 2,
       "pending": {
         "humanPending": true,
         "aiActions": 0,
         "error": "Argentum exact-deck game started: October 3 uploaded deck."
+      },
+      "result": {
+        "bothComplete": true,
+        "action": {
+          "type": "PlayLand",
+          "name": "Play Polluted Delta"
+        },
+        "error": "Argentum exact-deck game started: October 3 uploaded deck."
+      }
+    },
+    {
+      "key": "mandatory",
+      "twoMulligans": true,
+      "duplicateClicks": true,
+      "bottomedCards": 2,
+      "pending": {
+        "humanPending": true,
+        "aiActions": 0,
+        "error": "Argentum exact-deck game started: v0.6.5 mandatory deck."
       },
       "result": {
         "bothComplete": true,
@@ -14,27 +36,14 @@
           "type": "PlayLand",
           "name": "Play Underground Sea"
         },
-        "error": "Argentum exact-deck game started: October 3 uploaded deck."
-      }
-    },
-    {
-      "key": "mandatory",
-      "pending": {
-        "humanPending": true,
-        "aiActions": 0,
-        "error": "Argentum exact-deck game started: v0.6.5 mandatory deck."
-      },
-      "result": {
-        "bothComplete": true,
-        "action": {
-          "type": "PlayLand",
-          "name": "Play Wasteland"
-        },
         "error": "Argentum exact-deck game started: v0.6.5 mandatory deck."
       }
     },
     {
       "key": "legacy",
+      "twoMulligans": true,
+      "duplicateClicks": true,
+      "bottomedCards": 2,
       "pending": {
         "humanPending": true,
         "aiActions": 0,

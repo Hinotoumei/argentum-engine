@@ -404,8 +404,9 @@ SIDEBOARD:
   }
   function renderTabletopDecision(){
     const box=$('argentumTabletopDecision');if(!box)return;const d=active?.pendingDecision;
-    if(active?.user?.mulliganPrompt){box.innerHTML='<b>Opening hand decision</b> ';const keep=document.createElement('button');keep.className='good';keep.textContent='Keep';keep.onclick=()=>{active.user.mulliganPrompt=null;active.sendRole(active.user,{type:'keepHand'});};const mul=document.createElement('button');mul.textContent='Mulligan';mul.onclick=()=>{active.user.mulliganPrompt=null;active.sendRole(active.user,{type:'mulligan'});};box.append(keep,mul);return;}
-    if(active?.user?.bottomPrompt){box.innerHTML='<b>London mulligan:</b> use Diagnostics for bottom-card selection in this WIP.';return;}
+    if(active?.user?.mulliganPrompt){const prompt=active.user.mulliganPrompt;box.innerHTML='<b>Opening hand decision</b> ';const keep=document.createElement('button');keep.className='good';keep.textContent='Keep';keep.onclick=()=>active.submitOpening(active.user,'keepHand',null,prompt);const mul=document.createElement('button');mul.textContent='Mulligan';mul.onclick=()=>active.submitOpening(active.user,'mulligan',null,prompt);box.append(keep,mul);return;}
+    if(active?.user?.bottomPrompt){active.renderBottomCards(active.user.bottomPrompt,'argentumTabletopDecision');return;}
+    if(active?.user?.openingRequestPending){box.textContent='Waiting for the new opening hand…';return;}
     if(!d){box.textContent='No pending decision.';return;}
     box.innerHTML=`<b>${esc(d.prompt||d.type)}</b> `;const b=document.createElement('button');b.className='primary';b.textContent='Resolve decision';b.onclick=async()=>{try{const r=await decisionResponse(d,'human');if(r)active.submitDecision(r);}catch(e){setTabletopStatus(e.message,true)}};box.appendChild(b);
   }
@@ -966,7 +967,7 @@ SIDEBOARD:
       this.gameStarted=false; this.intentionalClose=false; this.aiMeaningful=[]; this.seats=[]; this.assessment=spec.assessment||null;
       this.sessionId=null; this.aiConfirmedActionCount=0; this.userConfirmedActionCount=0; this.fallbackStarted=false;
     }
-    newRole(kind,name){return {kind,name,ws:null,connected:false,playerId:null,token:null,state:null,legalActions:[],pendingDecision:null,mulliganPrompt:null,bottomPrompt:null,mulliganComplete:false,playReady:false,interactionEpoch:null,lastVersion:0,resyncTimer:null,autoTimer:null,pendingMeaningful:null};}
+    newRole(kind,name){return {kind,name,ws:null,connected:false,playerId:null,token:null,state:null,legalActions:[],pendingDecision:null,mulliganPrompt:null,bottomPrompt:null,openingRequestPending:false,mulliganComplete:false,playReady:false,interactionEpoch:null,lastVersion:0,resyncTimer:null,autoTimer:null,pendingMeaningful:null};}
     connect(){
       const cfg=providerConfig();
       if(!cfg.origin || !cfg.ws)throw new Error('Patched Argentum provider is not configured. Open Diagnostics and set the deployed provider origin/WebSocket.');
@@ -1035,21 +1036,25 @@ SIDEBOARD:
         return;
       }
       if(msg.type==='mulliganDecision'){
+        role.openingRequestPending=false;
         role.mulliganComplete=false;role.playReady=false;clearTimeout(role.autoTimer);
         role.mulliganPrompt=msg; role.bottomPrompt=null;
         if(role.kind==='user' && msg.state && !this.state){this.state=msg.state;role.state=msg.state;}
         if(role.kind==='user' && !(this.spec.autopilot||this.assessment)){ this.renderMulligan(msg); if(this.spec.presentation==='tabletop')renderTabletop(); }
-        else { role.mulliganPrompt=null; this.sendRole(role,{type:'keepHand'}); }
+        else { this.submitOpening(role,'keepHand',null,msg); }
+        if(role.kind==='user'&&!(this.spec.autopilot||this.assessment))this.sendRole(role,{type:'requestResync'});
         return;
       }
       if(msg.type==='chooseBottomCards'){
+        role.openingRequestPending=false;
         role.mulliganComplete=false;role.playReady=false;clearTimeout(role.autoTimer);
         role.bottomPrompt=msg; role.mulliganPrompt=null;
-        if(role.kind==='user' && !(this.spec.autopilot||this.assessment)) this.renderBottomCards(msg);
-        else { const ids=(msg.hand||msg.cardIds||[]).slice(0,msg.cardsToPutOnBottom||0); role.bottomPrompt=null; this.sendRole(role,{type:'chooseBottomCards',cardIds:ids}); }
+        if(role.kind==='user' && !(this.spec.autopilot||this.assessment)){this.renderBottomCards(msg);if(this.spec.presentation==='tabletop')renderTabletop();}
+        else { const ids=(msg.hand||msg.cardIds||[]).slice(0,msg.cardsToPutOnBottom||0); this.submitOpening(role,'chooseBottomCards',ids,msg); }
         return;
       }
       if(msg.type==='mulliganComplete'){
+        role.openingRequestPending=false;
         role.mulliganComplete=true;role.mulliganPrompt=null;role.bottomPrompt=null;
         // Completion is per seat; an opening-state resync can expose legal actions
         // while the other player is still deciding. Refresh after both confirmations.
@@ -1062,9 +1067,10 @@ SIDEBOARD:
         role.playReady=false;clearTimeout(role.autoTimer);return;
       }
       if(msg.type==='stateUpdate'){
+        role.playStateKey=JSON.stringify(msg.state);
         role.playReady=this.user.mulliganComplete&&this.ai.mulliganComplete;
         role.state=msg.state;role.legalActions=msg.legalActions||[];role.pendingDecision=msg.pendingDecision||null;role.interactionEpoch=msg.interactionEpoch||null;role.lastVersion=msg.stateVersion||role.lastVersion;
-        if(role.pendingMeaningful){
+        if(role.pendingMeaningful&&role.playStateKey!==role.lastSubmittedStateKey){
           const m=role.pendingMeaningful; role.pendingMeaningful=null;
           if(role.kind==='ai'){
             this.aiMeaningful.push(m);this.aiConfirmedActionCount++;log(`AI authoritative action confirmed: ${m.type}${m.name?` — ${m.name}`:''}`);
@@ -1091,30 +1097,44 @@ SIDEBOARD:
     renderMulligan(msg){
       ensureUI(); $('argentumGame').classList.remove('hidden'); this.user.mulliganPrompt=msg;
       $('argentumDecision').innerHTML=`<p><b>Opening hand</b> • mulligans ${msg.mulliganCount||0}</p><button id="argentumKeep" class="good">Keep</button> <button id="argentumMulligan">Mulligan</button>`;
-      $('argentumKeep').onclick=()=>{this.user.mulliganPrompt=null;this.sendRole(this.user,{type:'keepHand'});};
-      $('argentumMulligan').onclick=()=>{this.user.mulliganPrompt=null;this.sendRole(this.user,{type:'mulligan'});};
+      $('argentumKeep').onclick=()=>this.submitOpening(this.user,'keepHand',null,msg);
+      $('argentumMulligan').onclick=()=>this.submitOpening(this.user,'mulligan',null,msg);
     }
-    renderBottomCards(msg){
+    renderBottomCards(msg,hostId='argentumDecision'){
       ensureUI(); $('argentumGame').classList.remove('hidden'); this.user.bottomPrompt=msg;
       const ids=msg.hand||msg.cardIds||[], need=msg.cardsToPutOnBottom||0;
-      $('argentumDecision').innerHTML=`<p><b>London mulligan</b> • choose exactly ${need} card${need===1?'':'s'} to put on the bottom.</p><div id="argentumBottomChoices" class="choose-grid"></div><button id="argentumBottomConfirm" class="good" type="button">Put selected on bottom</button>`;
-      const box=$('argentumBottomChoices');
-      for(const id of ids){const b=document.createElement('button');b.type='button';b.className='choose-card';b.dataset.id=id;b.textContent=cardName(this.user.state,id);b.onclick=()=>b.classList.toggle('selected');box.appendChild(b);}
-      $('argentumBottomConfirm').onclick=()=>{const chosen=[...box.querySelectorAll('.choose-card.selected')].map(b=>b.dataset.id);if(chosen.length!==need){setStatus(`Choose exactly ${need} card${need===1?'':'s'} to bottom.`,true);return;}this.user.bottomPrompt=null;this.sendRole(this.user,{type:'chooseBottomCards',cardIds:chosen});};
+      const choicesId=hostId+'BottomChoices',confirmId=hostId+'BottomConfirm';
+      $(hostId).innerHTML=`<p><b>London mulligan</b> • choose exactly ${need} card${need===1?'':'s'} to put on the bottom.</p><div id="${choicesId}" class="choose-grid"></div><button id="${confirmId}" class="good" type="button">Put selected on bottom</button>`;
+      const box=$(choicesId);
+      for(const id of ids){const b=document.createElement('button');b.type='button';b.className='choose-card';b.dataset.id=id;b.textContent=msg.cards?.[id]?.name||cardName(this.user.state,id);b.onclick=()=>b.classList.toggle('selected');box.appendChild(b);}
+      $(confirmId).onclick=()=>{const chosen=[...box.querySelectorAll('.choose-card.selected')].map(b=>b.dataset.id);if(chosen.length!==need){setStatus(`Choose exactly ${need} card${need===1?'':'s'} to bottom.`,true);return;}this.submitOpening(this.user,'chooseBottomCards',chosen,msg);};
+    }
+    submitOpening(role,type,cardIds,prompt){
+      const current=type==='chooseBottomCards'?role.bottomPrompt:role.mulliganPrompt;
+      if(role.openingRequestPending||role.mulliganComplete||!current||current!==prompt)return false;
+      role.openingRequestPending=true;role.mulliganPrompt=null;role.bottomPrompt=null;role.playReady=false;clearTimeout(role.autoTimer);
+      this.sendRole(role,{type,...(cardIds?{cardIds}: {})});
+      if(role.kind==='user'){
+        for(const id of ['argentumKeep','argentumMulligan','argentumDecisionBottomConfirm','argentumTabletopDecisionBottomConfirm']){const button=$(id);if(button)button.disabled=true;}
+        if(this.spec.presentation==='tabletop')renderTabletopDecision();
+      }
+      return true;
     }
     canPlay(role){return role.playReady&&this.user.mulliganComplete&&this.ai.mulliganComplete&&!role.mulliganPrompt&&!role.bottomPrompt;}
     submitAction(action){if(!this.canPlay(this.user))throw new Error('Wait for both players to finish their opening hands.');this.sendRole(this.user,{type:'submitAction',action,interactionEpoch:this.user.interactionEpoch});}
     submitDecision(response){if(!this.user.state)throw new Error('No state.');this.submitAction({type:'SubmitDecision',playerId:this.user.pendingDecision?.playerId||this.user.state.viewingPlayerId,response});}
     submitRoleAction(role,action,info){
-      if(!this.canPlay(role))return;
+      if(!this.canPlay(role)||role.lastSubmittedStateKey===role.playStateKey)return;
+      role.lastSubmittedStateKey=role.playStateKey;
       this.sendRole(role,{type:'submitAction',action,interactionEpoch:role.interactionEpoch});
       const t=info?.actionType||action?.type||'';
       if(!/PassPriority|DeclareBlockers/i.test(t)) role.pendingMeaningful={type:t,name:info?.description||''};
     }
     submitRoleDecision(role,response){
-      if(!this.canPlay(role))return;
+      if(!this.canPlay(role)||role.lastSubmittedStateKey===role.playStateKey)return;
       const playerId=role.pendingDecision?.playerId||role.state?.viewingPlayerId;
       if(!playerId)return;
+      role.lastSubmittedStateKey=role.playStateKey;
       this.sendRole(role,{type:'submitAction',action:{type:'SubmitDecision',playerId,response},interactionEpoch:role.interactionEpoch});
     }
     autoRole(role){

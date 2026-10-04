@@ -1,6 +1,7 @@
 Focused Magic v0.6.9 — October 4 direct-source release
 
 FRONTEND UPLOAD
+This v2 package also locks repeated opening-hand clicks while a request is pending, refreshes each redraw, and provides London bottom-card selection directly on the tabletop. Tests cover two consecutive mulligans, repeated clicks, Keep and selecting two bottom cards on all three profiles.
 Upload this replacement ZIP's root contents to the existing seconddrawfocusedmagic Cloudflare Pages project. index.html is at the archive root. This release adds the manual opening-hand startup repair: the AI waits for both mulligan confirmations and fresh server state. The public deployment of this repair has not yet been verified. After upload, pause at the human opening-hand choice, click Keep, and verify the October profile, hand images, life totals, and exact deck versus AI.
 
 CURRENT HOSTING
