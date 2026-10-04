@@ -251,7 +251,7 @@ SIDEBOARD:
     modal.innerHTML = `
       <div class="modal-panel argentum-panel">
         <div class="argentum-head">
-          <div><h2>Focused Magic v0.6.9 — Argentum Match Engine</h2><p class="sub">Pinned provider ${ARGENTUM_COMMIT.slice(0,12)} • server-authoritative rules, legal actions, decisions, combat, hidden information and AI</p></div>
+          <div><h2>Focused Magic v0.6.9 — Argentum Match Engine</h2><p class="sub">Focused Magic rules server • server-authoritative rules, legal actions, decisions, combat, hidden information and AI</p></div>
           <button id="argentumClose" type="button">Close</button>
         </div>
         <div class="argentum-config">
@@ -346,9 +346,15 @@ SIDEBOARD:
     if(!name||cardImageCache.has(name))return cardImageCache.get(name)||'';
     const cfg=providerConfig();
     try{
-      const r=await fetch(`${cfg.origin}/api/cards/${encodeURIComponent(providerCardName(name))}/printings`,{headers:{Accept:'application/json'}});
+      const canonical=providerCardName(name);
+      // Spring's batch binding splits a single query value on commas; the path route
+      // preserves those names. Split-card slashes require the query route instead.
+      const single=canonical.includes(',')&&!canonical.includes('/');
+      const route=single?`/api/cards/${encodeURIComponent(canonical)}/printings`:`/api/printings?names=${encodeURIComponent(canonical)}`;
+      const r=await fetch(`${cfg.origin}${route}`,{headers:{Accept:'application/json'}});
       if(!r.ok)throw new Error(`HTTP ${r.status}`);
-      const rows=await r.json();
+      const payload=await r.json();
+      const rows=single?payload:(payload[canonical]||[]);
       const row=Array.isArray(rows)?rows.find(r=>r.imageUri||r.image_uri||r.imageURL||r.imageUrl):rows;
       const uri=row?.imageUri||row?.image_uri||row?.imageURL||row?.imageUrl||row?.normalImageUri||row?.card_faces?.[0]?.image_uri||'';
       cardImageCache.set(name,uri||'');
