@@ -1890,7 +1890,9 @@
         }
     },
     "metadata": {
-        "collectorNumber": "211"
+        "collectorNumber": "211",
+        "artist": "Jeff Miracola",
+        "imageUri": "https://cards.scryfall.io/normal/front/5/0/50283122-b8c4-4fb3-8eba-6252b72222f4.jpg?1783942721"
     },
     "colorIdentityOverride": [
         "RED",

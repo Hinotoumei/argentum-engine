@@ -12,5 +12,10 @@ val Manamorphose = card("Manamorphose") {
     spell {
         effect = Effects.AddManaInAnyCombination(amount = 2) then Effects.DrawCards(1)
     }
-    metadata { rarity = Rarity.COMMON; collectorNumber = "211" }
+    metadata {
+        rarity = Rarity.COMMON
+        collectorNumber = "211"
+        artist = "Jeff Miracola"
+        imageUri = "https://cards.scryfall.io/normal/front/5/0/50283122-b8c4-4fb3-8eba-6252b72222f4.jpg?1783942721"
+    }
 }
