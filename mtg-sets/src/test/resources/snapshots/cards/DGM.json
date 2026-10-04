@@ -453,7 +453,9 @@
     },
     "metadata": {
         "collectorNumber": "104",
-        "rarity": "RARE"
+        "rarity": "RARE",
+        "artist": "Peter Mohrbacher",
+        "imageUri": "https://cards.scryfall.io/normal/front/3/6/3665cfb7-51b6-4083-8eae-fbd3fa6c3554.jpg?1783940021"
     },
     "colorIdentityOverride": [
         "BLACK",

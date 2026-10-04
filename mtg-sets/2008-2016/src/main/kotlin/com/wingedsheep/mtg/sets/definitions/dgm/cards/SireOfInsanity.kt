@@ -23,5 +23,10 @@ val SireOfInsanity = card("Sire of Insanity") {
             Patterns.Hand.discardHand(EffectTarget.Controller)
         )
     }
-    metadata { rarity = Rarity.RARE; collectorNumber = "104" }
+    metadata {
+        rarity = Rarity.RARE
+        collectorNumber = "104"
+        artist = "Peter Mohrbacher"
+        imageUri = "https://cards.scryfall.io/normal/front/3/6/3665cfb7-51b6-4083-8eae-fbd3fa6c3554.jpg?1783940021"
+    }
 }
