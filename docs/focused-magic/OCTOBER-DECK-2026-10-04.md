@@ -2,6 +2,8 @@
 
 ## Final source verification, October 4
 
+The batch was published as 65408e0618b1c11f944b3dc267fcdc4543e98a68 and Render deployment dep-db1a4oc9v7es73el1ht0 reached live. The first updated-client acceptance exposed a missing cross-origin mapping for /api/printings; browser art requests failed although catalog admission was reachable. The read-only printing endpoint now has the same GET/OPTIONS policy as the card endpoints. Six real HTTP regressions cover ordinary, split, and comma-containing names from the public Pages origin and the local client. The complete server gate passed in 8m48s: 568 passed, 13 skipped, zero failures/errors. The original live failure is preserved in october-live-printing-cors-failure.log. Redeployed acceptance remains required.
+
 The repair batch now has 83 passing dedicated gameplay cases: the earlier 54 and 29 additional support-card cases. Kasmina's corrupted type-line and loyalty punctuation were corrected. Her four scenarios verify printed subtype, scry, the granted ability on Way of the Pyromancer's Jace, Fractal counters, and the granted ultimate's activating-source color restriction and free cast.
 
 The broad regression completed in 1h16m52s with only the stale compiled Kasmina subtype assertion failing. After rebuilding, the targeted support-card/snapshot/lint/counter gate passed in 11m17s, and the entire affected 2017–2022 card module passed 1,147 tests in 2m22s. All other modules passed the broad run. This is combined verification, not a claim that one full invocation passed. The accepted mtgish-only exclusion remains. See october-final-full-results.json for scopes and log hashes.
