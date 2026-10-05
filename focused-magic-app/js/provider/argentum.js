@@ -1035,6 +1035,7 @@ SIDEBOARD:
       if(msg.type==='error'){
         role.pendingMeaningful=null;
         if(msg.code==='INVALID_ACTION'){
+          if(role.kind==='ai'&&role.lastAutomaticAction){role.rejectedActions=role.rejectedActions||new Set();role.rejectedActions.add(JSON.stringify(role.lastAutomaticAction));role.lastSubmittedStateKey=null;}
           setStatus(msg.message||'That action cannot be performed now.',true);
           log(`Action rejected for ${role.kind}; keeping the match open.`);
           clearTimeout(role.resyncTimer);role.resyncTimer=setTimeout(()=>{try{this.sendRole(role,{type:'requestResync'})}catch(_e){}},10);return;
@@ -1103,7 +1104,9 @@ SIDEBOARD:
         role.playReady=false;clearTimeout(role.autoTimer);return;
       }
       if(msg.type==='stateUpdate'){
-        role.playStateKey=JSON.stringify({state:msg.state,pendingDecision:msg.pendingDecision||null,legalActions:msg.legalActions||[]});
+        const nextKey=JSON.stringify({state:msg.state,pendingDecision:msg.pendingDecision||null,legalActions:msg.legalActions||[]});
+        if(role.playStateKey!==nextKey)role.rejectedActions=new Set();
+        role.playStateKey=nextKey;
         role.playReady=this.user.mulliganComplete&&this.ai.mulliganComplete;
         role.state=msg.state;role.legalActions=msg.legalActions||[];role.pendingDecision=msg.pendingDecision||null;role.interactionEpoch=msg.interactionEpoch||null;role.lastVersion=msg.stateVersion||role.lastVersion;
         if(role.pendingMeaningful&&role.playStateKey!==role.lastSubmittedStateKey){
@@ -1162,6 +1165,7 @@ SIDEBOARD:
     submitRoleAction(role,action,info){
       if(!this.canPlay(role)||role.lastSubmittedStateKey===role.playStateKey)return;
       role.lastSubmittedStateKey=role.playStateKey;
+      role.lastAutomaticAction=clone(action);
       this.sendRole(role,{type:'submitAction',action,interactionEpoch:role.interactionEpoch});
       const t=info?.actionType||action?.type||'';
       if(!/PassPriority|DeclareBlockers/i.test(t)) role.pendingMeaningful={type:t,name:info?.description||''};
@@ -1183,8 +1187,8 @@ SIDEBOARD:
           const rank=a=>/PlayLand/i.test(a.actionType)?0:/CastSpell/i.test(a.actionType)?1:/ActivateAbility/i.test(a.actionType)&&!a.isManaAbility?2:/DeclareAttackers/i.test(a.actionType)?3:/DeclareBlockers/i.test(a.actionType)?4:/PassPriority/i.test(a.actionType)?99:20;
           candidates.sort((a,b)=>rank(a)-rank(b));
           let picked=null,action=null;
-          for(const c of candidates){const completed=completeActionForBot(c,role.state);if(completed){picked=c;action=completed;break;}}
-          if(!action){picked=(role.legalActions||[]).find(a=>/PassPriority/i.test(a.actionType));action=picked?clone(picked.action):null;}
+          for(const c of candidates){const completed=completeActionForBot(c,role.state);if(completed&&!role.rejectedActions?.has(JSON.stringify(completed))){picked=c;action=completed;break;}}
+          if(!action){picked=(role.legalActions||[]).find(a=>/PassPriority/i.test(a.actionType)&&!role.rejectedActions?.has(JSON.stringify(a.action)));action=picked?clone(picked.action):null;}
           if(action)this.submitRoleAction(role,action,picked);
         }catch(e){log(`${role.kind} autopilot: ${e.message}`);}
       },role.kind==='ai'?80:110);

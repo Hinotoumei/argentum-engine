@@ -95,3 +95,12 @@ test('a genuine provider failure still uses the configured failure handler',()=>
  s.onRoleMessage(s.user,{type:'error',code:'SESSION_NOT_FOUND',message:'Missing session'});h.flush();
  assert.equal(failures,1);assert.equal(closed,1);
 });
+
+
+test('AI skips its rejected command on unchanged state and passes instead',()=>{
+ const h=harness(),s=h.session;s.user.mulliganComplete=true;s.ai.mulliganComplete=true;
+ const msg={type:'stateUpdate',interactionEpoch:{id:'current'},state:{viewingPlayerId:'ai',priorityPlayerId:'ai',players:[],cards:{},zones:[]},legalActions:[{actionType:'CastSpell',isAffordable:true,action:{type:'CastSpell',playerId:'ai',cardId:'bad'}},{actionType:'PassPriority',action:{type:'PassPriority',playerId:'ai'}}]};
+ s.onRoleMessage(s.ai,msg);h.flush();assert.equal(h.sent.filter(m=>m.type==='submitAction').at(-1).action.type,'CastSpell');
+ s.onRoleMessage(s.ai,{type:'error',code:'INVALID_ACTION',message:'Not enough targets'});h.flush();s.onRoleMessage(s.ai,msg);h.flush();
+ assert.equal(h.sent.filter(m=>m.type==='submitAction').at(-1).action.type,'PassPriority');
+});

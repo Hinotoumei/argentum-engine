@@ -61,3 +61,16 @@
 .argentum-choice-art{width:100px;max-height:140px;object-fit:contain;border-radius:6px}.argentum-target-dialog label>span{display:flex;flex-direction:column;gap:8px}.argentum-target-dialog label:has(input:checked){border-color:#a8d7ff;background:#294459}.argentum-pile>small{color:#bee3ff;font-size:10px}
 
 .argentum-target-dialog label:has(.argentum-choice-art){margin:6px 0;padding:5px}.argentum-choice-art{width:75px;max-height:105px}
+
+/* Keep the actual art inside its allocated row, including short/zoomed viewports. */
+.argentum-tabletop-modal{inset:0;overflow:hidden!important;height:100dvh}
+.argentum-tabletop-panel{max-height:100dvh!important;min-height:0!important}
+.argentum-tabletop-player,.argentum-tabletop-hand,.argentum-tabletop-stack{overflow:hidden;box-sizing:border-box}
+.argentum-tabletop-playerhead,.argentum-tabletop-zone-title{flex-shrink:0}
+.argentum-tabletop-cards{min-width:0;min-height:0;padding:5px;box-sizing:border-box}
+.argentum-tabletop-card{height:min(112px,100%);max-height:100%;aspect-ratio:5/7;flex:0 1 80px;min-width:0}
+.argentum-tabletop-card.tapped{transform:rotate(10deg) scale(.85);margin:0}
+.argentum-pile{overflow:hidden}.argentum-pile img{max-height:50%;min-height:0}
+@media(max-height:620px){.argentum-tabletop-board{grid-template-rows:minmax(0,1fr) minmax(0,1fr) minmax(85px,1fr)}.argentum-tabletop-actions{max-height:45px}.argentum-tabletop-topbar{min-height:30px}.argentum-tabletop-footer button{padding:7px}.argentum-tabletop-panel{gap:3px;padding:6px}.argentum-tabletop-playerhead{font-size:11px}.argentum-tabletop-zone-title{font-size:9px}}
+
+.argentum-tabletop-player,.argentum-tabletop-hand,.argentum-tabletop-stack{container-type:size}.argentum-tabletop-card{height:clamp(28px,calc(100cqh - 46px),112px);flex-basis:clamp(20px,calc((100cqh - 46px)*.714),80px);max-width:clamp(20px,calc((100cqh - 46px)*.714),80px)}.argentum-tabletop-hand .argentum-tabletop-card{height:clamp(35px,calc(100cqh - 30px),112px);flex-basis:clamp(25px,calc((100cqh - 30px)*.714),80px);max-width:clamp(25px,calc((100cqh - 30px)*.714),80px)}

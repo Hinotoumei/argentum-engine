@@ -1,0 +1,503 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "size": {
+        "width": 1366,
+        "height": 680
+      },
+      "iy": {
+        "height": 680,
+        "bottom": 680,
+        "scroll": 680,
+        "client": 680,
+        "cards": [
+          {
+            "top": 130.796875,
+            "bottom": 224.859375,
+            "zoneTop": 101.59375,
+            "zoneBottom": 249.65625
+          },
+          {
+            "top": 350.859375,
+            "bottom": 444.9375,
+            "zoneTop": 321.65625,
+            "zoneBottom": 469.734375
+          },
+          {
+            "top": 553.125,
+            "bottom": 647.203125,
+            "zoneTop": 523.921875,
+            "zoneBottom": 672
+          },
+          {
+            "top": 553.125,
+            "bottom": 647.203125,
+            "zoneTop": 523.921875,
+            "zoneBottom": 672
+          },
+          {
+            "top": 553.125,
+            "bottom": 647.203125,
+            "zoneTop": 523.921875,
+            "zoneBottom": 672
+          },
+          {
+            "top": 553.125,
+            "bottom": 647.203125,
+            "zoneTop": 523.921875,
+            "zoneBottom": 672
+          },
+          {
+            "top": 553.125,
+            "bottom": 647.203125,
+            "zoneTop": 523.921875,
+            "zoneBottom": 672
+          },
+          {
+            "top": 553.125,
+            "bottom": 647.203125,
+            "zoneTop": 523.921875,
+            "zoneBottom": 672
+          },
+          {
+            "top": 548.53125,
+            "bottom": 642.609375,
+            "zoneTop": 523.921875,
+            "zoneBottom": 672
+          },
+          {
+            "top": 553.125,
+            "bottom": 647.203125,
+            "zoneTop": 523.921875,
+            "zoneBottom": 672
+          },
+          {
+            "top": 553.125,
+            "bottom": 647.203125,
+            "zoneTop": 523.921875,
+            "zoneBottom": 672
+          }
+        ]
+      },
+      "mtg": {
+        "bottom": 680,
+        "client": 678,
+        "scroll": 678,
+        "cards": [
+          {
+            "top": 152.9608154296875,
+            "bottom": 224.8829345703125,
+            "zoneTop": 105.375,
+            "zoneBottom": 241.6875
+          },
+          {
+            "top": 150.765625,
+            "bottom": 227.078125,
+            "zoneTop": 105.375,
+            "zoneBottom": 241.6875
+          },
+          {
+            "top": 152.9608154296875,
+            "bottom": 224.8829345703125,
+            "zoneTop": 105.375,
+            "zoneBottom": 241.6875
+          },
+          {
+            "top": 150.765625,
+            "bottom": 227.078125,
+            "zoneTop": 105.375,
+            "zoneBottom": 241.6875
+          },
+          {
+            "top": 152.9608154296875,
+            "bottom": 224.8829345703125,
+            "zoneTop": 105.375,
+            "zoneBottom": 241.6875
+          },
+          {
+            "top": 150.765625,
+            "bottom": 227.078125,
+            "zoneTop": 105.375,
+            "zoneBottom": 241.6875
+          },
+          {
+            "top": 152.9608154296875,
+            "bottom": 224.8829345703125,
+            "zoneTop": 105.375,
+            "zoneBottom": 241.6875
+          },
+          {
+            "top": 150.765625,
+            "bottom": 227.078125,
+            "zoneTop": 105.375,
+            "zoneBottom": 241.6875
+          },
+          {
+            "top": 152.9608154296875,
+            "bottom": 224.8829345703125,
+            "zoneTop": 105.375,
+            "zoneBottom": 241.6875
+          },
+          {
+            "top": 150.765625,
+            "bottom": 227.078125,
+            "zoneTop": 105.375,
+            "zoneBottom": 241.6875
+          },
+          {
+            "top": 297.27459716796875,
+            "bottom": 369.20977783203125,
+            "zoneTop": 249.6875,
+            "zoneBottom": 386.015625
+          },
+          {
+            "top": 295.078125,
+            "bottom": 371.40625,
+            "zoneTop": 249.6875,
+            "zoneBottom": 386.015625
+          },
+          {
+            "top": 297.27459716796875,
+            "bottom": 369.20977783203125,
+            "zoneTop": 249.6875,
+            "zoneBottom": 386.015625
+          },
+          {
+            "top": 295.078125,
+            "bottom": 371.40625,
+            "zoneTop": 249.6875,
+            "zoneBottom": 386.015625
+          },
+          {
+            "top": 297.27459716796875,
+            "bottom": 369.20977783203125,
+            "zoneTop": 249.6875,
+            "zoneBottom": 386.015625
+          },
+          {
+            "top": 295.078125,
+            "bottom": 371.40625,
+            "zoneTop": 249.6875,
+            "zoneBottom": 386.015625
+          },
+          {
+            "top": 297.27459716796875,
+            "bottom": 369.20977783203125,
+            "zoneTop": 249.6875,
+            "zoneBottom": 386.015625
+          },
+          {
+            "top": 295.078125,
+            "bottom": 371.40625,
+            "zoneTop": 249.6875,
+            "zoneBottom": 386.015625
+          },
+          {
+            "top": 297.27459716796875,
+            "bottom": 369.20977783203125,
+            "zoneTop": 249.6875,
+            "zoneBottom": 386.015625
+          },
+          {
+            "top": 295.078125,
+            "bottom": 371.40625,
+            "zoneTop": 249.6875,
+            "zoneBottom": 386.015625
+          },
+          {
+            "top": 423.015625,
+            "bottom": 494.015625,
+            "zoneTop": 394.015625,
+            "zoneBottom": 509.015625
+          },
+          {
+            "top": 423.015625,
+            "bottom": 494.015625,
+            "zoneTop": 394.015625,
+            "zoneBottom": 509.015625
+          },
+          {
+            "top": 423.015625,
+            "bottom": 494.015625,
+            "zoneTop": 394.015625,
+            "zoneBottom": 509.015625
+          },
+          {
+            "top": 423.015625,
+            "bottom": 494.015625,
+            "zoneTop": 394.015625,
+            "zoneBottom": 509.015625
+          },
+          {
+            "top": 423.015625,
+            "bottom": 494.015625,
+            "zoneTop": 394.015625,
+            "zoneBottom": 509.015625
+          },
+          {
+            "top": 423.015625,
+            "bottom": 494.015625,
+            "zoneTop": 394.015625,
+            "zoneBottom": 509.015625
+          },
+          {
+            "top": 423.015625,
+            "bottom": 494.015625,
+            "zoneTop": 394.015625,
+            "zoneBottom": 509.015625
+          }
+        ]
+      }
+    },
+    {
+      "size": {
+        "width": 1093,
+        "height": 544
+      },
+      "iy": {
+        "height": 544,
+        "bottom": 544,
+        "scroll": 544,
+        "client": 544,
+        "cards": [
+          {
+            "top": 111.796875,
+            "bottom": 177,
+            "zoneTop": 82.59375,
+            "zoneBottom": 201.796875
+          },
+          {
+            "top": 280.40625,
+            "bottom": 345.609375,
+            "zoneTop": 255.796875,
+            "zoneBottom": 375
+          },
+          {
+            "top": 450.984375,
+            "bottom": 516.203125,
+            "zoneTop": 421.78125,
+            "zoneBottom": 541
+          },
+          {
+            "top": 450.984375,
+            "bottom": 516.203125,
+            "zoneTop": 421.78125,
+            "zoneBottom": 541
+          },
+          {
+            "top": 446.390625,
+            "bottom": 511.609375,
+            "zoneTop": 421.78125,
+            "zoneBottom": 541
+          },
+          {
+            "top": 450.984375,
+            "bottom": 516.203125,
+            "zoneTop": 421.78125,
+            "zoneBottom": 541
+          },
+          {
+            "top": 450.984375,
+            "bottom": 516.203125,
+            "zoneTop": 421.78125,
+            "zoneBottom": 541
+          },
+          {
+            "top": 450.984375,
+            "bottom": 516.203125,
+            "zoneTop": 421.78125,
+            "zoneBottom": 541
+          },
+          {
+            "top": 450.984375,
+            "bottom": 516.203125,
+            "zoneTop": 421.78125,
+            "zoneBottom": 541
+          },
+          {
+            "top": 450.984375,
+            "bottom": 516.203125,
+            "zoneTop": 421.78125,
+            "zoneBottom": 541
+          },
+          {
+            "top": 446.390625,
+            "bottom": 511.609375,
+            "zoneTop": 421.78125,
+            "zoneBottom": 541
+          }
+        ]
+      },
+      "mtg": {
+        "bottom": 544,
+        "client": 542,
+        "scroll": 542,
+        "cards": [
+          {
+            "top": 140.3916473388672,
+            "bottom": 174.2021026611328,
+            "zoneTop": 95.375,
+            "zoneBottom": 191.25
+          },
+          {
+            "top": 139.359375,
+            "bottom": 175.234375,
+            "zoneTop": 95.375,
+            "zoneBottom": 191.25
+          },
+          {
+            "top": 140.3916473388672,
+            "bottom": 174.2021026611328,
+            "zoneTop": 95.375,
+            "zoneBottom": 191.25
+          },
+          {
+            "top": 139.359375,
+            "bottom": 175.234375,
+            "zoneTop": 95.375,
+            "zoneBottom": 191.25
+          },
+          {
+            "top": 140.3916473388672,
+            "bottom": 174.2021026611328,
+            "zoneTop": 95.375,
+            "zoneBottom": 191.25
+          },
+          {
+            "top": 139.359375,
+            "bottom": 175.234375,
+            "zoneTop": 95.375,
+            "zoneBottom": 191.25
+          },
+          {
+            "top": 140.3916473388672,
+            "bottom": 174.2021026611328,
+            "zoneTop": 95.375,
+            "zoneBottom": 191.25
+          },
+          {
+            "top": 139.359375,
+            "bottom": 175.234375,
+            "zoneTop": 95.375,
+            "zoneBottom": 191.25
+          },
+          {
+            "top": 140.3916473388672,
+            "bottom": 174.2021026611328,
+            "zoneTop": 95.375,
+            "zoneBottom": 191.25
+          },
+          {
+            "top": 139.359375,
+            "bottom": 175.234375,
+            "zoneTop": 95.375,
+            "zoneBottom": 191.25
+          },
+          {
+            "top": 244.2666473388672,
+            "bottom": 278.07708740234375,
+            "zoneTop": 199.25,
+            "zoneBottom": 295.125
+          },
+          {
+            "top": 243.234375,
+            "bottom": 279.109375,
+            "zoneTop": 199.25,
+            "zoneBottom": 295.125
+          },
+          {
+            "top": 244.2666473388672,
+            "bottom": 278.07708740234375,
+            "zoneTop": 199.25,
+            "zoneBottom": 295.125
+          },
+          {
+            "top": 243.234375,
+            "bottom": 279.109375,
+            "zoneTop": 199.25,
+            "zoneBottom": 295.125
+          },
+          {
+            "top": 244.2666473388672,
+            "bottom": 278.07708740234375,
+            "zoneTop": 199.25,
+            "zoneBottom": 295.125
+          },
+          {
+            "top": 243.234375,
+            "bottom": 279.109375,
+            "zoneTop": 199.25,
+            "zoneBottom": 295.125
+          },
+          {
+            "top": 244.2666473388672,
+            "bottom": 278.07708740234375,
+            "zoneTop": 199.25,
+            "zoneBottom": 295.125
+          },
+          {
+            "top": 243.234375,
+            "bottom": 279.109375,
+            "zoneTop": 199.25,
+            "zoneBottom": 295.125
+          },
+          {
+            "top": 244.2666473388672,
+            "bottom": 278.07708740234375,
+            "zoneTop": 199.25,
+            "zoneBottom": 295.125
+          },
+          {
+            "top": 243.234375,
+            "bottom": 279.109375,
+            "zoneTop": 199.25,
+            "zoneBottom": 295.125
+          },
+          {
+            "top": 331.421875,
+            "bottom": 383.3125,
+            "zoneTop": 303.125,
+            "zoneBottom": 399.015625
+          },
+          {
+            "top": 331.421875,
+            "bottom": 383.3125,
+            "zoneTop": 303.125,
+            "zoneBottom": 399.015625
+          },
+          {
+            "top": 331.421875,
+            "bottom": 383.3125,
+            "zoneTop": 303.125,
+            "zoneBottom": 399.015625
+          },
+          {
+            "top": 331.421875,
+            "bottom": 383.3125,
+            "zoneTop": 303.125,
+            "zoneBottom": 399.015625
+          },
+          {
+            "top": 331.421875,
+            "bottom": 383.3125,
+            "zoneTop": 303.125,
+            "zoneBottom": 399.015625
+          },
+          {
+            "top": 331.421875,
+            "bottom": 383.3125,
+            "zoneTop": 303.125,
+            "zoneBottom": 399.015625
+          },
+          {
+            "top": 331.421875,
+            "bottom": 383.3125,
+            "zoneTop": 303.125,
+            "zoneBottom": 399.015625
+          }
+        ]
+      }
+    }
+  ]
+}

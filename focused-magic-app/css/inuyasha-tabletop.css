@@ -19,3 +19,22 @@
 .iy-attack-modal{z-index:2200}.iy-attack-panel{width:min(620px,96vw);background:#17100c;border-color:#8e603e}.iy-attack-panel h2{margin:0 0 4px;color:#f2d8ae}.iy-attack-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:9px 0}.iy-attack-grid label{display:grid;gap:3px;color:#c4b0a1;font-size:10px}.iy-color-row{display:flex;gap:5px;flex-wrap:wrap}.iy-color-row button{font-size:10px;padding:6px 9px}.iy-color-row button.active{outline:2px solid #f2c36d}.iy-attack-note{font-size:10px;line-height:1.4;color:#baa99d;border-left:3px solid #9c704a;padding:6px 8px;background:#21150f}
 .iy-log-drawer{position:absolute;left:8px;bottom:8px;z-index:20}.iy-log-drawer details{border:1px solid #684a35;background:#0d0806ed;border-radius:8px;padding:4px}.iy-log-drawer summary{cursor:pointer;font-size:9px;color:#c7b2a2}.iy-log{width:min(430px,88vw);height:180px;overflow:auto;white-space:pre-wrap;margin-top:4px;font:10px/1.35 ui-monospace,SFMono-Regular,Menlo,monospace;color:#e3d7cf}
 @media(max-width:820px){.iy-topbar{height:auto;min-height:58px;grid-template-columns:1fr auto}.iy-config{grid-column:1/-1;overflow-x:auto}.iy-table{height:calc(100vh - 92px);grid-template-rows:auto minmax(92px,.85fr) 70px minmax(98px,.95fr) auto minmax(120px,1fr)}.iy-card{width:70px}.iy-card-face{width:70px;height:98px}.iy-hand-zone .iy-card{width:76px}.iy-hand-zone .iy-card-face{width:76px;height:106px}.iy-center{grid-template-columns:1fr}.iy-centerbox{grid-column:1}.iy-inspector{width:min(240px,72vw)}.iy-card.expended{margin:14px 14px 14px 0}.iy-title .sub{display:none}.iy-config select{max-width:180px}}
+
+/* Fit all three zones inside the available browser viewport. */
+.iy-game-modal{inset:0;height:100dvh;overflow:hidden!important}
+.iy-game-panel{height:100dvh!important;max-height:100dvh!important;display:flex;flex-direction:column;box-sizing:border-box;min-height:0}
+.iy-topbar{height:auto;flex:0 0 auto;box-sizing:border-box;min-width:0}
+.iy-title,.iy-config,.iy-config label{min-width:0}.iy-config select{width:min(22vw,260px);max-width:100%}
+.iy-table{height:auto!important;flex:1;min-height:0;box-sizing:border-box;grid-template-rows:34px minmax(0,1fr) 64px minmax(0,1fr) auto minmax(100px,1fr)}
+.iy-zone{overflow:hidden;display:flex;flex-direction:column;container-type:size;box-sizing:border-box}
+.iy-zone-title{position:static;flex-shrink:0}
+.iy-cards,.iy-hand-zone .iy-cards{flex:1;min-height:0;min-width:0;flex-wrap:nowrap;justify-content:center;align-items:center;padding:4px;gap:5px;box-sizing:border-box}
+.iy-card,.iy-hand-zone .iy-card{width:auto;min-width:0;flex:0 1 88px;max-width:88px}
+.iy-card-face,.iy-hand-zone .iy-card-face{width:100%;height:clamp(40px,calc(100cqh - 42px),123px);max-height:123px;box-sizing:border-box}
+.iy-card.expended{transform:rotate(10deg) scale(.85);margin:0}.iy-card.expended:hover{transform:rotate(10deg) scale(.9)}
+.iy-card-name{max-height:20px;font-size:8px}
+.iy-player-strip{min-width:0;min-height:0;box-sizing:border-box}.iy-player-id{max-width:25%;font-size:10px}.iy-toolbar{flex:1;gap:3px;justify-content:flex-end}.iy-toolbar button{padding:4px;font-size:9px}.iy-status{width:100%;max-width:none;font-size:9px}
+.iy-centerbox{min-height:0}.iy-topbar .sub{display:none}
+@media(max-height:620px){.iy-table{grid-template-rows:28px minmax(0,1fr) 50px minmax(0,1fr) auto minmax(85px,1fr);gap:2px;padding:3px}.iy-topbar{padding:3px}.iy-title h2{font-size:13px}.iy-centerbox{padding:3px}.iy-attack-summary{font-size:9px}.iy-toolbar button{font-size:8px;padding:3px}.iy-player-strip{font-size:9px}}
+
+.iy-inspector{top:60px;max-height:calc(100dvh - 230px);width:min(210px,30vw)}.iy-inspector img{max-height:calc(100dvh - 350px);min-height:60px}
