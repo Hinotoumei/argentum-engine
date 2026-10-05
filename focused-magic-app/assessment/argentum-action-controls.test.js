@@ -211,3 +211,13 @@ test('Bowmasters target decisions use the native legalTargets map and requiremen
  const human=await h.api.decisionResponse(d,'human');assert.deepEqual(JSON.parse(JSON.stringify(human.selectedTargets)),{2:['opp']});
 });
 test('automatic target choice refuses an impossible native requirement',()=>{const h=harness();assert.equal(h.api.decisionResponseSafeForState({type:'ChooseTargetsDecision',id:'empty',targetRequirements:[{index:0,minTargets:1}],legalTargets:{0:[]}},'auto',h.state),null);});
+
+test('human fetch activation pays the provider exact source sacrifice',async()=>{
+ const h=harness();const info={action:{type:'ActivateAbility',sourceId:'tarn',playerId:'me',abilityId:'fetch',costPayment:{existing:'preserved'}},additionalCostInfo:{costType:'SacrificeSelf',validSacrificeTargets:['tarn'],sacrificeCount:1}};
+ await h.api.submitLegalAction(info);assert.deepEqual(h.sent[0].costPayment,{existing:'preserved',sacrificedPermanents:['tarn']});
+});
+test('AI fetch activation pays source sacrifice while ambiguous sacrifice stays blocked',()=>{
+ const h=harness();const info={action:{type:'ActivateAbility',sourceId:'tarn',playerId:'me',abilityId:'fetch'},additionalCostInfo:{costType:'SacrificeSelf',validSacrificeTargets:['tarn'],sacrificeCount:1}};
+ assert.deepEqual(JSON.parse(JSON.stringify(h.api.completeActionForBot(info,h.state))).costPayment,{sacrificedPermanents:['tarn']});
+ info.additionalCostInfo.validSacrificeTargets=['other'];assert.equal(h.api.completeActionForBot(info,h.state),null);
+});

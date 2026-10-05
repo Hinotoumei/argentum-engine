@@ -798,11 +798,19 @@ SIDEBOARD:
     collectModalTargets(action,enumeration,()=>selections[next++],chosenTarget);
   }
 
+  function fixedSelfSacrifice(info){
+    const cost=info?.additionalCostInfo,action=info?.action;
+    return cost?.costType==='SacrificeSelf' && action?.type==='ActivateAbility' && (cost.sacrificeCount??1)===1 && cost.validSacrificeTargets?.length===1 && cost.validSacrificeTargets[0]===action.sourceId;
+  }
+  function applySelfSacrifice(action,info){
+    if(fixedSelfSacrifice(info))action.costPayment={...(action.costPayment||{}),sacrificedPermanents:[action.sourceId]};
+  }
   async function submitLegalAction(info) {
     try {
       if(!active?.interactionEpoch)throw new Error('No live interaction epoch; request a resync first.');
       const actionSession=active, actionEpoch=JSON.stringify(active.interactionEpoch);
       const action=clone(info.action);
+      applySelfSacrifice(action,info);
       if(/DeclareAttackers/.test(info.actionType||action.type||'')){
         const valid=info.validAttackers||[],mandatory=info.mandatoryAttackers||[];
         const chosen=await pickActionTargets('Choose attackers (leave empty to attack with none)',valid,mandatory.length,valid.length);
@@ -940,12 +948,13 @@ SIDEBOARD:
   function actionNeedsUnsupportedAutomation(info) {
     // Cast-time modes and targets come from the provider's enumeration. Resource-heavy
     // payments stay fail-closed until a generic chooser can complete their payloads.
-    return !!((info?.additionalCostInfo && info.additionalCostInfo.costType!=='PayXLife') || info?.hasConvoke || info?.hasDelve || info?.hasHarmonize || info?.hasTapForGeneric || info?.requiresDamageDistribution);
+    return !!((info?.additionalCostInfo && info.additionalCostInfo.costType!=='PayXLife' && !fixedSelfSacrifice(info)) || info?.hasConvoke || info?.hasDelve || info?.hasHarmonize || info?.hasTapForGeneric || info?.requiresDamageDistribution);
   }
 
   function completeActionForBot(info, state) {
     if (!info || info.isAffordable === false || actionNeedsUnsupportedAutomation(info)) return null;
     const action=clone(info.action);
+      applySelfSacrifice(action,info);
     if (!action || !state) return null;
     const me=state.viewingPlayerId;
     const opp=state.players?.find(p=>p.playerId!==me)?.playerId;
