@@ -38,3 +38,5 @@
 @media(max-height:620px){.iy-table{grid-template-rows:28px minmax(0,1fr) 50px minmax(0,1fr) auto minmax(85px,1fr);gap:2px;padding:3px}.iy-topbar{padding:3px}.iy-title h2{font-size:13px}.iy-centerbox{padding:3px}.iy-attack-summary{font-size:9px}.iy-toolbar button{font-size:8px;padding:3px}.iy-player-strip{font-size:9px}}
 
 .iy-inspector{top:60px;max-height:calc(100dvh - 230px);width:min(210px,30vw)}.iy-inspector img{max-height:calc(100dvh - 350px);min-height:60px}
+
+.iy-card,.iy-hand-zone .iy-card{flex-basis:clamp(28px,calc((100cqh - 42px)*.714),88px);max-width:clamp(28px,calc((100cqh - 42px)*.714),88px)}.iy-card-face img{object-fit:contain}

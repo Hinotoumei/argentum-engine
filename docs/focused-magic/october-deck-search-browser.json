@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "filteredByName": true,
+  "selectionRetainedAcrossFilters": true,
+  "result": {
+    "type": "CardsSelectedResponse",
+    "decisionId": "search-ui",
+    "selectedCards": [
+      "a",
+      "c"
+    ]
+  }
+}

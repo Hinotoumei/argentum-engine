@@ -9,7 +9,7 @@ function harness(answers=[]){
   const window={addEventListener(){},__ARGENTUM_TEST_CHOICES:answers};
   const context={window,document:{body:{contains(){return false}},getElementById:id=>elements[id]||null,createElement:()=>({dataset:{},classList:{add(){},toggle(){}},innerHTML:'',querySelector(){return null}})},console,setTimeout,clearTimeout};
   vm.createContext(context);
-  const source=fs.readFileSync(process.env.ARGENTUM_TEST_SOURCE||require.resolve('../js/provider/argentum.js'),'utf8').replace('  window.FocusedMagicArgentum={','  window.__test={decisionResponse,providerTableCard,playerEffectsSummary,submitLegalAction,completeActionForBot,setActive(value){active=value;}};\n  window.FocusedMagicArgentum={');
+  const source=fs.readFileSync(process.env.ARGENTUM_TEST_SOURCE||require.resolve('../js/provider/argentum.js'),'utf8').replace('  window.FocusedMagicArgentum={','  window.__test={decisionResponseSafeForState,decisionResponse,providerTableCard,playerEffectsSummary,submitLegalAction,completeActionForBot,setActive(value){active=value;}};\n  window.FocusedMagicArgentum={');
   vm.runInContext(source,context);
   const state={viewingPlayerId:'me',players:[{playerId:'me',life:20},{playerId:'opp',life:20}],cards:{bear:{name:'Bear',controllerId:'opp'},spell:{name:'Spell',controllerId:'opp'}},zones:[{zoneId:{zoneType:'BATTLEFIELD'},cardIds:['bear']},{zoneId:{zoneType:'STACK'},cardIds:['spell']}]};
   window.__test.setActive({interactionEpoch:{id:'epoch'},state,submitAction:action=>sent.push(JSON.parse(JSON.stringify(action)))});
@@ -204,3 +204,10 @@ test('an X chooser cannot submit into a replacement session',async()=>{
  h.api.setActive({interactionEpoch:{id:'replacement'},state:h.state,submitAction:action=>h.sent.push(action)});
  await pending;assert.equal(h.sent.length,0);assert.match(h.elements.argentumStatus.textContent,/game changed during selection/);
 });
+
+test('Bowmasters target decisions use the native legalTargets map and requirement index',async()=>{
+ const h=harness(['1']);const d={type:'ChooseTargetsDecision',id:'bowmasters',targetRequirements:[{index:2,minTargets:1,maxTargets:1,description:'Any target'}],legalTargets:{2:['opp','bear']}};
+ const response=h.api.decisionResponseSafeForState(d,'auto',h.state);assert.deepEqual(JSON.parse(JSON.stringify(response)),{type:'TargetsResponse',decisionId:'bowmasters',selectedTargets:{2:['opp']}});
+ const human=await h.api.decisionResponse(d,'human');assert.deepEqual(JSON.parse(JSON.stringify(human.selectedTargets)),{2:['opp']});
+});
+test('automatic target choice refuses an impossible native requirement',()=>{const h=harness();assert.equal(h.api.decisionResponseSafeForState({type:'ChooseTargetsDecision',id:'empty',targetRequirements:[{index:0,minTargets:1}],legalTargets:{0:[]}},'auto',h.state),null);});

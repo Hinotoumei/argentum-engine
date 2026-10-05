@@ -1,0 +1,276 @@
+{
+  "passed": true,
+  "scope": "Native AI casts Bowmasters, chooses ETB target, damage/amass resolve and human priority resumes",
+  "etb": {
+    "errors": [],
+    "decisions": [
+      {
+        "type": "ChooseTargetsDecision",
+        "id": "c22a6479-7c6c-4a4b-80af-7d0ddae17601:r0",
+        "playerId": "player-2",
+        "prompt": "Choose targets for Orcish Bowmasters",
+        "context": {
+          "sourceId": "card-1018",
+          "sourceName": "Orcish Bowmasters",
+          "phase": "CASTING",
+          "triggeringEntityId": null,
+          "inlineOnTrigger": false,
+          "effectHint": "Deal 1 damage to target. amass Orcs 1",
+          "subjectEntityId": null,
+          "abilityIdentity": null
+        },
+        "targetRequirements": [
+          {
+            "index": 0,
+            "description": "any target",
+            "minTargets": 1,
+            "maxTargets": 1,
+            "sameOwner": false,
+            "totalManaValueAtMost": null,
+            "differentNames": false,
+            "differentControllers": false,
+            "onePerCardType": false,
+            "mustDifferFromEarlier": false
+          }
+        ],
+        "legalTargets": {
+          "0": [
+            "player-1",
+            "player-2",
+            "card-1018"
+          ]
+        },
+        "canCancel": false
+      },
+      {
+        "type": "ChooseTargetsDecision",
+        "id": "c22a6479-7c6c-4a4b-80af-7d0ddae17601:r0",
+        "playerId": "player-2",
+        "prompt": "Choose targets for Orcish Bowmasters",
+        "context": {
+          "sourceId": "card-1018",
+          "sourceName": "Orcish Bowmasters",
+          "phase": "CASTING",
+          "triggeringEntityId": null,
+          "inlineOnTrigger": false,
+          "effectHint": "Deal 1 damage to target. amass Orcs 1",
+          "subjectEntityId": null,
+          "abilityIdentity": null
+        },
+        "targetRequirements": [
+          {
+            "index": 0,
+            "description": "any target",
+            "minTargets": 1,
+            "maxTargets": 1,
+            "sameOwner": false,
+            "totalManaValueAtMost": null,
+            "differentNames": false,
+            "differentControllers": false,
+            "onePerCardType": false,
+            "mustDifferFromEarlier": false
+          }
+        ],
+        "legalTargets": {
+          "0": [
+            "player-1",
+            "player-2",
+            "card-1018"
+          ]
+        },
+        "canCancel": false
+      }
+    ],
+    "players": [
+      {
+        "playerId": "player-1",
+        "name": "Human",
+        "life": 19,
+        "poisonCounters": 0,
+        "handSize": 2,
+        "maxHandSize": 7,
+        "librarySize": 14,
+        "graveyardSize": 0,
+        "exileSize": 0,
+        "landsPlayedThisTurn": 0,
+        "hasLost": false,
+        "manaPool": {
+          "white": 0,
+          "blue": 0,
+          "black": 0,
+          "red": 0,
+          "green": 0,
+          "colorless": 0,
+          "restrictedMana": []
+        },
+        "activeEffects": [],
+        "commanderDamage": [],
+        "speed": 0,
+        "energyCounters": 0,
+        "teamIndex": null,
+        "teamSharedLife": false,
+        "teamSharedTurns": false
+      },
+      {
+        "playerId": "player-2",
+        "name": "Bowmasters AI",
+        "life": 20,
+        "poisonCounters": 0,
+        "handSize": 0,
+        "maxHandSize": 7,
+        "librarySize": 15,
+        "graveyardSize": 0,
+        "exileSize": 0,
+        "landsPlayedThisTurn": 0,
+        "hasLost": false,
+        "manaPool": {
+          "white": 0,
+          "blue": 0,
+          "black": 0,
+          "red": 0,
+          "green": 0,
+          "colorless": 0,
+          "restrictedMana": []
+        },
+        "activeEffects": [],
+        "commanderDamage": [],
+        "speed": 0,
+        "energyCounters": 0,
+        "teamIndex": null,
+        "teamSharedLife": false,
+        "teamSharedTurns": false
+      }
+    ],
+    "cards": [
+      {
+        "id": "e1",
+        "name": "Orc Army",
+        "manaCost": "",
+        "manaValue": 0,
+        "typeLine": "Creature — Orc Army",
+        "cardTypes": [
+          "CREATURE"
+        ],
+        "subtypes": [
+          "Orc",
+          "Army"
+        ],
+        "colors": [
+          "BLACK"
+        ],
+        "grantedColors": [],
+        "oracleText": "",
+        "power": 1,
+        "toughness": 1,
+        "basePower": 0,
+        "baseToughness": 0,
+        "damage": null,
+        "keywords": [],
+        "abilityFlags": [],
+        "protections": [],
+        "hexproofFromColors": [],
+        "hexproofFromMonocolored": false,
+        "hexproofFromMulticolored": false,
+        "counters": {
+          "PLUS_ONE_PLUS_ONE": 1
+        },
+        "isTapped": false,
+        "hasSummoningSickness": true,
+        "isTransformed": false,
+        "isExerted": false,
+        "isPhasedOut": false,
+        "isAttacking": false,
+        "isBlocking": false,
+        "attackingTarget": null,
+        "blockingTarget": null,
+        "controllerId": "player-2",
+        "protectorId": null,
+        "ownerId": "player-2",
+        "isToken": true,
+        "isCommander": false,
+        "isRingBearer": false,
+        "pairedWithId": null,
+        "zone": {
+          "ownerId": "player-2",
+          "zoneType": "Battlefield"
+        },
+        "attachedTo": null,
+        "attachments": [],
+        "linkedExile": [],
+        "isFaceDown": false,
+        "faceDownMode": null,
+        "isSuspected": false,
+        "isSolved": false,
+        "isRenowned": false,
+        "saddleRequirement": null,
+        "isSaddled": false,
+        "isPlotted": false,
+        "isParadigm": false,
+        "isSuspended": false,
+        "isPrepared": false,
+        "isPreparedSpell": false,
+        "isWarped": false,
+        "isDashed": false,
+        "morphCost": null,
+        "targets": [],
+        "imageUri": "https://cards.scryfall.io/normal/front/2/f/2f8b43e8-dd89-452e-b572-8559e19fdea2.jpg?1783916049",
+        "imageRotation": 0,
+        "activeEffects": [],
+        "rulings": [],
+        "optionalCostLabel": null,
+        "castProvenanceLabel": null,
+        "costSacrificeLabel": null,
+        "manaPaidCost": null,
+        "giftPromised": false,
+        "wasBlightPaid": false,
+        "chosenX": null,
+        "abilityIdentity": null,
+        "copyIndex": null,
+        "copyTotal": null,
+        "chosenCreatureType": null,
+        "chosenColor": null,
+        "chosenMode": null,
+        "chosenCardName": null,
+        "chosenCardType": null,
+        "triggeringEntityId": null,
+        "sourceZone": null,
+        "sacrificedCreatureTypes": null,
+        "stackText": null,
+        "chosenModeDescriptions": [],
+        "perModeTargets": [],
+        "revealedName": null,
+        "revealedImageUri": null,
+        "playableFromExile": false,
+        "copyOf": null,
+        "nonLegendaryCopy": false,
+        "legendaryByEffect": false,
+        "grantedSubtypes": [],
+        "grantedCardTypes": [],
+        "damageDistribution": null,
+        "sagaTotalChapters": null,
+        "classLevel": null,
+        "classMaxLevel": null,
+        "thresholdInfo": null,
+        "deliriumInfo": null,
+        "isDoubleFaced": false,
+        "currentFace": null,
+        "backFaceName": null,
+        "backFaceTypeLine": null,
+        "backFaceOracleText": null,
+        "backFaceImageUri": null,
+        "backFacePower": null,
+        "backFaceToughness": null,
+        "backFaceKeywords": [],
+        "planeswalkerAbilities": null,
+        "isRoom": false,
+        "isLandscapeFace": false,
+        "backFaceIsLandscape": false,
+        "cardFaces": [],
+        "castFaceIndex": null,
+        "impending": null,
+        "evoke": null,
+        "bestow": null
+      }
+    ]
+  }
+}

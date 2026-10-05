@@ -74,3 +74,5 @@
 @media(max-height:620px){.argentum-tabletop-board{grid-template-rows:minmax(0,1fr) minmax(0,1fr) minmax(85px,1fr)}.argentum-tabletop-actions{max-height:45px}.argentum-tabletop-topbar{min-height:30px}.argentum-tabletop-footer button{padding:7px}.argentum-tabletop-panel{gap:3px;padding:6px}.argentum-tabletop-playerhead{font-size:11px}.argentum-tabletop-zone-title{font-size:9px}}
 
 .argentum-tabletop-player,.argentum-tabletop-hand,.argentum-tabletop-stack{container-type:size}.argentum-tabletop-card{height:clamp(28px,calc(100cqh - 46px),112px);flex-basis:clamp(20px,calc((100cqh - 46px)*.714),80px);max-width:clamp(20px,calc((100cqh - 46px)*.714),80px)}.argentum-tabletop-hand .argentum-tabletop-card{height:clamp(35px,calc(100cqh - 30px),112px);flex-basis:clamp(25px,calc((100cqh - 30px)*.714),80px);max-width:clamp(25px,calc((100cqh - 30px)*.714),80px)}
+
+.argentum-deck-search{width:100%;box-sizing:border-box;position:sticky;top:0;background:#142231;padding:10px;border:1px solid #8799ad;border-radius:6px;color:white;z-index:2}.argentum-target-dialog label[hidden]{display:none!important}

@@ -587,7 +587,7 @@ SIDEBOARD:
     noPromptFallback();
   }
 
-  async function pickActionTargets(promptText, ids, min=1, max=1, cardInfo={}) {
+  async function pickActionTargets(promptText, ids, min=1, max=1, cardInfo={}, {searchable=false}={}) {
     const options=[...new Set(ids||[])];
     if(options.length<min)throw new Error(`${promptText}: no legal targets.`);
     if(max===0)return [];
@@ -595,6 +595,7 @@ SIDEBOARD:
     if(!hasNativeDialog(dialog))return pickIds(promptText,options,min,max,cardInfo);
     dialog.className='argentum-target-dialog';
     const heading=document.createElement('h3');heading.textContent=promptText;dialog.appendChild(heading);
+    if(searchable){const search=document.createElement('input');search.type='search';search.placeholder='Search your deck by card name';search.setAttribute('aria-label','Search your deck');search.className='argentum-deck-search';search.oninput=()=>{const query=search.value.trim().toLocaleLowerCase();for(const row of dialog.querySelectorAll('label'))row.hidden=!row.dataset.searchName.includes(query);};dialog.append(search);}
     const help=document.createElement('p');help.textContent=`Choose ${min===max?min:`${min}-${max}`} card(s). Nothing is selected automatically.`;dialog.appendChild(help);
     return await new Promise((resolve,reject)=>{
       const selected=new Set();
@@ -603,7 +604,7 @@ SIDEBOARD:
       for(const id of options){
         const label=document.createElement('label');
         const input=document.createElement('input');input.type='checkbox';
-        const details=cardInfo[id]||active?.state?.cards?.[id]||{};
+        const details=cardInfo[id]||active?.state?.cards?.[id]||{};label.dataset.searchName=(details.name||entityLabel(id,details)).toLocaleLowerCase();
         const text=document.createElement('span');text.textContent=entityLabel(id,details).replace(/ \[[^\]]+\]$/,'');
         const art=details.imageUri||details.imageUrl||cardImageCache.get(details.name);
         if(art){const img=document.createElement('img');img.src=art;img.alt=details.name||'Card';img.className='argentum-choice-art';label.appendChild(img);}
@@ -723,6 +724,7 @@ SIDEBOARD:
     const dialog=document.createElement('dialog'); if(!hasNativeDialog(dialog))noPromptFallback();
     dialog.className='argentum-target-dialog';
     const heading=document.createElement('h3');heading.textContent=promptText;dialog.appendChild(heading);
+    if(searchable){const search=document.createElement('input');search.type='search';search.placeholder='Search your deck by card name';search.setAttribute('aria-label','Search your deck');search.className='argentum-deck-search';search.oninput=()=>{const query=search.value.trim().toLocaleLowerCase();for(const row of dialog.querySelectorAll('label'))row.hidden=!row.dataset.searchName.includes(query);};dialog.append(search);}
     const help=document.createElement('p');help.textContent=`Choose ${min===max?min:`${min}-${max}`} mode${max===1?'':'s'}.`;dialog.appendChild(help);
     return await new Promise((resolve,reject)=>{
       const selected=new Set();const confirm=document.createElement('button');confirm.type='button';confirm.textContent='Confirm modes';confirm.disabled=min>0;
@@ -854,12 +856,12 @@ SIDEBOARD:
     if(type==='SelectCardsDecision' || type==='SearchLibraryDecision'){
       const options=decision.options||[]; const min=decision.minSelections??decision.minCards??0,max=decision.maxSelections??decision.maxCards??options.length;
       const prompt=[decision.context?.sourceName,decision.prompt||'Choose cards'].filter(Boolean).join(' — ');
-      const picks=ai?options.slice(0,min):await pickActionTargets(prompt,options,min,max,decision.cardInfo||{});
+      const picks=ai?options.slice(0,min):await pickActionTargets(prompt,options,min,max,decision.cardInfo||{},{searchable:type==='SearchLibraryDecision'});
       return {type:'CardsSelectedResponse',decisionId:id,selectedCards:picks};
     }
     if(type==='ChooseTargetsDecision'){
       const reqs=decision.requirements||decision.targetRequirements||[]; const selectedTargets={};
-      for(const [i,r] of reqs.entries())selectedTargets[i]=ai?(r.validTargets||[]).slice(0,r.minTargets??1):await pickActionTargets(r.description||decision.prompt||'Choose targets',r.validTargets||[],r.minTargets??1,r.maxTargets??1);
+      for(const [i,r] of reqs.entries()){const index=r.index??i,valid=decision.legalTargets?.[index]||r.validTargets||[];selectedTargets[index]=ai?valid.slice(0,r.minTargets??1):await pickActionTargets(r.description||decision.prompt||'Choose targets',valid,r.minTargets??1,r.maxTargets??1);}
       return {type:'TargetsResponse',decisionId:id,selectedTargets};
     }
     if(type==='OrderObjectsDecision' || type==='ReorderLibraryDecision') return {type:'OrderedResponse',decisionId:id,orderedObjects:[...(decision.objects||decision.cards||[])]};
@@ -899,7 +901,7 @@ SIDEBOARD:
       if(type==='ChooseOptionDecision')return {type:'OptionChosenResponse',decisionId:id,optionIndex:0};
       if(type==='ChooseModeDecision')return {type:'ModesChosenResponse',decisionId:id,selectedModes:[0]};
       if(type==='SelectCardsDecision'||type==='SearchLibraryDecision'){const options=d.options||[],min=d.minSelections??d.minCards??0;return {type:'CardsSelectedResponse',decisionId:id,selectedCards:options.slice(0,min)};}
-      if(type==='ChooseTargetsDecision'){const reqs=d.requirements||d.targetRequirements||[],selectedTargets={};reqs.forEach((r,i)=>{selectedTargets[i]=(r.validTargets||[]).slice(0,r.minTargets??1)});return {type:'TargetsResponse',decisionId:id,selectedTargets};}
+      if(type==='ChooseTargetsDecision'){const reqs=d.requirements||d.targetRequirements||[],selectedTargets={};for(const [i,r] of reqs.entries()){const index=r.index??i,valid=d.legalTargets?.[index]||r.validTargets||[],min=r.minTargets??1;if(valid.length<min)return null;selectedTargets[index]=valid.slice(0,min);}return {type:'TargetsResponse',decisionId:id,selectedTargets};}
       if(type==='OrderObjectsDecision'||type==='ReorderLibraryDecision')return {type:'OrderedResponse',decisionId:id,orderedObjects:[...(d.objects||d.cards||[])]};
       if(type==='DistributeDecision'){const targets=d.targets||[];let left=d.totalAmount||0,distribution={};for(const [i,t] of targets.entries()){const min=d.minPerTarget||0;distribution[t]=min;left-=min;if(i===targets.length-1)distribution[t]+=Math.max(0,left);}return {type:'DistributionResponse',decisionId:id,distribution};}
       if(type==='AssignDamageDecision')return {type:'DamageAssignmentResponse',decisionId:id,assignments:d.defaultAssignments||{}};
