@@ -93,3 +93,10 @@ Automation deduplication now includes pending decisions and legal actions, allow
 ## Recoverable command rejection
 
 INVALID_ACTION no longer invokes fatal provider fallback or closes Constructed. Rejected commands display the reason and request authoritative resync. Other error codes retain fatal handling. 62 frontend regressions passed. Native live Chrome cast of Monument to Endurance without mana returned Not enough mana to cast this spell; board remained visible and socket open. Exact tapped-land/two-Petal position has not yet been reproduced.
+
+
+## October 5 discard, Converter and private library UI
+
+Choices show card art, names, source and explicit discard confirmation. Card action menus persist through state refreshes. Library piles remain face down; their dialogs show only provider-projected known identities and positions, with a known-top label. Currency Converter action help explains its exile then separate tap-to-convert sequence and the need to untap after its draw/discard tap ability.
+
+Live production scenario acceptance: Faithless Looting selects two pictured lands; declining Leng and accepting Converter exile then activating Converter returns a linked land and creates a Treasure. Separate Leng acceptance returns discarded lands to library, identifies the top privately, verifies opponent projection excludes those identities and checks the pile dialog. 62 frontend checks passed. See OCTOBER-CHOICE-ACCEPTANCE-2026-10-05.json and raw stage records. No engine changes were necessary for these observed paths. User historical missing-Treasure sequence is not reproduced; the complete tested sequence does create Treasure. Public Pages deployment remains pending ZIP upload.

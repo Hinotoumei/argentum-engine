@@ -397,8 +397,9 @@ SIDEBOARD:
   }
   function fillTableZone(id,state,zone){const el=$(id);if(!el)return;el.innerHTML='';if(!zone){el.innerHTML='<span class="sub">—</span>';return;}if(zone.isVisible===false){el.innerHTML=`<span class="sub">${zone.size??0} hidden cards</span>`;return;}for(const cardId of zone.cardIds||[])el.appendChild(providerTableCard(state,cardId,zoneType(zone)));if(!(zone.cardIds||[]).length)el.innerHTML='<span class="sub">Empty</span>';}
   function showCardActions(id,zone){
-    ensureTabletopUI();const box=$('argentumTabletopCardActions');const c=cardById(active?.state,id);const actions=actionsForCard(id).filter(a=>a.isAffordable!==false);
+    ensureTabletopUI();if(active)active.selectedCard={id,zone};const box=$('argentumTabletopCardActions');const c=cardById(active?.state,id);const actions=actionsForCard(id).filter(a=>a.isAffordable!==false);
     box.innerHTML=`<div class="argentum-tabletop-action-title"><b>${esc(c?.name||id)}</b><span class="sub">${esc(zone||'')}</span></div>`;
+    if(c?.name==='Currency Converter'){const help=document.createElement('span');help.className='sub';help.textContent='Discard → choose to exile it from your graveyard. Then tap Converter to return an exiled land for a Treasure, or a nonland for a Rogue. Drawing/discarding taps Converter, so its other tap ability needs it untapped again.';box.append(help);}
     if(!actions.length){const note=document.createElement('span');note.className='sub';note.textContent='No provider-advertised legal action for this card right now.';box.appendChild(note);return;}
     for(const info of actions){const b=document.createElement('button');b.type='button';b.className='good';b.textContent=info.description||info.actionType||'Use action';b.onclick=()=>submitLegalAction(info);box.appendChild(b);}
   }
@@ -436,6 +437,7 @@ SIDEBOARD:
     $('argentumTabletopScore').textContent=`Turn ${s.turnNumber??'?'} • ${s.currentPhase||''}${s.currentStep?'/'+s.currentStep:''} • Priority: ${s.players?.find(p=>p.playerId===s.priorityPlayerId)?.name||s.priorityPlayerId||'—'}`;
     fillTableZone('argentumTabletopMyHand',s,myHand);fillTableZone('argentumTabletopMyBattlefield',s,stateZone(s,me,'BATTLEFIELD'));if(opp)fillTableZone('argentumTabletopOppBattlefield',s,stateZone(s,opp.playerId,'BATTLEFIELD'));fillTableZone('argentumTabletopStack',s,s.zones?.find(z=>String(zoneType(z)).toUpperCase()==='STACK'));
     $('argentumTabletopCardActions').innerHTML='<span class="sub">Select a card or use Pass/Continue.</span>';
+    if(active.selectedCard&&s.cards?.[active.selectedCard.id])showCardActions(active.selectedCard.id,active.selectedCard.zone);
     $('argentumTabletopPlayerEffects').textContent=playerEffectsSummary(my);
     const turnActions=$('argentumTabletopTurnActions');turnActions.innerHTML='';
     if(!active.pendingDecision)for(const info of active.legalActions||[]){
@@ -449,12 +451,19 @@ SIDEBOARD:
       if(!owner)continue;const z=stateZone(s,owner,type),ids=z?.cardIds||[],count=z?.size??ids.length;
       const pile=document.createElement('button');pile.type='button';pile.className='argentum-pile';
       pile.textContent=`${label} · ${type.toLowerCase()} (${count})`;
-      const top=s.cards?.[ids[ids.length-1]],art=top?.imageUri||top?.imageUrl;
+      const knownTopIndex=type==='LIBRARY'?(z?.positions||[]).indexOf(0):-1;
+      const top=s.cards?.[type==='LIBRARY'?ids[knownTopIndex]:ids[ids.length-1]],art=top?.imageUri||top?.imageUrl;
+      if(type==='LIBRARY'&&top){const known=document.createElement('small');known.textContent=`Known top: ${top.name}`;pile.append(known);}
       if(type!=='LIBRARY'&&art){const img=document.createElement('img');img.src=art;img.alt=top.name;pile.prepend(img);}
       pile.onclick=()=>{const dialog=document.createElement('dialog');dialog.className='argentum-target-dialog';
-        const heading=document.createElement('h3');heading.textContent=pile.textContent;dialog.append(heading);
+        const heading=document.createElement('h3');heading.textContent=`${label} · ${type.toLowerCase()} (${count})`;dialog.append(heading);
         const cards=document.createElement('div');cards.className='argentum-pile-cards';
-        if(type==='LIBRARY'||z?.isVisible===false)cards.textContent=`${count} cards face down`;
+        if(type==='LIBRARY'){
+          const note=document.createElement('p');note.textContent=`${count} cards face down. Only cards the game allows you to know are listed below.`;cards.append(note);
+          for(const [i,id] of ids.entries()){const known=document.createElement('div'),position=(z.positions||[])[i];
+            const caption=document.createElement('p');caption.textContent=position===0?'Known top card':`Known card · position ${position+1}`;
+            known.append(caption,providerTableCard(s,id,type));cards.append(known);}
+        }else if(z?.isVisible===false)cards.textContent=`${count} cards face down`;
         else if(!ids.length)cards.textContent='Empty';else for(const id of ids)cards.append(providerTableCard(s,id,type));
         dialog.append(cards);const close=document.createElement('button');close.textContent='Back to game';close.onclick=()=>dialog.close();dialog.append(close);
         dialog.addEventListener('close',()=>dialog.remove());document.body.append(dialog);dialog.showModal();};piles.append(pile);
@@ -586,15 +595,19 @@ SIDEBOARD:
     if(!hasNativeDialog(dialog))return pickIds(promptText,options,min,max,cardInfo);
     dialog.className='argentum-target-dialog';
     const heading=document.createElement('h3');heading.textContent=promptText;dialog.appendChild(heading);
-    const help=document.createElement('p');help.textContent=`Choose ${min===max?min:`${min}-${max}`} target(s).`;dialog.appendChild(help);
+    const help=document.createElement('p');help.textContent=`Choose ${min===max?min:`${min}-${max}`} card(s). Nothing is selected automatically.`;dialog.appendChild(help);
     return await new Promise((resolve,reject)=>{
       const selected=new Set();
-      const confirmButton=document.createElement('button');confirmButton.type='button';confirmButton.textContent='Confirm targets';confirmButton.disabled=min>0;
+      const confirmButton=document.createElement('button');confirmButton.type='button';confirmButton.textContent=/discard/i.test(promptText)?'Discard selected cards':'Confirm selected cards';confirmButton.disabled=min>0;
       const finish=value=>{dialog.close();dialog.remove();resolve(value);};
       for(const id of options){
         const label=document.createElement('label');
         const input=document.createElement('input');input.type='checkbox';
-        const text=document.createElement('span');text.textContent=entityLabel(id,cardInfo[id]);
+        const details=cardInfo[id]||active?.state?.cards?.[id]||{};
+        const text=document.createElement('span');text.textContent=entityLabel(id,details).replace(/ \[[^\]]+\]$/,'');
+        const art=details.imageUri||details.imageUrl||cardImageCache.get(details.name);
+        if(art){const img=document.createElement('img');img.src=art;img.alt=details.name||'Card';img.className='argentum-choice-art';label.appendChild(img);}
+        if(details.oracleText){const rules=document.createElement('small');rules.textContent=details.oracleText;text.appendChild(rules);} 
         input.onchange=()=>{
           if(input.checked && max===1){for(const other of dialog.querySelectorAll('input'))if(other!==input)other.checked=false;selected.clear();}
           if(input.checked)selected.add(id);else selected.delete(id);
@@ -840,7 +853,8 @@ SIDEBOARD:
     }
     if(type==='SelectCardsDecision' || type==='SearchLibraryDecision'){
       const options=decision.options||[]; const min=decision.minSelections??decision.minCards??0,max=decision.maxSelections??decision.maxCards??options.length;
-      const picks=ai?options.slice(0,min):await pickActionTargets(decision.prompt||'Choose cards',options,min,max,decision.cardInfo||{});
+      const prompt=[decision.context?.sourceName,decision.prompt||'Choose cards'].filter(Boolean).join(' — ');
+      const picks=ai?options.slice(0,min):await pickActionTargets(prompt,options,min,max,decision.cardInfo||{});
       return {type:'CardsSelectedResponse',decisionId:id,selectedCards:picks};
     }
     if(type==='ChooseTargetsDecision'){

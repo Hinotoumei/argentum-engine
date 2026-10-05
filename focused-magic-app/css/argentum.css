@@ -57,3 +57,7 @@
 .argentum-pile-cards{display:flex;flex-wrap:wrap;gap:10px;padding:10px}
 @media(max-height:700px){.argentum-tabletop-board{grid-template-rows:minmax(0,1fr) minmax(0,1fr) 115px}.argentum-tabletop-card{height:95px;flex-basis:68px}.argentum-tabletop-zone-title{font-size:10px;margin:0}.argentum-tabletop-playerhead{font-size:12px}}
 @media(max-width:720px){.argentum-tabletop-board{grid-template-columns:minmax(0,1fr) 100px}.argentum-tabletop-card{height:85px;flex-basis:60px}.argentum-tabletop-topbar .actions{width:auto}.argentum-tabletop-topbar h2{font-size:14px}.argentum-tabletop-playerhead{font-size:11px;gap:4px}.argentum-tabletop-footer .sub{display:none}}
+
+.argentum-choice-art{width:100px;max-height:140px;object-fit:contain;border-radius:6px}.argentum-target-dialog label>span{display:flex;flex-direction:column;gap:8px}.argentum-target-dialog label:has(input:checked){border-color:#a8d7ff;background:#294459}.argentum-pile>small{color:#bee3ff;font-size:10px}
+
+.argentum-target-dialog label:has(.argentum-choice-art){margin:6px 0;padding:5px}.argentum-choice-art{width:75px;max-height:105px}

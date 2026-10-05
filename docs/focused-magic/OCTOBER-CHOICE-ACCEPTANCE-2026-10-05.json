@@ -1,0 +1,25 @@
+{
+  "checkedAt": "2026-10-05",
+  "provider": "https://focused-magic-argentum-067-pro.onrender.com",
+  "currencyConverter": {
+    "passed": true,
+    "sequence": [
+      "Faithless Looting draw and pictured selection of Mountain and Island",
+      "Decline Library of Leng replacement",
+      "Accept Converter exile triggers",
+      "Activate Converter tap ability",
+      "Return linked land and assert Treasure in native state"
+    ]
+  },
+  "libraryOfLeng": {
+    "passed": true,
+    "sequence": [
+      "Accept discard replacement",
+      "Assert library positions include zero",
+      "Assert those identities absent from opponent card map",
+      "Assert known-top pile label and library viewer display"
+    ]
+  },
+  "frontendControls": 62,
+  "scope": "Targeted native gameplay and UI acceptance; not whole-deck complete matches"
+}
