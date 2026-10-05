@@ -334,7 +334,7 @@ SIDEBOARD:
   }
 
   function openTabletopUI(){ensureTabletopUI();$('argentumTabletopModal').classList.add('open');$('argentumTabletopModal').setAttribute('aria-hidden','false');}
-  function closeTabletopUI(){$('argentumTabletopModal')?.classList.remove('open');$('argentumTabletopModal')?.setAttribute('aria-hidden','true');}
+  function closeTabletopUI(){hideCardPreview(true);$('argentumTabletopModal')?.classList.remove('open');$('argentumTabletopModal')?.setAttribute('aria-hidden','true');}
   function setTabletopStatus(text,bad=false){ensureTabletopUI();const el=$('argentumTabletopStatus');el.textContent=text;el.classList.toggle('bad-text',!!bad);}
   function takeTestChoice() {
     const q = window.__ARGENTUM_TEST_CHOICES;
@@ -392,10 +392,33 @@ SIDEBOARD:
     }
     b.title=c.stackText||c.oracleText||c.name||'';
     if(c.isTapped)b.classList.add('tapped');
-    b.onclick=()=>showCardActions(id,zone);
+    b.onmouseenter=()=>showCardPreview(c);b.onfocus=()=>showCardPreview(c);b.onmouseleave=()=>hideCardPreview();b.onblur=()=>hideCardPreview();
+    b.onclick=()=>{showCardActions(id,zone);showCardPreview(c,true);};
     return b;
   }
-  function fillTableZone(id,state,zone){const el=$(id);if(!el)return;el.innerHTML='';if(!zone){el.innerHTML='<span class="sub">—</span>';return;}if(zone.isVisible===false){el.innerHTML=`<span class="sub">${zone.size??0} hidden cards</span>`;return;}for(const cardId of zone.cardIds||[])el.appendChild(providerTableCard(state,cardId,zoneType(zone)));if(!(zone.cardIds||[]).length)el.innerHTML='<span class="sub">Empty</span>';}
+  let previewPinned=false;
+  function hideCardPreview(force=false){if(previewPinned&&!force)return;previewPinned=false;const preview=$('argentumCardPreview');if(preview)preview.hidden=true;}
+  function showCardPreview(card,pinned=false){
+    if(!card||(previewPinned&&!pinned))return;let preview=$('argentumCardPreview');
+    if(!preview){preview=document.createElement('aside');preview.id='argentumCardPreview';preview.className='argentum-card-preview';document.body.append(preview);}
+    previewPinned=pinned;preview.replaceChildren();preview.hidden=false;
+    const close=document.createElement('button');close.type='button';close.textContent='Close card preview';close.onclick=()=>hideCardPreview(true);preview.append(close);
+    const name=document.createElement('h3');name.textContent=card.name;preview.append(name);
+    const art=card.imageUri||card.imageURL||card.imageUrl||cardImageCache.get(card.name);
+    if(art){const img=document.createElement('img');img.src=art;img.alt=card.name;preview.append(img);}
+    const rules=document.createElement('p');rules.textContent=card.oracleText||card.stackText||'';preview.append(rules);
+  }
+  function fitCardRow(el){
+    const cards=[...el.querySelectorAll('.argentum-tabletop-card')];
+    if(!cards.length)return;
+    for(const card of cards)card.style.marginLeft='0px';
+    const width=cards[0].getBoundingClientRect().width;
+    const available=el.clientWidth-12;
+    const overlap=cards.length>1?Math.min(0,(available-cards.length*width)/(cards.length-1)-5):0;
+    cards.forEach((card,index)=>{if(index)card.style.marginLeft=overlap+'px';});
+  }
+  function fillTableZone(id,state,zone){const el=$(id);if(!el)return;el.innerHTML='';if(!zone){el.innerHTML='<span class="sub">—</span>';return;}if(zone.isVisible===false){el.innerHTML=`<span class="sub">${zone.size??0} hidden cards</span>`;return;}for(const cardId of zone.cardIds||[])el.appendChild(providerTableCard(state,cardId,zoneType(zone)));if(typeof requestAnimationFrame==='function')requestAnimationFrame(()=>fitCardRow(el));if(!(zone.cardIds||[]).length)el.innerHTML='<span class="sub">Empty</span>';}
+  if(typeof window.addEventListener==='function')window.addEventListener('resize',()=>document.querySelectorAll('.argentum-tabletop-cards').forEach(fitCardRow));
   function showCardActions(id,zone){
     ensureTabletopUI();if(active)active.selectedCard={id,zone};const box=$('argentumTabletopCardActions');const c=cardById(active?.state,id);const actions=actionsForCard(id).filter(a=>a.isAffordable!==false);
     box.innerHTML=`<div class="argentum-tabletop-action-title"><b>${esc(c?.name||id)}</b><span class="sub">${esc(zone||'')}</span></div>`;
@@ -408,7 +431,7 @@ SIDEBOARD:
     if(active?.user?.mulliganPrompt){const prompt=active.user.mulliganPrompt;box.innerHTML='<b>Opening hand decision</b> ';const keep=document.createElement('button');keep.className='good';keep.textContent='Keep';keep.onclick=()=>active.submitOpening(active.user,'keepHand',null,prompt);const mul=document.createElement('button');mul.textContent='Mulligan';mul.onclick=()=>active.submitOpening(active.user,'mulligan',null,prompt);box.append(keep,mul);return;}
     if(active?.user?.bottomPrompt){active.renderBottomCards(active.user.bottomPrompt,'argentumTabletopDecision');return;}
     if(active?.user?.openingRequestPending){box.textContent='Waiting for the new opening hand…';return;}
-    if(!d){box.textContent='No pending decision.';return;}
+    if(!d){box.textContent='';return;}
     box.innerHTML=`<b>${esc(d.prompt||d.type)}</b> `;const b=document.createElement('button');b.className='primary';b.textContent='Resolve decision';b.onclick=async()=>{try{const r=await decisionResponse(d,'human');if(r)active.submitDecision(r);}catch(e){setTabletopStatus(e.message,true)}};box.appendChild(b);
   }
   function playerEffectsSummary(player){
@@ -436,7 +459,7 @@ SIDEBOARD:
     $('argentumTabletopMyLibCount').textContent=myLib?.size??myLib?.cardIds?.length??'?';$('argentumTabletopMyGyCount').textContent=myGy?.size??myGy?.cardIds?.length??0;$('argentumTabletopOppHandCount').textContent=oppHand?.size??oppHand?.cardIds?.length??'?';$('argentumTabletopOppLibCount').textContent=oppLib?.size??oppLib?.cardIds?.length??'?';
     $('argentumTabletopScore').textContent=`Turn ${s.turnNumber??'?'} • ${s.currentPhase||''}${s.currentStep?'/'+s.currentStep:''} • Priority: ${s.players?.find(p=>p.playerId===s.priorityPlayerId)?.name||s.priorityPlayerId||'—'}`;
     fillTableZone('argentumTabletopMyHand',s,myHand);fillTableZone('argentumTabletopMyBattlefield',s,stateZone(s,me,'BATTLEFIELD'));if(opp)fillTableZone('argentumTabletopOppBattlefield',s,stateZone(s,opp.playerId,'BATTLEFIELD'));fillTableZone('argentumTabletopStack',s,s.zones?.find(z=>String(zoneType(z)).toUpperCase()==='STACK'));
-    $('argentumTabletopCardActions').innerHTML='<span class="sub">Select a card or use Pass/Continue.</span>';
+    $('argentumTabletopCardActions').innerHTML='';
     if(active.selectedCard&&s.cards?.[active.selectedCard.id])showCardActions(active.selectedCard.id,active.selectedCard.zone);
     $('argentumTabletopPlayerEffects').textContent=playerEffectsSummary(my);
     const turnActions=$('argentumTabletopTurnActions');turnActions.innerHTML='';
@@ -468,6 +491,7 @@ SIDEBOARD:
         dialog.append(cards);const close=document.createElement('button');close.textContent='Back to game';close.onclick=()=>dialog.close();dialog.append(close);
         dialog.addEventListener('close',()=>dialog.remove());document.body.append(dialog);dialog.showModal();};piles.append(pile);
     }
+    $('argentumTabletopModal').classList.toggle('opening-hand',!!active.user.mulliganPrompt||!!active.user.bottomPrompt);
     const pass=$('argentumTabletopPass'),canPass=(active.legalActions||[]).some(a=>/PassPriority/i.test(a.actionType||''));
     pass.disabled=!canPass||!!active.pendingDecision;pass.textContent=active.pendingDecision?'Choose cards':canPass?'Pass priority':'Waiting…';
     renderTabletopDecision();setTabletopStatus(active.pendingDecision?'Complete your choice to continue.':canPass?'Your move.':'Waiting for the opponent…');
