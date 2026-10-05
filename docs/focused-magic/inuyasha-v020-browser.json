@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "before": [
+    7,
+    7,
+    54,
+    53
+  ],
+  "after": {
+    "counts": [
+      10,
+      10,
+      51,
+      50
+    ],
+    "turn": "P1",
+    "windows": [
+      "start_of_turn",
+      "start_of_draw",
+      "when_you_draw_cards",
+      "when_you_draw_cards",
+      "end_of_draw"
+    ]
+  },
+  "duplicateDrawRejected": true,
+  "nextPlayerDrawPassed": true
+}

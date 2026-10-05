@@ -67,3 +67,7 @@ Rin, Young Follower versus Ginkotsu, Band of Seven compares blue 5 to 3 and purp
 The [rulebook](https://sites.google.com/view/inuyashatcgdatabase/inuyasha-gameplay-rules) permits a direct attack when the opponent controls no characters. Lack of matching colors alone does not satisfy this condition. Its definition of control requires a faceup card; defeated facedown cards are out of play. The resolver therefore excludes facedown defeated cards when checking controlled characters. The browser also blocks direct attacks while a faceup card’s type remains unknown, rather than assuming it is a noncharacter.
 
 These fixtures do not execute card-text exceptions, numeric modifiers from actual card effects, or most-recent-printing errata. They do not establish a complete official game: the imported tabletop still has prototype setup/turn controls, and its preserved Three’s Company fixture has 61 cards. See `docs/focused-magic/INUYASHA-COLOR-VERIFICATION.md` for the tested scope.
+
+
+## Integrated v0.2.0 update (October 5)
+Turn start and both-player draw-three timing is ported from the supplied v0.2.0 archive. Existing white-color, minimum-zero modifier and official direct-attack fixes remain. The browser offers Start Turn / Both Draw 3, rejects duplicate draw steps, and changes active player only through an explicit manual finish-turn control. Setup, recovery and later turn steps remain manual; the draw guard does not invent a deck-exhaustion rule. Python 22 tests, JavaScript 18 tests and real browser draw checks passed.

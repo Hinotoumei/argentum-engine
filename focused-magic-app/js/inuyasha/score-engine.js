@@ -9,7 +9,7 @@
   }
 
   const Color=Object.freeze({RED:'red',BLUE:'blue',GREEN:'green',PURPLE:'purple',BLACK:'black',WHITE:'white'});
-  const TimingWindow=Object.freeze({
+  const TimingWindow=Object.freeze({TURN_START:'start_of_turn',DRAW_START:'start_of_draw',CARDS_DRAWN:'when_you_draw_cards',DRAW_END:'end_of_draw',
     CHARACTER_EXPENDED:'when_character_expended',
     WHEN_ATTACKING:'when_attacking',
     WHEN_ATTACKED:'when_attacked',
@@ -41,11 +41,20 @@
   }
 
   class JewelShard { constructor(opaqueId){this.opaqueId=opaqueId;} }
-  class PlayerState { constructor(playerId,jewelShards=[]){this.playerId=playerId;this.jewelShards=[...jewelShards];} }
+  class PlayerState { constructor(playerId,jewelShards=[],{drawPile=[],hand=[]}={}){this.playerId=playerId;this.jewelShards=[...jewelShards];this.drawPile=[...drawPile];this.hand=[...hand];} drawExact(count){if(!Number.isInteger(count)||count<0)throw new RuleError('Invalid draw count');if(this.drawPile.length<count)throw new RuleError('Cannot complete required draw; deck exhaustion is not implemented');const cards=this.drawPile.splice(0,count);this.hand.push(...cards);return cards;} }
 
   class GameState {
     constructor({players,turnActivePlayerId,characters=[]}){
-      this.players={...players};this.turnActivePlayerId=turnActivePlayerId;this.characters=[...characters];this.eventLog=[];this._windowHandlers={};this._nextAttackId=1;
+      this.players={...players};this.turnActivePlayerId=turnActivePlayerId;this.characters=[...characters];this.eventLog=[];this._windowHandlers={};this._nextAttackId=1;this._nextTurnId=1;
+    }
+    startTurnAndDraw(){
+      const ids=Object.keys(this.players),active=this.player(this.turnActivePlayerId);
+      if(ids.length!==2)throw new RuleError('Turn draw requires exactly two players');
+      const opposing=this.player(ids.find(id=>id!==this.turnActivePlayerId));
+      for(const p of [active,opposing])if(p.drawPile.length<3)throw new RuleError(`${p.playerId} cannot complete required draw of 3; deck exhaustion is not implemented`);
+      const ctx={turnId:this._nextTurnId++,activePlayerId:active.playerId,opposingPlayerId:opposing.playerId,activeDrawnCards:[],opposingDrawnCards:[],drawStepComplete:false};
+      const open=(window,subjectPlayerId=null)=>{const event={window,turnId:ctx.turnId,activePlayerId:active.playerId,subjectPlayerId,detail:subjectPlayerId?'drew 3 cards':null};this.eventLog.push(event);for(const h of [...(this._windowHandlers[window]||[])])h(this,ctx,event);};
+      open(TimingWindow.TURN_START);open(TimingWindow.DRAW_START);ctx.activeDrawnCards=active.drawExact(3);open(TimingWindow.CARDS_DRAWN,active.playerId);ctx.opposingDrawnCards=opposing.drawExact(3);open(TimingWindow.CARDS_DRAWN,opposing.playerId);open(TimingWindow.DRAW_END);ctx.drawStepComplete=true;return ctx;
     }
     player(playerId){const p=this.players[playerId];if(!p)throw new RuleError(`Unknown player: ${playerId}`);return p;}
     registerWindowHandler(window,handler){(this._windowHandlers[window]||(this._windowHandlers[window]=[])).push(handler);}
