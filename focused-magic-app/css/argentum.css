@@ -100,3 +100,11 @@
 
 /* Battlefield height follows its row; the hand retains readable full cards. */
 .argentum-tabletop-player{container-type:size}.argentum-tabletop-player .argentum-tabletop-card{height:min(120px,calc(100cqh - 28px));width:auto;min-width:0;max-width:none;flex-basis:auto;aspect-ratio:5/7}.argentum-tabletop-cards{flex-wrap:nowrap}
+
+/* Keep gameplay controls in their own row; never cover zone piles. */
+#argentumTabletopCardActions:not(:empty){position:static;inset:auto;width:auto;max-height:72px;min-height:34px;overflow:auto;z-index:auto;box-shadow:none;flex-shrink:0}
+.argentum-tabletop-player{container-type:normal}
+.argentum-tabletop-player .argentum-tabletop-card{height:110px;width:79px;min-width:79px;max-width:79px;flex:0 0 79px}
+.argentum-tabletop-board{grid-template-rows:minmax(120px,1fr) minmax(120px,1fr) 170px}
+.argentum-tabletop-actions details{font-size:12px;max-width:420px}
+@media(max-height:620px){.argentum-tabletop-player .argentum-tabletop-card{height:96px;width:69px;min-width:69px;max-width:69px;flex-basis:69px}.argentum-tabletop-board{grid-template-rows:minmax(106px,1fr) minmax(106px,1fr) 160px}#argentumTabletopCardActions:not(:empty){max-height:55px}}
