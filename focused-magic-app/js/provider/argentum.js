@@ -1164,6 +1164,7 @@ SIDEBOARD:
           } else this.userConfirmedActionCount++;
         }
         if(role.kind==='user'){
+          const lib=stateZone(role.state,role.state.viewingPlayerId,'LIBRARY'),top=lib?.cardIds[(lib.positions||[]).indexOf(0)],known=top?role.state.cards?.[top]?.name:null;if(known!==this.lastKnownLibraryTop){log(`Your known library top: ${known||'not currently known'}`);this.lastKnownLibraryTop=known;}
           this.state=role.state;this.legalActions=role.legalActions;this.pendingDecision=role.pendingDecision;this.interactionEpoch=role.interactionEpoch;
           renderState();this.assessment?.state(this,msg);
           if(this.spec.autopilot||this.assessment)this.autoRole(role);
@@ -1209,7 +1210,7 @@ SIDEBOARD:
     }
     canPlay(role){return role.playReady&&this.user.mulliganComplete&&this.ai.mulliganComplete&&!role.mulliganPrompt&&!role.bottomPrompt;}
     submitAction(action){if(!this.canPlay(this.user))throw new Error('Wait for both players to finish their opening hands.');this.sendRole(this.user,{type:'submitAction',action,interactionEpoch:this.user.interactionEpoch});}
-    submitDecision(response){if(!this.user.state)throw new Error('No state.');this.submitAction({type:'SubmitDecision',playerId:this.user.pendingDecision?.playerId||this.user.state.viewingPlayerId,response});}
+    submitDecision(response){if(this.user.pendingDecision?.prompt?.includes('Library of Leng'))log(`Library of Leng choice: ${this.user.pendingDecision.prompt} → ${response.choice?'put on top':'graveyard'}`);if(!this.user.state)throw new Error('No state.');this.submitAction({type:'SubmitDecision',playerId:this.user.pendingDecision?.playerId||this.user.state.viewingPlayerId,response});}
     submitRoleAction(role,action,info){
       if(!this.canPlay(role)||role.lastSubmittedStateKey===role.playStateKey)return;
       role.lastSubmittedStateKey=role.playStateKey;
