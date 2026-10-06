@@ -1,6 +1,6 @@
 {
   "version": "0.6.9",
-  "build": "FOCUSED_MAGIC_INUYASHA_V030_BOARD_CONTROL_ROWS",
+  "build": "FOCUSED_MAGIC_INUYASHA_V030_DISCARD_COST_PICKER",
   "date": "2026-10-06",
   "base": {
     "frontend_authority": "Focused_Magic_v0.6.9_INUYASHA_RESOLVE_ARGENTUM_LIVE_REPAIR_2026-09-29.zip",
@@ -51,7 +51,7 @@
     "CHANGELOG_v0.6.6.txt": "b4d17f142887ceda23aaf3e94b8555f785348a3284c287b2ea414af383f0904a",
     "CHANGELOG_v0.6.8.txt": "b97fd25d00b4e2b3032aba77a7ca71adb3e29da4c50c1efd8df6721b4358623f",
     "CHANGELOG_v0.6.9.txt": "f0b932ba99ebbec0ba76ed9b703b89748e6527627bbb4e7cfb079cf91b140acb",
-    "index.html": "37edf63fd0a4ac43a295d46307fd93f6f4d55744effd00b8fe480cdb97049e3b",
+    "index.html": "b9e0e3954150585cd7d3ed8ed81ba990552c120de4c896e7ffac4345ed58252e",
     "README.md": "8483eb3dc383f537f12f21e524773782a426749e83fa4690dddc228f75dffa93",
     "README_DEPLOY.txt": "99939519678a4579d6614f2951e338c146d616376eca52946e58148f08beaf5a",
     "TIKUNARI_PREP_NOTES_2026-09-30.txt": "0d0c1bebfe72e6c42a8f534b05e094b70ddc6889f847054815b80ed2b7849dbd",
@@ -79,7 +79,7 @@
     "js/inuyasha/decks.js": "68d2f71e2118872d349c4e917d7be14ccb18b04628e81375f448b17fb2d6ea2c",
     "js/inuyasha/score-engine.js": "ee4dd055d1e49aacbc42bc24342db43df6c39710222cc1358ec45fa79a2d7720",
     "js/inuyasha/tabletop.js": "725fd5d6e5f185b6133e2ae04a73b91874c397bfeae6b865574da9dd5a5a3f59",
-    "js/provider/argentum.js": "4d2cfaffd3863c26086ca5965928018e13c3727b88dbebaac4c4d77b29ed1a3f",
+    "js/provider/argentum.js": "3b1894ab9cea53ef590a23c4292903fc6cf54bc6b2d9e73821cf137d2edaf1e6",
     "js/reality-fracture/mandatory-local-db.js": "7c064803ba4cab7586ff061e9789bccf66fe1b480889fd7d110748c636e95de0",
     "js/reality-fracture/rules-engine.js": "65eab19aac3e399df151f460a9a8a26333b24668e7d55351ecd96e4c7b675386",
     "js/reality-fracture/ui.js": "e862f48f1750fe09301e95d09cd2b75db1fa8a5c07921dc5d59aba8e0134f4c3",
