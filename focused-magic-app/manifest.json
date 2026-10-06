@@ -1,7 +1,7 @@
 {
   "version": "0.6.9",
-  "build": "FOCUSED_MAGIC_AI_REMOVAL_FETCH_INUYASHA_V030_COMBINED",
-  "date": "2026-10-05",
+  "build": "FOCUSED_MAGIC_INUYASHA_V030_PLAYABLE_AI_REMOVAL_FETCH",
+  "date": "2026-10-06",
   "base": {
     "frontend_authority": "Focused_Magic_v0.6.9_INUYASHA_RESOLVE_ARGENTUM_LIVE_REPAIR_2026-09-29.zip",
     "frontend_drive_id": "1iRWxWsS-Rbmi8tVK6jIfVAamqTXK5WYj",
@@ -29,7 +29,7 @@
     "card_art": "PASS_DEPLOYED_PRINTING_METADATA_AND_BROWSER_IMAGE_DECODING",
     "backend_acceptance": "PASS_LOCAL_UPDATED_FRONTEND_AGAINST_DEPLOYED_RENDER",
     "cloudflare_frontend": "PENDING_UPLOAD_AND_PUBLIC_ACCEPTANCE",
-    "inuyasha": "PRESERVED_UNCHANGED_USER_REPORTED_WORKING",
+    "inuyasha": "v0.3 Set Up integrated; existing Draw/combat core preserved; arbitrary printed effects remain manual",
     "checked_at": "2026-10-04T22:30:30.238Z",
     "brainstorm_continuation": "PASS_LIVE_SELECTION_ORDERING_RESTORED_PASS",
     "unpaid_cast_recovery": "PASS_LIVE_MONUMENT_REJECTION_BOARD_AND_SOCKET_REMAIN_OPEN",
@@ -43,7 +43,7 @@
     "readable_cards": "65 provider tests; browser layout and hover/click preview at 1366x680 and 1093x544; 20-card battlefield layout fixture. Not full card gameplay acceptance.",
     "fetch_activation": "67 frontend tests; live native Scalding Tarn life 20 to 19, sacrificed to graveyard, pictured Island choice onto battlefield, no server errors.",
     "ai_fetch": "69 frontend tests; live Scalding Tarn to Island and Polluted Delta to Swamp after life payment and sacrifice, zero server errors",
-    "inuyasha_v030": "37 Python tests; standalone v0.3 included, JavaScript integration separate",
+    "inuyasha_v030": "PLAYABLE_JS_INTEGRATION: 100 Node entries passed; 11 attack parity assertions; browser controls at 1366x680/1093x544; standalone Python 37 tests",
     "ai_removal": "70 frontend tests; live Fatal Push held with no opposing creature and destroyed opposing creature when available; own creature preserved in both cases"
   },
   "files": {
@@ -51,7 +51,7 @@
     "CHANGELOG_v0.6.6.txt": "b4d17f142887ceda23aaf3e94b8555f785348a3284c287b2ea414af383f0904a",
     "CHANGELOG_v0.6.8.txt": "b97fd25d00b4e2b3032aba77a7ca71adb3e29da4c50c1efd8df6721b4358623f",
     "CHANGELOG_v0.6.9.txt": "f0b932ba99ebbec0ba76ed9b703b89748e6527627bbb4e7cfb079cf91b140acb",
-    "index.html": "e2f4190d1caaad00b6023f8ba63baf828729dc8ddfffa3d65c7e76f6350c998c",
+    "index.html": "fa905deb6a9460ab7d47015ed53d1700a61a3de4996a29bd7caa424ce67e5061",
     "README.md": "8483eb3dc383f537f12f21e524773782a426749e83fa4690dddc228f75dffa93",
     "README_DEPLOY.txt": "99939519678a4579d6614f2951e338c146d616376eca52946e58148f08beaf5a",
     "TIKUNARI_PREP_NOTES_2026-09-30.txt": "0d0c1bebfe72e6c42a8f534b05e094b70ddc6889f847054815b80ed2b7849dbd",
@@ -61,7 +61,7 @@
     "css/base.css": "dba6a907a348d8357a05dfdb5b56a3da06f0ed42d78e2598b473524b036252b1",
     "css/core-match.css": "79ffc0e5da0fa92f3bdc0e5e52111d4d819eed253f9b4ffe9e4e273ecc8c206b",
     "css/fates.css": "a33906b0c88a332991a1b473d517e0122dd15075b0786cf68cfdfa07c3587685",
-    "css/inuyasha-tabletop.css": "6f663bac4f95339a3297464eec466a54d7a7c31d11583c34c09c110f10428e22",
+    "css/inuyasha-tabletop.css": "6850cf51c16c7a326bde83b7c79556e527d19deed0d8bee75bff9548c7571748",
     "css/launcher.css": "c114004c10d618b4931c8e346a7ea33582df154e59c8da0361e160a8a2964c93",
     "css/reality-fracture.css": "4034798494548472804e571805acbde17504a20e1aadaa03b7915a87acb1c3bc",
     "css/reality-tabletop.css": "9f2b3f79e24208c382e06cf56714052c6e258f7c9dfdc90620ea7d47d994937f",
@@ -78,7 +78,7 @@
     "js/fates/fates-lab.js": "d23a4eef108848def976478ac1063f9869c2a07e5f609a1cefaa9237568d3104",
     "js/inuyasha/decks.js": "68d2f71e2118872d349c4e917d7be14ccb18b04628e81375f448b17fb2d6ea2c",
     "js/inuyasha/score-engine.js": "ee4dd055d1e49aacbc42bc24342db43df6c39710222cc1358ec45fa79a2d7720",
-    "js/inuyasha/tabletop.js": "abd3ba5658df930550b24b318390bb35ae8de1623535503de3868255e52e254e",
+    "js/inuyasha/tabletop.js": "725fd5d6e5f185b6133e2ae04a73b91874c397bfeae6b865574da9dd5a5a3f59",
     "js/provider/argentum.js": "820b4eb940cafe793ae083bade1cb26d90b466828a7ceede714bbf0b1189c8dc",
     "js/reality-fracture/mandatory-local-db.js": "7c064803ba4cab7586ff061e9789bccf66fe1b480889fd7d110748c636e95de0",
     "js/reality-fracture/rules-engine.js": "65eab19aac3e399df151f460a9a8a26333b24668e7d55351ecd96e4c7b675386",
@@ -99,7 +99,8 @@
     "inuyasha-rules-engine-v0.3.0/tests/test_attack_sequence.py": "28ea4c5266339f85a46feaf8790d1b0a9193fa0b7f532dc96f030af2ebe4bf96",
     "inuyasha-rules-engine-v0.3.0/tests/test_setup_sequence.py": "c25f2b5e3bb575b1bfab45086706893dc2fa0565022cf789c9075ecbc17355e4",
     "inuyasha-rules-engine-v0.3.0/tests/test_turn_draw_sequence.py": "f7ea51a55cd3327abb5527361132c4bf11f74f4b296b1e8d1de9be7ac3d78623",
-    "COMBINED_RELEASE_README.md": "c97f61b9855755f868e62c3b0db79ead6c00e9d66ac5d29802682cca9a1ade91"
+    "COMBINED_RELEASE_README.md": "b840f8a4a910c38fe63c8add8cef9e707d98b44c5a26ac2a7af0d03a0125e3d2",
+    "js/inuyasha/setup-engine.js": "43794db8ac5a4d9b1fa0ab0760c42f4d50dcb46cc49d88254d5f78dea88443ec"
   },
   "historical_2026_09_30": {
     "render": {

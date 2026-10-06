@@ -1,0 +1,156 @@
+{
+  "passed": true,
+  "scope": "Visible integration using controlled card fixtures, not printed card effect completeness",
+  "evidence": [
+    {
+      "size": {
+        "width": 1366,
+        "height": 680
+      },
+      "result": {
+        "rules": "0.3.0",
+        "phase": "BATTLE_START",
+        "counts": {
+          "P1": 2,
+          "P2": 1
+        },
+        "windows": [
+          {
+            "window": "start_of_setup",
+            "activePlayerId": "P1",
+            "subjectPlayerId": "P1",
+            "cardId": null
+          },
+          {
+            "window": "start_of_setup",
+            "activePlayerId": "P1",
+            "subjectPlayerId": "P2",
+            "cardId": null
+          },
+          {
+            "window": "when_character_played",
+            "activePlayerId": "P1",
+            "subjectPlayerId": "P1",
+            "cardId": "alpha"
+          },
+          {
+            "window": "when_character_played",
+            "activePlayerId": "P1",
+            "subjectPlayerId": "P1",
+            "cardId": "beta"
+          },
+          {
+            "window": "when_item_played",
+            "activePlayerId": "P1",
+            "subjectPlayerId": "P1",
+            "cardId": "item"
+          },
+          {
+            "window": "when_location_played",
+            "activePlayerId": "P1",
+            "subjectPlayerId": "P1",
+            "cardId": "location"
+          },
+          {
+            "window": "when_character_played",
+            "activePlayerId": "P1",
+            "subjectPlayerId": "P2",
+            "cardId": "enemy"
+          },
+          {
+            "window": "end_of_setup",
+            "activePlayerId": "P1",
+            "subjectPlayerId": "P1",
+            "cardId": null
+          },
+          {
+            "window": "end_of_setup",
+            "activePlayerId": "P1",
+            "subjectPlayerId": "P2",
+            "cardId": null
+          }
+        ],
+        "discard": 5,
+        "bottom": 680,
+        "height": 680,
+        "scroll": 680,
+        "client": 680
+      }
+    },
+    {
+      "size": {
+        "width": 1093,
+        "height": 544
+      },
+      "result": {
+        "rules": "0.3.0",
+        "phase": "BATTLE_START",
+        "counts": {
+          "P1": 2,
+          "P2": 1
+        },
+        "windows": [
+          {
+            "window": "start_of_setup",
+            "activePlayerId": "P1",
+            "subjectPlayerId": "P1",
+            "cardId": null
+          },
+          {
+            "window": "start_of_setup",
+            "activePlayerId": "P1",
+            "subjectPlayerId": "P2",
+            "cardId": null
+          },
+          {
+            "window": "when_character_played",
+            "activePlayerId": "P1",
+            "subjectPlayerId": "P1",
+            "cardId": "alpha"
+          },
+          {
+            "window": "when_character_played",
+            "activePlayerId": "P1",
+            "subjectPlayerId": "P1",
+            "cardId": "beta"
+          },
+          {
+            "window": "when_item_played",
+            "activePlayerId": "P1",
+            "subjectPlayerId": "P1",
+            "cardId": "item"
+          },
+          {
+            "window": "when_location_played",
+            "activePlayerId": "P1",
+            "subjectPlayerId": "P1",
+            "cardId": "location"
+          },
+          {
+            "window": "when_character_played",
+            "activePlayerId": "P1",
+            "subjectPlayerId": "P2",
+            "cardId": "enemy"
+          },
+          {
+            "window": "end_of_setup",
+            "activePlayerId": "P1",
+            "subjectPlayerId": "P1",
+            "cardId": null
+          },
+          {
+            "window": "end_of_setup",
+            "activePlayerId": "P1",
+            "subjectPlayerId": "P2",
+            "cardId": null
+          }
+        ],
+        "discard": 5,
+        "bottom": 544,
+        "height": 544,
+        "scroll": 544,
+        "client": 544
+      }
+    }
+  ]
+}
