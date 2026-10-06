@@ -221,3 +221,15 @@ test('AI fetch activation pays source sacrifice while ambiguous sacrifice stays 
  assert.deepEqual(JSON.parse(JSON.stringify(h.api.completeActionForBot(info,h.state))).costPayment,{sacrificedPermanents:['tarn']});
  info.additionalCostInfo.validSacrificeTargets=['other'];assert.equal(h.api.completeActionForBot(info,h.state),null);
 });
+
+test('AI takes an eligible land from an optional fetch search',()=>{
+ const h=harness();h.state.cards.fetch={oracleText:'Search your library for an Island or Mountain card.'};h.state.cards.land={zone:{zoneType:'Library'}};
+ const d={type:'SelectCardsDecision',id:'search',context:{sourceId:'fetch'},options:['land'],minSelections:0,maxSelections:1};
+ assert.deepEqual(JSON.parse(JSON.stringify(h.api.decisionResponseSafeForState(d,'auto',h.state))).selectedCards,['land']);
+});
+test('AI optional discard stays empty and empty or zero-cap searches stay legal',()=>{
+ const h=harness();const d={type:'SelectCardsDecision',id:'discard',options:['bear'],minSelections:0,maxSelections:1};
+ assert.deepEqual(JSON.parse(JSON.stringify(h.api.decisionResponseSafeForState(d,'auto',h.state))).selectedCards,[]);
+ d.type='SearchLibraryDecision';d.options=[];assert.deepEqual(JSON.parse(JSON.stringify(h.api.decisionResponseSafeForState(d,'auto',h.state))).selectedCards,[]);
+ d.options=['bear'];d.maxSelections=0;assert.deepEqual(JSON.parse(JSON.stringify(h.api.decisionResponseSafeForState(d,'auto',h.state))).selectedCards,[]);
+});

@@ -862,6 +862,15 @@ SIDEBOARD:
     }catch(e){setStatus(e.message,true);log(`Action blocked: ${e.message}`);}
   }
 
+  function automaticCardSelection(decision,state){
+    const options=decision.options||[],min=decision.minSelections??decision.minCards??0,max=decision.maxSelections??decision.maxCards??options.length;
+    const source=state?.cards?.[decision.context?.sourceId];
+    const librarySearch=decision.type==='SearchLibraryDecision' ||
+      (max===1 && /search your library/i.test(source?.oracleText||'') && options.length>0 &&
+       options.every(id=>String(state?.cards?.[id]?.zone?.zoneType).toUpperCase()==='LIBRARY'));
+    const count=librarySearch?Math.min(max,Math.max(min,1)):min;
+    return options.slice(0,count);
+  }
   async function decisionResponse(decision, mode='human') {
     const type=decision?.type||''; const id=decision?.id;
     const ai = mode==='auto';
@@ -888,7 +897,7 @@ SIDEBOARD:
     if(type==='SelectCardsDecision' || type==='SearchLibraryDecision'){
       const options=decision.options||[]; const min=decision.minSelections??decision.minCards??0,max=decision.maxSelections??decision.maxCards??options.length;
       const prompt=[decision.context?.sourceName,decision.prompt||'Choose cards'].filter(Boolean).join(' — ');
-      const picks=ai?options.slice(0,min):await pickActionTargets(prompt,options,min,max,decision.cardInfo||{},{searchable:type==='SearchLibraryDecision'});
+      const picks=ai?automaticCardSelection(decision,active?.state):await pickActionTargets(prompt,options,min,max,decision.cardInfo||{},{searchable:type==='SearchLibraryDecision'});
       return {type:'CardsSelectedResponse',decisionId:id,selectedCards:picks};
     }
     if(type==='ChooseTargetsDecision'){
@@ -932,7 +941,7 @@ SIDEBOARD:
       if(type==='ChooseNumberDecision'){const min=d.min??d.minValue??0;return {type:'NumberChosenResponse',decisionId:id,number:min};}
       if(type==='ChooseOptionDecision')return {type:'OptionChosenResponse',decisionId:id,optionIndex:0};
       if(type==='ChooseModeDecision')return {type:'ModesChosenResponse',decisionId:id,selectedModes:[0]};
-      if(type==='SelectCardsDecision'||type==='SearchLibraryDecision'){const options=d.options||[],min=d.minSelections??d.minCards??0;return {type:'CardsSelectedResponse',decisionId:id,selectedCards:options.slice(0,min)};}
+      if(type==='SelectCardsDecision'||type==='SearchLibraryDecision'){const options=d.options||[],min=d.minSelections??d.minCards??0;return {type:'CardsSelectedResponse',decisionId:id,selectedCards:automaticCardSelection(d,state)};}
       if(type==='ChooseTargetsDecision'){const reqs=d.requirements||d.targetRequirements||[],selectedTargets={};for(const [i,r] of reqs.entries()){const index=r.index??i,valid=d.legalTargets?.[index]||r.validTargets||[],min=r.minTargets??1;if(valid.length<min)return null;selectedTargets[index]=valid.slice(0,min);}return {type:'TargetsResponse',decisionId:id,selectedTargets};}
       if(type==='OrderObjectsDecision'||type==='ReorderLibraryDecision')return {type:'OrderedResponse',decisionId:id,orderedObjects:[...(d.objects||d.cards||[])]};
       if(type==='DistributeDecision'){const targets=d.targets||[];let left=d.totalAmount||0,distribution={};for(const [i,t] of targets.entries()){const min=d.minPerTarget||0;distribution[t]=min;left-=min;if(i===targets.length-1)distribution[t]+=Math.max(0,left);}return {type:'DistributionResponse',decisionId:id,distribution};}
