@@ -12,13 +12,31 @@
                 "binding": "ANY",
                 "effect": {
                     "type": "Gated",
-                    "gate": "Gate.MayDecide",
+                    "gate": {
+                        "type": "Gate.WhenCondition",
+                        "condition": {
+                            "type": "EntityMatches",
+                            "entity": "TriggeringEntity",
+                            "filter": {
+                                "statePredicates": [
+                                    {
+                                        "type": "InZone",
+                                        "zone": "Graveyard"
+                                    }
+                                ]
+                            }
+                        }
+                    },
                     "then": {
-                        "type": "MoveToZone",
-                        "target": "TriggeringEntity",
-                        "destination": "Exile",
-                        "fromZone": "Graveyard",
-                        "linkToSource": true
+                        "type": "Gated",
+                        "gate": "Gate.MayDecide",
+                        "then": {
+                            "type": "MoveToZone",
+                            "target": "TriggeringEntity",
+                            "destination": "Exile",
+                            "fromZone": "Graveyard",
+                            "linkToSource": true
+                        }
                     }
                 }
             }

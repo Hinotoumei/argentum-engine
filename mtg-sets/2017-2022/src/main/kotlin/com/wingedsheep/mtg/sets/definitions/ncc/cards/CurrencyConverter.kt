@@ -3,6 +3,7 @@ package com.wingedsheep.mtg.sets.definitions.ncc.cards
 import com.wingedsheep.sdk.core.*
 import com.wingedsheep.sdk.dsl.*
 import com.wingedsheep.sdk.model.Rarity
+import com.wingedsheep.sdk.scripting.predicates.StatePredicate
 import com.wingedsheep.sdk.scripting.GameObjectFilter
 import com.wingedsheep.sdk.scripting.effects.CardSource
 import com.wingedsheep.sdk.scripting.effects.CardDestination
@@ -15,8 +16,14 @@ val CurrencyConverter = card("Currency Converter") {
     oracleText = "Whenever you discard a card, you may exile that card from your graveyard.\n{2}, {T}: Draw a card, then discard a card.\n{T}: Put a card exiled with this artifact into its owner's graveyard. If it's a land card, create a Treasure token. If it's a nonland card, create a 2/2 black Rogue creature token."
     triggeredAbility {
         trigger = Triggers.you.discards()
-        effect = Effects.May(Effects.Move(EffectTarget.TriggeringEntity, Zone.EXILE,
-            fromZone = Zone.GRAVEYARD, linkToSource = true))
+        effect = Effects.If(
+            condition = Conditions.TargetMatchesFilter(
+                GameObjectFilter.Any.withStatePredicate(StatePredicate.InZone(Zone.GRAVEYARD)),
+                EffectTarget.TriggeringEntity,
+            ),
+            then = Effects.May(Effects.Move(EffectTarget.TriggeringEntity, Zone.EXILE,
+                fromZone = Zone.GRAVEYARD, linkToSource = true)),
+        )
     }
     activatedAbility {
         cost = Costs.Composite(Costs.Mana("{2}"), Costs.Tap)

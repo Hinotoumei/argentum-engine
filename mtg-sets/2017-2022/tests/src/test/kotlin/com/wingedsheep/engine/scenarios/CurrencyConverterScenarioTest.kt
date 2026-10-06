@@ -267,4 +267,26 @@ class CurrencyConverterScenarioTest : FunSpec({
         (id in d.getExile(me)) shouldBe true
         named(d, "Rogue").size shouldBe 0
     }
+
+    test("Leng library replacement skips Converter exile prompt and preserves next draw") {
+        val d = setup()
+        val me = d.activePlayer!!
+        d.registerCard(com.wingedsheep.mtg.sets.definitions.lea.cards.LibraryOfLeng)
+        d.putPermanentOnBattlefield(me, "Library of Leng")
+        castConverter(d)
+        val chosen = d.putCardInHand(me, creature.name)
+        val spell = d.putCardInHand(me, discard.name)
+        d.castSpell(me, spell).error shouldBe null
+        settle(d)
+        d.submitCardSelection(me, listOf(chosen)).error shouldBe null
+        val decision = d.state.pendingDecision as YesNoDecision
+        decision.prompt.contains("Library of Leng") shouldBe true
+        d.submitYesNo(me, true).error shouldBe null
+        settle(d)
+        d.state.pendingDecision shouldBe null
+        d.getExile(me).contains(chosen) shouldBe false
+        d.getGraveyard(me).contains(chosen) shouldBe false
+        d.state.zones[com.wingedsheep.engine.state.ZoneKey(me, Zone.LIBRARY)]!!.first() shouldBe chosen
+    }
 })
+

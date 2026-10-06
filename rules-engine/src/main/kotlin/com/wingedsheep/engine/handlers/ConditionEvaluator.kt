@@ -1012,7 +1012,17 @@ class ConditionEvaluator(
         is EffectTarget.TriggeringEntity ->
             (ctx as? Resolution)?.let {
                 val triggeringId = it.effectContext.triggeringEntityId
-                if (triggeringId != null && state.getBattlefield().contains(triggeringId)) {
+                if (triggeringId != null && condition.filter.statePredicates.any {
+                    it is com.wingedsheep.sdk.scripting.predicates.StatePredicate.InZone
+                }) {
+                    // A present-zone requirement must consult the current object, even when the
+                    // triggering card is outside the battlefield. Static characteristic matching
+                    // ignores state predicates (e.g. a Leng discard now in the library).
+                    predicates.matches(
+                        state, state.projectedState, triggeringId, condition.filter,
+                        PredicateContext.fromEffectContext(it.effectContext)
+                    )
+                } else if (triggeringId != null && state.getBattlefield().contains(triggeringId)) {
                     // The triggering object is a battlefield permanent (e.g. a delayed trigger
                     // watching "that Equipment"). Match against projected state so state predicates
                     // (attachment) and the controller predicate ("a creature you control") resolve;
