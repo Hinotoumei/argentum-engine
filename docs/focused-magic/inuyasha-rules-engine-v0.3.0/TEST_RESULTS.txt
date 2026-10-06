@@ -37,6 +37,6 @@ test_turn_start_and_draw_windows_follow_ard_order (test_turn_draw_sequence.TurnD
 test_turn_window_handler_sees_exact_draw_order (test_turn_draw_sequence.TurnDrawSequenceTests.test_turn_window_handler_sees_exact_draw_order) ... ok
 
 ----------------------------------------------------------------------
-Ran 37 tests in 0.009s
+Ran 37 tests in 0.011s
 
 OK
