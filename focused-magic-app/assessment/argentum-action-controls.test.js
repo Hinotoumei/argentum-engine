@@ -240,3 +240,19 @@ test('AI holds Fatal Push when only its own creature is a legal target',()=>{
  assert.equal(h.api.completeActionForBot(info,h.state),null);
  info.targetRequirements=[target(['own','bear'])];assert.equal(h.api.completeActionForBot(info,h.state).targets[0].entityId,'bear');
 });
+
+test('named discard activation chooses only provider eligible cards and pays activation cost',async()=>{
+ const h=harness(['1']);
+ await h.api.submitLegalAction({actionType:'ActivateAbility',action:{type:'ActivateAbility',sourceId:'bear',playerId:'me',abilityIndex:0},additionalCostInfo:{costType:'Discard',discardCount:1,validDiscardTargets:['spell']}});
+ assert.deepEqual(h.sent[0].costPayment,{discardedCards:['spell']});
+});
+test('discard spell additional cost uses spell payment field',async()=>{
+ const h=harness(['1']);
+ await h.api.submitLegalAction({actionType:'CastSpell',action:{type:'CastSpell',cardId:'bear',playerId:'me'},additionalCostInfo:{costType:'Discard',discardCount:1,validDiscardTargets:['spell']}});
+ assert.deepEqual(h.sent[0].additionalCostPayment,{discardedCards:['spell']});
+});
+test('discard cost cannot submit without enough eligible cards',async()=>{
+ const h=harness(['1']);
+ await h.api.submitLegalAction({actionType:'ActivateAbility',action:{type:'ActivateAbility',sourceId:'bear',playerId:'me'},additionalCostInfo:{costType:'Discard',discardCount:2,validDiscardTargets:['spell']}});
+ assert.equal(h.sent.length,0);
+});

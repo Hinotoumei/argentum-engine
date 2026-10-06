@@ -814,6 +814,14 @@ SIDEBOARD:
       const actionSession=active, actionEpoch=JSON.stringify(active.interactionEpoch);
       const action=clone(info.action);
       applySelfSacrifice(action,info);
+      const additional=info.additionalCostInfo;
+      if(additional?.costType==='Discard'){
+        const count=additional.discardCount??0;
+        if(count<1)throw new Error('The provider did not specify the discard cost.');
+        const cards=await pickActionTargets('Choose cards to discard as the cost',additional.validDiscardTargets||[],count,count);
+        const paymentKey=action.type==='ActivateAbility'?'costPayment':'additionalCostPayment';
+        action[paymentKey]={...(action[paymentKey]||{}),discardedCards:cards};
+      }
       if(/DeclareAttackers/.test(info.actionType||action.type||'')){
         const valid=info.validAttackers||[],mandatory=info.mandatoryAttackers||[];
         const chosen=await pickActionTargets('Choose attackers (leave empty to attack with none)',valid,mandatory.length,valid.length);
@@ -1338,3 +1346,5 @@ SIDEBOARD:
 
   window.addEventListener('DOMContentLoaded',()=>{ensureUI();installConstructedProfile();});
 })();
+
+
