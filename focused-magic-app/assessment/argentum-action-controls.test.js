@@ -233,3 +233,10 @@ test('AI optional discard stays empty and empty or zero-cap searches stay legal'
  d.type='SearchLibraryDecision';d.options=[];assert.deepEqual(JSON.parse(JSON.stringify(h.api.decisionResponseSafeForState(d,'auto',h.state))).selectedCards,[]);
  d.options=['bear'];d.maxSelections=0;assert.deepEqual(JSON.parse(JSON.stringify(h.api.decisionResponseSafeForState(d,'auto',h.state))).selectedCards,[]);
 });
+
+test('AI holds Fatal Push when only its own creature is a legal target',()=>{
+ const h=harness();h.state.cards.push={oracleText:'Destroy target creature if it has mana value 2 or less.'};h.state.cards.own={controllerId:'me'};
+ const info={action:{type:'CastSpell',cardId:'push',playerId:'me'},requiresTargets:true,targetRequirements:[target(['own'])]};
+ assert.equal(h.api.completeActionForBot(info,h.state),null);
+ info.targetRequirements=[target(['own','bear'])];assert.equal(h.api.completeActionForBot(info,h.state).targets[0].entityId,'bear');
+});

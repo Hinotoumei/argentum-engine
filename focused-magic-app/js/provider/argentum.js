@@ -996,8 +996,9 @@ SIDEBOARD:
         validTargets:info.validTargets||[],
       }];
       const chosen=[];
+      const removal=action.type==='CastSpell' && /destroy target creature/i.test(state.cards?.[action.cardId]?.oracleText||'');
       for (const req of reqs) {
-        const min=req.minTargets??1, max=req.maxTargets??min, valid=req.validTargets||[];
+        const min=req.minTargets??1, max=req.maxTargets??min, valid=(req.validTargets||[]).filter(id=>!removal || state.cards?.[id]?.controllerId===opp);
         if (valid.length < min) return null;
         const preferred=[...valid].sort((a,b)=>{
           const ap=a===opp?0:state.cards?.[a]?.controllerId===opp?1:a===me?4:2;
