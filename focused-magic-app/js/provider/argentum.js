@@ -392,8 +392,7 @@ SIDEBOARD:
     }
     b.title=c.stackText||c.oracleText||c.name||'';
     if(c.isTapped)b.classList.add('tapped');
-    b.onmouseenter=()=>showCardPreview(c);b.onfocus=()=>showCardPreview(c);b.onmouseleave=()=>hideCardPreview();b.onblur=()=>hideCardPreview();
-    b.onclick=()=>{showCardActions(id,zone);showCardPreview(c,true);};
+    b.onclick=()=>{hideCardPreview(true);showCardActions(id,zone);};
     return b;
   }
   let previewPinned=false;
@@ -422,6 +421,8 @@ SIDEBOARD:
   function showCardActions(id,zone){
     ensureTabletopUI();if(active)active.selectedCard={id,zone};const box=$('argentumTabletopCardActions');const c=cardById(active?.state,id);const actions=actionsForCard(id).filter(a=>a.isAffordable!==false);
     box.innerHTML=`<div class="argentum-tabletop-action-title"><b>${esc(c?.name||id)}</b><span class="sub">${esc(zone||'')}</span></div>`;
+    if(c){const inspect=document.createElement('button');inspect.type='button';inspect.textContent='Enlarge card';inspect.onclick=()=>showCardPreview(c,true);box.append(inspect);}
+    if(c?.name==='Treasure'){const help=document.createElement('span');help.className='sub';help.textContent='Sacrifice this Treasure for a chosen color of mana, then cast your spell. Automatic payment does not sacrifice Treasures for you.';box.append(help);}
     if(c?.name==='Currency Converter'){const help=document.createElement('span');help.className='sub';help.textContent='Discard → choose to exile it from your graveyard. Then tap Converter to return an exiled land for a Treasure, or a nonland for a Rogue. Drawing/discarding taps Converter, so its other tap ability needs it untapped again.';box.append(help);}
     if(!actions.length){const note=document.createElement('span');note.className='sub';note.textContent='No provider-advertised legal action for this card right now.';box.appendChild(note);return;}
     for(const info of actions){const b=document.createElement('button');b.type='button';b.className='good';b.textContent=info.description||info.actionType||'Use action';b.onclick=()=>submitLegalAction(info);box.appendChild(b);}
