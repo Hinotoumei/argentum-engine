@@ -1,0 +1,432 @@
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Callable, Dict, List, Optional, Union
+
+
+class RuleError(ValueError):
+    """Raised when an attempted game action is illegal under implemented rules."""
+
+
+class Color(str, Enum):
+    RED = "red"
+    BLUE = "blue"
+    GREEN = "green"
+    PURPLE = "purple"
+    BLACK = "black"
+
+
+class TimingWindow(str, Enum):
+    SETUP_START = "start_of_setup"
+    CHARACTER_PLAYED = "when_character_played"
+    ITEM_PLAYED = "when_item_played"
+    LOCATION_PLAYED = "when_location_played"
+    SETUP_END = "end_of_setup"
+    # ARD v4.0 Timing Windows Appearing Within a Turn — implemented in v0.2.0.
+    TURN_START = "start_of_turn"
+    DRAW_START = "start_of_draw"
+    CARDS_DRAWN = "when_you_draw_cards"
+    DRAW_END = "end_of_draw"
+
+    # ARD v4.0 Attack Timing Sequence — inherited from v0.1.0.
+    CHARACTER_EXPENDED = "when_character_expended"
+    WHEN_ATTACKING = "when_attacking"
+    WHEN_ATTACKED = "when_attacked"
+    COMPARING_COLOR_VALUES = "when_comparing_color_values"
+    CHARACTER_DEFEATED = "when_character_defeated"
+    JEWEL_SHARD_STOLEN = "when_jewel_shard_stolen"
+    ATTACK_END = "when_attack_ends"
+
+
+@dataclass
+class AttachmentState:
+    title: str
+    face_up: bool = True
+    expended: bool = False
+
+    card_id: Optional[str] = None
+    owner_id: Optional[str] = None
+    is_item: bool = True
+
+    def defeat_with_host(self) -> None:
+        # ARD Attack Timing Sequence: defeated character is turned facedown,
+        # expended "with all its attached cards."
+        self.face_up = False
+        self.expended = True
+
+
+@dataclass
+class CharacterState:
+    title: str
+    controller_id: str
+    color_values: Dict[Color, int]
+    ready: bool = True
+    face_up: bool = True
+    in_play: bool = True
+    defeated: bool = False
+    attachments: List[AttachmentState] = field(default_factory=list)
+    temporary_color_modifiers: Dict[Color, int] = field(default_factory=dict)
+    constant_color_modifiers: Dict[Color, int] = field(default_factory=dict)
+
+    card_id: Optional[str] = None
+    owner_id: Optional[str] = None
+
+    @property
+    def expended(self) -> bool:
+        return not self.ready
+
+    def final_color_value(self, color: Color) -> int:
+        """Return the current final value for one color.
+
+        This intentionally keeps printed/base values separate from modifiers so
+        later constant/floating/temporary effects can plug into the same path.
+        """
+        if color not in self.color_values:
+            raise RuleError(f"{self.title} has no implemented {color.value} value")
+        return (
+            self.color_values[color]
+            + self.temporary_color_modifiers.get(color, 0)
+            + self.constant_color_modifiers.get(color, 0)
+        )
+
+    def expend(self) -> None:
+        if not self.ready:
+            raise RuleError(f"{self.title} is already expended")
+        self.ready = False
+
+    def defeat(self) -> None:
+        self.defeated = True
+        self.face_up = False
+        self.ready = False
+        for attachment in self.attachments:
+            attachment.defeat_with_host()
+
+
+@dataclass
+class JewelShard:
+    """Opaque shard-pile object.
+
+    The ARD says players may know shard-pile counts but may not look at their
+    facedown shard cards. The engine therefore moves opaque shard objects without
+    exposing an identity to the attack resolver.
+    """
+
+    opaque_id: str
+
+
+@dataclass
+class PlayerState:
+    player_id: str
+    jewel_shards: List[JewelShard] = field(default_factory=list)
+    # v0.2.0 adds only the minimum card-zone state required for the Draw Step.
+    # These values are opaque engine tokens, not authoritative printed-card data.
+    draw_pile: List[str] = field(default_factory=list)
+    hand: List[str] = field(default_factory=list)
+
+    discard_pile: List[str] = field(default_factory=list)
+
+    def draw_exact(self, count: int) -> List[str]:
+        """Move exactly ``count`` cards from the top of draw_pile to hand.
+
+        ARD v4.0 requires each player to draw 3 during the Draw Step, but the
+        supplied ARD/CRD sources do not define a deck-exhaustion consequence in
+        the implemented slice. v0.2.0 therefore fails closed before mutation if
+        the exact draw cannot be completed instead of inventing a loss/partial draw.
+        """
+        if count < 0:
+            raise RuleError("Draw count cannot be negative")
+        if len(self.draw_pile) < count:
+            raise RuleError(
+                f"{self.player_id} cannot complete the required draw of {count}; "
+                "deck-exhaustion behavior is not implemented"
+            )
+        drawn = self.draw_pile[:count]
+        del self.draw_pile[:count]
+        self.hand.extend(drawn)
+        return drawn
+
+
+@dataclass
+class WindowEvent:
+    window: TimingWindow
+    attack_id: int
+    active_player_id: str
+    attacker_title: str
+    defender_title: str
+    color: Color
+    detail: Optional[str] = None
+
+
+@dataclass
+class TurnWindowEvent:
+    window: TimingWindow
+    turn_id: int
+    active_player_id: str
+    # For CARDS_DRAWN this identifies the player who drew the cards. For the
+    # start/end windows it is left None.
+    subject_player_id: Optional[str] = None
+    detail: Optional[str] = None
+
+
+@dataclass
+class AttackContext:
+    attack_id: int
+    turn_active_player_id: str
+    attacking_player_id: str
+    attacker: CharacterState
+    defender: CharacterState
+    color: Color
+    attacker_final_value: Optional[int] = None
+    defender_final_value: Optional[int] = None
+    defender_defeated_by_attack: bool = False
+    shard_stolen: bool = False
+    ended: bool = False
+
+
+@dataclass
+class TurnContext:
+    turn_id: int
+    active_player_id: str
+    opposing_player_id: str
+    active_drawn_cards: List[str] = field(default_factory=list)
+    opposing_drawn_cards: List[str] = field(default_factory=list)
+    draw_step_complete: bool = False
+
+
+WindowContext = Union[AttackContext, TurnContext]
+AnyWindowEvent = Union[WindowEvent, TurnWindowEvent]
+WindowHandler = Callable[["GameState", WindowContext, AnyWindowEvent], None]
+
+
+from .setup import SetupRulesMixin
+
+
+@dataclass
+class GameState(SetupRulesMixin):
+    players: Dict[str, PlayerState]
+    turn_active_player_id: str
+    characters: List[CharacterState] = field(default_factory=list)
+    event_log: List[AnyWindowEvent] = field(default_factory=list)
+    _window_handlers: Dict[TimingWindow, List[WindowHandler]] = field(default_factory=dict)
+    setup_cards: Dict[str, object] = field(default_factory=dict)
+    locations: List[object] = field(default_factory=list)
+    setup_context: Optional[object] = None
+    _next_attack_id: int = 1
+    _next_turn_id: int = 1
+
+    def player(self, player_id: str) -> PlayerState:
+        try:
+            return self.players[player_id]
+        except KeyError as exc:
+            raise RuleError(f"Unknown player: {player_id}") from exc
+
+    def register_window_handler(self, window: TimingWindow, handler: WindowHandler) -> None:
+        """Register a hook for later triggered/response-effect implementation.
+
+        Attack windows receive AttackContext + WindowEvent. Turn/Draw windows
+        receive TurnContext + TurnWindowEvent. This keeps v0.1 attack behavior
+        intact while the turn engine is added section-by-section.
+        """
+        self._window_handlers.setdefault(window, []).append(handler)
+
+    def _dispatch_window(self, window: TimingWindow, ctx: WindowContext, event: AnyWindowEvent) -> None:
+        self.event_log.append(event)
+        for handler in list(self._window_handlers.get(window, [])):
+            handler(self, ctx, event)
+
+    def _open_attack_window(
+        self,
+        ctx: AttackContext,
+        window: TimingWindow,
+        detail: Optional[str] = None,
+    ) -> None:
+        event = WindowEvent(
+            window=window,
+            attack_id=ctx.attack_id,
+            active_player_id=ctx.attacking_player_id,
+            attacker_title=ctx.attacker.title,
+            defender_title=ctx.defender.title,
+            color=ctx.color,
+            detail=detail,
+        )
+        self._dispatch_window(window, ctx, event)
+
+    def _open_turn_window(
+        self,
+        ctx: TurnContext,
+        window: TimingWindow,
+        *,
+        subject_player_id: Optional[str] = None,
+        detail: Optional[str] = None,
+    ) -> None:
+        event = TurnWindowEvent(
+            window=window,
+            turn_id=ctx.turn_id,
+            active_player_id=ctx.active_player_id,
+            subject_player_id=subject_player_id,
+            detail=detail,
+        )
+        self._dispatch_window(window, ctx, event)
+
+    def _opposing_player_id(self) -> str:
+        # The implemented ARD slice refers to one "opposing player." Keep the
+        # first turn engine explicitly two-player instead of inventing multiplayer
+        # ordering rules.
+        self.player(self.turn_active_player_id)
+        opponents = [pid for pid in self.players if pid != self.turn_active_player_id]
+        if len(opponents) != 1:
+            raise RuleError("v0.2.0 Turn/Draw engine requires exactly two players")
+        return opponents[0]
+
+    def start_turn_and_draw(self) -> TurnContext:
+        """Run the ARD v4.0 Turn Start + Draw Step timing slice.
+
+        Implemented order, exactly as supplied by the ARD:
+        1) The Turn Starts -> "Start of the turn" window
+        2) Draw Starts -> "At the start of Draw" window
+        3) Active player draws 3 -> "When you draw cards" window
+        4) Opposing player draws 3 -> "When you draw cards" window
+        5) Draw Ends -> "At the end of Draw" window
+
+        The general ARD window rule keeps the turn's active player as the active
+        player for these windows. CARDS_DRAWN events separately record which
+        player actually drew the cards in ``subject_player_id``.
+
+        Deck-exhaustion behavior is outside the supplied implemented rules slice.
+        To avoid a half-resolved Draw Step, both exact three-card draws are
+        prevalidated before any timing window or zone mutation occurs.
+        """
+        active_id = self.turn_active_player_id
+        opposing_id = self._opposing_player_id()
+        active = self.player(active_id)
+        opposing = self.player(opposing_id)
+
+        if len(active.draw_pile) < 3:
+            raise RuleError(
+                f"{active_id} cannot complete the required draw of 3; "
+                "deck-exhaustion behavior is not implemented"
+            )
+        if len(opposing.draw_pile) < 3:
+            raise RuleError(
+                f"{opposing_id} cannot complete the required draw of 3; "
+                "deck-exhaustion behavior is not implemented"
+            )
+
+        ctx = TurnContext(
+            turn_id=self._next_turn_id,
+            active_player_id=active_id,
+            opposing_player_id=opposing_id,
+        )
+        self._next_turn_id += 1
+
+        self._open_turn_window(ctx, TimingWindow.TURN_START)
+        self._open_turn_window(ctx, TimingWindow.DRAW_START)
+
+        ctx.active_drawn_cards = active.draw_exact(3)
+        self._open_turn_window(
+            ctx,
+            TimingWindow.CARDS_DRAWN,
+            subject_player_id=active_id,
+            detail="drew 3 cards",
+        )
+
+        ctx.opposing_drawn_cards = opposing.draw_exact(3)
+        self._open_turn_window(
+            ctx,
+            TimingWindow.CARDS_DRAWN,
+            subject_player_id=opposing_id,
+            detail="drew 3 cards",
+        )
+
+        self._open_turn_window(ctx, TimingWindow.DRAW_END)
+        ctx.draw_step_complete = True
+        return ctx
+
+    def _validate_basic_attack(self, attacker: CharacterState, defender: CharacterState, color: Color) -> None:
+        # This is deliberately only the minimum legality required by the first
+        # ARD attack-timing slice. Target restrictions, traits, "cannot attack",
+        # missing defenders, etc. are later-rule work and are not guessed here.
+        if attacker not in self.characters or defender not in self.characters:
+            raise RuleError("Both attacker and defender must be in the game state's play area")
+        if not attacker.in_play or not defender.in_play:
+            raise RuleError("Both attacker and defender must be in play when the attack is declared")
+        if attacker.controller_id == defender.controller_id:
+            raise RuleError("v0.2.0 only permits attacks against an opposing character")
+        if attacker.defeated or not attacker.face_up:
+            raise RuleError("A defeated/facedown character cannot declare this implemented attack")
+        if defender.defeated or not defender.face_up:
+            raise RuleError("A defeated/facedown character cannot be the implemented defender")
+        if not attacker.ready:
+            raise RuleError("The attacking character must be ready before it is expended to attack")
+        if color not in attacker.color_values or color not in defender.color_values:
+            raise RuleError("Both test characters need an implemented value for the chosen attack color")
+
+    def _steal_one_opaque_shard(self, thief_id: str, victim_id: str) -> bool:
+        thief = self.player(thief_id)
+        victim = self.player(victim_id)
+        if not victim.jewel_shards:
+            return False
+        # The attack section says to steal a shard but does not specify a visible
+        # choice procedure. Because shards are opaque here, moving one element
+        # does not reveal card identity. Later setup/shard rules may refine how
+        # this facedown object is selected without changing attack semantics.
+        shard = victim.jewel_shards.pop()
+        thief.jewel_shards.append(shard)
+        return True
+
+    def attack(self, attacker: CharacterState, defender: CharacterState, color: Color) -> AttackContext:
+        """Resolve the ARD v4.0 Attack Timing Sequence inherited from v0.1.0.
+
+        Implemented sequence:
+        1) declare attacker, defender, color
+        2) expend attacker; open expend window
+        3) attack begins; open when-attacking / when-attacked windows
+        4) compare final values; open comparison window
+        5) if attacker >= defender, defeat defender + attachments; open defeat window
+        6) if defeated by attack, steal one opponent shard; open shard-stolen window
+        7) attack ends; open attack-end window
+
+        During this attack, the attacking player is the active player for attack
+        windows; turn_active_player_id is retained separately and never mutated.
+        """
+        self._validate_basic_attack(attacker, defender, color)
+
+        ctx = AttackContext(
+            attack_id=self._next_attack_id,
+            turn_active_player_id=self.turn_active_player_id,
+            attacking_player_id=attacker.controller_id,
+            attacker=attacker,
+            defender=defender,
+            color=color,
+        )
+        self._next_attack_id += 1
+
+        attacker.expend()
+        self._open_attack_window(ctx, TimingWindow.CHARACTER_EXPENDED)
+
+        self._open_attack_window(ctx, TimingWindow.WHEN_ATTACKING)
+        self._open_attack_window(ctx, TimingWindow.WHEN_ATTACKED)
+
+        # Preserve v0.1.0's explicit ARD wording reconciliation: use the chosen
+        # attack color's final value for both characters.
+        ctx.attacker_final_value = attacker.final_color_value(color)
+        ctx.defender_final_value = defender.final_color_value(color)
+        self._open_attack_window(
+            ctx,
+            TimingWindow.COMPARING_COLOR_VALUES,
+            detail=f"{ctx.attacker_final_value} vs {ctx.defender_final_value}",
+        )
+
+        if ctx.attacker_final_value >= ctx.defender_final_value:
+            defender.defeat()
+            ctx.defender_defeated_by_attack = True
+            self._open_attack_window(ctx, TimingWindow.CHARACTER_DEFEATED)
+
+            if self._steal_one_opaque_shard(attacker.controller_id, defender.controller_id):
+                ctx.shard_stolen = True
+                self._open_attack_window(ctx, TimingWindow.JEWEL_SHARD_STOLEN)
+
+        self._open_attack_window(ctx, TimingWindow.ATTACK_END)
+        ctx.ended = True
+        return ctx
