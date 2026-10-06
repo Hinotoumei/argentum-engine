@@ -463,6 +463,7 @@ SIDEBOARD:
     if(active.selectedCard&&s.cards?.[active.selectedCard.id])showCardActions(active.selectedCard.id,active.selectedCard.zone);
     $('argentumTabletopPlayerEffects').textContent=playerEffectsSummary(my);
     const turnActions=$('argentumTabletopTurnActions');turnActions.innerHTML='';
+    const undo=document.createElement('button');undo.type='button';undo.textContent='Undo last action';undo.disabled=!active.user.undoAvailable;undo.title=undo.disabled?'Undo is unavailable after hidden information or an opponent response. Cancel a selection window to change an unconfirmed choice.':'Undo the last action allowed by the game server';undo.onclick=()=>{if(active.user.undoAvailable){active.user.undoAvailable=false;undo.disabled=true;active.send({type:'requestUndo'});}};turnActions.append(undo);
     if(!active.pendingDecision)for(const info of active.legalActions||[]){
       if(!/DeclareAttackers|DeclareBlockers/.test(info.actionType||''))continue;
       const button=document.createElement('button');button.type='button';button.className='primary';
@@ -620,10 +621,11 @@ SIDEBOARD:
     dialog.className='argentum-target-dialog';
     const heading=document.createElement('h3');heading.textContent=promptText;dialog.appendChild(heading);
     if(searchable){const search=document.createElement('input');search.type='search';search.placeholder='Search your deck by card name';search.setAttribute('aria-label','Search your deck');search.className='argentum-deck-search';search.oninput=()=>{const query=search.value.trim().toLocaleLowerCase();for(const row of dialog.querySelectorAll('label'))row.hidden=!row.dataset.searchName.includes(query);};dialog.append(search);}
-    const help=document.createElement('p');help.textContent=`Choose ${min===max?min:`${min}-${max}`} card(s). Nothing is selected automatically.`;dialog.appendChild(help);
+    const attackTarget=/attack target|who .* attacks/i.test(promptText);
+    const help=document.createElement('p');help.textContent=attackTarget?'Choose the player or planeswalker to attack. This is separate from the attack-trigger ability.':`Choose ${min===max?min:`${min}-${max}`} card(s). Nothing is selected automatically. You can cancel before confirming.`;dialog.appendChild(help);
     return await new Promise((resolve,reject)=>{
       const selected=new Set();
-      const confirmButton=document.createElement('button');confirmButton.type='button';confirmButton.textContent=/discard/i.test(promptText)?'Discard selected cards':'Confirm selected cards';confirmButton.disabled=min>0;
+      const confirmButton=document.createElement('button');confirmButton.type='button';confirmButton.textContent=attackTarget?'Confirm attack target':/discard/i.test(promptText)?'Discard selected cards':'Confirm selected cards';confirmButton.disabled=min>0;
       const finish=value=>{dialog.close();dialog.remove();resolve(value);};
       for(const id of options){
         const label=document.createElement('label');
@@ -817,7 +819,7 @@ SIDEBOARD:
         if(mandatory.some(id=>!chosen.includes(id)))throw new Error('Choose every mandatory attacker.');
         action.attackers={};
         for(const id of chosen){
-          const targets=await pickActionTargets(`Choose attack target for ${entityLabel(id)}`,info.validAttackTargets||[],1,1);
+          const targets=await pickActionTargets(`Choose who ${entityLabel(id)} attacks`,info.validAttackTargets||[],1,1);
           action.attackers[id]=targets[0];
         }
       }
@@ -1153,7 +1155,7 @@ SIDEBOARD:
         if(role.playStateKey!==nextKey)role.rejectedActions=new Set();
         role.playStateKey=nextKey;
         role.playReady=this.user.mulliganComplete&&this.ai.mulliganComplete;
-        role.state=msg.state;role.legalActions=msg.legalActions||[];role.pendingDecision=msg.pendingDecision||null;role.interactionEpoch=msg.interactionEpoch||null;role.lastVersion=msg.stateVersion||role.lastVersion;
+        role.undoAvailable=msg.undoAvailable===true;role.state=msg.state;role.legalActions=msg.legalActions||[];role.pendingDecision=msg.pendingDecision||null;role.interactionEpoch=msg.interactionEpoch||null;role.lastVersion=msg.stateVersion||role.lastVersion;
         if(role.pendingMeaningful&&role.playStateKey!==role.lastSubmittedStateKey){
           const m=role.pendingMeaningful; role.pendingMeaningful=null;
           if(role.kind==='ai'){
@@ -1171,7 +1173,7 @@ SIDEBOARD:
         return;
       }
       if(msg.type==='stateDeltaUpdate'){
-        role.legalActions=msg.legalActions||role.legalActions;role.pendingDecision=msg.pendingDecision||null;role.interactionEpoch=msg.interactionEpoch||role.interactionEpoch;
+        role.undoAvailable=msg.undoAvailable===true;role.legalActions=msg.legalActions||role.legalActions;role.pendingDecision=msg.pendingDecision||null;role.interactionEpoch=msg.interactionEpoch||role.interactionEpoch;
         clearTimeout(role.resyncTimer);role.resyncTimer=setTimeout(()=>{try{this.sendRole(role,{type:'requestResync'})}catch(_e){}},10);return;
       }
       if(msg.type==='gameOver'){
