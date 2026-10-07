@@ -1,6 +1,6 @@
 {
   "version": "0.6.9",
-  "build": "FOCUSED_MAGIC_INUYASHA_V030_DISCARD_COST_PICKER",
+  "build": "FOCUSED_MAGIC_INUYASHA_V030_CONFIRMED_DISCARD_PICKER",
   "date": "2026-10-06",
   "base": {
     "frontend_authority": "Focused_Magic_v0.6.9_INUYASHA_RESOLVE_ARGENTUM_LIVE_REPAIR_2026-09-29.zip",
@@ -51,7 +51,7 @@
     "CHANGELOG_v0.6.6.txt": "b4d17f142887ceda23aaf3e94b8555f785348a3284c287b2ea414af383f0904a",
     "CHANGELOG_v0.6.8.txt": "b97fd25d00b4e2b3032aba77a7ca71adb3e29da4c50c1efd8df6721b4358623f",
     "CHANGELOG_v0.6.9.txt": "f0b932ba99ebbec0ba76ed9b703b89748e6527627bbb4e7cfb079cf91b140acb",
-    "index.html": "b9e0e3954150585cd7d3ed8ed81ba990552c120de4c896e7ffac4345ed58252e",
+    "index.html": "398445d45e2685c29d172584b6344a2fb46bb865227b38b01f42b362f2d638d4",
     "README.md": "8483eb3dc383f537f12f21e524773782a426749e83fa4690dddc228f75dffa93",
     "README_DEPLOY.txt": "99939519678a4579d6614f2951e338c146d616376eca52946e58148f08beaf5a",
     "TIKUNARI_PREP_NOTES_2026-09-30.txt": "0d0c1bebfe72e6c42a8f534b05e094b70ddc6889f847054815b80ed2b7849dbd",
@@ -100,7 +100,8 @@
     "inuyasha-rules-engine-v0.3.0/tests/test_setup_sequence.py": "c25f2b5e3bb575b1bfab45086706893dc2fa0565022cf789c9075ecbc17355e4",
     "inuyasha-rules-engine-v0.3.0/tests/test_turn_draw_sequence.py": "f7ea51a55cd3327abb5527361132c4bf11f74f4b296b1e8d1de9be7ac3d78623",
     "COMBINED_RELEASE_README.md": "b840f8a4a910c38fe63c8add8cef9e707d98b44c5a26ac2a7af0d03a0125e3d2",
-    "js/inuyasha/setup-engine.js": "43794db8ac5a4d9b1fa0ab0760c42f4d50dcb46cc49d88254d5f78dea88443ec"
+    "js/inuyasha/setup-engine.js": "43794db8ac5a4d9b1fa0ab0760c42f4d50dcb46cc49d88254d5f78dea88443ec",
+    "inuyasha-reference/APP_V03_COMPARISON.json": "3f52d1486de026c688fe0e2b3e7986a9bebfb2a176ba3ddcb80f9cf9edc39e96"
   },
   "historical_2026_09_30": {
     "render": {
@@ -122,5 +123,16 @@
       "inuyasha_required_live_acceptance": "PENDING",
       "backend_27_card_repair": "PENDING_CODEX"
     }
+  },
+  "inuyasha_app_comparison": {
+    "attachment": "INUYASHA_SCORE_RULES_APP_v0.3_SETUP.zip",
+    "sha256": "2043c02e69989540f9b3ab17c564e93cdf6883d201f6b33c3847cc771fd0d0eb",
+    "integrated_rules_version": "0.3.0",
+    "decision": "Preserve current integrated Draw, combat and CRD Set Up implementation. Attached simplified app is compared reference, not replacement authority.",
+    "differences": [
+      "Attached drawStep collapses preserved Draw timing windows.",
+      "Attached setup ends the active player start/end block before opponent start; integrated engine preserves both start effects before player action blocks and both end effects afterward.",
+      "Attached tabletop bypasses integrated printed deck-cost and CRD handling."
+    ]
   }
 }

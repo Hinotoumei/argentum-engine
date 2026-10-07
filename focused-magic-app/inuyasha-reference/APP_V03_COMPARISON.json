@@ -1,0 +1,11 @@
+{
+  "attachment": "INUYASHA_SCORE_RULES_APP_v0.3_SETUP.zip",
+  "sha256": "2043c02e69989540f9b3ab17c564e93cdf6883d201f6b33c3847cc771fd0d0eb",
+  "integrated_rules_version": "0.3.0",
+  "decision": "Preserve current integrated Draw, combat and CRD Set Up implementation. Attached simplified app is compared reference, not replacement authority.",
+  "differences": [
+    "Attached drawStep collapses preserved Draw timing windows.",
+    "Attached setup ends the active player start/end block before opponent start; integrated engine preserves both start effects before player action blocks and both end effects afterward.",
+    "Attached tabletop bypasses integrated printed deck-cost and CRD handling."
+  ]
+}
