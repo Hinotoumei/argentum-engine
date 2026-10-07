@@ -108,3 +108,16 @@
 .argentum-tabletop-board{grid-template-rows:minmax(120px,1fr) minmax(120px,1fr) 170px}
 .argentum-tabletop-actions details{font-size:12px;max-width:420px}
 @media(max-height:620px){.argentum-tabletop-player .argentum-tabletop-card{height:96px;width:69px;min-width:69px;max-width:69px;flex-basis:69px}.argentum-tabletop-board{grid-template-rows:minmax(106px,1fr) minmax(106px,1fr) 160px}#argentumTabletopCardActions:not(:empty){max-height:55px}}
+
+/* Allocate the complete hand before placing controls below the board. */
+.argentum-tabletop-board{grid-template-rows:minmax(0,1fr) minmax(0,1fr) 202px}
+.argentum-tabletop-hand,.argentum-tabletop-player{overflow:hidden}
+.argentum-tabletop-cards.hand{overflow-x:auto;overflow-y:hidden;align-items:center}
+.argentum-tabletop-hand .argentum-tabletop-card{flex-shrink:0}
+#argentumTabletopCardActions:not(:empty){position:relative;z-index:1;min-height:44px;max-height:84px;flex:0 0 auto}
+#argentumTabletopCardActions button{min-height:36px}
+@media(max-height:620px){
+ .argentum-tabletop-board{grid-template-rows:minmax(0,1fr) minmax(0,1fr) 180px}
+ .argentum-tabletop-player .argentum-tabletop-card{height:82px;width:59px;min-width:59px;max-width:59px;flex-basis:59px}
+ #argentumTabletopCardActions:not(:empty){max-height:64px}
+}
